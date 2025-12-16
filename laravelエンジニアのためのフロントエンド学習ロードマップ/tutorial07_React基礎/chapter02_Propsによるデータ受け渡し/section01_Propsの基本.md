@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-2-1: Propsの基本
 
 ## Chapter 2: Propsによるデータ受け渡し
 

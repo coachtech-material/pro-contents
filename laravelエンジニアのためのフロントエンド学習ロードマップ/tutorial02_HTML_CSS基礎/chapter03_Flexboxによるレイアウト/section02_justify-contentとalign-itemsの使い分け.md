@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-3-2: justify-contentとalign-itemsの使い分け
 
 ## Chapter 3: Flexboxによるレイアウト
 

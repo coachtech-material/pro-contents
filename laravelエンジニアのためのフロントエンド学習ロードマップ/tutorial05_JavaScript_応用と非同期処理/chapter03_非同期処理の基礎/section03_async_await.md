@@ -1,4 +1,4 @@
-# Tutorial 5: JavaScript応用と非同期処理
+# 5-3-3: async_await
 
 ## Chapter 3: 非同期処理の基礎
 

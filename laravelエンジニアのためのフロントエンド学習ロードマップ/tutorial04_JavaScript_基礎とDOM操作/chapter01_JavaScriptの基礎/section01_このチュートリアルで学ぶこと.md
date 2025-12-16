@@ -1,4 +1,4 @@
-# Tutorial 4: JavaScript 基礎とDOM操作
+# 4-1-1: このチュートリアルで学ぶこと
 
 ## Chapter 1: JavaScriptの基礎
 

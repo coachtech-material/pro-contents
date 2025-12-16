@@ -1,4 +1,4 @@
-# Tutorial 6: TypeScript 基礎から実用へ
+# 6-1-1: なぜTypeScriptなのか？
 
 ## Chapter 1: TypeScriptの基礎
 

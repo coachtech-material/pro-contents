@@ -1,4 +1,4 @@
-# Tutorial 11: 品質保証とチーム開発
+# 11-1-2: Laravelでのユニットテスト(Pest)
 
 ## Chapter 1: テストの基礎
 

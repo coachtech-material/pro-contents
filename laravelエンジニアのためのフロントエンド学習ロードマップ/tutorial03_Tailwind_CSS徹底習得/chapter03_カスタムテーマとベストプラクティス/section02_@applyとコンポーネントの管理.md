@@ -1,4 +1,4 @@
-# Tutorial 3: Tailwind CSS 徹底習得
+# 3-3-2: @applyとコンポーネントの管理
 
 ## Chapter 3: カスタムテーマとベストプラクティス
 

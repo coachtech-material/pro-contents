@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-4-3: grid-areaによるアイテムの配置
 
 ## Chapter 4: Gridによるレイアウト
 

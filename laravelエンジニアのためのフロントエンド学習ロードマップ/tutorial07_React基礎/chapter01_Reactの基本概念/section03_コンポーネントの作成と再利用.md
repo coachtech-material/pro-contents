@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-1-3: コンポーネントの作成と再利用
 
 ## Chapter 1: Reactの基本概念
 

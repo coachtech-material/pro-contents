@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-1-2: HTMLの基本構造と主要タグ
 
 ## Chapter 1: HTMLの基礎
 

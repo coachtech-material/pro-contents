@@ -1,4 +1,4 @@
-# Tutorial 8: React応用
+# 8-1-2: useEffectの基本構文
 
 ## Chapter 1: `useEffect`による副作用の管理
 

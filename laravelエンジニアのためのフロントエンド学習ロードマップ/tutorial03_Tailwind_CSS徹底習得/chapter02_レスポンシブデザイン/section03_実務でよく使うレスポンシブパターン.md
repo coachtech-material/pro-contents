@@ -1,4 +1,4 @@
-# Tutorial 3: Tailwind CSS 徹底習得
+# 3-2-3: 実務でよく使うレスポンシブパターン
 
 ## Chapter 2: レスポンシブデザイン
 

@@ -1,4 +1,4 @@
-# Tutorial 4: JavaScript基礎とDOM操作
+# 4-1-3: 演算子（算術、比較、論理）
 
 ## Chapter 1: JavaScriptの基礎
 

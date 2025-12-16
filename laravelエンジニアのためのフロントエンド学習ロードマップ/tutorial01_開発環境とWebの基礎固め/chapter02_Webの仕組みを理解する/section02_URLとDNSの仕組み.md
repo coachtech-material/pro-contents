@@ -1,3 +1,5 @@
+# 1-2-2: URLとDNSの仕組み
+
 ## 🎯 このセクションで学ぶこと
 
 *   URL（Uniform Resource Locator）が、Web上のリソース（資源）の「住所」であることを理解します。

@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-2-2: children_props
 
 ## Chapter 2: Propsによるデータ受け渡し
 

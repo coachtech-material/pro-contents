@@ -1,4 +1,4 @@
-# Tutorial 8: React応用
+# 8-1-1: 副作用とは何か？
 
 ## Chapter 1: `useEffect`による副作用の管理
 

@@ -1,4 +1,4 @@
-# Tutorial 6: TypeScript 基礎から実用へ
+# 6-2-2: ESLintとPrettierの導入
 
 ## Chapter 2: TypeScriptの開発環境設定
 

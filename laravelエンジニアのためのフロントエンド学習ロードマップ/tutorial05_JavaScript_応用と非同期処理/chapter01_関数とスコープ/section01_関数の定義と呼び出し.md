@@ -1,4 +1,4 @@
-# Tutorial 5: JavaScript応用と非同期処理
+# 5-1-1: 関数の定義と呼び出し
 
 ## Chapter 1: 関数とスコープ
 

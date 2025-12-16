@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-2-3: ボックスモデルとmargin_paddingの使い分け
 
 ## Chapter 2: CSSの基礎
 

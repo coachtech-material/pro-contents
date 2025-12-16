@@ -1,4 +1,4 @@
-# Tutorial 4: JavaScript基礎とDOM操作
+# 4-1-4: 条件分岐（if, else if, else）
 
 ## Chapter 1: JavaScriptの基礎
 

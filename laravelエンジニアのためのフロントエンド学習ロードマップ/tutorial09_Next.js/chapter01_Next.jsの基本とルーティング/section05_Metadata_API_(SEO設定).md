@@ -1,4 +1,4 @@
-# Tutorial 9: Next.js
+# 9-1-5: Metadata_API_(SEO設定)
 
 ## Chapter 1: Next.jsの基本とルーティング
 

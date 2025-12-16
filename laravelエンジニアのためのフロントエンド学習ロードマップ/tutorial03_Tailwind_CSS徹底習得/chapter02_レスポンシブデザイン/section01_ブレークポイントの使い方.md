@@ -1,4 +1,4 @@
-# Tutorial 3: Tailwind CSS 徹底習得
+# 3-2-1: ブレークポイントの使い方
 
 ## Chapter 2: レスポンシブデザイン
 

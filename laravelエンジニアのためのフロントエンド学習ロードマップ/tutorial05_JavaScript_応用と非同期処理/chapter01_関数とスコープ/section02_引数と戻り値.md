@@ -1,4 +1,4 @@
-# Tutorial 5: JavaScript応用と非同期処理
+# 5-1-2: 引数と戻り値
 
 ## Chapter 1: 関数とスコープ
 

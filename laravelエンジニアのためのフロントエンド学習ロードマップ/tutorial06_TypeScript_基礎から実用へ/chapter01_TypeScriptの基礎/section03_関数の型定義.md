@@ -1,4 +1,4 @@
-# Tutorial 6: TypeScript 基礎から実用へ
+# 6-1-3: 関数の型定義
 
 ## Chapter 1: TypeScriptの基礎
 

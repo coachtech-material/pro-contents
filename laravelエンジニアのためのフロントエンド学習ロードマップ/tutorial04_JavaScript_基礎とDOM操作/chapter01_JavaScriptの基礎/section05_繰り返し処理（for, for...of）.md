@@ -1,4 +1,4 @@
-# Tutorial 4: JavaScript基礎とDOM操作
+# 4-1-5: 繰り返し処理（for, for...of）
 
 ## Chapter 1: JavaScriptの基礎
 

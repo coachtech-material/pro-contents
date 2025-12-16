@@ -1,4 +1,4 @@
-# Tutorial 3: Tailwind CSS 徹底習得
+# 3-1-3: package.jsonの構造と役割
 
 ## Chapter 1: パッケージ管理とTailwind CSSの導入
 

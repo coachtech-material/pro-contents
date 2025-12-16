@@ -1,4 +1,4 @@
-# Tutorial 10: Laravel × Next.js
+# 10-1-2: CORSと環境変数の設定
 
 ## Chapter 1: API連携の準備
 

@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-4-2: grid-template-columnsとgrid-template-rows
 
 ## Chapter 4: Gridによるレイアウト
 

@@ -1,4 +1,4 @@
-# Tutorial 5: JavaScript応用と非同期処理
+# 5-2-1: forEachメソッド
 
 ## Chapter 2: 配列の高度な操作
 

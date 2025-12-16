@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-1-1: なぜReactなのか？
 
 ## Chapter 1: Reactの基本概念
 

@@ -1,4 +1,4 @@
-# Tutorial 9: Next.js
+# 9-1-4: LayoutとTemplate
 
 ## Chapter 1: Next.jsの基本とルーティング
 

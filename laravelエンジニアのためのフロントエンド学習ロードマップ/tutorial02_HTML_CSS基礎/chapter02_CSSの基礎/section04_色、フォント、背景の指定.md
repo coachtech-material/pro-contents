@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-2-4: 色、フォント、背景の指定
 
 ## Chapter 2: CSSの基礎
 

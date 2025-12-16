@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-1-2: JSXの基本ルール
 
 ## Chapter 1: Reactの基本概念
 

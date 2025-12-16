@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-2-3: Propsのデフォルト値と分割代入
 
 ## Chapter 2: Propsによるデータ受け渡し
 

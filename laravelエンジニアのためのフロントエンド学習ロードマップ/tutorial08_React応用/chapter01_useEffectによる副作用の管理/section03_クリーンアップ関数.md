@@ -1,4 +1,4 @@
-# Tutorial 8: React応用
+# 8-1-3: クリーンアップ関数
 
 ## Chapter 1: `useEffect`による副作用の管理
 

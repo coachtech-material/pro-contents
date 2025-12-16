@@ -1,4 +1,4 @@
-# Tutorial 5: JavaScript応用と非同期処理
+# 5-3-2: Promiseの基礎
 
 ## Chapter 3: 非同期処理の基礎
 

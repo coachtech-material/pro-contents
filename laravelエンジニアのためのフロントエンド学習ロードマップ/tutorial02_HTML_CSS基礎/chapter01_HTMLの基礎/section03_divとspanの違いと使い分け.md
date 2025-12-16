@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-1-3: divとspanの違いと使い分け
 
 ## Chapter 1: HTMLの基礎
 

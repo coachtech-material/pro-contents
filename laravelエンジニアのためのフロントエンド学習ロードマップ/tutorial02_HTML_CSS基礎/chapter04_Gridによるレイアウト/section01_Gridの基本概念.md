@@ -1,4 +1,4 @@
-# Tutorial 2: HTML/CSS基礎
+# 2-4-1: Gridの基本概念
 
 ## Chapter 4: Gridによるレイアウト
 

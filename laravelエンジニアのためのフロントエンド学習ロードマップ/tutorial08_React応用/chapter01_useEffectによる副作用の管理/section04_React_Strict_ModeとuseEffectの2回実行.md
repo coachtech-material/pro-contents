@@ -1,4 +1,4 @@
-# Tutorial 8: React応用
+# 8-1-4: React_Strict_ModeとuseEffectの2回実行
 
 ## Chapter 1: `useEffect`による副作用の管理
 

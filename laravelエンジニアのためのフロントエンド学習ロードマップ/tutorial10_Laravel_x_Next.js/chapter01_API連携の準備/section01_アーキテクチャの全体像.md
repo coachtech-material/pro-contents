@@ -1,4 +1,4 @@
-# Tutorial 10: Laravel × Next.js
+# 10-1-1: アーキテクチャの全体像
 
 ## Chapter 1: API連携の準備
 

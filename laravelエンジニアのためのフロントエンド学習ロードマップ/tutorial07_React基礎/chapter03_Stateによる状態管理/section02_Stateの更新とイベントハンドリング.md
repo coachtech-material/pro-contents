@@ -1,4 +1,4 @@
-# Tutorial 7: React基礎
+# 7-3-2: Stateの更新とイベントハンドリング
 
 ## Chapter 3: Stateによる状態管理
 

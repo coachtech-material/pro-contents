@@ -1,4 +1,4 @@
-# Tutorial 3: Tailwind CSS 徹底習得
+# 3-2-2: モバイルファーストの考え方
 
 ## Chapter 2: レスポンシブデザイン
 
