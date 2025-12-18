@@ -1,0 +1,210 @@
+# 10-3-2: NextAuth.jsのセットアップ
+
+## 🎯 このセクションで学ぶこと
+
+-   NextAuth.jsとは何か、Next.jsアプリケーションにおける認証の役割を理解する
+-   NextAuth.jsをインストールし、基本的な設定ファイルを作成する方法を学ぶ
+-   Laravel Sanctumと連携するための`CredentialsProvider`を設定する方法を習得する
+-   認証状態をアプリケーション全体で共有するための`SessionProvider`をセットアップする
+
+## 導入
+
+バックエンド（Laravel Sanctum）の準備が整いました。次はフロントエンド（Next.js）に認証機能を組み込みます。ここで登場するのが**NextAuth.js**です。
+
+NextAuth.jsは、Next.jsアプリケーションのための完全な認証ソリューションです。ソーシャルログイン（Google, GitHubなど）、メール/パスワード認証、そして今回のような独自のバックエンドAPI（Laravel）と連携するクレデンシャル認証など、様々な認証方法を驚くほど簡単に実装できます。
+
+このセクションでは、NextAuth.jsをインストールし、Laravel Sanctumと通信してユーザー認証を行うための設定を進めていきます。
+
+## 詳細解説
+
+**注意**: これ以降の作業は、すべてNext.jsプロジェクトのディレクトリ（`next-frontend-app`）で行います。
+
+### ステップ1: NextAuth.jsのインストール
+
+まず、npmを使ってNextAuth.jsをインストールします。
+
+```bash
+npm install next-auth
+```
+
+### ステップ2: APIルートの作成
+
+NextAuth.jsは、自身の認証処理（サインイン、サインアウト、セッション管理など）を行うためのAPIエンドポイントを必要とします。`src/app/api/auth/[...nextauth]/route.ts`というファイルを作成します。この`[...nextauth]`という動的ルートが、NextAuth.jsに関連するすべてのAPIリクエストをキャッチします。
+
+`src/app/api/auth/[...nextauth]/route.ts`に以下のコードを記述してください。
+
+```typescript
+// src/app/api/auth/[...nextauth]/route.ts
+
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        // Laravel APIへのログインリクエスト
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          return null;
+        }
+
+        // ユーザー情報を取得
+        const userRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
+          {
+            headers: {
+              // ログインリクエストのレスポンスからCookieヘッダーを取得して設定
+              Cookie: res.headers.get("set-cookie") || "",
+            },
+          }
+        );
+
+        if (!userRes.ok) {
+          return null;
+        }
+
+        const user = await userRes.json();
+
+        // ユーザーオブジェクトを返す
+        return user;
+      },
+    }),
+  ],
+  // 他の設定...
+});
+
+export { handler as GET, handler as POST };
+```
+
+**コードのポイント:**
+
+-   **`CredentialsProvider`**: メールアドレスとパスワードのような、任意のクレデンシャル（資格情報）を使った認証方法を定義します。
+-   **`authorize`関数**: ログインフォームから送信された`credentials`（メール、パスワード）を受け取り、認証ロジックを実行する最も重要な部分です。
+    1.  まず、Laravelの`/login`エンドポイント（まだ作成していません）に`fetch`でPOSTリクエストを送信します。
+    2.  ログインが成功すると、Laravelはセッションを開始し、レスポンスの`Set-Cookie`ヘッダーにセッションIDを含めて返します。
+    3.  次に、その`Set-Cookie`ヘッダーを`Cookie`ヘッダーとして次のリクエストに含め、Laravelの`/api/user`エンドポイント（これもまだ作成していません）にアクセスして、認証済みユーザーの情報を取得します。
+    4.  取得したユーザー情報をNextAuth.jsに返すことで、セッションが確立されます。
+
+### ステップ3: セッション管理とコールバックの設定
+
+`authorize`関数で返されたユーザー情報を、NextAuth.jsのセッションやJWT（JSON Web Token）にどのように保存するかを定義します。`route.ts`に`callbacks`と`pages`の設定を追加します。
+
+```typescript
+// src/app/api/auth/[...nextauth]/route.ts
+
+// ... (importとprovidersは変更なし)
+
+const handler = NextAuth({
+  providers: [
+    // ... (CredentialsProviderは変更なし)
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // ログイン時に返されたユーザー情報をトークンに含める
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // JWTトークンの情報をセッションに含める
+      session.user = token.user as any;
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/login", // カスタムログインページのパス
+  },
+});
+
+export { handler as GET, handler as POST };
+```
+
+**コードのポイント:**
+
+-   **`callbacks`**: 認証フローの特定のタイミングで呼び出される関数を定義します。
+    -   `jwt`: JWTが作成・更新されるたびに呼び出されます。`authorize`から返された`user`オブジェクトをトークンに含めています。
+    -   `session`: セッションがアクセスされるたびに呼び出されます。`jwt`コールバックで設定したトークン情報を、クライアント側でアクセス可能な`session`オブジェクトに渡しています。
+-   **`pages`**: NextAuth.jsが使用するデフォルトのページを、カスタムページで上書きします。`signIn`に`/login`を指定することで、認証が必要な場合に自動的に`/login`ページにリダイレクトされるようになります。
+
+### ステップ4: セッションプロバイダーのセットアップ
+
+NextAuth.jsの`useSession`フックや`getSession`関数をクライアントコンポーネントで使えるようにするには、アプリケーションのルートで`SessionProvider`コンポーネントを配置する必要があります。
+
+`src/app/providers.tsx`という新しいファイルを作成します。
+
+```tsx
+// src/app/providers.tsx
+"use client";
+
+import { SessionProvider } from "next-auth/react";
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <SessionProvider>{children}</SessionProvider>;
+}
+```
+
+そして、ルートレイアウトである`src/app/layout.tsx`で、この`Providers`コンポーネントを使います。
+
+```tsx
+// src/app/layout.tsx
+
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Providers } from "./providers"; // Providersをインポート
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers>{children}</Providers> {/* childrenをProvidersでラップ */}
+      </body>
+    </html>
+  );
+}
+```
+
+`SessionProvider`は内部でReactのContext APIを使用しているため、`"use client"`ディレクティブが必要です。しかし、ルートレイアウト(`layout.tsx`)はServer Componentである必要があるため、`SessionProvider`をラップした別のClient Component (`providers.tsx`) を作成し、それをレイアウトから呼び出す、という構成にしています。
+
+## ✨ まとめ
+
+-   NextAuth.jsは、Next.jsアプリケーションに認証機能を簡単に追加できるライブラリである。
+-   `src/app/api/auth/[...nextauth]/route.ts`に認証設定を記述する。
+-   `CredentialsProvider`を使い、独自のバックエンド（Laravel Sanctum）と連携する認証ロジックを`authorize`関数内に実装する。
+-   `callbacks`を設定して、認証されたユーザー情報をセッションデータに正しく反映させる。
+-   アプリケーションのルートで`SessionProvider`を配置し、クライアントサイドで認証状態にアクセスできるようにする。
+
+これでフロントエンド側の認証設定の骨格が完成しました。しかし、この設定が参照しているLaravel側のログインAPI（`/login`）やユーザー情報取得API（`/api/user`）はまだ存在しません。
+
+次のセクションでは、これらのAPIをLaravelに実装し、実際にログイン・ログアウトができるようにします。
