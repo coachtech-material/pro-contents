@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブレークポイントの使い方 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン.html">Chapter 2: レスポンシブデザイン</a><span>></span>ブレークポイントの使い方</div>
+                    <div class="section-content">
+<h1 id="3-2-1">3-2-1: ブレークポイントの使い方</h1>
+<h2 id="chapter-2">Chapter 2: レスポンシブデザイン</h2>
+<h3 id="section-1">Section 1: ブレークポイントの使い方</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>レスポンシブデザインがなぜ現代のWeb開発で必須なのかを説明できるようになる。</li>
+<li>Tailwind CSSのデフォルトブレークポイント（<code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>2xl</code>）を理解する。</li>
+<li>ブレークポイントプレフィックス（例: <code>md:</code>）を使って、特定の画面サイズ以上でスタイルを適用できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：あらゆる画面サイズに対応するということ</h3>
+<p>現代では、WebサイトはデスクトップPCだけでなく、スマートフォン、タブレット、大型モニターなど、多種多様なデバイスで閲覧されます。レスポンシブデザインとは、<strong>閲覧しているデバイスの画面サイズに応じて、Webページのレイアウトやデザインを最適化する</strong>手法のことです。</p>
+<p>これができないと、スマートフォンでPCサイトを表示したときに文字が小さすぎて読めなかったり、逆にPCでスマホサイトを表示したときにコンテンツが中央に寄ってスカスカに見えたり、といった問題が起こります。</p>
+<p>Tailwind CSSは、このレスポンシブデザインを驚くほど簡単かつ直感的に実装できる仕組みを提供します。それが<strong>ブレークポイントプレフィックス</strong>です。</p>
+<hr />
+<h3 id="_2">🔑 ブレークポイントとは？</h3>
+<p>ブレークポイントとは、<strong>デザインが切り替わる画面幅の「境界線」</strong>のことです。例えば、「画面幅が768px以上になったら、サイドバーを表示する」といったルールを定義する際の「768px」がブレークポイントにあたります。</p>
+<p>Tailwind CSSには、一般的なデバイスの画面サイズに基づいた5つのデフォルトブレークポイントが用意されています。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">プレフィックス</th>
+<th style="text-align: left;">最小幅</th>
+<th style="text-align: left;">CSSメディアクエリ</th>
+<th style="text-align: left;">対象デバイス（目安）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>sm</code></td>
+<td style="text-align: left;">640px</td>
+<td style="text-align: left;"><code>@media (min-width: 640px)</code></td>
+<td style="text-align: left;">スマートフォン（横向き）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>md</code></td>
+<td style="text-align: left;">768px</td>
+<td style="text-align: left;"><code>@media (min-width: 768px)</code></td>
+<td style="text-align: left;">タブレット</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>lg</code></td>
+<td style="text-align: left;">1024px</td>
+<td style="text-align: left;"><code>@media (min-width: 1024px)</code></td>
+<td style="text-align: left;">ノートPC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>xl</code></td>
+<td style="text-align: left;">1280px</td>
+<td style="text-align: left;"><code>@media (min-width: 1280px)</code></td>
+<td style="text-align: left;">デスクトップPC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>2xl</code></td>
+<td style="text-align: left;">1536px</td>
+<td style="text-align: left;"><code>@media (min-width: 1536px)</code></td>
+<td style="text-align: left;">大型モニター</td>
+</tr>
+</tbody>
+</table>
+<p><strong>重要なポイント:</strong> Tailwindのブレークポイントはすべて<strong>「最小幅（min-width）」</strong>で定義されています。これは、<code>md:bg-blue-500</code>というクラスが「画面幅が<strong>768px以上</strong>の場合に背景を青にする」という意味になることを示します。この「以上」という考え方が、次のセクションで学ぶ「モバイルファースト」の思想と密接に結びついています。</p>
+<hr />
+<h3 id="_3">⚙️ ブレークポイントプレフィックスの使い方</h3>
+<p>使い方は非常にシンプルです。適用したいユーティリティクラスの前に、<code>{breakpoint}:</code>というプレフィックスを付けるだけです。</p>
+<p><strong>例：画面サイズに応じて背景色を変える</strong></p>
+<pre class="codehilite"><code class="language-html">&lt;div class=&quot;bg-red-500 md:bg-blue-500 lg:bg-green-500&quot;&gt;
+  &lt;!-- ... --&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>この<code>div</code>要素の背景色は、画面幅に応じて以下のように変化します。</p>
+<ul>
+<li><strong>画面幅が 768px 未満の場合:</strong> <code>bg-red-500</code>が適用され、背景は<strong>赤色</strong>になります。（プレフィックスなしのクラスは、すべての画面サイズで適用されます）</li>
+<li><strong>画面幅が 768px 以上 1024px 未満の場合:</strong> <code>md:bg-blue-500</code>が<code>bg-red-500</code>を上書きし、背景は<strong>青色</strong>になります。</li>
+<li><strong>画面幅が 1024px 以上の場合:</strong> <code>lg:bg-green-500</code>が<code>md:bg-blue-500</code>を上書きし、背景は<strong>緑色</strong>になります。</li>
+</ul>
+<p><strong>例：画面サイズに応じてレイアウトを変更する</strong></p>
+<p>レスポンシブデザインで最もよく使われるのが、レイアウトの変更です。例えば、スマートフォンでは要素を縦に並べ、タブレット以上では横に並べたい場合、以下のように記述できます。</p>
+<pre class="codehilite"><code class="language-html">&lt;div class=&quot;md:flex&quot;&gt;
+  &lt;div class=&quot;md:w-1/2&quot;&gt;要素A&lt;/div&gt;
+  &lt;div class=&quot;md:w-1/2&quot;&gt;要素B&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<ul>
+<li><strong>画面幅が 768px 未満の場合:</strong><ul>
+<li><code>md:flex</code>や<code>md:w-1/2</code>は適用されません。</li>
+<li><code>div</code>はデフォルトのブロック要素として振る舞うため、要素Aと要素Bは<strong>縦に並びます</strong>。</li>
+</ul>
+</li>
+<li><strong>画面幅が 768px 以上の場合:</strong><ul>
+<li><code>md:flex</code>が適用され、親要素がFlexコンテナになります。</li>
+<li><code>md:w-1/2</code>が適用され、子要素の幅がそれぞれ50%になります。</li>
+<li>結果として、要素Aと要素Bは<strong>横に並びます</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>このように、HTMLのクラスを少し変更するだけで、CSSファイルにメディアクエリを一行も書くことなく、複雑なレスポンシブ対応が実現できてしまうのが、Tailwind CSSの最大の強みの一つです。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>レスポンシブデザインとは、画面サイズに応じてデザインを最適化する手法である。</li>
+<li>Tailwind CSSでは、<code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>2xl</code>というブレークポイントが定義されている。</li>
+<li>ユーティリティクラスの前に<code>md:</code>のようなプレフィックスを付けることで、特定の画面幅以上でスタイルを適用できる。</li>
+<li>Tailwindのブレークポイントはすべて「最小幅（min-width）」で定義されており、「モバイルファースト」のアプローチと相性が良い。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] <code>lg:text-center</code>というクラスは、どのような画面サイズのときに適用されますか？</li>
+<li>[ ] スマートフォンでは非表示で、タブレット（<code>md</code>）以上でのみ表示したい要素がある場合、どのようなクラスを付ければよいでしょうか？（ヒント: <code>hidden</code>クラス）</li>
+<li>[ ] なぜTailwind CSSのブレークポイントは「最大幅（max-width）」ではなく「最小幅（min-width）」を基本としているのでしょうか？（次のセクションで詳しく学びます）</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン_3-2-2: モバイルファーストの考え方.html" class="next">モバイルファーストの考え方</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

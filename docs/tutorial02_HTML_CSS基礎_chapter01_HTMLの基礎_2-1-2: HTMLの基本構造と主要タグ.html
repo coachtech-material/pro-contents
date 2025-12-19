@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMLの基本構造と主要タグ | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎.html">Chapter 1: HTMLの基礎</a><span>></span>HTMLの基本構造と主要タグ</div>
+                    <div class="section-content">
+<h1 id="2-1-2-html">2-1-2: HTMLの基本構造と主要タグ</h1>
+<h2 id="chapter-1-html">Chapter 1: HTMLの基礎</h2>
+<h3 id="section-2-html">Section 2: HTMLの基本構造と主要タグ</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、HTMLの最も基本的なタグを学び、以下のような自己紹介ページを作成します。まだCSSがないため見た目はシンプルですが、ページの「構造」がしっかりと定義されている点に注目してください。</p>
+<p><em>ここに自己紹介ページのスクリーンショットを挿入: h1の見出し、pタグの自己紹介文、ul/liの趣味リスト、aタグのSNSリンクが含まれる</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、どんなWebページにも共通するHTMLの基本構造と、コンテンツ作成に必須の主要タグを学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>HTML文書の基本構造（<code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>）を説明できるようになる。</li>
+<li>見出し、段落、リンク、画像、リストといった主要なタグを使い、簡単なWebページのコンテンツを作成できるようになる。</li>
+<li>タグに付加的な情報を与える「属性」の役割を理解し、<code>href</code>や<code>src</code>属性を正しく使えるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>前のセクションで、HTMLがWebページの「骨格」を作ることを学びました。このセクションでは、その骨格を具体的にどのように組み立てていくのか、HTML文書の基本的な構造と、頻繁に登場する主要なタグについて詳しく見ていきましょう。これは、どんなWebページを作る上でも必ず必要となる、まさに「基礎の基礎」です。</p>
+<h3 id="_2">概念の説明</h3>
+<p>HTML文書は、入れ子構造（ネスト）になった「要素（Element）」の集まりで構成されています。要素は、<code>&lt;p&gt;</code>のような「開始タグ」、<code>&lt;/p&gt;</code>のような「終了タグ」、そしてその間に挟まれた「内容（Content）」から成り立ちます。そして、すべてのHTML文書には、必ず守らなければならない基本的な構造があります。</p>
+<h4 id="html">HTML文書の基本構造</h4>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;文書のタイトル&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- ここにページに表示される内容を書く --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>この構造は、HTMLを書く上での「お作法」のようなものです。一つずつ見ていきましょう。</p>
+<ul>
+<li><code>&lt;!DOCTYPE html&gt;</code>: この文書がHTML5という最新の規格で書かれていることをブラウザに宣言するものです。必ず一番最初に記述します。</li>
+<li><code>&lt;html&gt;</code>: すべてのHTML要素を囲む、最も外側の要素です。<code>lang="ja"</code>は、このページの主要な言語が日本語であることを示しています。</li>
+<li><code>&lt;head&gt;</code>: この文書に関する「メタ情報（付加情報）」を格納する部分です。ここに書かれた内容は、直接ページには表示されません。ブラウザのタブに表示されるタイトルや、文字コードの指定、外部CSSファイルの読み込みなどがここに含まれます。</li>
+<li><code>&lt;body&gt;</code>: このページに<strong>実際に表示されるすべての内容</strong>を格納する部分です。見出し、文章、画像、リンクなど、ユーザーが目にするものはすべてこの<code>&lt;body&gt;</code>タグの中に記述します。</li>
+</ul>
+<h3 id="_3">詳細解説</h3>
+<p><code>&lt;body&gt;</code>タグの中に記述する、代表的なタグをいくつか紹介します。これらを組み合わせることで、Webページの基本的なコンテンツを作成できます。</p>
+<h4 id="1-heading">1. 見出し (Heading)</h4>
+<p>見出しは <code>&lt;h1&gt;</code> から <code>&lt;h6&gt;</code> までの6段階があります。<code>&lt;h1&gt;</code> が最も重要度が高く、数字が大きくなるにつれて重要度が低くなります。ページの構造を明確にするために非常に重要です。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;h1&gt;最も大きな見出し&lt;/h1&gt;
+    &lt;h2&gt;二番目に大きな見出し&lt;/h2&gt;
+    &lt;h3&gt;三番目に大きな見出し&lt;/h3&gt;</code></li>
+<li><strong>ポイント:</strong> <code>&lt;h1&gt;</code> は通常、そのページの主題を示すために1ページに1回だけ使うのが一般的です。</li>
+</ul>
+<h4 id="2-paragraph">2. 段落 (Paragraph)</h4>
+<p>文章のまとまり（段落）を表すには <code>&lt;p&gt;</code> タグを使います。ブラウザは通常、<code>&lt;p&gt;</code> タグの前後に適度な間隔を自動的に設けます。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;p&gt;これは最初の段落です。文章が続きます。&lt;/p&gt;
+    &lt;p&gt;これは二番目の段落です。新しい段落になります。&lt;/p&gt;</code></li>
+</ul>
+<h4 id="3-anchor">3. リンク (Anchor)</h4>
+<p>他のページへのリンクを作成するには <code>&lt;a&gt;</code> タグを使います。<code>href</code> という<strong>属性（Attribute）</strong>に行き先のURLを指定します。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;a href="https://www.google.com"&gt;Googleへのリンク&lt;/a&gt;</code></li>
+<li><strong>ポイント:</strong> タグに付加的な情報を与えるものを「属性」と呼びます。<code>&lt;a&gt;</code> タグの <code>href</code> 属性は、リンク先を指定する重要な属性です。</li>
+</ul>
+<h4 id="4-image">4. 画像 (Image)</h4>
+<p>画像を表示するには <code>&lt;img&gt;</code> タグを使います。<code>&lt;img&gt;</code> タグは終了タグを持たない「空要素」の一つです。<code>src</code> 属性に画像のパスを、<code>alt</code> 属性に画像が表示できない場合に表示される代替テキストを指定します。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;img src="images/cat.jpg" alt="かわいい猫の画像"&gt;</code></li>
+<li><strong>ポイント:</strong> <code>alt</code> 属性は、目の不自由な方が利用するスクリーンリーダーで読み上げられたり、画像が読み込めなかった場合に表示されたりするため、必ず指定するようにしましょう。</li>
+</ul>
+<h4 id="5-list">5. リスト (List)</h4>
+<p>項目を列挙するにはリストを使います。順序のないリスト <code>&lt;ul&gt;</code> と、順序のあるリスト <code>&lt;ol&gt;</code> があります。各項目は <code>&lt;li&gt;</code> タグで囲みます。</p>
+<ul>
+<li><strong>コード例（順序なし）:</strong><br />
+<code>html
+    &lt;ul&gt;
+      &lt;li&gt;りんご&lt;/li&gt;
+      &lt;li&gt;ばなな&lt;/li&gt;
+      &lt;li&gt;みかん&lt;/li&gt;
+    &lt;/ul&gt;</code></li>
+<li><strong>コード例（順序あり）:</strong><br />
+<code>html
+    &lt;ol&gt;
+      &lt;li&gt;まず、お湯を沸かす&lt;/li&gt;
+      &lt;li&gt;次に、カップに麺を入れる&lt;/li&gt;
+      &lt;li&gt;最後にお湯を注いで3分待つ&lt;/li&gt;
+    &lt;/ol&gt;</code></li>
+</ul>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>インデント（字下げ）:</strong> HTMLを書くときは、入れ子構造が分かりやすくなるようにインデント（字下げ）を付ける習慣をつけましょう。コードが格段に読みやすくなります。</li>
+<li><strong>コメント:</strong> <code>&lt;!-- これはコメントです --&gt;</code> という形式で、HTML内にメモを残すことができます。コメントはブラウザには表示されません。</li>
+</ul>
+<h3 id="_4">✨ まとめ</h3>
+<ul>
+<li>HTML文書は <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> という基本構造を持つ。</li>
+<li><code>&lt;head&gt;</code> にはページのメタ情報を、<code>&lt;body&gt;</code> には表示されるコンテンツを記述する。</li>
+<li><code>&lt;h1&gt;</code>〜<code>&lt;h6&gt;</code> で見出しを、<code>&lt;p&gt;</code> で段落を定義する。</li>
+<li><code>&lt;a&gt;</code> タグと <code>href</code> 属性でリンクを作成する。</li>
+<li><code>&lt;img&gt;</code> タグと <code>src</code>, <code>alt</code> 属性で画像を表示する。</li>
+<li><code>&lt;ul&gt;</code>（順序なし）と <code>&lt;ol&gt;</code>（順序あり）でリストを作成する。</li>
+</ul>
+<h3 id="_5">📝 学習のポイント</h3>
+<ul>
+<li>[ ] HTML文書の基本的な4つの構成要素を説明できるか？</li>
+<li>[ ] <code>&lt;head&gt;</code> と <code>&lt;body&gt;</code> の役割の違いを説明できるか？</li>
+<li>[ ] 見出し、段落、リンク、画像、リストをそれぞれ適切なタグを使って記述できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-1: このチュートリアルで学ぶこと.html" class="prev">このチュートリアルで学ぶこと</a>
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-3: divとspanの違いと使い分け.html" class="next">divとspanの違いと使い分け</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

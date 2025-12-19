@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>型推論と型注釈 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎.html">Chapter 1: TypeScriptの基礎</a><span>></span>型推論と型注釈</div>
+                    <div class="section-content">
+<h1 id="6-1-4">6-1-4: 型推論と型注釈</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>TypeScriptの強力な機能である<strong>型推論</strong>がどのように機能するかを理解する</li>
+<li><strong>型注釈</strong>を使って、意図的に型を明示する方法を習得する</li>
+<li>型推論と型注釈をどのような場面で使い分けるべきかの判断基準を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>TypeScriptは、コードに型を付けることで静的解析を可能にし、開発段階で多くのエラーを防ぎます。しかし、すべての変数や関数に手動で型を記述する必要があるとしたら、コードは非常に冗長になってしまいます。</p>
+<p>そこで登場するのが<strong>型推論（Type Inference）</strong>と<strong>型注釈（Type Annotation）</strong>です。TypeScriptは、開発者が明示的に型を指定しなくても、文脈から型を自動的に推測する賢い仕組みを持っています。このセクションでは、これらの基本的ながら非常に重要な概念を学び、TypeScriptのコードをより効率的かつ安全に書く方法を習得します。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="type-inference">🔑 型推論 (Type Inference)</h3>
+<p>型推論は、TypeScriptコンパイラがコードの文脈から変数の型を自動的に決定する機能です。主に、変数を宣言と同時に初期化した場合に機能します。</p>
+<pre class="codehilite"><code class="language-typescript">// 変数 `name` は初期値 'Taro' から string 型だと推論される
+let name = 'Taro';
+
+// name = 123; // エラー: Type 'number' is not assignable to type 'string'.
+
+// 変数 `age` は初期値 30 から number 型だと推論される
+let age = 30;
+
+// 変数 `isAdult` は初期値 true から boolean 型だと推論される
+let isAdult = true;
+</code></pre>
+
+<p>この例では、<code>name</code> に文字列リテラル <code>'Taro'</code> を代入しているため、TypeScriptは「<code>name</code> は <code>string</code> 型の変数である」と推論します。そのため、後から数値を代入しようとすると、コンパイルエラーが発生します。これにより、開発者は型を明記することなく、型の安全性を享受できます。</p>
+<h3 id="type-annotation">🔑 型注釈 (Type Annotation)</h3>
+<p>型注釈は、開発者が変数や関数の型を明示的に指定する方法です。変数名や関数名の後にコロン (<code>:</code>) を付け、その後に型名を記述します。</p>
+<pre class="codehilite"><code class="language-typescript">// 変数 `username` は string 型であることを明示的に注釈
+let username: string;
+
+username = 'Jiro'; // OK
+// username = false; // エラー: Type 'boolean' is not assignable to type 'string'.
+
+// 関数の引数と戻り値の型を注釈
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+</code></pre>
+
+<h4 id="_4">型注釈が必要なケース</h4>
+<p>型推論は非常に強力ですが、型注釈が不可欠な場面も存在します。</p>
+<ol>
+<li>
+<p><strong>変数を初期化せずに宣言する場合</strong><br />
+<code>``typescript
+    let user; //</code>any` 型と推論されてしまう<br />
+    user = 'Saburo';<br />
+    user = 123; // エラーにならない！</p>
+<p>let safeUser: string; // string 型と明示<br />
+safeUser = 'Shiro';<br />
+// safeUser = 456; // エラーになる！<br />
+```</p>
+</li>
+<li>
+<p><strong>関数の引数</strong><br />
+    関数の引数は、呼び出されるまで値が不明なため、TypeScriptは型を推論できません。そのため、必ず型注釈が必要です。<br />
+    ```typescript<br />
+    // a と b の型が不明なためエラーになる<br />
+    // function add(a, b) {<br />
+    //   return a + b;<br />
+    // }</p>
+<p>// 型を注釈することで、安全な関数になる<br />
+function add(a: number, b: number): number {<br />
+  return a + b;<br />
+}<br />
+```</p>
+</li>
+<li>
+<p><strong>より複雑な型を扱う場合</strong><br />
+    オブジェクトや配列など、複数の型が組み合わさる場合、意図した通りの型を明示するために型注釈が役立ちます。<br />
+<code>typescript
+    let post: { title: string; likes: number };
+    post = { title: 'My first post', likes: 10 };</code></p>
+</li>
+</ol>
+<h3 id="_5">型推論と型注釈の使い分け</h3>
+<p>TypeScript開発におけるベストプラクティスは、<strong>「可能な限り型推論に任せ、必要な場合にのみ型注釈を使う」</strong>というものです。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">状況</th>
+<th style="text-align: left;">推奨される方法</th>
+<th style="text-align: left;">理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">変数を宣言と同時に初期化する</td>
+<td style="text-align: left;"><strong>型推論</strong></td>
+<td style="text-align: left;">コードが冗長にならず、簡潔に保てるため。</td>
+</tr>
+<tr>
+<td style="text-align: left;">変数を初期化せずに宣言する</td>
+<td style="text-align: left;"><strong>型注釈</strong></td>
+<td style="text-align: left;"><code>any</code>型になるのを防ぎ、型の安全性を確保するため。</td>
+</tr>
+<tr>
+<td style="text-align: left;">関数の引数</td>
+<td style="text-align: left;"><strong>型注釈</strong></td>
+<td style="text-align: left;">TypeScriptが型を推論できないため、必須。</td>
+</tr>
+<tr>
+<td style="text-align: left;">関数の戻り値</td>
+<td style="text-align: left;"><strong>型注釈</strong>（推奨）</td>
+<td style="text-align: left;">意図しない戻り値を返してしまうバグを防ぎ、関数の仕様を明確にするため。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>関数の戻り値の型注釈は省略可能か？</strong></p>
+<pre class="codehilite"><code class="language-typescript">// 戻り値の型は `number` と推論される
+function multiply(a: number, b: number) {
+  return a * b;
+}
+</code></pre>
+
+<p>上記のように、TypeScriptは関数の <code>return</code> 文から戻り値の型を推論できます。しかし、複雑な関数では、意図せず異なる型を返してしまう可能性があります。そのため、<strong>関数の戻り値には型注釈を付けることが一般的に推奨されます。</strong></p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>VS Codeなどの高機能なエディタでは、型推論によって決定された変数の型を、マウスホバーで確認することができます。これにより、TypeScriptがどのように型を解釈しているかを簡単に知ることができます。</li>
+</ul>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li><strong>型推論</strong>は、TypeScriptが初期値などから自動で型を決定する機能であり、コードを簡潔に保つ。</li>
+<li><strong>型注釈</strong>は、<code>:</code> を使って開発者が明示的に型を指定する方法であり、関数の引数など推論が効かない場面で必須となる。</li>
+<li>基本方針は「<strong>型推論に任せ、必要な時だけ型注釈を使う</strong>」。これにより、安全性と可読性のバランスの取れたコードを書くことができる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎_6-1-3: 基本的な型.html" class="prev">基本的な型</a>
+<a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎_6-1-5: Chapter 1 ハンズオン: TypeScriptで関数を書く.html" class="next">Chapter 1 ハンズオン: TypeScriptで関数を書く</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

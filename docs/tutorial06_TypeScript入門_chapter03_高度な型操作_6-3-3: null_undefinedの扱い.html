@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>null_undefinedの扱い | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter03_高度な型操作.html">Chapter 3: 高度な型操作</a><span>></span>null_undefinedの扱い</div>
+                    <div class="section-content">
+<h1 id="6-3-3-nullundefined">6-3-3: null/undefinedの扱い</h1>
+<h2 id="_1">🎯 この章で学ぶこと</h2>
+<ul>
+<li><code>null</code>と<code>undefined</code>の違いを理解する</li>
+<li>TypeScriptにおける<code>null</code>/<code>undefined</code>の型安全な扱い方を学ぶ</li>
+<li>オプショナルチェイニングとNullish Coalescingを使いこなす</li>
+<li><code>strictNullChecks</code>の重要性を理解する</li>
+</ul>
+<h2 id="_2">はじめに</h2>
+<p>JavaScriptにおいて、<code>null</code>と<code>undefined</code>は「値がない」ことを表す特殊な値です。しかし、これらの値を適切に扱わないと、実行時に「Cannot read property of undefined」といったエラーが発生し、アプリケーションがクラッシュする原因となります。</p>
+<p>TypeScriptは、これらの値を型システムで管理することで、コンパイル時にエラーを検出し、より安全なコードを書くことを可能にします。</p>
+<h2 id="1-nullundefined">1. <code>null</code>と<code>undefined</code>の違い</h2>
+<p>JavaScriptには「値がない」ことを表す値が2つあります。</p>
+<table>
+<thead>
+<tr>
+<th>値</th>
+<th>意味</th>
+<th>発生するケース</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>undefined</code></td>
+<td>値が定義されていない</td>
+<td>変数を宣言したが値を代入していない、オブジェクトに存在しないプロパティにアクセスした</td>
+</tr>
+<tr>
+<td><code>null</code></td>
+<td>値が意図的に空である</td>
+<td>開発者が明示的に「値がない」ことを示すために代入する</td>
+</tr>
+</tbody>
+</table>
+<pre class="codehilite"><code class="language-typescript">let a; // undefined（値が未定義）
+let b = null; // null（意図的に空）
+
+const obj = { name: &quot;Taro&quot; };
+console.log(obj.age); // undefined（存在しないプロパティ）
+</code></pre>
+
+<h2 id="2-strictnullchecks">2. <code>strictNullChecks</code>オプション</h2>
+<p>TypeScriptの<code>tsconfig.json</code>で<code>strictNullChecks</code>を<code>true</code>に設定すると（<code>strict: true</code>に含まれる）、<code>null</code>と<code>undefined</code>は明示的に型に含めない限り、他の型に代入できなくなります。</p>
+<pre class="codehilite"><code class="language-typescript">// strictNullChecks: false の場合
+let name: string = null; // OK（危険！）
+
+// strictNullChecks: true の場合
+let name: string = null; // Error: Type 'null' is not assignable to type 'string'.
+let name: string | null = null; // OK（Union型で明示的に許可）
+</code></pre>
+
+<p>このオプションを有効にすることで、<code>null</code>や<code>undefined</code>が混入する可能性のある箇所をコンパイラが検出してくれます。</p>
+<h2 id="3">3. オプショナルプロパティとオプショナルパラメータ</h2>
+<p>オブジェクトのプロパティや関数の引数が省略可能であることを示すには、<code>?</code>を使います。</p>
+<pre class="codehilite"><code class="language-typescript">// オプショナルプロパティ
+interface User {
+  name: string;
+  age?: number; // number | undefined と同等
+}
+
+const user1: User = { name: &quot;Taro&quot; }; // OK
+const user2: User = { name: &quot;Hanako&quot;, age: 25 }; // OK
+
+// オプショナルパラメータ
+function greet(name: string, greeting?: string): string {
+  return `${greeting ?? &quot;Hello&quot;}, ${name}!`;
+}
+
+greet(&quot;Taro&quot;); // &quot;Hello, Taro!&quot;
+greet(&quot;Taro&quot;, &quot;Hi&quot;); // &quot;Hi, Taro!&quot;
+</code></pre>
+
+<h2 id="4">4. オプショナルチェイニング (<code>?.</code>)</h2>
+<p>オプショナルチェイニングを使うと、ネストしたオブジェクトのプロパティに安全にアクセスできます。途中で<code>null</code>や<code>undefined</code>に遭遇した場合、エラーを投げずに<code>undefined</code>を返します。</p>
+<pre class="codehilite"><code class="language-typescript">interface Company {
+  name: string;
+  address?: {
+    city: string;
+    zipCode?: string;
+  };
+}
+
+const company: Company = { name: &quot;TechCorp&quot; };
+
+// オプショナルチェイニングなし（危険）
+// const city = company.address.city; // Error: Cannot read property 'city' of undefined
+
+// オプショナルチェイニングあり（安全）
+const city = company.address?.city; // undefined
+const zipCode = company.address?.zipCode; // undefined
+</code></pre>
+
+<h2 id="5-nullish-coalescing">5. Nullish Coalescing (<code>??</code>)</h2>
+<p>Nullish Coalescing演算子は、左辺が<code>null</code>または<code>undefined</code>の場合にのみ右辺の値を返します。<code>||</code>演算子と似ていますが、<code>0</code>や空文字列<code>""</code>を有効な値として扱う点が異なります。</p>
+<pre class="codehilite"><code class="language-typescript">const value1 = null ?? &quot;default&quot;; // &quot;default&quot;
+const value2 = undefined ?? &quot;default&quot;; // &quot;default&quot;
+const value3 = 0 ?? &quot;default&quot;; // 0（0は有効な値）
+const value4 = &quot;&quot; ?? &quot;default&quot;; // &quot;&quot;（空文字列は有効な値）
+
+// || との違い
+const value5 = 0 || &quot;default&quot;; // &quot;default&quot;（0はfalsyなので右辺が返る）
+const value6 = &quot;&quot; || &quot;default&quot;; // &quot;default&quot;（空文字列はfalsyなので右辺が返る）
+</code></pre>
+
+<h2 id="6-null">6. 非Nullアサーション演算子 (<code>!</code>)</h2>
+<p>変数の後ろに<code>!</code>を付けると、TypeScriptに対して「この値は<code>null</code>や<code>undefined</code>ではない」と断言できます。ただし、これは型チェックを回避するものであり、実行時の安全性は保証されません。<strong>使用は最小限に留めるべきです。</strong></p>
+<pre class="codehilite"><code class="language-typescript">function getElement(id: string): HTMLElement | null {
+  return document.getElementById(id);
+}
+
+// 非Nullアサーション（危険な場合がある）
+const element = getElement(&quot;app&quot;)!;
+element.innerHTML = &quot;Hello&quot;; // 要素が存在しない場合、実行時エラー
+
+// より安全な方法
+const element = getElement(&quot;app&quot;);
+if (element) {
+  element.innerHTML = &quot;Hello&quot;;
+}
+</code></pre>
+
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li><code>null</code>は「意図的に空」、<code>undefined</code>は「値が未定義」を表す</li>
+<li><code>strictNullChecks</code>を有効にすることで、<code>null</code>/<code>undefined</code>に関するバグをコンパイル時に検出できる</li>
+<li>オプショナルチェイニング (<code>?.</code>) を使うと、ネストしたプロパティへの安全なアクセスが可能</li>
+<li>Nullish Coalescing (<code>??</code>) を使うと、<code>null</code>/<code>undefined</code>の場合のみデフォルト値を設定できる</li>
+<li>非Nullアサーション (<code>!</code>) は便利だが、実行時の安全性を保証しないため使用は慎重に</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-2: 型の絞り込み（Type Guards）.html" class="prev">型の絞り込み（Type Guards）</a>
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-4: ジェネリクスの基本.html" class="next">ジェネリクスの基本</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

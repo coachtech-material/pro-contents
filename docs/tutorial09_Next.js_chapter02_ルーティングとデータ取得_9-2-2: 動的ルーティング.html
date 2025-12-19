@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動的ルーティング | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得.html">Chapter 2: ルーティングとデータ取得</a><span>></span>動的ルーティング</div>
+                    <div class="section-content">
+<h1 id="9-2-2">9-2-2: 動的ルーティング</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>静的ルートだけでは対応できない動的なURL（例: ブログ記事、商品詳細ページ）の必要性を理解する</li>
+<li>角括弧 <code>[]</code> を使って、URLの一部を動的なパラメータとして受け取る方法（Dynamic Segments）を習得する</li>
+<li>コンポーネント内で動的パラメータを <code>params</code> オブジェクトから受け取る方法を学ぶ</li>
+<li>複数のURLセグメントを一度にキャッチする <code>[...slug]</code> (Catch-all Segments) の使い方を理解する</li>
+<li>親ルートも含めてキャッチする <code>[[...slug]]</code> (Optional Catch-all Segments) の使い方を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでは、ファイルベースルーティングを使って静的なパス（例: <code>/about</code>, <code>/dashboard</code>）を作成する方法を学びました。しかし、実際のアプリケーションでは、URLの一部が動的に変わるケースがほとんどです。</p>
+<ul>
+<li>ブログ記事: <code>/blog/my-first-post</code>, <code>/blog/react-hooks-deep-dive</code></li>
+<li>商品詳細: <code>/products/123</code>, <code>/products/456</code></li>
+<li>ユーザープロフィール: <code>/users/john-doe</code>, <code>/users/jane-doe</code></li>
+</ul>
+<p>これらのように、IDやスラッグ（URLフレンドリーな文字列）に基づいて表示するコンテンツが変わるページを、一つ一つ静的なフォルダとして作成するのは現実的ではありません。この問題を解決するのが<strong>動的ルーティング (Dynamic Routing)</strong> です。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="dynamic-segments">🔑 動的セグメント (Dynamic Segments)</h3>
+<p>Next.jsでは、フォルダ名を角括弧 <code>[]</code> で囲むことで、その部分を動的なセグメントとして定義できます。例えば、<code>[slug]</code>や<code>[id]</code>のようにします。</p>
+<h4 id="_4">例：ブログ記事ページ</h4>
+<p>ブログ記事の詳細ページを考えてみましょう。URLが<code>/blog/記事のスラッグ</code>となるようにしたい場合、以下のようなフォルダ構造になります。</p>
+<pre class="codehilite"><code>app/
+└── blog/
+    └── [slug]/         # `slug`という名前の動的セグメント
+        └── page.tsx    # /blog/:slug に対応するページコンポーネント
+</code></pre>
+
+<p>この設定により、<code>/blog/hello-world</code>や<code>/blog/learning-nextjs</code>といったURLへのアクセスは、すべて<code>app/blog/[slug]/page.tsx</code>で処理されます。</p>
+<h4 id="_5">パラメータの受け取り</h4>
+<p><code>page.tsx</code>コンポーネントは、<code>params</code>という名前のpropsを受け取ります。このオブジェクトに、URLから抽出された動的パラメータが格納されます。</p>
+<pre class="codehilite"><code class="language-tsx">// app/blog/[slug]/page.tsx
+
+// paramsの型を定義するのがベストプラクティス
+interface PostPageProps {
+  params: {
+    slug: string; // フォルダ名 `[slug]` に対応
+  };
+}
+
+// `params` をpropsとして受け取る
+export default function PostPage({ params }: PostPageProps) {
+  const { slug } = params;
+
+  // このslugを使って、データベースやAPIから特定の記事データを取得する
+  // const post = await getPostBySlug(slug);
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Blog Post: {slug}&lt;/h1&gt;
+      {/* ここに記事の内容を表示 */}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><code>params</code>オブジェクトのキーは、角括弧で囲んだフォルダ名（この場合は<code>slug</code>）と一致します。</p>
+<h3 id="generatestaticparams"><code>generateStaticParams</code> による静的生成</h3>
+<p>動的セグメントを持つページは、デフォルトではリクエスト時にサーバーサイドでレンダリングされます（SSR）。しかし、ブログ記事のように、ビルド時にすべての可能なパスが分かっている場合、<code>generateStaticParams</code>関数をエクスポートすることで、ビルド時にすべてのページを静的に生成（SSG）しておくことができます。これにより、パフォーマンスが大幅に向上します。</p>
+<pre class="codehilite"><code class="language-tsx">// app/blog/[slug]/page.tsx
+
+// この関数をエクスポートすると、ビルド時に各ページが静的生成される
+export async function generateStaticParams() {
+  // 例: APIからすべての記事のスラッグを取得
+  const posts = await fetch(&quot;https://.../posts&quot;).then((res) =&gt; res.json());
+
+  // Next.jsが期待する形式 [{ slug: 'post-1' }, { slug: 'post-2' }, ...]
+  return posts.map((post) =&gt; ({
+    slug: post.slug,
+  }));
+}
+
+// ... PostPageコンポーネントは同じ
+</code></pre>
+
+<h3 id="catch-all-segments">📚 Catch-all Segments</h3>
+<p>複数のパスセグメントをまとめてキャッチしたい場合もあります。例えば、ドキュメントサイトで<code>/docs/getting-started/installation</code>のようなURLを考えます。この場合、<code>getting-started</code>と<code>installation</code>の部分をまとめて取得したいでしょう。</p>
+<p>このようなケースでは、角括弧の中に三点リーダー <code>...</code> を付けたフォルダ名を使います。これを<strong>Catch-all Segments</strong>と呼びます。</p>
+<ul>
+<li>フォルダ名: <code>[...slug]</code></li>
+<li>URL: <code>/docs/a/b/c</code></li>
+<li><code>params</code>: <code>{ slug: ["a", "b", "c"] }</code></li>
+</ul>
+<pre class="codehilite"><code class="language-tsx">// app/docs/[...slug]/page.tsx
+
+interface DocsPageProps {
+  params: {
+    slug: string[]; // パラメータは文字列の配列になる
+  };
+}
+
+export default function DocsPage({ params }: DocsPageProps) {
+  const path = params.slug.join(&quot;/&quot;); // &quot;a/b/c&quot;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Documentation for: {path}&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<h3 id="optional-catch-all-segments">📖 Optional Catch-all Segments</h3>
+<p>Catch-all Segmentsは、少なくとも1つのセグメントが存在するURLにしかマッチしません。例えば、<code>app/docs/[...slug]/page.tsx</code>は<code>/docs</code>というURLにはマッチしません。</p>
+<p>親ルート（この場合は<code>/docs</code>）も含めて、すべてのパスをキャッチしたい場合は、フォルダ名を二重の角括弧 <code>[[]]</code> で囲みます。これを<strong>Optional Catch-all Segments</strong>と呼びます。</p>
+<ul>
+<li>フォルダ名: <code>[[...slug]]</code></li>
+<li>URL: <code>/docs</code> → <code>params</code>: <code>{ slug: undefined }</code></li>
+<li>URL: <code>/docs/a/b</code> → <code>params</code>: <code>{ slug: ["a", "b"] }</code></li>
+</ul>
+<p>これは、例えば<code>/shop</code>という商品一覧ページと、<code>/shop/category/product</code>のような絞り込みページを同じコンポーネントで処理したい場合に便利です。</p>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li>URLの一部が動的に変わるルートを作成するには、フォルダ名を角括弧 <code>[]</code> で囲んだ<strong>動的セグメント</strong>を使用する（例: <code>[slug]</code>）。</li>
+<li>ページコンポーネントは <code>params</code> propsを受け取り、URLから抽出された動的な値にアクセスできる。</li>
+<li>複数のURLセグメントを配列としてキャッチするには、<code>[...slug]</code> のような <strong>Catch-all Segments</strong> を使用する。</li>
+<li>親ルートも含めてすべてをキャッチするには、<code>[[...slug]]</code> のような <strong>Optional Catch-all Segments</strong> を使用する。</li>
+<li>これらの動的ルーティング機能を活用することで、ブログ、ECサイト、ドキュメントサイトなど、あらゆる種類のWebアプリケーションのURL構造を柔軟に構築できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-1: ファイルベースルーティング.html" class="prev">ファイルベースルーティング</a>
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-3: データ取得（fetch）.html" class="next">データ取得（fetch）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

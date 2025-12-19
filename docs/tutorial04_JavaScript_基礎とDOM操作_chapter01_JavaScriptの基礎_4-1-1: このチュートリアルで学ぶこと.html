@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>このチュートリアルで学ぶこと | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎.html">Chapter 1: JavaScriptの基礎</a><span>></span>このチュートリアルで学ぶこと</div>
+                    <div class="section-content">
+<h1 id="4-1-1">4-1-1: このチュートリアルで学ぶこと</h1>
+<h2 id="chapter-1-javascript">Chapter 1: JavaScriptの基礎</h2>
+<h3 id="section-1">Section 1: このチュートリアルで学ぶこと</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このチュートリアルを終える頃には、あなたはJavaScriptの基本的な文法を理解し、簡単な計算機やToDoリストといった、ユーザーの操作に反応するインタラクティブなWebアプリケーションをゼロから構築できるようになります。</p>
+<p><em>ここにスクリーンショットを挿入: (1) 数字ボタンと演算子ボタンがあり、クリックするとディスプレイに計算結果が表示されるシンプルな電卓のUI。 (2) 入力フィールドと「追加」ボタンがあり、タスクを追加するとリストに表示され、クリックすると取り消し線が引かれるToDoリストのUI。</em></p>
+<hr />
+<p>🎯 <strong>このチュートリアルで学ぶこと</strong></p>
+<p>このチュートリアルでは、Webページに「動き」を与えるためのプログラミング言語、JavaScriptの基礎を徹底的に学びます。このチュートリアルを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>JavaScriptの基本構文（変数、関数、条件分岐、ループ）を使って、一連の処理を記述できるようになる。</li>
+<li>DOM（Document Object Model）を操作して、Webページの見た目や内容を動的に変更できるようになる。</li>
+<li>イベントリスナーを使って、ボタンのクリックやフォームの入力といったユーザーのアクションに応じた処理を実行できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：静的なページから動的なアプリケーションへ</h3>
+<p>これまでのチュートリアルで、あなたはHTMLでWebページの骨格を作り、CSS（とTailwind CSS）で美しく装飾する方法を学びました。しかし、それだけではまだ「静的な」Webページ、つまり、ただ情報を表示するだけのページしか作れません。</p>
+<p>実世界のWebアプリケーションは、ユーザーの操作に応じて見た目が変わったり、サーバーと通信したり、複雑な計算を行ったりします。例えば、</p>
+<ul>
+<li>ECサイトで「カートに追加」ボタンを押すと、カートのアイコンに商品の数が表示される。</li>
+<li>SNSで「いいね」ボタンを押すと、カウンターの数字が増え、ボタンの色が変わる。</li>
+<li>検索ボックスに文字を入力すると、リアルタイムで検索結果の候補が表示される。</li>
+</ul>
+<p>こうした「動き」や「インタラクティブ性」を実現するのが、<strong>JavaScript</strong>です。</p>
+<p>Laravelエンジニアであるあなたにとって、JavaScriptは、サーバーサイドで培ったプログラミングの知識を、ユーザーが直接触れるフロントエンドの世界で活かすための強力な武器となります。PHPがサーバー側でHTMLを生成するのに対し、JavaScriptはユーザーのブラウザ上でHTMLやCSSを直接操作し、UIをリアルタイムに更新することができるのです。</p>
+<p>このチュートリアルでは、JavaScriptの基本的な「読み書き」から始め、最終的にはWebページを自在に操る「DOM操作」までを習得します。さあ、あなたのWebページに命を吹き込む旅を始めましょう！</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-2: 変数とデータ型（let, const, var）.html" class="next">変数とデータ型（let, const, var）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zustandによるグローバル状態管理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter03_ライブラリ活用術.html">Chapter 3: ライブラリ活用術</a><span>></span>Zustandによるグローバル状態管理</div>
+                    <div class="section-content">
+<h1 id="8-3-4-zustand">8-3-4: Zustandによるグローバル状態管理</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>グローバル状態管理の必要性と、Context APIの課題を理解する</li>
+<li><code>Zustand</code>の基本的な考え方と、そのシンプルさ、パフォーマンスの利点を学ぶ</li>
+<li><code>create</code> APIを使って、状態（State）とアクション（Action）を持つストアを作成する方法を習得する</li>
+<li>作成したストアをReactコンポーネントで利用する方法を学ぶ</li>
+<li>ストア内で非同期処理を扱う方法を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Reactアプリケーションでは、コンポーネント間で状態を共有するために「Propsをバケツリレーする」方法や、「状態を親コンポーネントにリフトアップする」方法を学びました。しかし、アプリケーションが大規模になり、多くのコンポーネントが同じ状態を必要とする場合、これらの方法は非常に煩雑になります。</p>
+<p>この問題を解決するReactの組み込み機能が<strong>Context API</strong>です。Contextは、コンポーネントツリーの深い階層にあるコンポーネントにも、Propsを介さずに状態を直接渡すことができます。</p>
+<p>しかし、Context APIにも課題があります。特に、Contextの値が更新されると、そのContextを購読しているすべてのコンポーネントが<strong>無条件に再レンダリング</strong>されてしまうというパフォーマンス上の問題です。大規模なアプリケーションでは、これが原因で不要な再レンダリングが多発し、パフォーマンスのボトルネックになることがあります。</p>
+<p>この「Contextの再レンダリング問題」を解決しつつ、よりシンプルで直感的なAPIを提供するグローバル状態管理ライブラリが <strong><code>Zustand</code></strong> です。</p>
+<p><code>Zustand</code>（ズースタンド、ドイツ語で「状態」の意味）は、Reduxのような複雑なボイラープレートコードを必要とせず、フックベースの非常にシンプルなAPIで強力な状態管理を実現します。Fluxアーキテクチャに影響を受けており、状態の更新が予測可能であるという特徴も持っています。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="zustand">🔑 Zustandの基本コンセプト</h3>
+<p><code>Zustand</code>の核心は、<code>create</code>という一つの関数です。この関数を使って、状態（State）と、その状態を更新するための関数（Action）をまとめた「<strong>ストア</strong>」を作成します。このストアはReactコンポーネントの外に存在するただのオブジェクトであり、Reactに依存しません。</p>
+<p>そして、作成されたストアは自動的にフックを返します。コンポーネントはそのフックを使うだけで、ストアの状態にアクセスしたり、アクションを呼び出したりできます。</p>
+<h3 id="create-api"><code>create</code> APIによるストアの作成</h3>
+<p>カウンターを管理するシンプルなストアを作成してみましょう。</p>
+<pre class="codehilite"><code class="language-bash">npm install zustand
+</code></pre>
+
+<pre class="codehilite"><code class="language-typescript">// src/store/counterStore.ts
+import { create } from 'zustand';
+
+// ストアの型を定義
+interface CounterState {
+  count: number;
+  increment: () =&gt; void;
+  decrement: () =&gt; void;
+  reset: () =&gt; void;
+}
+
+// create関数でストアを作成
+export const useCounterStore = create&lt;CounterState&gt;((set) =&gt; ({
+  // ① 初期状態 (State)
+  count: 0,
+
+  // ② 状態を更新する関数 (Action)
+  increment: () =&gt; set((state) =&gt; ({ count: state.count + 1 })),
+  decrement: () =&gt; set((state) =&gt; ({ count: state.count - 1 })),
+  reset: () =&gt; set({ count: 0 }),
+}));
+</code></pre>
+
+<h4 id="_4">コードのポイント</h4>
+<ol>
+<li><strong>初期状態</strong>: <code>create</code>のコールバック関数は、ストアの初期状態をオブジェクトとして返します。<code>count: 0</code>が初期状態です。</li>
+<li><strong>アクション</strong>: <code>increment</code>や<code>decrement</code>のような、状態を更新するためのメソッドを定義します。これらのメソッド内で<code>set</code>関数を呼び出すことで、状態を更新します。</li>
+<li><strong><code>set</code>関数</strong>: <code>set</code>関数は、<code>Zustand</code>から提供される、ストアの状態を安全に更新するための関数です。<code>setState</code>のように、現在の状態（<code>state</code>）を受け取って新しい状態を返す関数を渡すことで、イミュータブルな更新を簡単に行えます。</li>
+</ol>
+<p>これだけで、グローバルにアクセス可能な<code>useCounterStore</code>フックが完成しました。<code>Provider</code>でコンポーネントをラップする必要は一切ありません。</p>
+<h3 id="_5">ストアの利用</h3>
+<p>作成したストアをコンポーネントで使うのは非常に簡単です。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/Counter.tsx
+import { useCounterStore } from '../store/counterStore';
+
+function Counter() {
+  // ストアから必要なstateとactionを取得
+  const { count, increment, decrement } = useCounterStore();
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={increment}&gt;Increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;Decrement&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><code>useCounterStore()</code>を呼び出すだけで、ストアのすべての状態とアクションにアクセスできます。</p>
+<h4 id="_6">パフォーマンスの最適化</h4>
+<p><code>Zustand</code>の真価は、状態の一部だけを購読できる点にあります。これにより、不要な再レンダリングを避けることができます。</p>
+<pre class="codehilite"><code class="language-tsx">// このコンポーネントは`count`が変更された時だけ再レンダリングされる
+function CountDisplay() {
+  const count = useCounterStore((state) =&gt; state.count);
+  return &lt;p&gt;Count: {count}&lt;/p&gt;;
+}
+
+// このコンポーネントは`reset`アクションしか使わないので、`count`が変更されても再レンダリングされない！
+function ResetButton() {
+  const reset = useCounterStore((state) =&gt; state.reset);
+  return &lt;button onClick={reset}&gt;Reset&lt;/button&gt;;
+}
+</code></pre>
+
+<p><code>useCounterStore</code>の引数にセレクター関数（<code>state =&gt; state.count</code>）を渡すことで、その値が変更されたときにのみコンポーネントが再レンダリングされるようになります。これは、Context APIにはない<code>Zustand</code>の大きな利点です。</p>
+<h3 id="_7">非同期アクション</h3>
+<p><code>Zustand</code>では、非同期処理も簡単に扱えます。アクション内で<code>async/await</code>を使うだけです。</p>
+<pre class="codehilite"><code class="language-typescript">// src/store/todoStore.ts
+import { create } from 'zustand';
+
+interface Todo {
+  id: number;
+  title: string;
+}
+
+interface TodoState {
+  todos: Todo[];
+  fetchTodos: () =&gt; Promise&lt;void&gt;;
+}
+
+export const useTodoStore = create&lt;TodoState&gt;((set) =&gt; ({
+  todos: [],
+  fetchTodos: async () =&gt; {
+    const response = await fetch('https://api.example.com/todos');
+    const data = await response.json();
+    set({ todos: data });
+  },
+}));
+</code></pre>
+
+<h2 id="_8">✨ まとめ</h2>
+<ul>
+<li><code>Zustand</code>は、Context APIの再レンダリング問題を解決し、ボイラープレートコードを最小限に抑えた、シンプルで強力なグローバル状態管理ライブラリである。</li>
+<li><code>create</code>関数一つで、状態（State）とアクション（Action）を持つ「ストア」を簡単に作成できる。</li>
+<li><code>Provider</code>でラップする必要がなく、作成されたフックをコンポーネントで呼び出すだけで、どこからでも状態にアクセスできる。</li>
+<li>セレクター関数を使うことで、状態の一部だけを購読し、不要な再レンダリングを抑制するパフォーマンス最適化が容易に行える。</li>
+<li><code>TanStack Query</code>が<strong>サーバー状態</strong>管理のデファクトスタンダードである一方、<code>Zustand</code>は<strong>クライアント状態</strong>のグローバル管理において、非常に有力な選択肢である。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial08_React応用_chapter03_ライブラリ活用術_8-3-3: TanStack Queryによるサーバー状態管理.html" class="prev">TanStack Queryによるサーバー状態管理</a>
+<a href="tutorial08_React応用_chapter03_ライブラリ活用術_8-3-5: Chapter 3 ハンズオン: 高機能なフォームを作成する.html" class="next">Chapter 3 ハンズオン: 高機能なフォームを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

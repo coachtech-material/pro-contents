@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading UIとError UI | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得.html">Chapter 2: ルーティングとデータ取得</a><span>></span>Loading UIとError UI</div>
+                    <div class="section-content">
+<h1 id="9-2-4-loading-uierror-ui">9-2-4: Loading UIとError UI</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.js App Routerが提供する、規約に基づいたローディングUIとエラーUIの仕組みを理解する</li>
+<li><code>loading.tsx</code>ファイルを作成し、データ取得中に自動的に表示されるローディングUIを実装する方法を学ぶ</li>
+<li>React Suspenseが裏側でどのように機能しているかを理解する</li>
+<li><code>error.tsx</code>ファイルを作成し、ルートセグメントで発生したエラーをハンドリングし、フォールバックUIを表示する方法を学ぶ</li>
+<li>React Error Boundaryが裏側でどのように機能しているかを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでは、Server Componentsでデータを取得する方法を学びました。データ取得には時間がかかるため、その間ユーザーに「読み込み中である」ことを示すフィードバックを提供することは、優れたUX（ユーザー体験）のために不可欠です。</p>
+<p>同様に、データ取得の失敗やレンダリング中の予期せぬエラーが発生した場合に、アプリケーション全体がクラッシュするのではなく、適切なエラーメッセージを表示し、ユーザーが次のアクション（例: 再読み込み）を取れるようにすることも非常に重要です。</p>
+<p>Next.js App Routerは、これらの一般的な要件に対して、<strong>規約に基づいたファイル</strong>（<code>loading.tsx</code>と<code>error.tsx</code>）を作成するだけで、Reactの高度な機能である<strong>Suspense</strong>と<strong>Error Boundary</strong>を簡単に利用できる仕組みを提供しています。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="loadingtsx-ui">⏳ <code>loading.tsx</code> によるローディングUI</h3>
+<p><code>loading.tsx</code>は、同じ階層にある<code>page.tsx</code>とその子コンポーネントがデータを取得している間、自動的に表示されるUIを定義するための規約ファイルです。</p>
+<h4 id="_4">使い方</h4>
+<p>データ取得を行う<code>page.tsx</code>と同じディレクトリに、<code>loading.tsx</code>という名前のファイルを作成するだけです。</p>
+<pre class="codehilite"><code>app/
+└── dashboard/
+    ├── page.tsx      # データ取得を行うページ
+    └── loading.tsx   # page.tsxのデータ取得中に表示されるUI
+</code></pre>
+
+<pre class="codehilite"><code class="language-tsx">// app/dashboard/loading.tsx
+
+export default function Loading() {
+  // スケルトンスクリーンやスピナーなど、任意のローディングUIを返す
+  return &lt;div&gt;Loading dashboard data...&lt;/div&gt;;
+}
+</code></pre>
+
+<pre class="codehilite"><code class="language-tsx">// app/dashboard/page.tsx
+
+async function DashboardPage() {
+  // このデータ取得が完了するまで、Next.jsは
+  // loading.tsx の内容を代わりに表示する
+  await new Promise(resolve =&gt; setTimeout(resolve, 2000)); // 2秒待機をシミュレート
+  const response = await fetch(&quot;https://api.example.com/dashboard&quot;);
+  const data = await response.json();
+
+  return &lt;h1&gt;Dashboard Data: {data.value}&lt;/h1&gt;;
+}
+
+export default DashboardPage;
+</code></pre>
+
+<p>これだけで、<code>/dashboard</code>にアクセスすると、まず<code>loading.tsx</code>の内容が即座に表示され、<code>page.tsx</code>のデータ取得が完了した時点で、ページの内容が<code>page.tsx</code>のレンダリング結果に自動的に切り替わります。</p>
+<h4 id="react-suspense">裏側の仕組み: React Suspense</h4>
+<p>この機能は、Reactの<strong>Suspense</strong>という機能に基づいています。Next.jsは、<code>loading.tsx</code>ファイルを見つけると、自動的に<code>page.tsx</code>を<code>&lt;Suspense&gt;</code>コンポーネントでラップし、<code>fallback</code> propに<code>loading.tsx</code>の内容を渡してくれます。</p>
+<pre class="codehilite"><code class="language-tsx">// Next.jsが内部的に生成するコードのイメージ
+&lt;Suspense fallback={&lt;Loading /&gt;}&gt;
+  &lt;DashboardPage /&gt;
+&lt;/Suspense&gt;
+</code></pre>
+
+<p><code>loading.tsx</code>は、この複雑な設定をファイル規約という形で抽象化し、開発者がSuspenseを意識することなく、簡単にローディングUIを実装できるようにしてくれているのです。</p>
+<h3 id="errortsx-ui">💣 <code>error.tsx</code> によるエラーUI</h3>
+<p><code>error.tsx</code>は、ルートセグメント（同じ階層の<code>page.tsx</code>やその子コンポーネント）で予期せぬエラーが発生した際に、自動的に表示されるフォールバックUIを定義するための規約ファイルです。</p>
+<h4 id="_5">使い方</h4>
+<p><code>loading.tsx</code>と同様に、エラーをキャッチしたいルートセグメントに<code>error.tsx</code>という名前のファイルを作成します。</p>
+<pre class="codehilite"><code>app/
+└── dashboard/
+    ├── page.tsx
+    ├── loading.tsx
+    └── error.tsx     # page.tsxでエラーが発生した場合に表示されるUI
+</code></pre>
+
+<p><code>error.tsx</code>コンポーネントは、<strong>Client Componentである必要があります</strong> (<code>"use client";</code>が必須)。これは、エラーが発生した後にユーザーが「再試行」するなどのインタラクションを可能にするためです。</p>
+<pre class="codehilite"><code class="language-tsx">// app/dashboard/error.tsx
+&quot;use client&quot;; // Error BoundaryはClient Componentである必要がある
+
+import { useEffect } from &quot;react&quot;;
+
+interface ErrorProps {
+  error: Error; // 発生したエラーオブジェクト
+  reset: () =&gt; void; // セグメントを再レンダリングして再試行する関数
+}
+
+export default function Error({ error, reset }: ErrorProps) {
+  useEffect(() =&gt; {
+    // エラーをロギングサービスに送信するなどの処理
+    console.error(error);
+  }, [error]);
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Something went wrong!&lt;/h2&gt;
+      &lt;p&gt;{error.message}&lt;/p&gt;
+      &lt;button onClick={() =&gt; reset()}&gt;Try again&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><code>page.tsx</code>内でエラーがスローされると（例: <code>fetch</code>の失敗）、Next.jsは最も近い親階層にある<code>error.tsx</code>を探し、その内容でUIを置き換えます。<code>reset</code>関数を呼び出すことで、ユーザーはページを再読み込みすることなく、コンポーネントの再レンダリングを試みることができます。</p>
+<h4 id="react-error-boundary">裏側の仕組み: React Error Boundary</h4>
+<p>この機能は、Reactの<strong>Error Boundary</strong>という機能に基づいています。Next.jsは、<code>error.tsx</code>ファイルを見つけると、自動的にルートセグメントをError Boundaryコンポーネントでラップします。</p>
+<p><code>error.tsx</code>は、アプリケーション全体がクラッシュするのを防ぎ、エラーが発生した部分だけをフォールバックUIに置き換えることで、アプリケーションの堅牢性を高めます。重要な点として、<code>error.tsx</code>は同じ階層の<code>layout.tsx</code>で発生したエラーはキャッチしません。これは、エラーUI自体を表示するための共通レイアウト（ナビゲーションなど）が、エラーによって壊れるのを防ぐためです。</p>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li>Next.js App Routerでは、ファイル規約に従うだけで、高度なローディングUIとエラーハンドリングを簡単に実装できる。</li>
+<li><code>loading.tsx</code>を作成すると、同じ階層のページコンポーネントのデータ取得中に、その内容が<strong>React Suspense</strong>のフォールバックとして自動的に表示される。</li>
+<li><code>error.tsx</code>を作成すると、ページコンポーネントでエラーが発生した際に、その内容が<strong>React Error Boundary</strong>のフォールバックとして自動的に表示される。</li>
+<li><code>error.tsx</code>は<code>"use client";</code>ディレクティブが必須であり、エラー内容の表示や再試行のための<code>reset</code>関数といったインタラクティブな機能を提供できる。</li>
+<li>これらの規約を活用することで、UXとアプリケーションの堅牢性を手軽に向上させることができる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-3: データ取得（fetch）.html" class="prev">データ取得（fetch）</a>
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-5: Chapter 2 ハンズオン: ブログを作成する.html" class="next">Chapter 2 ハンズオン: ブログを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: カスタムテーマを設定する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス.html">Chapter 3: カスタムテーマとベストプラクティス</a><span>></span>Chapter 3 ハンズオン: カスタムテーマを設定する</div>
+                    <div class="section-content">
+<h1 id="tutorial-3-tailwind-css">Tutorial 3: Tailwind CSS 徹底習得</h1>
+<h2 id="chapter-3">Chapter 3: カスタムテーマとベストプラクティス</h2>
+<h3 id="chapter-3_1">Chapter 3 ハンズオン: プロジェクトのブランドカラーを定義し、カスタムボタンコンポーネントを作成する</h3>
+<p>🎯 <strong>このハンズオンで達成すること</strong></p>
+<ul>
+<li><code>tailwind.config.js</code>を編集し、プロジェクト独自のブランドカラーを追加できるようになる。</li>
+<li><code>@apply</code>を使い、カスタマイズした色を含んだボタンコンポーネント（<code>.btn</code>）を作成できるようになる。</li>
+<li>作成したコンポーネントを使い、複数のバリエーション（プライマリ、セカンダリ）を持つボタンを効率的に実装できるようになる。</li>
+</ul>
+<hr />
+<p>🖼️ <strong>完成イメージ</strong></p>
+<p>このハンズオンでは、まずプロジェクトのテーマカラーとして「Laravelの赤」と「落ち着いたグレー」を定義します。その後、それらの色を使った2種類のボタンコンポーネント（<code>.btn-primary</code>, <code>.btn-secondary</code>）を<code>@apply</code>を使って作成します。</p>
+<p><em>ここにスクリーンショットを挿入: (1) Laravelの赤色を基調としたプライマリボタン。 (2) グレーを基調としたセカンダリボタン。どちらも同じ形状・サイズで、ホバー時のインタラクションも実装されている。</em></p>
+<hr />
+<h3 id="_1">🧠 先輩エンジニアの思考プロセス</h3>
+<p>「ブランドカラーを使ったボタンをコンポーネント化してください」と頼まれたとき、頭の中では以下のような手順を考えます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">手順</th>
+<th style="text-align: left;">思考プロセス</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. 色の定義 (<code>tailwind.config.js</code>)</strong></td>
+<td style="text-align: left;">まずはデザインシステムの中核となる色を定義しよう。<code>theme.extend.colors</code>にブランドカラーを追加する。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. 共通スタイルの抽出 (<code>@apply</code>)</strong></td>
+<td style="text-align: left;">プライマリボタンとセカンダリボタンで共通するスタイル（サイズ、余白、フォント、角丸など）は、ベースとなる<code>.btn</code>クラスにまとめよう。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. バリエーションの作成 (<code>@apply</code>)</strong></td>
+<td style="text-align: left;">色に関する部分だけを、<code>.btn-primary</code>と<code>.btn-secondary</code>に分けて定義しよう。こうすれば、後から色の変更が楽になる。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. HTMLでの実装</strong></td>
+<td style="text-align: left;">最後に、HTML側で<code>.btn</code>と<code>.btn-primary</code>のように、基本クラスと修飾クラスを組み合わせて使う。</td>
+</tr>
+</tbody>
+</table>
+<p>💡 <strong>ポイント:</strong> <strong>「共通部分」と「可変部分」を分離する</strong>のが、優れたコンポーネント設計の鍵です。<code>@apply</code>を使う際も、この原則を意識することが重要です。</p>
+<hr />
+<h3 id="step-by-step">🏃 実践: Step by Stepでカスタムボタンを作成しよう</h3>
+<p><code>tailwind-handson</code>プロジェクトを使います。</p>
+<h4 id="step-1">Step 1: ブランドカラーの追加</h4>
+<p>まず、<code>tailwind.config.js</code>を開き、<code>theme.extend.colors</code>にプロジェクトのブランドカラーを追加します。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+module.exports = {
+  content: [&quot;./src/**/*.{html,js}&quot;],
+  theme: {
+    extend: {
+      colors: {
+        'brand': {
+          'primary': '#F05340', // Laravel Red
+          'secondary': '#6c757d', // Gray
+        },
+      },
+    },
+  },
+  plugins: [],
+}
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>brand</code>というキーで色をグループ化し、その中に<code>primary</code>と<code>secondary</code>を定義しました。これにより、<code>bg-brand-primary</code>や<code>text-brand-secondary</code>といったクラス名で色を使えるようになります。</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-2-apply">Step 2: <code>@apply</code>を使ったコンポーネントの作成</h4>
+<p>次に、<code>src/input.css</code>を開き、<code>@tailwind</code>ディレクティブの下にボタンコンポーネントのスタイルを記述します。</p>
+<pre class="codehilite"><code class="language-css">/* src/input.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ボタンの共通スタイル */
+.btn {
+  @apply font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-300;
+}
+
+/* プライマリボタン */
+.btn-primary {
+  @apply bg-brand-primary text-white;
+}
+.btn-primary:hover {
+  @apply bg-red-700; /* 少し濃い赤 */
+}
+
+/* セカンダリボタン */
+.btn-secondary {
+  @apply bg-brand-secondary text-white;
+}
+.btn-secondary:hover {
+  @apply bg-gray-700; /* 少し濃いグレー */
+}
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>.btn</code>: ボタンの形状やフォント、影、アニメーション効果など、<strong>色以外の共通スタイル</strong>をすべてここにまとめます。<ul>
+<li><code>transition-colors duration-300</code>: ホバー時の色の変化が0.3秒かけて滑らかに行われるようになります。</li>
+</ul>
+</li>
+<li><code>.btn-primary</code>, <code>.btn-secondary</code>: <strong>色に関するスタイル</strong>だけをそれぞれ定義します。</li>
+<li><code>:hover</code>: ホバー時の色も定義します。ここでは、configで定義した色名ではなく、Tailwindのデフォルトカラーパレットの濃い色を指定しています。（もちろん、<code>hover</code>用の色をconfigで定義することも可能です）</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-3-html">Step 3: HTMLでの実装</h4>
+<p>最後に、<code>src/index.html</code>を編集し、作成したボタンコンポーネントを使ってみましょう。<code>&lt;body&gt;</code>の中身を以下のように書き換えます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+&lt;body class=&quot;bg-gray-100 flex justify-center items-center h-screen space-x-4&quot;&gt;
+
+  &lt;button class=&quot;btn btn-primary&quot;&gt;
+    Primary Button
+  &lt;/button&gt;
+
+  &lt;button class=&quot;btn btn-secondary&quot;&gt;
+    Secondary Button
+  &lt;/button&gt;
+
+&lt;/body&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>class="btn btn-primary"</code>: <strong>共通の<code>.btn</code>クラス</strong>と、<strong>バリエーションの<code>.btn-primary</code>クラス</strong>を両方指定しているのがポイントです。これにより、スタイルが合成されます。</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-4">Step 4: ビルドと確認</h4>
+<p>ターミナルで<code>npm run watch</code>が実行されていることを確認し、ブラウザをリロードしてください。</p>
+<p>定義したブランドカラーの2種類のボタンが表示され、それぞれにホバーエフェクトが適用されていれば成功です。<code>src/input.css</code>の<code>.btn-primary</code>の<code>bg-brand-primary</code>を<code>bg-blue-500</code>などに変更して保存すると、即座にブラウザ上のボタンの色が変わることも確認してみましょう。コンポーネント化のメリットが実感できるはずです。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><code>tailwind.config.js</code>でプロジェクトのカラースキームを定義することで、デザインの一貫性を保ちやすくなる。</li>
+<li><code>@apply</code>を使う際は、「共通スタイル」と「バリエーションのスタイル」を分離して定義すると、メンテナンス性の高いコンポーネントを作ることができる。</li>
+<li>HTML側では、ベースとなるクラスとバリエーションのクラスを組み合わせて使用する。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] もし「危険な操作」を表す赤い<code>.btn-danger</code>を追加したい場合、<code>input.css</code>にどのようなコードを追加しますか？</li>
+<li>[ ] <code>.btn</code>クラスに<code>disabled:opacity-50 disabled:cursor-not-allowed</code>というユーティリティを追加すると、HTMLで<code>&lt;button class="btn btn-primary" disabled&gt;...</code>とした場合にどのような表示になるか想像できますか？</li>
+<li>[ ] このハンズオンで作成したボタンコンポーネントは、<code>@apply</code>を使わずにReactコンポーネントとして実装することもできます。もしReactで実装する場合、どのようなコードになるか考えてみましょう。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス_3-3-4: Tailwind_CSSのベストプラクティス.html" class="prev">Tailwind_CSSのベストプラクティス</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

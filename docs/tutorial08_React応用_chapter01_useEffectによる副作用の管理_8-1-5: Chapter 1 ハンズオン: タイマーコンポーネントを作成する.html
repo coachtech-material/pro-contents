@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: タイマーコンポーネントを作成する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter01_useEffectによる副作用の管理.html">Chapter 1: useEffectによる副作用の管理</a><span>></span>Chapter 1 ハンズオン: タイマーコンポーネントを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-8-react">Tutorial 8: React応用</h1>
+<h2 id="chapter-1-useeffect">Chapter 1: <code>useEffect</code>による副作用の管理</h2>
+<h3 id="chapter-1-api">Chapter 1 ハンズオン: APIからユーザー情報を取得する</h3>
+<p>🎯 <strong>このハンズオンで達成すること</strong></p>
+<ul>
+<li>コンポーネントのマウント時に、<code>useEffect</code>を使ってAPIからデータを取得する方法を習得する。</li>
+<li>取得したデータをStateで管理し、UIに表示する流れを実装できるようになる。</li>
+<li>ローディング中とエラー発生時のUIを条件付きレンダリングで表示できるようになる。</li>
+<li><code>useEffect</code>のクリーンアップ関数を使って、APIリクエストのキャンセル処理を実装し、Strict Modeの2回実行に正しく対応できるようになる。</li>
+</ul>
+<hr />
+<p>🖼️ <strong>完成イメージ</strong></p>
+<p>コンポーネントが表示されると、「Loading...」と表示され、APIから取得したユーザー名が表示されます。IDを変更するボタンを押すと、再度APIリクエストが走り、別のユーザー名が表示されます。</p>
+<p><img alt="完成イメージ" src="https://placehold.jp/800x400.png?text=ユーザー情報%0A---%0AUser%20ID:%201%0A%0A...Loading...%0A%0A---%0A↓%0A---%0AUser%20ID:%201%0A%0A名前:%20Leanne%20Graham%0A%0A[次のユーザーへ]" /></p>
+<hr />
+<h3 id="_1">🧠 先輩エンジニアの思考プロセス</h3>
+<p>「ユーザーIDを指定して、そのユーザー情報をAPIから取ってきて表示するコンポーネント作って」と言われたら、こう考える。</p>
+<ol>
+<li><strong>必要なStateは何か？:</strong><ul>
+<li>取得したユーザー情報を保持するStateが必要だ。<code>user</code>という名前にしよう。初期値は<code>null</code>だな。</li>
+<li>API通信中であることを示すStateも必要だ。<code>loading</code>という<code>boolean</code>のStateにしよう。初期値は<code>true</code>だ。</li>
+<li>エラーが発生したことを示すStateも欲しい。<code>error</code>というStateで、エラーメッセージ（<code>string</code>）か<code>null</code>を保持するようにしよう。</li>
+<li>表示するユーザーIDを管理するStateも必要だ。<code>userId</code>という<code>number</code>のStateにしよう。初期値は<code>1</code>だ。</li>
+</ul>
+</li>
+<li><strong>副作用（API通信）のタイミング:</strong><ul>
+<li>API通信は副作用だから、<code>useEffect</code>の中で行う。</li>
+<li>実行タイミングは？<ul>
+<li>まず、コンポーネントが最初に表示されたときに実行したい。</li>
+<li>そして、<code>userId</code> Stateが変更されたときにも再実行したい。</li>
+</ul>
+</li>
+<li>ということは、<code>useEffect</code>の依存配列は<code>[userId]</code>にすれば完璧だ。</li>
+</ul>
+</li>
+<li><strong>API通信処理の実装:</strong><ul>
+<li><code>useEffect</code>の中で<code>async/await</code>を使いたいが、<code>useEffect</code>の第一引数に直接<code>async</code>は付けられない（クリーンアップ関数を返せなくなるため）。なので、<code>useEffect</code>の内部で<code>async</code>関数を定義して、それを呼び出す形にしよう。</li>
+<li><code>try...catch</code>ブロックでエラーハンドリングをしっかり行う。<code>loading</code> Stateの更新も忘れずに。通信開始時に<code>setLoading(true)</code>、終了時（成功・失敗問わず）に<code>setLoading(false)</code>を呼ぶ。</li>
+<li>今回はダミーAPIとして<code>JSONPlaceholder</code>を使おう。<code>https://jsonplaceholder.typicode.com/users/{userId}</code>というエンドポイントだ。</li>
+</ul>
+</li>
+<li><strong>クリーンアップ処理の実装:</strong><ul>
+<li>Strict Modeでの2回実行問題に対応するため、リクエストのキャンセル処理を入れるのがプロだ。</li>
+<li><code>AbortController</code>を作成し、<code>fetch</code>の<code>signal</code>に渡す。</li>
+<li><code>useEffect</code>のクリーンアップ関数で<code>controller.abort()</code>を呼び出す。これで、<code>userId</code>が素早く変更されたときや、コンポーネントがアンマウントされたときに、古いリクエストがキャンセルされる。</li>
+</ul>
+</li>
+<li><strong>UIの条件付きレンダリング:</strong><ul>
+<li><code>loading</code>が<code>true</code>の間は、「Loading...」と表示する。</li>
+<li><code>error</code>が存在する場合は、エラーメッセージを表示する。</li>
+<li><code>user</code>が正常に取得できたら、ユーザー名を表示する。</li>
+<li>これらを三項演算子や<code>&amp;&amp;</code>を使って書けば、スッキリするな。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="step-by-step">🏃 実践: Step by Stepで実装しよう</h3>
+<h4 id="step-1">Step 1: コンポーネントの雛形作成</h4>
+<p><code>src/components</code>に<code>UserInfo.tsx</code>というファイルを作成します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/UserInfo.tsx
+import { useState, useEffect } from &quot;react&quot;;
+
+// APIから返ってくるユーザーデータの型
+type User = {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+};
+
+function UserInfo() {
+  // ここにStateとuseEffectを実装していく
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;ユーザー情報&lt;/h2&gt;
+      {/* ここにUIを実装していく */}
+    &lt;/div&gt;
+  );
+}
+
+export default UserInfo;
+</code></pre>
+
+<p>そして、<code>src/App.tsx</code>でこのコンポーネントを呼び出します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/App.tsx
+import UserInfo from &quot;./components/UserInfo&quot;;
+
+function App() {
+  return &lt;UserInfo /&gt;;
+}
+
+export default App;
+</code></pre>
+
+<h4 id="step-2-state">Step 2: Stateの宣言</h4>
+<p><code>UserInfo.tsx</code>に必要なStateを宣言します。</p>
+<pre class="codehilite"><code class="language-tsx">// ...
+function UserInfo() {
+  const [userId, setUserId] = useState(1);
+  const [user, setUser] = useState&lt;User | null&gt;(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState&lt;string | null&gt;(null);
+
+  // ...
+}
+// ...
+</code></pre>
+
+<h4 id="step-3-useeffectapi">Step 3: <code>useEffect</code>でのAPI通信とクリーンアップの実装</h4>
+<p><code>useEffect</code>を使って、<code>userId</code>が変更されたときにAPI通信を行うロジックを実装します。</p>
+<pre class="codehilite"><code class="language-tsx">// ...
+useEffect(() =&gt; {
+  // AbortControllerでクリーンアップを実装
+  const controller = new AbortController();
+
+  const fetchUser = async () =&gt; {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/users/${userId}`,
+        { signal: controller.signal } // signalを渡す
+      );
+
+      if (!response.ok) {
+        throw new Error(&quot;ユーザー情報の取得に失敗しました。&quot;);
+      }
+
+      const data = await response.json();
+      setUser(data);
+    } catch (err) {
+      if (err.name === &quot;AbortError&quot;) {
+        console.log(&quot;Fetch aborted&quot;);
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUser();
+
+  // クリーンアップ関数
+  return () =&gt; {
+    controller.abort();
+  };
+}, [userId]); // userIdに依存
+// ...
+</code></pre>
+
+<h4 id="step-4-ui">Step 4: UIの条件付きレンダリング</h4>
+<p>取得したStateに基づいて、表示するUIを動的に変更します。</p>
+<pre class="codehilite"><code class="language-tsx">// ...
+function UserInfo() {
+  // ... (StateとuseEffectの実装)
+
+  const handleNextUser = () =&gt; {
+    setUserId(id =&gt; id + 1);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;ユーザー情報&lt;/h2&gt;
+      &lt;p&gt;User ID: {userId}&lt;/p&gt;
+
+      {/* 条件付きレンダリング */}
+      {loading &amp;&amp; &lt;p&gt;Loading...&lt;/p&gt;}
+      {error &amp;&amp; &lt;p style={{ color: &quot;red&quot; }}&gt;{error}&lt;/p&gt;}
+      {user &amp;&amp; (
+        &lt;div&gt;
+          &lt;p&gt;&lt;strong&gt;名前:&lt;/strong&gt; {user.name}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;ユーザー名:&lt;/strong&gt; {user.username}&lt;/p&gt;
+          &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {user.email}&lt;/p&gt;
+        &lt;/div&gt;
+      )}
+
+      &lt;button onClick={handleNextUser} disabled={loading}&gt;
+        {loading ? &quot;読み込み中...&quot; : &quot;次のユーザーへ&quot;}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+// ...
+</code></pre>
+
+<p>これで完成です！ブラウザで動作を確認してみましょう。「次のユーザーへ」ボタンを素早く連続でクリックしても、コンソールに "Fetch aborted" と表示され、最後のIDのリクエストだけが正常に完了することが確認できるはずです。これがクリーンアップの力です。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><code>useEffect</code>の依存配列に<code>[userId]</code>を指定することで、<code>userId</code>の変更をトリガーに副作用を再実行できる。</li>
+<li><code>loading</code>や<code>error</code>といったStateを用意することで、API通信の状態に応じたUIをユーザーに提示できる。</li>
+<li><code>AbortController</code>を使い、<code>useEffect</code>のクリーンアップで<code>fetch</code>をキャンセルすることで、Strict Modeの2回実行や、不要になったリクエストの後始末を安全に行うことができる。</li>
+<li><code>try...catch...finally</code>ブロックを使うと、成功・失敗にかかわらず実行したい処理（例: <code>setLoading(false)</code>）を確実に記述できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial08_React応用_chapter01_useEffectによる副作用の管理_8-1-4: React_Strict_ModeとuseEffectの2回実行.html" class="prev">React_Strict_ModeとuseEffectの2回実行</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

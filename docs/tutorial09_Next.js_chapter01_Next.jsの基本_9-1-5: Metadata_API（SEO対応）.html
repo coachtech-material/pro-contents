@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata_API（SEO対応） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter01_Next.jsの基本.html">Chapter 1: Next.jsの基本</a><span>></span>Metadata_API（SEO対応）</div>
+                    <div class="section-content">
+<h1 id="9-1-5-metadata-apiseo">9-1-5: Metadata API（SEO対応）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.jsのMetadata APIを使ってSEO対策を行う方法を学ぶ</li>
+<li>静的メタデータと動的メタデータの使い分けを理解する</li>
+<li>Open Graphタグの設定方法を学ぶ</li>
+</ul>
+<h2 id="_2">はじめに</h2>
+<p>SEO（検索エンジン最適化）において、適切なメタデータの設定は非常に重要です。Next.jsのApp Routerでは、<strong>Metadata API</strong>を使って、ページごとにタイトルや説明文、OGP画像などを簡単に設定できます。</p>
+<p>Laravelの<code>@section('title')</code>や<code>@section('description')</code>に相当する機能ですが、Next.jsではより型安全で、動的な生成も容易です。</p>
+<h2 id="1">1. 静的メタデータ</h2>
+<p>ページのメタデータが固定の場合は、<code>metadata</code>オブジェクトをエクスポートします。</p>
+<pre class="codehilite"><code class="language-typescript">// app/about/page.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '会社概要',
+  description: '私たちの会社について紹介します。',
+};
+
+export default function AboutPage() {
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;会社概要&lt;/h1&gt;
+      {/* ... */}
+    &lt;/main&gt;
+  );
+}
+</code></pre>
+
+<p>生成されるHTML:</p>
+<pre class="codehilite"><code class="language-html">&lt;head&gt;
+  &lt;title&gt;会社概要&lt;/title&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;私たちの会社について紹介します。&quot; /&gt;
+&lt;/head&gt;
+</code></pre>
+
+<h2 id="2">2. レイアウトでの共通メタデータ</h2>
+<p><code>layout.tsx</code>でメタデータを設定すると、そのレイアウト配下のすべてのページに適用されます。</p>
+<pre class="codehilite"><code class="language-typescript">// app/layout.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'My Website',
+    template: '%s | My Website', // 子ページのタイトルに追加される
+  },
+  description: 'Next.jsで作成したWebサイトです。',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    &lt;html lang=&quot;ja&quot;&gt;
+      &lt;body&gt;{children}&lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+</code></pre>
+
+<p>子ページで<code>title: '会社概要'</code>を設定すると、実際のタイトルは「会社概要 | My Website」になります。</p>
+<h2 id="3">3. 動的メタデータ</h2>
+<p>ブログ記事や商品ページなど、動的なコンテンツのメタデータを設定するには、<code>generateMetadata</code>関数を使います。</p>
+<pre class="codehilite"><code class="language-typescript">// app/blog/[slug]/page.tsx
+import type { Metadata } from 'next';
+
+interface Props {
+  params: Promise&lt;{ slug: string }&gt;;
+}
+
+// 動的にメタデータを生成
+export async function generateMetadata({ params }: Props): Promise&lt;Metadata&gt; {
+  const { slug } = await params;
+
+  // データベースやAPIから記事を取得
+  const post = await fetch(`https://api.example.com/posts/${slug}`).then(
+    (res) =&gt; res.json()
+  );
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [post.coverImage],
+    },
+  };
+}
+
+export default async function BlogPost({ params }: Props) {
+  const { slug } = await params;
+  const post = await fetch(`https://api.example.com/posts/${slug}`).then(
+    (res) =&gt; res.json()
+  );
+
+  return (
+    &lt;article&gt;
+      &lt;h1&gt;{post.title}&lt;/h1&gt;
+      &lt;p&gt;{post.content}&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}
+</code></pre>
+
+<h2 id="4-open-graphogp">4. Open Graph（OGP）の設定</h2>
+<p>SNSでシェアされたときの表示を設定するには、<code>openGraph</code>プロパティを使います。</p>
+<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+  title: '素晴らしい記事',
+  description: 'この記事では...',
+  openGraph: {
+    title: '素晴らしい記事',
+    description: 'この記事では...',
+    url: 'https://example.com/blog/great-article',
+    siteName: 'My Website',
+    images: [
+      {
+        url: 'https://example.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: '記事のサムネイル',
+      },
+    ],
+    locale: 'ja_JP',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '素晴らしい記事',
+    description: 'この記事では...',
+    images: ['https://example.com/og-image.png'],
+  },
+};
+</code></pre>
+
+<h2 id="5">5. その他のメタデータ</h2>
+<h3 id="robots">robots（クローラー制御）</h3>
+<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+</code></pre>
+
+<h3 id="icons">icons（ファビコン）</h3>
+<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+};
+</code></pre>
+
+<h3 id="canonical-url">canonical URL</h3>
+<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://example.com/blog/great-article',
+  },
+};
+</code></pre>
+
+<h2 id="6-laravelnextjs">6. LaravelとNext.jsの比較</h2>
+<table>
+<thead>
+<tr>
+<th>機能</th>
+<th>Laravel (Blade)</th>
+<th>Next.js (Metadata API)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>タイトル設定</td>
+<td><code>@section('title', '...')</code></td>
+<td><code>metadata.title</code></td>
+</tr>
+<tr>
+<td>説明文設定</td>
+<td><code>&lt;meta name="description"&gt;</code></td>
+<td><code>metadata.description</code></td>
+</tr>
+<tr>
+<td>動的メタデータ</td>
+<td>コントローラーから渡す</td>
+<td><code>generateMetadata()</code></td>
+</tr>
+<tr>
+<td>OGP設定</td>
+<td>手動でタグを記述</td>
+<td><code>metadata.openGraph</code></td>
+</tr>
+<tr>
+<td>型安全性</td>
+<td>なし</td>
+<td>TypeScriptで型チェック</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li><code>generateMetadata</code>は<code>generateStaticParams</code>と組み合わせて、ビルド時に静的に生成することもできます。</li>
+<li>メタデータはServer Componentでのみ設定可能です（Client Componentでは使えません）。</li>
+<li>同じデータを<code>generateMetadata</code>とページコンポーネントの両方で取得する場合、Next.jsが自動的にリクエストを重複排除（dedupe）してくれます。</li>
+</ul>
+<h2 id="_3">✨ まとめ</h2>
+<p>Next.jsのMetadata APIを使うと、SEOに重要なメタデータを型安全に設定できます。静的なページには<code>metadata</code>オブジェクト、動的なページには<code>generateMetadata</code>関数を使い分けましょう。Open Graphの設定も簡単に行えるため、SNSでのシェア時の表示も最適化できます。</p>
+<p>次のセクションでは、ハンズオンとしてNext.jsプロジェクトを作成し、ここまで学んだ内容を実践します。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter01_Next.jsの基本_9-1-4: Server ComponentsとClient Components.html" class="prev">Server ComponentsとClient Components</a>
+<a href="tutorial09_Next.js_chapter01_Next.jsの基本_9-1-6: Chapter 1 ハンズオン: Next.jsプロジェクトを作成する.html" class="next">Chapter 1 ハンズオン: Next.jsプロジェクトを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

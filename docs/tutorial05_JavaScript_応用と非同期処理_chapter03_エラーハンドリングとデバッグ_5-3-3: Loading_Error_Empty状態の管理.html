@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading_Error_Empty状態の管理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ.html">Chapter 3: エラーハンドリングとデバッグ</a><span>></span>Loading_Error_Empty状態の管理</div>
+                    <div class="section-content">
+<h1 id="5-3-3-loadingerrorempty">5-3-3: Loading/Error/Empty状態の管理</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>非同期処理におけるUIの3つの主要な状態（ローディング、エラー、データ有り/無し）を理解する</li>
+<li>ユーザー体験を向上させるために、これらの状態をUIに適切に反映させる方法を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>APIからデータを取得する際、データがすぐに手に入るわけではありません。通信には時間がかかりますし、失敗することもあります。また、成功してもデータが1件も存在しない場合もあります。</p>
+<p>優れたUIは、こうした様々な状況をユーザーに明確に伝えます。このセクションでは、非同期処理における代表的な3つの状態、「<strong>ローディング（Loading）</strong>」「<strong>エラー（Error）</strong>」「<strong>データが空（Empty）</strong>」を管理する実践的なパターンを学びます。これは、実務でWebアプリケーションを構築する上で、ほぼ必須となる非常に重要な考え方です。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="_4">なぜ状態管理が重要なのか？</h3>
+<ul>
+<li><strong>ユーザー体験の向上</strong>: 画面が固まったように見えると、ユーザーは不安になります。ローディング表示を出すことで、「今、処理中である」ことを伝え、安心感を与えます。</li>
+<li><strong>明確なフィードバック</strong>: エラーが発生した際に、その旨を伝えなければ、ユーザーは何が起こったのか理解できません。適切なエラーメッセージは、ユーザーが次のアクションを取る手助けになります。</li>
+<li><strong>エッジケースへの対応</strong>: データが0件の場合と、データがまだ読み込まれていない状態は、明確に区別して表示する必要があります。「データがありません」というメッセージは、システムが正常に動作した結果であることを示します。</li>
+</ul>
+<h3 id="_5">状態管理の実装パターン</h3>
+<p>状態に応じて表示を切り替えるための、シンプルで効果的な実装パターンを見ていきましょう。</p>
+<p><strong>HTML (<code>index.html</code>)</strong></p>
+<p>まず、各状態に対応するUI要素をあらかじめHTMLに用意しておきます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;State Management Example&lt;/title&gt;
+  &lt;style&gt;
+    /* 最初はデータリスト以外を非表示にしておく */
+    #loading, #error, #empty {
+      display: none;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;User List&lt;/h1&gt;
+
+  &lt;!-- データ表示エリア --&gt;
+  &lt;ul id=&quot;user-list&quot;&gt;&lt;/ul&gt;
+
+  &lt;!-- ローディング表示 --&gt;
+  &lt;div id=&quot;loading&quot;&gt;データを読み込み中です...&lt;/div&gt;
+
+  &lt;!-- エラー表示 --&gt;
+  &lt;div id=&quot;error&quot;&gt;エラーが発生しました。&lt;/div&gt;
+
+  &lt;!-- データが空の場合の表示 --&gt;
+  &lt;div id=&quot;empty&quot;&gt;ユーザーデータが見つかりません。&lt;/div&gt;
+
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><strong>JavaScript (<code>app.js</code>)</strong></p>
+<p>JavaScript側で、処理の進行状況に合わせてこれらの要素の表示・非表示を切り替えます。</p>
+<pre class="codehilite"><code class="language-javascript">// 各UI要素を取得
+const userList = document.querySelector(&quot;#user-list&quot;);
+const loading = document.querySelector(&quot;#loading&quot;);
+const error = document.querySelector(&quot;#error&quot;);
+const empty = document.querySelector(&quot;#empty&quot;);
+
+// UIの状態を更新するヘルパー関数
+function showElement(element) {
+  element.style.display = 'block';
+}
+function hideElement(element) {
+  element.style.display = 'none';
+}
+
+async function fetchAndDisplayUsers() {
+  // --- 1. ローディング状態 --- 
+  showElement(loading);
+  hideElement(userList);
+  hideElement(error);
+  hideElement(empty);
+
+  try {
+    const response = await fetch(&quot;https://jsonplaceholder.typicode.com/users&quot;);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const users = await response.json();
+
+    // --- 2. データ表示 or Empty状態 --- 
+    hideElement(loading);
+
+    if (users.length === 0) {
+      // データが空の場合
+      showElement(empty);
+    } else {
+      // データがある場合
+      showElement(userList);
+      users.forEach(user =&gt; {
+        const listItem = document.createElement(&quot;li&quot;);
+        listItem.textContent = user.name;
+        userList.appendChild(listItem);
+      });
+    }
+
+  } catch (e) {
+    // --- 3. エラー状態 ---
+    hideElement(loading);
+    showElement(error);
+    console.error('Fetch error:', e);
+  }
+}
+
+// 実行
+fetchAndDisplayUsers();
+</code></pre>
+
+<h3 id="_6">コードのポイント</h3>
+<ol>
+<li><strong>初期状態</strong>: <code>fetch</code> を呼び出す直前に、まずローディング表示を <code>show</code> し、他の要素を <code>hide</code> します。これにより、処理が開始されたことをユーザーに伝えます。</li>
+<li><strong>成功時</strong>: データ取得に成功したら、ローディング表示を <code>hide</code> します。<ul>
+<li>取得したデータの件数（<code>users.length</code>）をチェックし、<code>0</code> であればEmpty表示を <code>show</code> します。</li>
+<li>データが1件以上あれば、データリストを表示します。</li>
+</ul>
+</li>
+<li><strong>失敗時</strong>: <code>catch</code> ブロックでエラーを捕捉したら、ローディング表示を <code>hide</code> し、エラー表示を <code>show</code> します。これにより、何らかの問題が発生したことをユーザーに伝えます。</li>
+</ol>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>このような状態管理は、後のチュートリアルで学ぶReactなどのUIライブラリ/フレームワークを使うと、より宣言的でシンプルに記述できます。しかし、ここで学んだ基本的な考え方は、どのような技術を使っても変わりません。</li>
+</ul>
+<h2 id="_7">✨ まとめ</h2>
+<ul>
+<li>非同期処理を伴うUIでは、「ローディング」「エラー」「データ有り/無し」の状態を意識することが重要。</li>
+<li>各状態に対応するUI要素をあらかじめ用意し、JavaScriptで表示・非表示を制御することで、堅牢でユーザーフレンドリーなアプリケーションを構築できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ_5-3-2: Networkタブでのデバッグ方法.html" class="prev">Networkタブでのデバッグ方法</a>
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ_5-3-4: Chapter 3 ハンズオン: エラーハンドリングを実装する.html" class="next">Chapter 3 ハンズオン: エラーハンドリングを実装する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

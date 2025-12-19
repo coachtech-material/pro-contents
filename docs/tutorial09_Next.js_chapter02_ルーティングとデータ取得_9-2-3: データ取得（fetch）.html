@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データ取得（fetch） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得.html">Chapter 2: ルーティングとデータ取得</a><span>></span>データ取得（fetch）</div>
+                    <div class="section-content">
+<h1 id="9-2-3-fetch">9-2-3: データ取得（fetch）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Server Componentsで<code>async/await</code>を使ってデータを直接取得する方法を学ぶ</li>
+<li>Next.jsが拡張した<code>fetch</code> APIの強力なキャッシュ機能を理解する</li>
+<li>データのキャッシュ戦略（静的、動的）を制御する方法を習得する</li>
+<li>キャッシュされたデータを更新するための再検証（Revalidation）の仕組みを学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Next.js App Routerの最も革新的な機能の一つが、データ取得の方法です。Server Componentsの導入により、Reactコンポーネント内で直接<code>async/await</code>を使ってデータを取得できるようになりました。これにより、<code>useEffect</code>や<code>useState</code>、あるいは<code>TanStack Query</code>のようなクライアントサイドのデータフェッチライブラリを使わずに、シンプルかつ直感的にデータを扱うことができます。</p>
+<p>さらに、Next.jsはWeb標準の<code>fetch</code> APIを独自に拡張し、リクエストごとに詳細なキャッシュ戦略を定義できるようにしています。これにより、パフォーマンスとデータの鮮度を柔軟にコントロールすることが可能になります。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="server-components">🔑 Server Componentsでのデータ取得</h3>
+<p>Server Componentsはサーバーサイドで実行されるため、コンポーネント自体を<code>async</code>関数として定義できます。これにより、コンポーネントのレンダリングプロセスの一部として、ごく自然にデータ取得を組み込めます。</p>
+<pre class="codehilite"><code class="language-tsx">// app/posts/page.tsx
+
+interface Post {
+  id: number;
+  title: string;
+}
+
+// ページコンポーネントをasync関数として定義
+async function PostsPage() {
+  // データを直接fetch
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
+    // Next.jsのキャッシュオプション (後述)
+    cache: 'force-cache', 
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  const posts: Post[] = await res.json();
+
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Posts&lt;/h1&gt;
+      &lt;ul&gt;
+        {posts.map((post) =&gt; (
+          &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  );
+}
+
+export default PostsPage;
+</code></pre>
+
+<p>このコードは、<code>useEffect</code>を使った従来のデータ取得方法に比べて、はるかにシンプルで宣言的です。ローディング状態を別途管理する必要もありません。Next.jsがデータの取得が完了するまでページのレンダリングを待機してくれるからです。（ローディングUIについては次のセクションで学びます）</p>
+<h3 id="_4">📚 キャッシュ戦略</h3>
+<p>Next.jsは、<code>fetch</code> APIの<code>options</code>オブジェクトを拡張し、サーバーサイドでのキャッシュ動作を制御できるようにしています。<code>cache</code>オプションと<code>next.revalidate</code>オプションがその中心です。</p>
+<h4 id="cache-force-cache">デフォルトの動作: 静的データフェッチ (<code>cache: 'force-cache'</code>)</h4>
+<p><code>fetch</code>を呼び出す際にキャッシュオプションを指定しない場合、デフォルトで<code>cache: 'force-cache'</code>が適用されます。これは、<strong>ビルド時に一度だけデータを取得し、その結果を永続的にキャッシュする</strong>という動作を意味します。同じリクエストが再度発生しても、ネットワークリクエストは走らず、キャッシュされたデータが即座に返されます。</p>
+<p>これは、ブログ記事や製品情報など、頻繁に更新されないコンテンツに最適で、ページのパフォーマンスを最大化します（実質的なSSG: Static Site Generation）。</p>
+<h4 id="cache-no-store">キャッシュの無効化: 動的データフェッチ (<code>cache: 'no-store'</code>)</h4>
+<p>常に最新のデータを表示したい場合、例えばユーザーごとのダッシュボードや株価情報のようなページでは、キャッシュを無効化する必要があります。そのためには<code>cache: 'no-store'</code>オプションを指定します。</p>
+<pre class="codehilite"><code class="language-tsx">async function DashboardPage() {
+  const res = await fetch('https://api.example.com/user/dashboard', {
+    cache: 'no-store', // リクエストごとに常に最新のデータを取得
+  });
+  // ...
+}
+</code></pre>
+
+<p>このオプションを指定すると、ページへのリクエストがあるたびに、サーバーサイドでデータが再取得されます。これは、SSR (Server-Side Rendering) と同じ動作になります。</p>
+<h3 id="revalidation">♻️ データの再検証 (Revalidation)</h3>
+<p>「ビルド時に静的に生成しつつも、定期的にデータを更新したい」というニーズも多くあります。例えば、ニュースサイトの記事一覧などです。このようなケースのために、Next.jsは<strong>再検証 (Revalidation)</strong> の仕組みを提供しています。</p>
+<h4 id="time-based-revalidation">時間ベースの再検証 (Time-based Revalidation)</h4>
+<p><code>fetch</code>の<code>next.revalidate</code>オプションに秒数を指定することで、指定した時間が経過した後に最初のリクエストがあったタイミングで、バックグラウンドでデータが再取得されます。その間、ユーザーには古い（キャッシュされた）データが表示され、再取得が完了するとキャッシュが更新されます。</p>
+<p>これは<strong>ISR (Incremental Static Regeneration)</strong>として知られる強力な機能です。</p>
+<pre class="codehilite"><code class="language-tsx">async function NewsPage() {
+  const res = await fetch('https://api.example.com/news', {
+    next: { 
+      revalidate: 60, // 60秒ごとにデータを再検証
+    }, 
+  });
+  // ...
+}
+</code></pre>
+
+<p>この設定により、ビルド時にページが生成された後も、最大60秒の鮮度を保ちつつ、静的ページのように高速な表示を実現できます。</p>
+<h4 id="on-demand-revalidation">オンデマンド再検証 (On-demand Revalidation)</h4>
+<p>時間ベースではなく、特定のイベント（例: CMSで記事を更新した、データベースの内容を変更した）をトリガーにキャッシュを能動的にクリアしたい場合もあります。これを<strong>オンデマンド再検証</strong>と呼びます。</p>
+<p>これは、<code>revalidatePath</code>や<code>revalidateTag</code>といった関数をAPIルートやサーバーアクション内で呼び出すことで実現します。これにより、ヘッドレスCMSのWebhookなどと連携して、コンテンツの更新を即座に本番環境に反映させることが可能になります。（詳細は発展的な内容のため、ここでは紹介に留めます）</p>
+<h3 id="_5">キャッシュ戦略の選択</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">キャッシュオプション</th>
+<th style="text-align: left;">説明</th>
+<th style="text-align: left;">ユースケース</th>
+<th style="text-align: left;">レンダリング方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>cache: 'force-cache'</code> (デフォルト)</td>
+<td style="text-align: left;">ビルド時にデータを取得し、永続的にキャッシュする。</td>
+<td style="text-align: left;">ブログ記事、製品ページ、ドキュメント</td>
+<td style="text-align: left;">SSG</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>next: { revalidate: number }</code></td>
+<td style="text-align: left;">指定した秒数ごとにデータを再検証する。</td>
+<td style="text-align: left;">ニュース記事、イベント一覧</td>
+<td style="text-align: left;">ISR</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cache: 'no-store'</code></td>
+<td style="text-align: left;">リクエストごとに常にデータを再取得する。</td>
+<td style="text-align: left;">ユーザーダッシュボード、ショッピングカート</td>
+<td style="text-align: left;">SSR</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li>Server Componentsでは、コンポーネントを<code>async</code>関数にすることで、<code>useEffect</code>なしで直接データを取得できる。</li>
+<li>Next.jsは<code>fetch</code> APIを拡張し、<code>cache</code>オプションと<code>next.revalidate</code>オプションでキャッシュ戦略を細かく制御できる。</li>
+<li>デフォルト (<code>force-cache</code>) ではデータは永続的にキャッシュされ、パフォーマンスが最大化される (SSG)。</li>
+<li><code>cache: 'no-store'</code>を指定すると、リクエストごとにデータが再取得される (SSR)。</li>
+<li><code>next: { revalidate: 60 }</code>のように指定すると、時間ベースの再検証 (ISR) が可能になり、静的サイトのパフォーマンスと動的コンテンツの鮮度を両立できる。</li>
+<li>これらの機能を理解し使い分けることが、Next.jsアプリケーションのパフォーマンスを最適化する上で非常に重要である。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-2: 動的ルーティング.html" class="prev">動的ルーティング</a>
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-4: Loading UIとError UI.html" class="next">Loading UIとError UI</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

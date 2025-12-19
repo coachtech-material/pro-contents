@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オブジェクトと配列のState管理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html" class="current">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial07_React入門.html">Tutorial 7: React入門</a><span>></span><a href="tutorial07_React入門_chapter03_Stateによる状態管理.html">Chapter 3: Stateによる状態管理</a><span>></span>オブジェクトと配列のState管理</div>
+                    <div class="section-content">
+<h1 id="7-3-3-state">7-3-3: オブジェクトと配列のState管理</h1>
+<h2 id="chapter-3-state">Chapter 3: Stateによる状態管理</h2>
+<h3 id="section-3-state">Section 3: オブジェクトと配列のState管理</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>オブジェクトや配列といった非プリミティブな値をStateで扱う際の注意点（<strong>Immutability</strong>）を理解する。</li>
+<li>JavaScriptのスプレッド構文 (<code>...</code>) を使って、オブジェクトや配列のStateを<strong>イミュータブル（不変）</strong>に更新する方法を習得する。</li>
+<li>配列Stateに対して、要素の追加・削除・更新をイミュータブルに行う方法を習得する。</li>
+</ul>
+<hr />
+<h3 id="state">イントロダクション：複雑なStateの落とし穴</h3>
+<p>Stateとして扱いたいデータは、数値や文字列のような単純な値（プリミティブ値）だけではありません。ユーザー情報のオブジェクトや、TODOリストの配列など、より複雑な構造を持つデータを扱う場面は非常に多いです。</p>
+<p>しかし、オブジェクトや配列をStateとして扱う際には、Reactの重要な原則である <strong>Immutability（不変性）</strong> を理解していないと、予期せぬバグに繋がります。「Stateを更新したはずなのに、画面が再レンダリングされない」という問題の多くは、これが原因です。</p>
+<p>このセクションでは、オブジェクトと配列のStateを安全に更新するための正しい方法を学びます。</p>
+<hr />
+<h3 id="immutability">⚙️ Immutability（不変性）の原則</h3>
+<p>Reactでは、<strong>Stateを直接変更（mutate）してはいけません</strong>。これは、オブジェクトや配列のStateを扱う際に特に重要です。</p>
+<p>JavaScriptでは、オブジェクトや配列は参照によって扱われます。つまり、変数が保持しているのはデータそのものではなく、メモリ上のデータが置かれている場所（アドレス）です。</p>
+<p><strong>❌ やってはいけないこと（Stateの直接変更）:</strong></p>
+<pre class="codehilite"><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
+
+const handleAgeIncrement = () =&gt; {
+  // ダメ！ userオブジェクトのプロパティを直接変更している
+  user.age = user.age + 1; 
+  setUser(user); // Reactは変更を検知できない！
+};
+</code></pre>
+
+<p>なぜこれがダメなのでしょうか？<br />
+<code>setUser(user)</code>を呼び出しても、渡されている<code>user</code>変数が指し示すメモリ上のアドレスは、更新前と後で変わっていません。Reactは、Stateの変更を検知するために、前回のStateと今回のStateを比較しますが、この比較は高速化のために参照（アドレス）の比較で行われます。アドレスが変わっていないため、Reactは「何も変更されていない」と判断し、<strong>再レンダリングを行わない</strong>のです。</p>
+<p><strong>⭕ 正しい方法：新しいオブジェクトを作成する</strong></p>
+<p>Stateを更新する際は、元のオブジェクトや配列を変更するのではなく、<strong>新しいオブジェクトや配列を作成し</strong>、それをセッター関数に渡す必要があります。この操作を<strong>イミュータブルな更新</strong>と呼びます。</p>
+<hr />
+<h3 id="_1">🚀 スプレッド構文によるイミュータブルな更新</h3>
+<p>イミュータブルな更新を簡単に行うために、JavaScriptの<strong>スプレッド構文 (<code>...</code>)</strong> を活用します。</p>
+<h4 id="_2">オブジェクトの更新</h4>
+<pre class="codehilite"><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
+
+const handleAgeIncrement = () =&gt; {
+  // スプレッド構文で新しいオブジェクトを作成
+  setUser({ 
+    ...user, // 1. 元のuserオブジェクトの全プロパティを展開
+    age: user.age + 1 // 2. 更新したいプロパティだけを上書き
+  });
+};
+</code></pre>
+
+<ul>
+<li><code>{ ...user }</code> は、<code>user</code>オブジェクトが持つすべてのプロパティ（<code>name: 'Taro'</code>, <code>age: 20</code>）を新しいオブジェクトの中にコピーします。</li>
+<li>その直後に <code>, age: user.age + 1</code> と記述することで、<code>age</code>プロパティだけが新しい値で上書きされます。</li>
+<li>結果として、<code>{ name: 'Taro', age: 21 }</code> という<strong>全く新しいオブジェクト</strong>が生成され、<code>setUser</code>に渡されます。Reactは参照が変わったことを検知し、正しく再レンダリングを行います。</li>
+</ul>
+<h4 id="_3">配列の更新</h4>
+<p>配列のStateも同様に、<code>push</code>や<code>splice</code>のような配列を直接変更するメソッドは使えません。スプレッド構文や、<code>map</code>, <code>filter</code>のような新しい配列を返すメソッドを使います。</p>
+<p><strong>例：TODOリスト</strong></p>
+<pre class="codehilite"><code class="language-tsx">const [todos, setTodos] = useState([
+  { id: 1, text: 'Reactを学ぶ' },
+  { id: 2, text: '寝る' },
+]);
+
+// 1. 要素の追加
+const addTodo = (newTodoText: string) =&gt; {
+  const newTodo = { id: Date.now(), text: newTodoText };
+  // 元の配列を展開し、末尾に新しい要素を追加した「新しい配列」を作成
+  setTodos([...todos, newTodo]);
+};
+
+// 2. 要素の削除 (idが2のものを削除)
+const deleteTodo = (idToDelete: number) =&gt; {
+  // filterは条件に合う要素だけを集めた「新しい配列」を返す
+  setTodos(todos.filter(todo =&gt; todo.id !== idToDelete));
+};
+
+// 3. 要素の更新 (idが1のもののtextを更新)
+const updateTodo = (idToUpdate: number, newText: string) =&gt; {
+  // mapは各要素を変換した「新しい配列」を返す
+  setTodos(todos.map(todo =&gt; {
+    if (todo.id === idToUpdate) {
+      // 更新対象の要素の場合、新しいオブジェクトを返す
+      return { ...todo, text: newText };
+    } else {
+      // それ以外は元の要素をそのまま返す
+      return todo;
+    }
+  }));
+};
+</code></pre>
+
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>オブジェクトや配列のStateを更新する際は、<strong>Immutability（不変性）</strong>の原則に従う必要がある。</li>
+<li>Stateを直接変更（mutate）するのではなく、常に<strong>新しいオブジェクトや配列を作成</strong>してセッター関数に渡す。</li>
+<li><strong>スプレッド構文 (<code>...</code>)</strong> を使うことで、イミュータブルな更新を簡潔に記述できる。<ul>
+<li>オブジェクトの更新: <code>setObj({ ...obj, key: newValue })</code></li>
+<li>配列への追加: <code>setArr([...arr, newItem])</code></li>
+</ul>
+</li>
+<li>配列の削除や更新には、新しい配列を返す<code>filter</code>や<code>map</code>メソッドが非常に便利である。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] なぜReactは、Stateの変更検知に、オブジェクトの中身全体の比較ではなく、参照の比較を行うのでしょうか？その理由をパフォーマンスの観点から考えてみましょう。</li>
+<li>[ ] <code>const arr1 = [1, 2, 3]; const arr2 = arr1; arr2.push(4);</code> としたとき、<code>arr1</code>の中身はどうなっているでしょうか？ JavaScriptの参照の概念を再確認しましょう。</li>
+<li>[ ] 配列の先頭に要素を追加するには、スプレッド構文をどのように使えばよいでしょうか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial07_React入門_chapter03_Stateによる状態管理_7-3-2: Stateの更新とイベントハンドリング.html" class="prev">Stateの更新とイベントハンドリング</a>
+<a href="tutorial07_React入門_chapter03_Stateによる状態管理_7-3-4: Chapter 3 ハンズオン: カウンターアプリを作成する.html" class="next">Chapter 3 ハンズオン: カウンターアプリを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

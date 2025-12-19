@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSSの基本構文と適用方法 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎.html">Chapter 2: CSSの基礎</a><span>></span>CSSの基本構文と適用方法</div>
+                    <div class="section-content">
+<h1 id="2-2-1-css">2-2-1: CSSの基本構文と適用方法</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>CSSの基本構文（セレクタ、プロパティ、値）を理解する</li>
+<li>CSSをHTMLに適用する3つの方法（インライン、内部、外部）を使い分けられるようになる</li>
+<li>外部CSSファイルを使った実務的なスタイル管理ができるようになる</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Chapter 1ではHTMLを使ってWebページの「構造」を作成しました。しかし、HTMLだけでは見た目が味気ないままです。このセクションでは、Webページに「スタイル（見た目）」を与える<strong>CSS（Cascading Style Sheets）</strong>の基本を学びます。</p>
+<p>CSSは「HTMLで作った構造に、どのような見た目を適用するか」を指定する言語です。文字の色、背景色、余白、配置など、Webページのデザインに関わるほぼすべてをCSSで制御します。</p>
+<h2 id="css">CSSの基本構文</h2>
+<p>CSSは「<strong>セレクタ</strong>」「<strong>プロパティ</strong>」「<strong>値</strong>」の3つの要素で構成されます。</p>
+<pre class="codehilite"><code class="language-css">セレクタ {
+  プロパティ: 値;
+}
+</code></pre>
+
+<h3 id="_3">構文の各要素</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">要素</th>
+<th style="text-align: left;">役割</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>セレクタ</strong></td>
+<td style="text-align: left;">どの要素にスタイルを適用するかを指定</td>
+<td style="text-align: left;"><code>h1</code>, <code>.card</code>, <code>#header</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>プロパティ</strong></td>
+<td style="text-align: left;">何を変更するかを指定</td>
+<td style="text-align: left;"><code>color</code>, <code>font-size</code>, <code>margin</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>値</strong></td>
+<td style="text-align: left;">どのように変更するかを指定</td>
+<td style="text-align: left;"><code>red</code>, <code>16px</code>, <code>10px</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">実際のコード例</h3>
+<pre class="codehilite"><code class="language-css">h1 {
+  color: blue;
+  font-size: 24px;
+}
+</code></pre>
+
+<p>このコードを1行ずつ読み解きましょう。</p>
+<ol>
+<li><code>h1</code> - セレクタ。HTMLの<code>&lt;h1&gt;</code>要素を対象にする</li>
+<li><code>{</code> - 宣言ブロックの開始</li>
+<li><code>color: blue;</code> - 文字色を青にする</li>
+<li><code>font-size: 24px;</code> - 文字サイズを24ピクセルにする</li>
+<li><code>}</code> - 宣言ブロックの終了</li>
+</ol>
+<blockquote>
+<p><strong>💡 TIP:</strong> 各宣言の末尾には必ず<strong>セミコロン（<code>;</code>）</strong>を付けます。最後の宣言では省略可能ですが、後からプロパティを追加するときにエラーになりやすいため、常に付ける習慣をつけましょう。</p>
+</blockquote>
+<h2 id="csshtml3">CSSをHTMLに適用する3つの方法</h2>
+<p>CSSをHTMLに適用する方法は3つあります。それぞれの特徴と使い分けを理解しましょう。</p>
+<h3 id="1">1. インラインスタイル（非推奨）</h3>
+<p>HTML要素の<code>style</code>属性に直接CSSを記述する方法です。</p>
+<pre class="codehilite"><code class="language-html">&lt;h1 style=&quot;color: blue; font-size: 24px;&quot;&gt;見出し&lt;/h1&gt;
+</code></pre>
+
+<p><strong>特徴:</strong><br />
+- 特定の要素にのみスタイルを適用できる<br />
+- HTMLとCSSが混在し、管理が困難になる<br />
+- 同じスタイルを複数の要素に適用する場合、コードが重複する</p>
+<blockquote>
+<p><strong>⚠️ 注意:</strong> インラインスタイルは<strong>実務ではほとんど使いません</strong>。JavaScriptで動的にスタイルを変更する場合など、限られた状況でのみ使用します。</p>
+</blockquote>
+<h3 id="2">2. 内部スタイルシート（限定的に使用）</h3>
+<p>HTMLファイルの<code>&lt;head&gt;</code>内に<code>&lt;style&gt;</code>タグを使ってCSSを記述する方法です。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;内部スタイルシートの例&lt;/title&gt;
+  &lt;style&gt;
+    h1 {
+      color: blue;
+      font-size: 24px;
+    }
+    p {
+      color: gray;
+      line-height: 1.6;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;見出し&lt;/h1&gt;
+  &lt;p&gt;本文テキスト&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><strong>特徴:</strong><br />
+- 1つのHTMLファイル内でスタイルを管理できる<br />
+- 複数のHTMLファイルで同じスタイルを使う場合、コードが重複する<br />
+- 小規模なページやプロトタイプ作成時に便利</p>
+<h3 id="3">3. 外部スタイルシート（推奨）</h3>
+<p>CSSを別ファイル（<code>.css</code>）に記述し、HTMLから読み込む方法です。</p>
+<p><strong>style.css:</strong></p>
+<pre class="codehilite"><code class="language-css">h1 {
+  color: blue;
+  font-size: 24px;
+}
+
+p {
+  color: gray;
+  line-height: 1.6;
+}
+</code></pre>
+
+<p><strong>index.html:</strong></p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;外部スタイルシートの例&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;見出し&lt;/h1&gt;
+  &lt;p&gt;本文テキスト&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><strong>特徴:</strong><br />
+- HTMLとCSSを分離でき、管理しやすい<br />
+- 複数のHTMLファイルで同じCSSファイルを共有できる<br />
+- ブラウザがCSSファイルをキャッシュするため、ページ読み込みが高速化される</p>
+<blockquote>
+<p><strong>💡 TIP:</strong> 実務では<strong>外部スタイルシート</strong>を使うのが基本です。HTMLは「構造」、CSSは「見た目」と役割を分離することで、保守性が大幅に向上します。</p>
+</blockquote>
+<h2 id="3_1">3つの方法の比較</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">管理のしやすさ</th>
+<th style="text-align: left;">再利用性</th>
+<th style="text-align: left;">実務での使用頻度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">インラインスタイル</td>
+<td style="text-align: left;">✕</td>
+<td style="text-align: left;">✕</td>
+<td style="text-align: left;">ほぼ使わない</td>
+</tr>
+<tr>
+<td style="text-align: left;">内部スタイルシート</td>
+<td style="text-align: left;">△</td>
+<td style="text-align: left;">△</td>
+<td style="text-align: left;">限定的</td>
+</tr>
+<tr>
+<td style="text-align: left;">外部スタイルシート</td>
+<td style="text-align: left;">◎</td>
+<td style="text-align: left;">◎</td>
+<td style="text-align: left;"><strong>推奨</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="csshtml">🏃 実践: 外部CSSファイルを作成してHTMLに適用する</h2>
+<p>実際に外部CSSファイルを作成し、HTMLに適用してみましょう。</p>
+<h3 id="step-1">Step 1: プロジェクトフォルダを作成</h3>
+<pre class="codehilite"><code>css-practice/
+├── index.html
+└── style.css
+</code></pre>
+
+<h3 id="step-2-html">Step 2: HTMLファイルを作成</h3>
+<p><code>index.html</code>を作成し、以下のコードを記述します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;CSS練習&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;CSSの基本を学ぼう&lt;/h1&gt;
+  &lt;p&gt;このページでは、CSSの基本構文と適用方法を学びます。&lt;/p&gt;
+  &lt;p&gt;外部スタイルシートを使って、見た目を整えていきましょう。&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3 id="step-3-css">Step 3: CSSファイルを作成</h3>
+<p><code>style.css</code>を作成し、以下のコードを記述します。</p>
+<pre class="codehilite"><code class="language-css">/* 見出しのスタイル */
+h1 {
+  color: #333;
+  font-size: 28px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+}
+
+/* 段落のスタイル */
+p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.8;
+}
+</code></pre>
+
+<h3 id="step-4">Step 4: ブラウザで確認</h3>
+<p><code>index.html</code>をブラウザで開き、スタイルが適用されていることを確認します。</p>
+<p><strong>確認ポイント:</strong><br />
+- 見出しが濃いグレー（#333）で表示されている<br />
+- 見出しの下に線が引かれている<br />
+- 段落が薄いグレー（#666）で表示されている<br />
+- 行間が広めに設定されている</p>
+<blockquote>
+<p><strong>💡 TIP:</strong> CSSファイルを変更した後、ブラウザに反映されない場合は、<strong>Ctrl + Shift + R</strong>（Mac: <strong>Cmd + Shift + R</strong>）で強制リロードしてください。ブラウザがキャッシュを使用している可能性があります。</p>
+</blockquote>
+<h2 id="_5">コメントの書き方</h2>
+<p>CSSでは<code>/* */</code>でコメントを記述できます。コメントはブラウザに無視され、コードの説明やメモとして使用します。</p>
+<pre class="codehilite"><code class="language-css">/* これはコメントです */
+h1 {
+  color: blue; /* 文字色を青に設定 */
+}
+
+/*
+  複数行の
+  コメントも
+  書けます
+*/
+</code></pre>
+
+<h2 id="_6">よくある間違いと対処法</h2>
+<h3 id="1_1">1. セミコロンの付け忘れ</h3>
+<pre class="codehilite"><code class="language-css">/* ❌ 間違い */
+h1 {
+  color: blue
+  font-size: 24px;
+}
+
+/* ✅ 正しい */
+h1 {
+  color: blue;
+  font-size: 24px;
+}
+</code></pre>
+
+<h3 id="2_1">2. 波括弧の閉じ忘れ</h3>
+<pre class="codehilite"><code class="language-css">/* ❌ 間違い */
+h1 {
+  color: blue;
+
+p {
+  color: gray;
+}
+
+/* ✅ 正しい */
+h1 {
+  color: blue;
+}
+
+p {
+  color: gray;
+}
+</code></pre>
+
+<h3 id="3_2">3. ファイルパスの間違い</h3>
+<pre class="codehilite"><code class="language-html">&lt;!-- ❌ 間違い（ファイル名のスペルミス） --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+
+&lt;!-- ✅ 正しい --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> CSSが適用されない場合は、まずブラウザの開発者ツール（F12）の「Console」タブでエラーがないか確認しましょう。ファイルが見つからない場合は「404 Not Found」エラーが表示されます。</p>
+</blockquote>
+<h2 id="_7">✨ まとめ</h2>
+<ul>
+<li>CSSは「<strong>セレクタ</strong>」「<strong>プロパティ</strong>」「<strong>値</strong>」の3要素で構成される</li>
+<li>CSSをHTMLに適用する方法は3つあるが、実務では<strong>外部スタイルシート</strong>を使用する</li>
+<li>HTMLとCSSを分離することで、コードの<strong>保守性</strong>と<strong>再利用性</strong>が向上する</li>
+<li>CSSが適用されない場合は、セミコロンの付け忘れやファイルパスの間違いを確認する</li>
+</ul>
+<h2 id="_8">📝 学習のポイント</h2>
+<ul>
+<li>[ ] CSSの基本構文（セレクタ、プロパティ、値）を説明できる</li>
+<li>[ ] 3つのCSS適用方法の違いを説明できる</li>
+<li>[ ] 外部CSSファイルを作成し、HTMLに適用できる</li>
+<li>[ ] CSSのコメントを記述できる</li>
+<li>[ ] CSSが適用されない場合のトラブルシューティングができる</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-2: セレクタの種類と使い分け.html" class="next">セレクタの種類と使い分け</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

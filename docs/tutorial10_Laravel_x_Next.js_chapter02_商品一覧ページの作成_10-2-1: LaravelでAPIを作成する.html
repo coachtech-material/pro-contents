@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaravelでAPIを作成する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成.html">Chapter 2: 商品一覧ページの作成</a><span>></span>LaravelでAPIを作成する</div>
+                    <div class="section-content">
+<h1 id="10-2-1-laravelapi">10-2-1: LaravelでAPIを作成する</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>LaravelでAPI用のルートを定義する方法を学ぶ</li>
+<li>マイグレーションを使ってデータベースにテーブルを作成する方法を習得する</li>
+<li>シーダーを使って、テスト用のダミーデータをデータベースに投入する方法を学ぶ</li>
+<li>コントローラーを作成し、データベースから取得したデータをJSON形式で返す基本的なAPIロジックを実装する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>開発環境が整ったので、いよいよアプリケーションの機能を実装していきます。このチャプターでは、Next.jsフロントエンドに表示するための「商品一覧データ」を提供するAPIを、Laravelバックエンドに作成します。</p>
+<p>API作成の基本的な流れは以下の通りです。</p>
+<ol>
+<li><strong>データベース準備</strong>: 商品データを保存するためのテーブルをデータベースに作成します（マイグレーション）。</li>
+<li><strong>ダミーデータ投入</strong>: 動作確認用のダミー商品データをテーブルに投入します（シーダー）。</li>
+<li><strong>ルーティング</strong>: <code>/api/products</code> のようなAPIのエンドポイント（URL）を定義します。</li>
+<li><strong>コントローラー作成</strong>: リクエストを受け取り、データベースから商品データを取得して、JSON形式でレスポンスを返す処理を記述します。</li>
+</ol>
+<p>それでは、ステップバイステップで進めていきましょう。</p>
+<h2 id="_3">詳細解説</h2>
+<p><strong>注意</strong>: これ以降のコマンドは、すべてLaravelプロジェクトのディレクトリ（<code>laravel-next-app</code>）で、Sailを使って実行します。<code>sail</code>のエイリアスを設定していない場合は、コマンドの先頭に<code>./vendor/bin/</code>を付けてください。</p>
+<h3 id="1">ステップ1: モデルとマイグレーションの作成</h3>
+<p>まず、商品データを表現するための<code>Product</code>モデルと、対応する<code>products</code>テーブルを作成するためのマイグレーションファイルを同時に生成します。</p>
+<pre class="codehilite"><code class="language-bash"># -mオプションでマイグレーションファイルも同時に作成
+sail artisan make:model Product -m
+</code></pre>
+
+<p>このコマンドにより、以下のファイルが生成されます。</p>
+<ul>
+<li><code>app/Models/Product.php</code> (モデル)</li>
+<li><code>database/migrations/xxxx_xx_xx_xxxxxx_create_products_table.php</code> (マイグレーションファイル)</li>
+</ul>
+<p>次に、マイグレーションファイルを編集して、<code>products</code>テーブルのカラムを定義します。<code>database/migrations/..._create_products_table.php</code>を開き、<code>up</code>メソッドを以下のように修正してください。</p>
+<pre class="codehilite"><code class="language-php">// database/migrations/..._create_products_table.php
+
+public function up(): void
+{
+    Schema::create('products', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;string('name');
+        $table-&gt;text('description');
+        $table-&gt;integer('price');
+        $table-&gt;timestamps();
+    });
+}
+</code></pre>
+
+<h3 id="2">ステップ2: シーダーの作成とダミーデータ投入</h3>
+<p>次に、<code>products</code>テーブルにダミーデータを投入するためのシーダーを作成します。</p>
+<pre class="codehilite"><code class="language-bash">sail artisan make:seeder ProductSeeder
+</code></pre>
+
+<p><code>database/seeders/ProductSeeder.php</code>が生成されるので、<code>run</code>メソッドを編集して、ダミーデータを10件作成するロジックを記述します。</p>
+<pre class="codehilite"><code class="language-php">// database/seeders/ProductSeeder.php
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\Product; // Productモデルをインポート
+
+class ProductSeeder extends Seeder
+{
+    public function run(): void
+    {
+        Product::create([
+            'name' =&gt; '商品A',
+            'description' =&gt; 'これは商品Aです。高品質な素材を使用しています。',
+            'price' =&gt; 1000,
+        ]);
+
+        Product::create([
+            'name' =&gt; '商品B',
+            'description' =&gt; 'これは商品Bです。最新の技術で作られています。',
+            'price' =&gt; 2500,
+        ]);
+
+        // Fakerを使ってランダムなデータを8件追加
+        Product::factory()-&gt;count(8)-&gt;create();
+    }
+}
+</code></pre>
+
+<blockquote>
+<p><strong>補足</strong>: <code>Product::factory()</code> を使うには、対応する<code>ProductFactory</code>が必要です。<code>sail artisan make:factory ProductFactory --model=Product</code>でファクトリを作成し、<code>definition</code>メソッドを定義してください。ここでは簡単のため、手動で2件、ファクトリで8件のデータを作成しています。</p>
+</blockquote>
+<p>作成した<code>ProductSeeder</code>を呼び出すために、<code>database/seeders/DatabaseSeeder.php</code>を編集します。</p>
+<pre class="codehilite"><code class="language-php">// database/seeders/DatabaseSeeder.php
+
+public function run(): void
+{
+    // \App\Models\User::factory(10)-&gt;create();
+
+    $this-&gt;call([
+        ProductSeeder::class, // ProductSeederを呼び出す
+    ]);
+}
+</code></pre>
+
+<p>準備ができたので、マイグレーションとシーディングを実行します。<code>migrate:fresh</code>コマンドは、すべてのテーブルを一度削除してから再度マイグレーションを実行し、<code>--seed</code>オプションでシーダーも実行します。開発中にテーブル構造を頻繁に変更する場合に便利です。</p>
+<pre class="codehilite"><code class="language-bash">sail artisan migrate:fresh --seed
+</code></pre>
+
+<p>これで、データベースに<code>products</code>テーブルが作成され、10件のダミーデータが投入されました。</p>
+<h3 id="3-api">ステップ3: APIルートとコントローラーの作成</h3>
+<p>次に、APIのエンドポイントを定義します。<code>routes/api.php</code>ファイルに、<code>/products</code>へのGETリクエストを処理するためのルートを追加します。</p>
+<pre class="codehilite"><code class="language-php">// routes/api.php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController; // コントローラーをインポート
+
+// ...
+
+Route::get('/products', [ProductController::class, 'index']);
+</code></pre>
+
+<p>このルートが参照している<code>ProductController</code>をまだ作成していないので、<code>artisan</code>コマンドで作成します。</p>
+<pre class="codehilite"><code class="language-bash"># --apiオプションで、API用の基本的なメソッドが用意されたコントローラーが作成される
+sail artisan make:controller ProductController --api
+</code></pre>
+
+<p><code>app/Http/Controllers/ProductController.php</code>が生成されるので、<code>index</code>メソッドを編集して、すべての商品データを取得してJSON形式で返すロジックを実装します。</p>
+<pre class="codehilite"><code class="language-php">// app/Http/Controllers/ProductController.php
+
+namespace App\Http\Controllers;
+
+use App\Models\Product; // Productモデルをインポート
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        // Productモデルを使って、productsテーブルのすべてのレコードを取得
+        $products = Product::all();
+
+        // 取得したデータをJSON形式で返す
+        return response()-&gt;json($products);
+    }
+
+    // ... 他のメソッドは今回は使用しない
+}
+</code></pre>
+
+<h3 id="4-api">ステップ4: APIの動作確認</h3>
+<p>以上でAPIの実装は完了です。動作確認をしてみましょう。</p>
+<p>ブラウザまたは<code>curl</code>コマンドで、<code>http://localhost/api/products</code>にアクセスします。</p>
+<pre class="codehilite"><code class="language-bash">curl http://localhost/api/products
+</code></pre>
+
+<p>以下のようなJSONデータが返ってくれば成功です。</p>
+<pre class="codehilite"><code class="language-json">[
+    {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;商品A&quot;,
+        &quot;description&quot;: &quot;これは商品Aです。高品質な素材を使用しています。&quot;,
+        &quot;price&quot;: 1000,
+        &quot;created_at&quot;: &quot;2023-10-27T12:34:56.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2023-10-27T12:34:56.000000Z&quot;
+    },
+    {
+        &quot;id&quot;: 2,
+        &quot;name&quot;: &quot;商品B&quot;,
+        &quot;description&quot;: &quot;これは商品Bです。最新の技術で作られています。&quot;,
+        &quot;price&quot;: 2500,
+        &quot;created_at&quot;: &quot;2023-10-27T12:34:56.000000Z&quot;,
+        &quot;updated_at&quot;: &quot;2023-10-27T12:34:56.000000Z&quot;
+    },
+    // ... (残りのデータ)
+]
+</code></pre>
+
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><code>make:model</code>と<code>make:seeder</code>コマンドで、モデル、マイグレーション、シーダーを効率的に作成できる。</li>
+<li><code>migrate:fresh --seed</code>コマンドで、データベースの初期化とデータ投入を一度に行える。</li>
+<li><code>routes/api.php</code>にルートを定義し、コントローラーのメソッドに処理を紐付ける。</li>
+<li>コントローラー内でモデルを使ってデータベースからデータを取得し、<code>response()-&gt;json()</code>でJSONレスポンスを返す。</li>
+</ul>
+<p>これで、Next.jsから呼び出すためのバックエンドAPIが準備できました。次のセクションでは、いよいよフロントエンドからこのAPIを呼び出し、取得したデータを画面に表示します。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-2: Next.jsからAPIを呼び出す.html" class="next">Next.jsからAPIを呼び出す</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

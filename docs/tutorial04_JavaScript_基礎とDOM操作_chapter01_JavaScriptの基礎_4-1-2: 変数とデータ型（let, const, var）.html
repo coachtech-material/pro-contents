@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>変数とデータ型（let, const, var） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎.html">Chapter 1: JavaScriptの基礎</a><span>></span>変数とデータ型（let, const, var）</div>
+                    <div class="section-content">
+<h1 id="4-1-2-let-const-var">4-1-2: 変数とデータ型（let, const, var）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>JavaScriptの<strong>変数</strong>を使ってデータを保存・管理できるようになる</li>
+<li><code>let</code>、<code>const</code>、<code>var</code>の違いを理解し、適切に使い分けられるようになる</li>
+<li>JavaScriptの<strong>基本的なデータ型</strong>（文字列、数値、真偽値など）を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>プログラミングでは、データを一時的に保存して後で使いたい場面が頻繁にあります。例えば、ユーザーが入力した名前を保存しておいて、後で「こんにちは、〇〇さん」と表示したい場合などです。</p>
+<p>このような「データを保存する箱」を<strong>変数</strong>と呼びます。変数を使いこなすことは、プログラミングの第一歩です。</p>
+<h2 id="_3">変数とは</h2>
+<p><strong>変数</strong>は、データに名前を付けて保存する仕組みです。</p>
+<blockquote>
+<p><strong>💡 比喩で理解:</strong> 変数は「ラベル付きの箱」のようなものです。箱に「名前」というラベルを貼り、中に「田中太郎」というデータを入れます。後で「名前」の箱を開ければ、「田中太郎」を取り出せます。</p>
+</blockquote>
+<pre class="codehilite"><code class="language-javascript">// 「name」という箱に「田中太郎」を入れる
+let name = &quot;田中太郎&quot;;
+
+// 「name」の箱の中身を表示
+console.log(name);  // 出力: 田中太郎
+</code></pre>
+
+<h2 id="_4">変数の宣言方法</h2>
+<p>JavaScriptでは、変数を宣言する方法が3つあります。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">キーワード</th>
+<th style="text-align: left;">再代入</th>
+<th style="text-align: left;">再宣言</th>
+<th style="text-align: left;">スコープ</th>
+<th style="text-align: left;">推奨度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>const</code></td>
+<td style="text-align: left;">✕</td>
+<td style="text-align: left;">✕</td>
+<td style="text-align: left;">ブロック</td>
+<td style="text-align: left;">⭐⭐⭐</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>let</code></td>
+<td style="text-align: left;">◯</td>
+<td style="text-align: left;">✕</td>
+<td style="text-align: left;">ブロック</td>
+<td style="text-align: left;">⭐⭐</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>var</code></td>
+<td style="text-align: left;">◯</td>
+<td style="text-align: left;">◯</td>
+<td style="text-align: left;">関数</td>
+<td style="text-align: left;">✕（非推奨）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="const">const（定数）</h3>
+<p><code>const</code>は<strong>再代入できない</strong>変数を宣言します。一度値を設定したら、変更できません。</p>
+<pre class="codehilite"><code class="language-javascript">const PI = 3.14159;
+console.log(PI);  // 出力: 3.14159
+
+PI = 3.14;  // ❌ エラー: Assignment to constant variable.
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> 実務では<strong>まず<code>const</code>を使う</strong>のが基本です。再代入が必要な場合のみ<code>let</code>を使います。これにより、意図しない値の変更を防げます。</p>
+</blockquote>
+<h3 id="let">let（変数）</h3>
+<p><code>let</code>は<strong>再代入できる</strong>変数を宣言します。値を後から変更できます。</p>
+<pre class="codehilite"><code class="language-javascript">let count = 0;
+console.log(count);  // 出力: 0
+
+count = 1;  // ✅ 再代入OK
+console.log(count);  // 出力: 1
+
+count = count + 1;  // ✅ 現在の値に1を足す
+console.log(count);  // 出力: 2
+</code></pre>
+
+<h3 id="var">var（非推奨）</h3>
+<p><code>var</code>は古い変数宣言方法です。<strong>現代のJavaScriptでは使いません</strong>。</p>
+<pre class="codehilite"><code class="language-javascript">var oldVariable = &quot;古い書き方&quot;;
+</code></pre>
+
+<blockquote>
+<p><strong>⚠️ 注意:</strong> <code>var</code>には「巻き上げ（hoisting）」や「関数スコープ」など、予期しない動作を引き起こす特性があります。新しいコードでは<code>const</code>と<code>let</code>のみを使いましょう。</p>
+</blockquote>
+<h2 id="_5">変数の命名規則</h2>
+<p>変数名には以下のルールがあります。</p>
+<h3 id="_6">使える文字</h3>
+<ul>
+<li>アルファベット（a-z, A-Z）</li>
+<li>数字（0-9）※ただし先頭には使えない</li>
+<li>アンダースコア（_）</li>
+<li>ドル記号（$）</li>
+</ul>
+<pre class="codehilite"><code class="language-javascript">// ✅ 有効な変数名
+let userName = &quot;田中&quot;;
+let user_name = &quot;田中&quot;;
+let $element = document.body;
+let _private = &quot;内部変数&quot;;
+let count1 = 0;
+
+// ❌ 無効な変数名
+let 1count = 0;      // 数字で始まっている
+let user-name = &quot;&quot;;  // ハイフンは使えない
+let let = &quot;&quot;;        // 予約語は使えない
+</code></pre>
+
+<h3 id="_7">命名のベストプラクティス</h3>
+<pre class="codehilite"><code class="language-javascript">// ✅ キャメルケース（推奨）
+let firstName = &quot;太郎&quot;;
+let isLoggedIn = true;
+let getUserData = function() {};
+
+// ✅ 定数は大文字スネークケース
+const MAX_COUNT = 100;
+const API_BASE_URL = &quot;https://api.example.com&quot;;
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> 変数名は<strong>意味が分かる名前</strong>を付けましょう。<code>x</code>や<code>data</code>ではなく、<code>userName</code>や<code>productList</code>のように、何が入っているか一目で分かる名前が理想です。</p>
+</blockquote>
+<h2 id="_8">データ型</h2>
+<p>JavaScriptには、以下の基本的なデータ型があります。</p>
+<h3 id="1-string">1. 文字列（String）</h3>
+<p>テキストデータを表します。シングルクォート（<code>'</code>）、ダブルクォート（<code>"</code>）、バッククォート（<code>`</code>）で囲みます。</p>
+<pre class="codehilite"><code class="language-javascript">const greeting = &quot;こんにちは&quot;;
+const name = '田中太郎';
+
+// テンプレートリテラル（バッククォート）
+const message = `${greeting}、${name}さん`;
+console.log(message);  // 出力: こんにちは、田中太郎さん
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> テンプレートリテラル（バッククォート）を使うと、<code>${}</code>の中に変数を埋め込めます。文字列の連結よりも読みやすいコードが書けます。</p>
+</blockquote>
+<h3 id="2-number">2. 数値（Number）</h3>
+<p>整数と小数を表します。</p>
+<pre class="codehilite"><code class="language-javascript">const age = 25;           // 整数
+const price = 1980.5;     // 小数
+const negative = -10;     // 負の数
+
+// 計算
+const total = price * 2;
+console.log(total);  // 出力: 3961
+</code></pre>
+
+<h3 id="3-boolean">3. 真偽値（Boolean）</h3>
+<p><code>true</code>（真）または<code>false</code>（偽）の2つの値のみを持ちます。</p>
+<pre class="codehilite"><code class="language-javascript">const isLoggedIn = true;
+const hasError = false;
+
+// 条件分岐で使用
+if (isLoggedIn) {
+  console.log(&quot;ログイン中です&quot;);
+}
+</code></pre>
+
+<h3 id="4-undefined">4. undefined</h3>
+<p>変数が宣言されたが、値が代入されていない状態を表します。</p>
+<pre class="codehilite"><code class="language-javascript">let notAssigned;
+console.log(notAssigned);  // 出力: undefined
+</code></pre>
+
+<h3 id="5-null">5. null</h3>
+<p>「値が存在しない」ことを明示的に表します。</p>
+<pre class="codehilite"><code class="language-javascript">let user = null;  // ユーザーがいないことを明示
+console.log(user);  // 出力: null
+</code></pre>
+
+<h3 id="6-array">6. 配列（Array）</h3>
+<p>複数の値をまとめて管理します。</p>
+<pre class="codehilite"><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;オレンジ&quot;];
+console.log(fruits[0]);  // 出力: りんご（インデックスは0から始まる）
+console.log(fruits.length);  // 出力: 3
+</code></pre>
+
+<h3 id="7-object">7. オブジェクト（Object）</h3>
+<p>キーと値のペアでデータを管理します。</p>
+<pre class="codehilite"><code class="language-javascript">const user = {
+  name: &quot;田中太郎&quot;,
+  age: 25,
+  isAdmin: false
+};
+
+console.log(user.name);  // 出力: 田中太郎
+console.log(user[&quot;age&quot;]);  // 出力: 25
+</code></pre>
+
+<h2 id="_9">データ型の確認</h2>
+<p><code>typeof</code>演算子を使うと、データ型を確認できます。</p>
+<pre class="codehilite"><code class="language-javascript">console.log(typeof &quot;文字列&quot;);    // 出力: string
+console.log(typeof 123);         // 出力: number
+console.log(typeof true);        // 出力: boolean
+console.log(typeof undefined);   // 出力: undefined
+console.log(typeof null);        // 出力: object（歴史的な理由による）
+console.log(typeof [1, 2, 3]);   // 出力: object
+console.log(typeof { a: 1 });    // 出力: object
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> <code>typeof null</code>が<code>object</code>を返すのは、JavaScriptの歴史的なバグです。<code>null</code>かどうかを確認するには、<code>value === null</code>を使いましょう。</p>
+</blockquote>
+<h2 id="_10">🏃 実践: 変数を使ってみよう</h2>
+<p>ブラウザの開発者ツール（F12 → Console）で以下のコードを試してみましょう。</p>
+<pre class="codehilite"><code class="language-javascript">// 1. 変数を宣言
+const userName = &quot;田中太郎&quot;;
+let userAge = 25;
+
+// 2. 変数を使って表示
+console.log(`名前: ${userName}`);
+console.log(`年齢: ${userAge}歳`);
+
+// 3. 再代入（letのみ可能）
+userAge = 26;
+console.log(`来年の年齢: ${userAge}歳`);
+
+// 4. 配列とオブジェクト
+const hobbies = [&quot;読書&quot;, &quot;映画鑑賞&quot;, &quot;プログラミング&quot;];
+const profile = {
+  name: userName,
+  age: userAge,
+  hobbies: hobbies
+};
+
+console.log(profile);
+</code></pre>
+
+<p><strong>実行結果:</strong></p>
+<pre class="codehilite"><code>名前: 田中太郎
+年齢: 25歳
+来年の年齢: 26歳
+{ name: '田中太郎', age: 26, hobbies: ['読書', '映画鑑賞', 'プログラミング'] }
+</code></pre>
+
+<h2 id="_11">よくある間違いと対処法</h2>
+<h3 id="1-const">1. constに再代入しようとする</h3>
+<pre class="codehilite"><code class="language-javascript">const name = &quot;田中&quot;;
+name = &quot;佐藤&quot;;  // ❌ エラー
+
+// 対処法: 再代入が必要ならletを使う
+let name = &quot;田中&quot;;
+name = &quot;佐藤&quot;;  // ✅ OK
+</code></pre>
+
+<h3 id="2">2. 変数を宣言せずに使う</h3>
+<pre class="codehilite"><code class="language-javascript">console.log(message);  // ❌ エラー: message is not defined
+
+// 対処法: 使う前に宣言する
+const message = &quot;こんにちは&quot;;
+console.log(message);  // ✅ OK
+</code></pre>
+
+<h3 id="3">3. 文字列と数値の混同</h3>
+<pre class="codehilite"><code class="language-javascript">const price = &quot;100&quot;;  // 文字列
+const tax = 10;       // 数値
+
+console.log(price + tax);  // 出力: &quot;10010&quot;（文字列連結になる）
+
+// 対処法: 数値に変換する
+console.log(Number(price) + tax);  // 出力: 110
+</code></pre>
+
+<h2 id="_12">✨ まとめ</h2>
+<ul>
+<li><strong>変数</strong>はデータに名前を付けて保存する仕組み</li>
+<li><strong><code>const</code>を優先</strong>して使い、再代入が必要な場合のみ<code>let</code>を使う</li>
+<li><strong><code>var</code>は使わない</strong>（レガシーコードでのみ見かける）</li>
+<li>JavaScriptには<strong>7つの基本データ型</strong>がある（文字列、数値、真偽値、undefined、null、配列、オブジェクト）</li>
+<li>変数名は<strong>意味が分かる名前</strong>を付ける</li>
+</ul>
+<h2 id="_13">📝 学習のポイント</h2>
+<ul>
+<li>[ ] <code>const</code>、<code>let</code>、<code>var</code>の違いを説明できる</li>
+<li>[ ] 変数の命名規則を理解している</li>
+<li>[ ] 基本的なデータ型を列挙できる</li>
+<li>[ ] <code>typeof</code>演算子でデータ型を確認できる</li>
+<li>[ ] テンプレートリテラルを使って文字列を作成できる</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-1: このチュートリアルで学ぶこと.html" class="prev">このチュートリアルで学ぶこと</a>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-3: 関数の定義と呼び出し.html" class="next">関数の定義と呼び出し</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

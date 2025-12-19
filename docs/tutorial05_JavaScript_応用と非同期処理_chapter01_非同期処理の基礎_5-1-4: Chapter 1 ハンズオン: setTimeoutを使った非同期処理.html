@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: setTimeoutを使った非同期処理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter01_非同期処理の基礎.html">Chapter 1: 非同期処理の基礎</a><span>></span>Chapter 1 ハンズオン: setTimeoutを使った非同期処理</div>
+                    <div class="section-content">
+<h1 id="5-1-4-chapter-1-settimeout">5-1-4: Chapter 1 ハンズオン: setTimeoutを使った非同期処理</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このハンズオンでは、Chapter 1で学んだ非同期処理の基礎を実践します。<code>setTimeout</code>とPromiseを使って、非同期処理の動作を体験しましょう。</p>
+<h2 id="_2">準備</h2>
+<p>作業用のHTMLファイルを作成します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;非同期処理の練習&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;非同期処理の練習&lt;/h1&gt;
+  &lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+  &lt;script src=&quot;async-practice.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2 id="1">課題1: 実行順序を予測する</h2>
+<p>以下のコードの実行順序を予測し、実際に実行して確認してください。</p>
+<pre class="codehilite"><code class="language-javascript">console.log(&quot;A&quot;);
+
+setTimeout(() =&gt; {
+  console.log(&quot;B&quot;);
+}, 0);
+
+console.log(&quot;C&quot;);
+
+setTimeout(() =&gt; {
+  console.log(&quot;D&quot;);
+}, 1000);
+
+console.log(&quot;E&quot;);
+</code></pre>
+
+<h3 id="_3">解答</h3>
+<pre class="codehilite"><code>A
+C
+E
+B（0ミリ秒後でも、同期処理の後に実行される）
+D（1秒後）
+</code></pre>
+
+<p><code>setTimeout</code>は0ミリ秒を指定しても、同期処理がすべて完了した後に実行されます。これはJavaScriptの「イベントループ」の仕組みによるものです。</p>
+<h2 id="2">課題2: カウントダウンタイマーを作成する</h2>
+<p>指定した秒数からカウントダウンし、0になったら「完了！」と表示するタイマーを作成してください。</p>
+<h3 id="_4">要件</h3>
+<ol>
+<li><code>countdown(seconds)</code> 関数を作成</li>
+<li>1秒ごとに残り秒数を表示</li>
+<li>0になったら「完了！」を表示</li>
+</ol>
+<h3 id="_5">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">function countdown(seconds) {
+  console.log(`カウントダウン開始: ${seconds}秒`);
+
+  for (let i = seconds; i &gt;= 0; i--) {
+    setTimeout(() =&gt; {
+      if (i &gt; 0) {
+        console.log(i);
+      } else {
+        console.log(&quot;完了！&quot;);
+      }
+    }, (seconds - i) * 1000);
+  }
+}
+
+countdown(5);
+
+// 出力:
+// カウントダウン開始: 5秒
+// 5（即座に）
+// 4（1秒後）
+// 3（2秒後）
+// 2（3秒後）
+// 1（4秒後）
+// 完了！（5秒後）
+</code></pre>
+
+<h2 id="3-promise">課題3: Promiseを使ったデータ取得シミュレーション</h2>
+<p>APIからデータを取得する処理をシミュレートする関数を作成してください。</p>
+<h3 id="_6">要件</h3>
+<ol>
+<li><code>fetchData(id)</code> 関数を作成（Promiseを返す）</li>
+<li>1秒後にデータを返す</li>
+<li>idが0以下の場合はエラーを返す</li>
+</ol>
+<h3 id="_7">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">function fetchData(id) {
+  return new Promise((resolve, reject) =&gt; {
+    console.log(`データ取得中... (ID: ${id})`);
+
+    setTimeout(() =&gt; {
+      if (id &lt;= 0) {
+        reject(new Error(&quot;無効なIDです&quot;));
+      } else {
+        resolve({
+          id: id,
+          title: `データ ${id}`,
+          createdAt: new Date().toISOString()
+        });
+      }
+    }, 1000);
+  });
+}
+
+// 成功パターン
+fetchData(1)
+  .then((data) =&gt; {
+    console.log(&quot;取得成功:&quot;, data);
+  })
+  .catch((error) =&gt; {
+    console.error(&quot;エラー:&quot;, error.message);
+  });
+
+// 失敗パターン
+fetchData(-1)
+  .then((data) =&gt; {
+    console.log(&quot;取得成功:&quot;, data);
+  })
+  .catch((error) =&gt; {
+    console.error(&quot;エラー:&quot;, error.message);
+  });
+</code></pre>
+
+<h2 id="4-promise">課題4: Promiseチェーンを使った連続処理</h2>
+<p>ユーザー情報を取得し、そのユーザーの投稿一覧を取得し、最初の投稿のコメントを取得する処理を作成してください。</p>
+<h3 id="_8">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">// ユーザー取得
+function getUser(userId) {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve({ id: userId, name: &quot;山田太郎&quot; });
+    }, 500);
+  });
+}
+
+// 投稿取得
+function getPosts(userId) {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve([
+        { id: 1, userId: userId, title: &quot;最初の投稿&quot; },
+        { id: 2, userId: userId, title: &quot;2番目の投稿&quot; }
+      ]);
+    }, 500);
+  });
+}
+
+// コメント取得
+function getComments(postId) {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve([
+        { id: 1, postId: postId, text: &quot;素晴らしい記事です！&quot; },
+        { id: 2, postId: postId, text: &quot;参考になりました&quot; }
+      ]);
+    }, 500);
+  });
+}
+
+// Promiseチェーンで連結
+console.log(&quot;処理開始&quot;);
+
+getUser(1)
+  .then((user) =&gt; {
+    console.log(&quot;ユーザー取得:&quot;, user.name);
+    return getPosts(user.id);
+  })
+  .then((posts) =&gt; {
+    console.log(&quot;投稿取得:&quot;, posts.length, &quot;件&quot;);
+    return getComments(posts[0].id);
+  })
+  .then((comments) =&gt; {
+    console.log(&quot;コメント取得:&quot;, comments.length, &quot;件&quot;);
+    comments.forEach((comment) =&gt; {
+      console.log(`  - ${comment.text}`);
+    });
+  })
+  .catch((error) =&gt; {
+    console.error(&quot;エラー:&quot;, error);
+  })
+  .finally(() =&gt; {
+    console.log(&quot;処理完了&quot;);
+  });
+</code></pre>
+
+<h2 id="5-promiseall">課題5: Promise.allを使った並列処理</h2>
+<p>複数のユーザーのデータを同時に取得し、全員の名前を表示してください。</p>
+<h3 id="_9">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">function getUser(userId) {
+  return new Promise((resolve) =&gt; {
+    const names = [&quot;田中&quot;, &quot;佐藤&quot;, &quot;鈴木&quot;, &quot;高橋&quot;, &quot;渡辺&quot;];
+    setTimeout(() =&gt; {
+      resolve({
+        id: userId,
+        name: names[userId - 1] || `ユーザー${userId}`
+      });
+    }, Math.random() * 1000); // ランダムな遅延
+  });
+}
+
+// 5人のユーザーを並列で取得
+const userPromises = [
+  getUser(1),
+  getUser(2),
+  getUser(3),
+  getUser(4),
+  getUser(5)
+];
+
+console.log(&quot;全ユーザーを取得中...&quot;);
+
+Promise.all(userPromises)
+  .then((users) =&gt; {
+    console.log(&quot;取得完了！&quot;);
+    users.forEach((user) =&gt; {
+      console.log(`  ID: ${user.id}, 名前: ${user.name}`);
+    });
+  })
+  .catch((error) =&gt; {
+    console.error(&quot;エラー:&quot;, error);
+  });
+</code></pre>
+
+<h2 id="_10">✨ まとめ</h2>
+<p>このハンズオンでは、以下のことを実践しました。</p>
+<ul>
+<li><code>setTimeout</code>を使った非同期処理の実行順序の理解</li>
+<li>Promiseを使った非同期処理の作成</li>
+<li>Promiseチェーンによる連続処理</li>
+<li><code>Promise.all</code>を使った並列処理</li>
+</ul>
+<p>次のチャプターでは、Promiseをより直感的に書ける<code>async/await</code>と、実際のAPI通信に使う<code>fetch API</code>について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter01_非同期処理の基礎_5-1-3: Promiseの基本.html" class="prev">Promiseの基本</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

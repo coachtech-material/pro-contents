@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storybookの基本 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter03_ビジュアルリグレッションテスト_Storybook.html">Chapter 3: ビジュアルリグレッションテスト Storybook</a><span>></span>Storybookの基本</div>
+                    <div class="section-content">
+<h1 id="11-3-2-storybook">11-3-2: Storybookの基本</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.jsプロジェクトにStorybookをセットアップする方法を学ぶ</li>
+<li>Storybookの主要なファイル（<code>.storybook/main.ts</code>, <code>.storybook/preview.ts</code>）の役割を理解する</li>
+<li>コンポーネントの「Story」を作成し、Storybook上で表示する方法を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでは、Storybookの概念と利点について学びました。このセクションでは、実際にNext.jsプロジェクトにStorybookを導入し、最初のStoryを作成するまでの手順をハンズオン形式で進めていきます。</p>
+<h2 id="storybook">Storybookのセットアップ</h2>
+<p>Storybookの導入は、Playwrightと同様に、簡単なコマンドで対話的に行うことができます。Next.jsプロジェクトのルートディレクトリで、以下のコマンドを実行してください。</p>
+<pre class="codehilite"><code class="language-bash">npx storybook@latest init
+</code></pre>
+
+<p>このコマンドは、プロジェクトの依存関係（<code>react</code>, <code>next</code>など）を自動で検出し、最適な設定を対話形式で進めてくれます。基本的にはデフォルトの選択肢のままで問題ありません。</p>
+<p>セットアップが完了すると、主に以下の2つのディレクトリと、<code>package.json</code>へのスクリプト追加が行われます。</p>
+<ul>
+<li><code>.storybook/</code>: Storybook自体の設定ファイルを格納するディレクトリ。</li>
+<li><code>src/stories/</code>: サンプルのコンポーネントとStoryファイルが格納されるディレクトリ。</li>
+</ul>
+<p>また、<code>package.json</code>の<code>scripts</code>には、Storybookを起動・ビルドするためのコマンドが追加されます。</p>
+<pre class="codehilite"><code class="language-json">// package.json
+{
+  ...
+  &quot;scripts&quot;: {
+    ...
+    &quot;storybook&quot;: &quot;storybook dev -p 6006&quot;,
+    &quot;build-storybook&quot;: &quot;storybook build&quot;
+  },
+  ...
+}
+</code></pre>
+
+<h2 id="storybook_1">Storybookを起動する</h2>
+<p>早速、Storybookを起動してみましょう。</p>
+<pre class="codehilite"><code class="language-bash">npm run storybook
+</code></pre>
+
+<p>しばらくすると、ブラウザで<code>http://localhost:6006</code>が開き、StorybookのUIが表示されます。<code>src/stories</code>に自動生成されたサンプルコンポーネントのStoryがいくつか表示されているはずです。</p>
+<h2 id="storybook_2">Storybookの主要な設定ファイル</h2>
+<p><code>.storybook</code>ディレクトリにある2つの主要な設定ファイルを見てみましょう。</p>
+<h3 id="storybookmaints"><code>.storybook/main.ts</code></h3>
+<p>Storybookのメインの設定ファイルです。どの場所にあるStoryファイルを読み込むか、どのアドオンを利用するかなどを定義します。</p>
+<pre class="codehilite"><code class="language-typescript">// .storybook/main.ts
+
+import type { StorybookConfig } from &quot;@storybook/nextjs&quot;;
+
+const config: StorybookConfig = {
+  // 1. Storyファイルの場所を指定
+  stories: [&quot;../src/**/*.mdx&quot;, &quot;../src/**/*.stories.@(js|jsx|mjs|ts|tsx)&quot;],
+
+  // 2. 使用するアドオンを列挙
+  addons: [
+    &quot;@storybook/addon-links&quot;,
+    &quot;@storybook/addon-essentials&quot;,
+    &quot;@storybook/addon-onboarding&quot;,
+    &quot;@storybook/addon-interactions&quot;,
+  ],
+  framework: {
+    name: &quot;@storybook/nextjs&quot;,
+    options: {},
+  },
+  docs: {
+    autodocs: &quot;tag&quot;,
+  },
+};
+export default config;
+</code></pre>
+
+<ol>
+<li><strong><code>stories</code></strong>: Storybookが読み込むファイルのパスをglobパターンで指定します。デフォルトでは、<code>src</code>ディレクトリ以下の<code>.stories.tsx</code>（または<code>.mdx</code>）という名前のファイルを探しに行きます。</li>
+<li><strong><code>addons</code></strong>: Storybookの機能を拡張するアドオンのリストです。<code>addon-essentials</code>には、コンポーネントのpropsを動的に変更できる<code>Controls</code>や、コンポーネントの説明書を書ける<code>Docs</code>など、基本的な機能が含まれています。</li>
+</ol>
+<h3 id="storybookpreviewts"><code>.storybook/preview.ts</code></h3>
+<p>すべてのStoryに共通で適用される「プレビュー」の設定を行います。例えば、グローバルなCSSを読み込んだり、Storyを特定のコンポーネントでラップしたりすることができます。</p>
+<p>Next.jsでTailwind CSSを使用している場合、<code>globals.css</code>をここでインポートする必要があります。</p>
+<pre class="codehilite"><code class="language-typescript">// .storybook/preview.ts
+
+import type { Preview } from &quot;@storybook/react&quot;;
+import &quot;../src/app/globals.css&quot;; // グローバルCSSをインポート
+
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: &quot;^on[A-Z].*&quot; },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+};
+
+export default preview;
+</code></pre>
+
+<h2 id="story">Storyを書いてみよう</h2>
+<p>それでは、自分たちで作成したコンポーネントのStoryを書いてみましょう。</p>
+<h3 id="1">ステップ1: コンポーネントの準備</h3>
+<p>まず、<code>src/components/ui/Button.tsx</code>というシンプルなボタンコンポーネントを作成します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/ui/Button.tsx
+
+import { cva, type VariantProps } from &quot;class-variance-authority&quot;;
+
+const buttonVariants = cva(
+  &quot;inline-flex items-center justify-center rounded-md text-sm font-medium&quot;,
+  {
+    variants: {
+      variant: {
+        primary: &quot;bg-blue-500 text-white hover:bg-blue-600&quot;,
+        secondary: &quot;bg-gray-200 text-gray-800 hover:bg-gray-300&quot;,
+        destructive: &quot;bg-red-500 text-white hover:bg-red-600&quot;,
+      },
+      size: {
+        sm: &quot;h-9 px-3&quot;,
+        md: &quot;h-10 px-4 py-2&quot;,
+        lg: &quot;h-11 px-8&quot;,
+      },
+    },
+    defaultVariants: {
+      variant: &quot;primary&quot;,
+      size: &quot;md&quot;,
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;,
+    VariantProps&lt;typeof buttonVariants&gt; {}
+
+const Button = ({ className, variant, size, ...props }: ButtonProps) =&gt; {
+  return (
+    &lt;button
+      className={buttonVariants({ variant, size, className })}
+      {...props}
+    /&gt;
+  );
+};
+
+export { Button };
+</code></pre>
+
+<h3 id="2-story">ステップ2: Storyファイルの作成</h3>
+<p>次に、この<code>Button</code>コンポーネントと同じ階層に<code>Button.stories.tsx</code>というファイルを作成します。これが<code>Button</code>コンポーネントのStoryファイルになります。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/ui/Button.stories.tsx
+
+import type { Meta, StoryObj } from &quot;@storybook/react&quot;;
+import { Button } from &quot;./Button&quot;;
+
+// 1. メタデータオブジェクト
+const meta: Meta&lt;typeof Button&gt; = {
+  title: &quot;UI/Button&quot;, // Storybookのサイドバーでの表示名
+  component: Button, // 対象のコンポーネント
+  tags: [&quot;autodocs&quot;], // Docsタブを自動生成
+  argTypes: { // propsの型定義
+    variant: {
+      control: { type: &quot;radio&quot; },
+      options: [&quot;primary&quot;, &quot;secondary&quot;, &quot;destructive&quot;],
+    },
+    size: {
+      control: { type: &quot;select&quot; },
+      options: [&quot;sm&quot;, &quot;md&quot;, &quot;lg&quot;],
+    },
+  },
+};
+
+export default meta;
+
+type Story = StoryObj&lt;typeof Button&gt;;
+
+// 2. PrimaryボタンのStory
+export const Primary: Story = {
+  args: {
+    variant: &quot;primary&quot;,
+    children: &quot;Primary Button&quot;,
+  },
+};
+
+// 3. SecondaryボタンのStory
+export const Secondary: Story = {
+  args: {
+    variant: &quot;secondary&quot;,
+    children: &quot;Secondary Button&quot;,
+  },
+};
+
+// 4. DestructiveボタンのStory
+export const Destructive: Story = {
+  args: {
+    variant: &quot;destructive&quot;,
+    children: &quot;Destructive Button&quot;,
+  },
+};
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ol>
+<li>
+<p><strong><code>meta</code>オブジェクト</strong>: Storyファイルの「メタ情報」を定義します。<code>title</code>でStorybook上での階層構造と表示名を決め、<code>component</code>で対象コンポーネントを指定します。<code>argTypes</code>を設定すると、StorybookのControlsアドオンでpropsをどのように操作するかをカスタマイズできます（例: <code>radio</code>ボタンや<code>select</code>ドロップダウン）。</p>
+</li>
+<li>
+<p><strong><code>Story</code>オブジェクト</strong>: 個々のStory（コンポーネントの特定の状態）を定義します。<code>export const</code>でエクスポートされたオブジェクトが、それぞれ一つのStoryになります。</p>
+</li>
+<li>
+<p><strong><code>args</code></strong>: コンポーネントに渡すpropsの値を指定します。<code>Primary</code> Storyでは、<code>variant</code>に<code>primary</code>を、<code>children</code>にボタンのテキストを渡しています。</p>
+</li>
+</ol>
+<p>このファイルを作成して保存すると、Storybookが自動でリロードされ、サイドバーに「UI/Button」という項目が追加され、その下に<code>Primary</code>, <code>Secondary</code>, <code>Destructive</code>という3つのStoryが表示されるはずです。</p>
+<p>Controlsタブを開けば、<code>variant</code>や<code>size</code>をGUIで変更して、リアルタイムにコンポーネントの見た目が変わるのを確認できます。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>Storybookは<code>npx storybook@latest init</code>で簡単にセットアップできる。</li>
+<li><code>.storybook/main.ts</code>でStoryファイルの場所やアドオンを設定し、<code>.storybook/preview.ts</code>でグローバルな設定（CSSのインポートなど）を行う。</li>
+<li>Storyファイル（<code>.stories.tsx</code>）では、<code>meta</code>オブジェクトでコンポーネントのメタ情報を定義し、<code>export const</code>で個々のStoryを定義する。</li>
+<li><code>args</code>を使って、各Storyに渡すpropsを指定する。</li>
+</ul>
+<p>これで、UIコンポーネントをカタログ化し、様々な状態をインタラクティブに確認する準備が整いました。次のハンズオンでは、このStorybookを使ってビジュアルリグレッションテストをセットアップします。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial11_テスト_chapter03_ビジュアルリグレッションテスト_Storybook_11-3-1: Storybookとは何か.html" class="prev">Storybookとは何か</a>
+<a href="tutorial11_テスト_chapter03_ビジュアルリグレッションテスト_Storybook_11-3-3: Chapter 3 ハンズオン: コンポーネントカタログを作成する.html" class="next">Chapter 3 ハンズオン: コンポーネントカタログを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

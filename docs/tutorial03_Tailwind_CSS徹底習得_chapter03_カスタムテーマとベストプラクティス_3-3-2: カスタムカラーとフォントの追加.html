@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カスタムカラーとフォントの追加 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス.html">Chapter 3: カスタムテーマとベストプラクティス</a><span>></span>カスタムカラーとフォントの追加</div>
+                    <div class="section-content">
+<h1 id="3-3-2">3-3-2: カスタムカラーとフォントの追加</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>tailwind.config.js</code> を編集して、独自のカラーパレットを追加できるようになる</li>
+<li>プロジェクトで使用するカスタムフォントを定義できるようになる</li>
+<li><code>theme.extend</code> の役割を理解し、既存のテーマを拡張できるようになる</li>
+</ul>
+<h2 id="_2">🖼️ 完成イメージ</h2>
+<p>このセクションでは、<code>tailwind.config.js</code> をカスタマイズして、プロジェクト独自のブランドカラーやフォントを定義します。</p>
+<h2 id="_3">導入</h2>
+<p>Tailwind CSSは豊富なデフォルトカラーやフォントを提供していますが、実際のプロジェクトではブランドガイドラインに沿った独自のデザイントークンが必要になります。<code>tailwind.config.js</code> を編集することで、Tailwindの機能を拡張し、プロジェクトに最適化できます。</p>
+<h2 id="_4">詳細解説</h2>
+<h3 id="tailwindconfigjs-theme"><code>tailwind.config.js</code> の <code>theme</code> オブジェクト</h3>
+<p>カスタマイズのほとんどは <code>theme</code> オブジェクト内で行います。<code>theme</code> オブジェクトに直接キーを追加すると、デフォルトのテーマが上書きされます。既存のテーマを維持しつつ追加したい場合は、<code>theme.extend</code> を使います。</p>
+<h3 id="_5">カスタムカラーの追加</h3>
+<p><code>theme.extend.colors</code> に独自のカラーを追加します。キーがクラス名の一部になり、値がカラーコードになります。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        'custom-blue': '#1E40AF',
+        'custom-green': {
+          light: '#6EE7B7',
+          DEFAULT: '#10B981',
+          dark: '#047857',
+        },
+      },
+    },
+  },
+}
+</code></pre>
+
+<p>上記のように設定すると、<code>bg-custom-blue</code> や <code>text-custom-green-light</code> のようなクラスが使えるようになります。</p>
+<h3 id="_6">カスタムフォントの追加</h3>
+<p><code>theme.extend.fontFamily</code> にフォントファミリーを追加します。キーがクラス名の一部になり、値がフォントファミリーの配列になります。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
+      },
+    },
+  },
+}
+</code></pre>
+
+<p><code>defaultTheme</code> をインポートしてスプレッド構文で展開することで、デフォルトのフォントファミリーを維持しつつ、先頭にカスタムフォントを追加できます。</p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li><code>tailwind.config.js</code> を変更した後は、開発サーバーを再起動しないと変更が反映されない場合があります。</li>
+</ul>
+<h2 id="_7">🏃 実践</h2>
+<p>前のセクションで作成したプロジェクトに、独自のブランドカラーとフォントを追加してみましょう。</p>
+<h2 id="_8">✨ まとめ</h2>
+<ul>
+<li><code>tailwind.config.js</code> の <code>theme.extend</code> を使ってテーマを拡張する</li>
+<li><code>colors</code> オブジェクトに独自のカラーパレットを追加できる</li>
+<li><code>fontFamily</code> オブジェクトにカスタムフォントを追加できる</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス_3-3-1: tailwind.config.jsのカスタマイズ.html" class="prev">tailwind.config.jsのカスタマイズ</a>
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス_3-3-3: @applyとコンポーネントの管理.html" class="next">@applyとコンポーネントの管理</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

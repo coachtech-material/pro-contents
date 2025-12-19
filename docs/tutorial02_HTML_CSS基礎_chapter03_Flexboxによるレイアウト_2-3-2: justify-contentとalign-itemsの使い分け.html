@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>justify-contentとalign-itemsの使い分け | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト.html">Chapter 3: Flexboxによるレイアウト</a><span>></span>justify-contentとalign-itemsの使い分け</div>
+                    <div class="section-content">
+<h1 id="2-3-2-justify-contentalign-items">2-3-2: justify-contentとalign-itemsの使い分け</h1>
+<h2 id="chapter-3-flexbox">Chapter 3: Flexboxによるレイアウト</h2>
+<h3 id="section-2-justify-contentalign-items">Section 2: justify-contentとalign-itemsの使い分け</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、Flexboxの最も強力なプロパティである<code>justify-content</code>と<code>align-items</code>を学びます。これらを使いこなすことで、アイテムを「主軸方向」と「交差軸方向」に自在に配置し、以下のような多様なレイアウトを実現できるようになります。</p>
+<p><em>ここにスクリーンショットを挿入: 3つのボックスが、(1)右端揃え、(2)中央揃え、(3)均等間隔、(4)垂直方向に中央揃え、など様々なパターンで配置されている様子を示す</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、Flexアイテムの揃えをコントロールする2大プロパティ、<code>justify-content</code>と<code>align-items</code>をマスターします。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li><code>justify-content</code>を使って、主軸方向（デフォルトでは横方向）の揃え（左揃え、右揃え、中央揃え、均等配置など）を自在に操れるようになる。</li>
+<li><code>align-items</code>を使って、交差軸方向（デフォルトでは縦方向）の揃え（上揃え、下揃え、中央揃えなど）を自在に操れるようになる。</li>
+<li>「水平・垂直方向の中央揃え」という、これまで非常に難しかったレイアウトをたった数行で実現できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>前のセクションで、<code>display: flex;</code>によってアイテムが横に並ぶことを学びました。しかし、ただ並べるだけでは実用的なレイアウトは作れません。Flexboxの真価は、並べたアイテムを「どのように揃えるか」を簡単に指定できる点にあります。その司令塔となるのが、<code>justify-content</code>（主軸方向の揃え）と<code>align-items</code>（交差軸方向の揃え）です。この2つのプロパティを理解すれば、あなたのレイアウト能力は飛躍的に向上します。</p>
+<h3 id="_2">概念の説明</h3>
+<p>思い出してください、Flexboxには「主軸」と「交差軸」がありましたね。</p>
+<ul>
+<li><strong><code>justify-content</code></strong>: <strong>主軸 (Main Axis) 方向</strong>のアイテムの揃え方と間隔を調整します。（デフォルトは横方向）</li>
+<li><strong><code>align-items</code></strong>: <strong>交差軸 (Cross Axis) 方向</strong>のアイテムの揃え方を調整します。（デフォルトは縦方向）</li>
+</ul>
+<p>この2つは必ず<strong>親要素（Flexコンテナ）</strong>に指定します。子要素（Flexアイテム）に指定しても効果はありません。</p>
+<h3 id="_3">詳細解説</h3>
+<h4 id="justify-content"><code>justify-content</code> の主要な値</h4>
+<p>主軸方向（横方向）の揃え方をコントロールします。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">値</th>
+<th style="text-align: left;">説明</th>
+<th style="text-align: left;">イメージ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>flex-start</code> (デフォルト)</td>
+<td style="text-align: left;">コンテナの<strong>始点</strong>に寄せて配置</td>
+<td style="text-align: left;"><code>[■■■      ]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>flex-end</code></td>
+<td style="text-align: left;">コンテナの<strong>終点</strong>に寄せて配置</td>
+<td style="text-align: left;"><code>[      ■■■]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>center</code></td>
+<td style="text-align: left;">コンテナの<strong>中央</strong>に配置</td>
+<td style="text-align: left;"><code>[   ■■■   ]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>space-between</code></td>
+<td style="text-align: left;">最初と最後のアイテムを両端に配置し、残りのアイテム間の<strong>間隔を均等</strong>にする</td>
+<td style="text-align: left;"><code>[■   ■   ■]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>space-around</code></td>
+<td style="text-align: left;">全てのアイテムの<strong>周りに均等な間隔</strong>を設ける（両端のアイテムの余白は、アイテム間の余白の半分になる）</td>
+<td style="text-align: left;"><code>[ ■  ■  ■ ]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>space-evenly</code></td>
+<td style="text-align: left;">全てのアイテムの<strong>間隔と、両端の余白を完全に均等</strong>にする</td>
+<td style="text-align: left;"><code>[  ■  ■  ■  ]</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>コード例 (<code>space-between</code>):</strong><br />
+<code>css
+  .container {
+    display: flex;
+    justify-content: space-between; /* これを追加 */
+  }</code></li>
+<li><strong>表示結果:</strong> 最初のアイテムは左端、最後のアイテムは右端に配置され、その間のスペースが均等に分配されます。ヘッダーのロゴとナビゲーションメニューの配置などで非常によく使われます。</li>
+</ul>
+<h4 id="align-items"><code>align-items</code> の主要な値</h4>
+<p>交差軸方向（縦方向）の揃え方をコントロールします。コンテナに高さがないと違いが分かりにくいため、以下の例ではコンテナに高さを指定しています。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">値</th>
+<th style="text-align: left;">説明</th>
+<th style="text-align: left;">イメージ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>stretch</code> (デフォルト)</td>
+<td style="text-align: left;">アイテムの高さをコンテナの高さに合わせて<strong>引き伸ばす</strong></td>
+<td style="text-align: left;"><code>[|||]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>flex-start</code></td>
+<td style="text-align: left;">コンテナの<strong>始点</strong>（上端）に寄せて配置</td>
+<td style="text-align: left;"><code>[▀▀▀]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>flex-end</code></td>
+<td style="text-align: left;">コンテナの<strong>終点</strong>（下端）に寄せて配置</td>
+<td style="text-align: left;"><code>[▄▄▄]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>center</code></td>
+<td style="text-align: left;">コンテナの<strong>中央</strong>に配置</td>
+<td style="text-align: left;"><code>[▬▬▬]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>baseline</code></td>
+<td style="text-align: left;">アイテム内のテキストの<strong>ベースライン</strong>（下線）を揃える</td>
+<td style="text-align: left;">（文字の大きさが違う場合に効果を発揮）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>コード例 (<code>center</code>):</strong><br />
+<code>css
+  .container {
+    display: flex;
+    height: 150px; /* 高さを指定 */
+    align-items: center; /* これを追加 */
+  }</code></li>
+<li><strong>表示結果:</strong> 高さ150pxのコンテナの中で、アイテムが垂直方向の中央に配置されます。</li>
+</ul>
+<h4 id="_4">究極のテクニック: 水平・垂直中央揃え</h4>
+<p><code>justify-content</code>と<code>align-items</code>を組み合わせることで、CSSの長年の課題であった「完全な中央揃え」が、たった3行で実現できます。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>css
+  .container {
+    display: flex;
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center;     /* 垂直方向の中央揃え */
+    height: 200px; /* コンテナの高さが必要 */
+  }</code></li>
+<li><strong>表示結果:</strong> 高さ200pxのコンテナの中で、中のアイテムがど真ん中に配置されます。これはモーダルウィンドウやローディング表示など、あらゆる場面で活用できる必須テクニックです。</li>
+</ul>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>軸の向きに注意:</strong> <code>flex-direction: column;</code>で主軸を垂直にした場合、<code>justify-content</code>は「垂直方向」の揃え、<code>align-items</code>は「水平方向」の揃えをコントロールするようになります。役割が入れ替わるので注意しましょう。</li>
+<li><strong><code>gap</code>プロパティ:</strong> <code>space-between</code>などでは間隔を直接指定できませんが、最近のブラウザでは<code>gap</code>プロパティが使えます。<code>.container { display: flex; gap: 10px; }</code>と指定するだけで、アイテム間に10pxの隙間を簡単に作ることができ、非常に便利です。</li>
+</ul>
+<h3 id="_5">✨ まとめ</h3>
+<ul>
+<li><code>justify-content</code>は<strong>主軸方向（横）</strong>の揃えと間隔を、<code>align-items</code>は<strong>交差軸方向（縦）</strong>の揃えをコントロールする。</li>
+<li><code>justify-content: center;</code>で水平中央、<code>align-items: center;</code>で垂直中央に配置できる。</li>
+<li>この2つを組み合わせることで、完全な中央揃えが簡単に実現できる。</li>
+<li><code>space-between</code>はアイテム間の間隔を均等に分配し、ヘッダーレイアウトなどで頻繁に使われる。</li>
+</ul>
+<h3 id="_6">📝 学習のポイント</h3>
+<ul>
+<li>[ ] <code>justify-content</code>と<code>align-items</code>は、それぞれどちらの軸の揃えを担当するか説明できるか？</li>
+<li>[ ] 3つのアイテムを、コンテナの両端と中央に均等な間隔で配置するには、<code>justify-content</code>にどの値を指定すればよいか？</li>
+<li>[ ] アイテムをコンテナのど真ん中に配置するためのCSSを3行で書けるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト_2-3-1: Flexboxの基本概念.html" class="prev">Flexboxの基本概念</a>
+<a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト_2-3-3: 実務でよく使うFlexboxパターン.html" class="next">実務でよく使うFlexboxパターン</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

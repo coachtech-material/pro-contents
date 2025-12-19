@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: ブログのパフォーマンスを改善する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter03_レンダリングとパフォーマンス.html">Chapter 3: レンダリングとパフォーマンス</a><span>></span>Chapter 3 ハンズオン: ブログのパフォーマンスを改善する</div>
+                    <div class="section-content">
+<h1 id="9-3-5-chapter-3-hydration-error">9-3-5: 実践 🚀 Chapter 3 ハンズオン: ブログのパフォーマンスを改善する（Hydration Errorの体験を含む）</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このチャプターで学んだパフォーマンス最適化のテクニックと、Hydration Mismatchエラーの対処法を実践的に習得します。Chapter 2で作成したブログアプリケーションをベースに、以下の改善を加えます。</p>
+<ul>
+<li><strong>Hydration Mismatchの体験と修正</strong>: 意図的にエラーを発生させ、<code>useEffect</code>を使って正しく修正する。</li>
+<li><strong>画像最適化</strong>: <code>next/image</code>を使って、記事にアイキャッチ画像を追加し、最適化する。</li>
+<li><strong>フォント最適化</strong>: <code>next/font</code>を使って、アプリケーション全体のフォントを最適化する。</li>
+<li><strong>動的インポート</strong>: コメント欄など、初期表示に不要なコンポーネントを<code>next/dynamic</code>で遅延読み込みする。</li>
+</ul>
+<p>このハンズオンを通して、Next.jsが提供する強力な最適化機能を実際に適用し、その効果を体感します。</p>
+<h2 id="_2">事前準備</h2>
+<ul>
+<li>Chapter 2のハンズオンで作成したブログアプリケーションのコード。</li>
+<li>画像は、<a href="https://unsplash.com/">Unsplash</a> などのフリー素材サイトから好きなものを選んで使うか、ダミー画像生成サービス（例: <code>https://picsum.photos/800/400</code>）を利用します。</li>
+</ul>
+<h2 id="_3">ハンズオン</h2>
+<h3 id="1-hydration-mismatch">ステップ1: Hydration Mismatchを体験し、修正する</h3>
+<p>まず、記事詳細ページに「この記事はXX秒前に表示されました」というような、クライアントサイドでのみ正確に計算できる情報を表示してみましょう。これにより、Hydration Mismatchがどのように発生し、どう修正するのかを学びます。</p>
+<ol>
+<li>
+<p><code>app/blog/[id]/page.tsx</code>を開き、コンポーネントの先頭で現在時刻を取得するコードを追加します。</p>
+<p>```tsx<br />
+// app/blog/[id]/page.tsx</p>
+<p>// ... (imports)</p>
+<p>// ... (getPost function)</p>
+<p>export default async function PostDetailPage({ params }: { params: { id: string } }) {<br />
+  const post: Post = await getPost(params.id);<br />
+  const renderedAt = new Date().toLocaleTimeString(); // サーバーとクライアントで値が異なる</p>
+<p>return (<br />
+    <div><br />
+      <h1>{post.title}</h1><br />
+      <p>{post.body}</p><br />
+      <p style={{ color: "gray" }}>Rendered at: {renderedAt}</p> {/<em> ミスマッチの原因 </em>/}<br />
+    </div><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p>開発サーバーを起動し、いずれかの記事ページにアクセスします。ブラウザのコンソールにHydration Mismatchエラーが表示されることを確認してください。</p>
+</li>
+<li>
+<p>このエラーを修正します。<code>useEffect</code>を使って、クライアントサイドでのみ時刻をレンダリングするように変更します。このコンポーネントは<code>async</code>なので、時刻表示部分を別のClient Componentに切り出す必要があります。</p>
+<p>a. <code>app/blog/[id]/</code>に<code>RenderedTime.tsx</code>というファイルを作成します。</p>
+<p>```tsx<br />
+// app/blog/[id]/RenderedTime.tsx<br />
+"use client";</p>
+<p>import { useState, useEffect } from "react";</p>
+<p>export default function RenderedTime() {<br />
+  const [time, setTime] = useState("");</p>
+<p>useEffect(() =&gt; {<br />
+    // マウント後にクライアントサイドでのみ実行<br />
+    setTime(new Date().toLocaleTimeString());<br />
+  }, []);</p>
+<p>if (!time) {<br />
+    return <p style={{ color: "gray" }}>Rendered at: calculating...</p>;<br />
+  }</p>
+<p>return <p style={{ color: "gray" }}>Rendered at: {time}</p>;<br />
+}<br />
+```</p>
+<p>b. <code>app/blog/[id]/page.tsx</code>を修正し、新しいコンポーネントをインポートして使います。</p>
+<p>```tsx<br />
+// app/blog/[id]/page.tsx<br />
+import RenderedTime from "./RenderedTime";</p>
+<p>// ... (getPost function)</p>
+<p>export default async function PostDetailPage({ params }: { params: { id: string } }) {<br />
+  const post: Post = await getPost(params.id);</p>
+<p>return (<br />
+    <div><br />
+      <h1>{post.title}</h1><br />
+      <p>{post.body}</p><br />
+      <RenderedTime /> {/<em> Client Componentを呼び出す </em>/}<br />
+    </div><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p>再度ページにアクセスし、コンソールからエラーが消え、時刻が正しく表示されることを確認します。</p>
+</li>
+</ol>
+<h3 id="2-nextimage">ステップ2: <code>next/image</code>でアイキャッチ画像を追加する</h3>
+<p>記事詳細ページにアイキャッチ画像を追加します。</p>
+<ol>
+<li>
+<p><code>app/blog/[id]/page.tsx</code>を修正し、<code>&lt;Image&gt;</code>コンポーネントを追加します。画像のURLは、ダミー画像サービスを使い、記事IDに基づいて異なる画像が表示されるようにしてみましょう。</p>
+<p>```tsx<br />
+// app/blog/[id]/page.tsx<br />
+import Image from "next/image";<br />
+import RenderedTime from "./RenderedTime";</p>
+<p>// ... (interface Post, getPost function)</p>
+<p>export default async function PostDetailPage({ params }: { params: { id: string } }) {<br />
+  const post: Post = await getPost(params.id);</p>
+<p>return (<br />
+    <div><br />
+      <h1>{post.title}</h1><br />
+      <div style={{ margin: "20px 0" }}><br />
+        <Image
+          src={<code>https://picsum.photos/seed/${post.id}/800/400</code>}
+          alt={post.title}
+          width={800}
+          height={400}
+          priority // LCPになる可能性が高い画像にはpriority属性をつける
+        /><br />
+      </div><br />
+      <p>{post.body}</p><br />
+      <RenderedTime /><br />
+    </div><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p><code>next.config.mjs</code>ファイルに、外部ドメインの画像を利用するための設定を追加します。</p>
+<p>```js<br />
+// next.config.mjs<br />
+/*<em> @type {import("next").NextConfig} </em>/<br />
+const nextConfig = {<br />
+  images: {<br />
+    remotePatterns: [<br />
+      {<br />
+        protocol: "https",<br />
+        hostname: "picsum.photos",<br />
+      },<br />
+    ],<br />
+  },<br />
+};</p>
+<p>export default nextConfig;<br />
+```</p>
+</li>
+<li>
+<p>開発サーバーを再起動し、記事ページに画像が最適化されて表示されることを確認します。ブラウザの開発者ツールでネットワークタブを開き、画像がWebP形式で配信されていることや、サイズが適切になっていることを確認してみましょう。</p>
+</li>
+</ol>
+<h3 id="3-nextfont">ステップ3: <code>next/font</code>でフォントを最適化する</h3>
+<p>アプリケーション全体のフォントを<code>next/font</code>を使って最適化します。</p>
+<ol>
+<li>
+<p><code>app/layout.tsx</code>を開き、Google Fontsから好きなフォント（例: <code>Noto Sans JP</code>）をインポートして適用します。</p>
+<p>```tsx<br />
+// app/layout.tsx<br />
+import { Noto_Sans_JP } from "next/font/google";<br />
+import "./globals.css";</p>
+<p>const notoSansJP = Noto_Sans_JP({<br />
+  subsets: ["latin"],<br />
+  weight: ["400", "700"],<br />
+  display: "swap",<br />
+});</p>
+<p>export const metadata = {<br />
+  title: "My Blog",<br />
+  description: "A blog created with Next.js",<br />
+};</p>
+<p>export default function RootLayout({ children }: { children: React.ReactNode }) {<br />
+  return (<br />
+    <html lang="ja" className={notoSansJP.className}><br />
+      <body>{children}</body><br />
+    </html><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p>ページにアクセスし、フォントが適用されていることを確認します。開発者ツールで<code>&lt;html&gt;</code>要素を見ると、<code>next/font</code>によって生成されたクラス名とスタイルが適用されていることがわかります。</p>
+</li>
+</ol>
+<h3 id="4-nextdynamic">ステップ4: <code>next/dynamic</code>でコメント欄を遅延読み込みする</h3>
+<p>記事詳細ページに、初期表示には不要な「コメント欄」コンポーネントを追加し、動的に読み込むようにします。</p>
+<ol>
+<li>
+<p><code>app/blog/[id]/</code>に<code>Comments.tsx</code>というファイルを作成します。これは重いコンポーネントであると仮定し、<code>setTimeout</code>で読み込みをシミュレートします。</p>
+<p>```tsx<br />
+// app/blog/[id]/Comments.tsx<br />
+export default async function Comments() {<br />
+  // 重い処理をシミュレート<br />
+  await new Promise((resolve) =&gt; setTimeout(resolve, 2000));</p>
+<p>return <div>This is a heavy comments section.</div>;<br />
+}<br />
+```</p>
+</li>
+<li>
+<p><code>app/blog/[id]/page.tsx</code>を修正し、<code>next/dynamic</code>を使って<code>Comments</code>コンポーネントを遅延読み込みします。</p>
+<p>```tsx<br />
+// app/blog/[id]/page.tsx<br />
+import Image from "next/image";<br />
+import dynamic from "next/dynamic";<br />
+import RenderedTime from "./RenderedTime";</p>
+<p>// Commentsコンポーネントを動的にインポート<br />
+const Comments = dynamic(() =&gt; import("./Comments"), {<br />
+  loading: () =&gt; <p>Loading comments...</p>,<br />
+});</p>
+<p>// ... (interface Post, getPost function)</p>
+<p>export default async function PostDetailPage({ params }: { params: { id: string } }) {<br />
+  const post: Post = await getPost(params.id);</p>
+<p>return (<br />
+    <div><br />
+      {/<em> ... (title, image, body) </em>/}<br />
+      <RenderedTime /><br />
+      <hr style={{ margin: "20px 0" }} /><br />
+      <Comments /><br />
+    </div><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p>記事ページにアクセスします。ページの主要なコンテンツ（タイトル、画像、本文）がまず表示され、その後に「Loading comments...」と表示され、2秒後に「This is a heavy comments section.」に切り替わることを確認します。これにより、重いコンポーネントが初期表示をブロックしていないことがわかります。</p>
+</li>
+</ol>
+<h2 id="_4">✨ まとめ</h2>
+<p>このハンズオンを通じて、Next.jsのパフォーマンス最適化機能を一通り実践しました。</p>
+<ul>
+<li>Hydration Mismatchエラーを意図的に発生させ、Client Componentに処理を分離することで正しく修正しました。</li>
+<li><code>next/image</code>を導入し、外部画像を最適化された形で配信しました。</li>
+<li><code>next/font</code>を使い、数行のコードでWebフォントを最適化し、レイアウトシフトを防ぎました。</li>
+<li><code>next/dynamic</code>を利用して、重いコンポーネントを遅延読み込みし、初期表示のパフォーマンスを改善しました。</li>
+</ul>
+<p>これらのテクニックは、実際のプロジェクトでアプリケーションの品質を向上させるために頻繁に利用されます。それぞれの機能がどのような問題を解決し、どのように使うのかを実践的に理解できたはずです。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter03_レンダリングとパフォーマンス_9-3-4: Hydration Mismatch エラーの倒し方.html" class="prev">Hydration Mismatch エラーの倒し方</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

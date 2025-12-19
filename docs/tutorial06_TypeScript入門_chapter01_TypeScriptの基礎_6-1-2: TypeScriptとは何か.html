@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScriptとは何か | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎.html">Chapter 1: TypeScriptの基礎</a><span>></span>TypeScriptとは何か</div>
+                    <div class="section-content">
+<h1 id="6-1-2-typescript">6-1-2: TypeScriptとは何か</h1>
+<h2 id="_1">🎯 この章で学ぶこと</h2>
+<ul>
+<li>TypeScriptの概要と特徴を理解する</li>
+<li>JavaScriptとTypeScriptの関係を理解する</li>
+<li>型システムがもたらすメリットを理解する</li>
+</ul>
+<h2 id="_2">はじめに</h2>
+<p>TypeScriptは、Microsoftが開発したプログラミング言語で、JavaScriptに「静的型付け」という機能を追加したものです。2012年に初めてリリースされて以来、急速に普及し、現在では多くの企業やプロジェクトで採用されています。</p>
+<h2 id="javascript">JavaScriptの課題</h2>
+<p>JavaScriptは非常に柔軟な言語ですが、その柔軟さゆえに問題が発生することがあります。</p>
+<pre class="codehilite"><code class="language-javascript">// JavaScriptの例
+function add(a, b) {
+  return a + b;
+}
+
+add(1, 2);       // 3（期待通り）
+add(&quot;1&quot;, &quot;2&quot;);   // &quot;12&quot;（文字列の連結になってしまう）
+add(1, &quot;2&quot;);     // &quot;12&quot;（意図しない結果）
+</code></pre>
+
+<p>このように、JavaScriptでは関数に渡される引数の型をチェックしないため、意図しない動作が発生する可能性があります。小規模なプロジェクトでは問題になりにくいですが、コードベースが大きくなるにつれて、このような問題が増えていきます。</p>
+<h2 id="typescript">TypeScriptの解決策</h2>
+<p>TypeScriptは、変数や関数の引数に「型」を指定することで、これらの問題を解決します。</p>
+<pre class="codehilite"><code class="language-typescript">// TypeScriptの例
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+add(1, 2);       // 3（OK）
+add(&quot;1&quot;, &quot;2&quot;);   // コンパイルエラー！
+add(1, &quot;2&quot;);     // コンパイルエラー！
+</code></pre>
+
+<p>TypeScriptでは、コードを実行する前（コンパイル時）にエラーを検出できるため、バグを早期に発見し、修正することができます。</p>
+<h2 id="typescriptjavascript">TypeScriptとJavaScriptの関係</h2>
+<p>TypeScriptは「JavaScriptのスーパーセット」と呼ばれます。これは、すべてのJavaScriptコードが有効なTypeScriptコードであることを意味します。</p>
+<pre class="codehilite"><code>JavaScript ⊂ TypeScript
+</code></pre>
+
+<p>TypeScriptのコードは、最終的にJavaScriptにコンパイル（変換）されて実行されます。ブラウザやNode.jsはTypeScriptを直接実行できないため、このコンパイルステップが必要です。</p>
+<pre class="codehilite"><code>TypeScript (.ts) → コンパイル → JavaScript (.js) → 実行
+</code></pre>
+
+<h2 id="_3">型システムのメリット</h2>
+<p>TypeScriptの型システムは、以下のようなメリットをもたらします。</p>
+<table>
+<thead>
+<tr>
+<th>メリット</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>バグの早期発見</strong></td>
+<td>コンパイル時に型の不一致を検出し、実行前にエラーを修正できる</td>
+</tr>
+<tr>
+<td><strong>コードの自己文書化</strong></td>
+<td>型情報がコードの意図を明確にし、ドキュメントの役割を果たす</td>
+</tr>
+<tr>
+<td><strong>IDEサポートの向上</strong></td>
+<td>型情報を基にした強力な補完機能やリファクタリング支援が利用できる</td>
+</tr>
+<tr>
+<td><strong>チーム開発の効率化</strong></td>
+<td>型定義がインターフェースの役割を果たし、チームメンバー間の認識のズレを防ぐ</td>
+</tr>
+</tbody>
+</table>
+<h2 id="typescript_1">TypeScriptの採用状況</h2>
+<p>TypeScriptは、現在のフロントエンド開発において事実上の標準となっています。React、Vue、Angularといった主要なフレームワークはすべてTypeScriptをサポートしており、多くの企業がTypeScriptを採用しています。</p>
+<p>また、npmパッケージの多くがTypeScriptの型定義ファイル（<code>.d.ts</code>）を提供しており、サードパーティライブラリを使用する際にも型の恩恵を受けることができます。</p>
+<h2 id="_4">✨ まとめ</h2>
+<p>TypeScriptは、JavaScriptに静的型付けを追加した言語です。型システムにより、バグの早期発見、コードの可読性向上、IDEサポートの強化といったメリットが得られます。現代のフロントエンド開発において、TypeScriptは必須のスキルとなっています。</p>
+<p>次のセクションでは、TypeScriptの基本的な型について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎_6-1-1: このチュートリアルで学ぶこと.html" class="prev">このチュートリアルで学ぶこと</a>
+<a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎_6-1-3: 基本的な型.html" class="next">基本的な型</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: ジェネリクスを使った共通部品を作成する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter03_高度な型操作.html">Chapter 3: 高度な型操作</a><span>></span>Chapter 3 ハンズオン: ジェネリクスを使った共通部品を作成する</div>
+                    <div class="section-content">
+<h1 id="6-3-5">6-3-5: 実践 🚀 チャプターハンズオン: ジェネリクスを使った共通部品を作成する</h1>
+<h2 id="_1">🎯 課題</h2>
+<p>このチャプターで学んだジェネリクス、Union型、型の絞り込みを駆使して、実務でよくある「APIレスポンスを扱う共通関数」を作成しましょう。</p>
+<p>多くのWeb APIは、成功時にはデータを、失敗時にはエラー情報を含む、共通のラッパーオブジェクトでレスポンスを返します。今回は、そのような構造を型安全に扱うための部品を作成します。</p>
+<h3 id="_2">完成要件</h3>
+<ol>
+<li>
+<p><strong>共通のAPIレスポンス型 <code>ApiResponse&lt;T&gt;</code> を作成する。</strong></p>
+<ul>
+<li>成功レスポンス <code>ApiSuccessResponse&lt;T&gt;</code> と失敗レスポンス <code>ApiErrorResponse</code> のUnion型とする。</li>
+<li><code>ApiSuccessResponse&lt;T&gt;</code> は、ジェネリクス <code>T</code> で受け取ったデータ <code>data</code> と、ステータス <code>status: 'success'</code> を持つ。</li>
+<li><code>ApiErrorResponse</code> は、エラーメッセージ <code>message</code> と、ステータス <code>status: 'error'</code> を持つ。</li>
+</ul>
+</li>
+<li>
+<p><strong>レスポンスを処理する関数 <code>handleResponse</code> を作成する。</strong></p>
+<ul>
+<li>この関数は <code>ApiResponse&lt;T&gt;</code> を引数に取る。</li>
+<li><code>status</code> プロパティを使って型の絞り込みを行う。</li>
+<li>ステータスが <code>'success'</code> なら、<code>"Success! Data: "</code> に続けて <code>data</code> の内容をコンソールに出力する。</li>
+<li>ステータスが <code>'error'</code> なら、<code>"Error! Message: "</code> に続けて <code>message</code> をコンソールに出力する。</li>
+</ul>
+</li>
+</ol>
+<h2 id="_3">🛠️ 手順</h2>
+<ol>
+<li><strong>型の定義</strong>: まず、<code>ApiSuccessResponse&lt;T&gt;</code> と <code>ApiErrorResponse</code> の2つの <code>interface</code> (または <code>type</code>) を定義します。</li>
+<li><strong>Union型の作成</strong>: <code>ApiResponse&lt;T&gt;</code> を、上記2つの型のUnion型として <code>type</code> エイリアスで定義します。</li>
+<li><strong>関数の実装</strong>: <code>handleResponse</code> 関数をジェネリック関数として実装します。関数の内部で <code>if</code> 文を使い、<code>response.status</code> の値に応じて処理を分岐させます。</li>
+<li><strong>動作確認</strong>: ユーザーデータと商品データを模したサンプルデータを作成し、<code>handleResponse</code> 関数を成功ケースと失敗ケースでそれぞれ呼び出し、期待通りの出力が得られるか確認します。</li>
+</ol>
+<h2 id="_4">🏆 解答例</h2>
+<pre class="codehilite"><code class="language-typescript">// 1. 型の定義
+
+// 成功時のレスポンス型。データ部分をジェネリクスTで受け取る
+interface ApiSuccessResponse&lt;T&gt; {
+  status: 'success';
+  data: T;
+}
+
+// 失敗時のレスポンス型
+interface ApiErrorResponse {
+  status: 'error';
+  message: string;
+}
+
+// 2. Union型の作成
+type ApiResponse&lt;T&gt; = ApiSuccessResponse&lt;T&gt; | ApiErrorResponse;
+
+// 3. レスポンスを処理するジェネリック関数の実装
+function handleResponse&lt;T&gt;(response: ApiResponse&lt;T&gt;): void {
+  // `status`プロパティの値に基づいて型を絞り込む (Discriminated Unions)
+  if (response.status === 'success') {
+    // このブロック内では、responseは `ApiSuccessResponse&lt;T&gt;` 型として扱われる
+    console.log(&quot;Success! Data:&quot;, response.data);
+  } else {
+    // このブロック内では、responseは `ApiErrorResponse` 型として扱われる
+    console.log(&quot;Error! Message:&quot;, response.message);
+  }
+}
+
+// 4. 動作確認
+
+// --- サンプルデータ ---
+interface User {
+  id: number;
+  name: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+// --- 成功ケースのシミュレーション ---
+const userResponse: ApiResponse&lt;User&gt; = {
+  status: 'success',
+  data: { id: 1, name: 'Taro Yamada' }
+};
+
+const productResponse: ApiResponse&lt;Product&gt; = {
+  status: 'success',
+  data: { id: 'abc-123', name: 'Laptop', price: 150000 }
+};
+
+// --- 失敗ケースのシミュレーション ---
+const errorResponse: ApiResponse&lt;never&gt; = { // データがないのでneverを指定
+  status: 'error',
+  message: 'Could not fetch data from the server.'
+};
+
+console.log(&quot;--- Handling User Response ---&quot;);
+handleResponse(userResponse);
+
+console.log(&quot;\n--- Handling Product Response ---&quot;);
+handleResponse(productResponse);
+
+console.log(&quot;\n--- Handling Error Response ---&quot;);
+handleResponse(errorResponse);
+
+/*
+--- 期待される出力 ---
+
+--- Handling User Response ---
+Success! Data: { id: 1, name: 'Taro Yamada' }
+
+--- Handling Product Response ---
+Success! Data: { id: 'abc-123', name: 'Laptop', price: 150000 }
+
+--- Handling Error Response ---
+Error! Message: Could not fetch data from the server.
+
+*/
+</code></pre>
+
+<h3 id="discriminated-unions">💡 コードのポイント: Discriminated Unions</h3>
+<p>このハンズオンで使った <code>status</code> プロパティのように、Union型の各メンバーが共通して持つリテラル型（ここでは <code>'success'</code> と <code>'error'</code>）のプロパティは、<strong>Discriminated Union（判別可能な合併型）</strong> と呼ばれます。これを使うことで、TypeScriptは <code>if</code> 文や <code>switch</code> 文で非常に効率的かつ確実に型を絞り込むことができます。これは実務で頻繁に使われる、極めて重要なパターンです。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-4: ジェネリクスの基本.html" class="prev">ジェネリクスの基本</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

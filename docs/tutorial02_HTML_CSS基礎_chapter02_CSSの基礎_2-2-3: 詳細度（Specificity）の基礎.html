@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>詳細度（Specificity）の基礎 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎.html">Chapter 2: CSSの基礎</a><span>></span>詳細度（Specificity）の基礎</div>
+                    <div class="section-content">
+<h1 id="2-2-3-specificity">2-2-3: 詳細度（Specificity）の基礎</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>CSSの<strong>詳細度（Specificity）</strong>の概念を理解する</li>
+<li>複数のスタイルが競合した場合、どのスタイルが適用されるかを予測できるようになる</li>
+<li>詳細度を意識した保守しやすいCSSを書けるようになる</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでセレクタの種類を学びました。しかし、同じ要素に複数のスタイルが適用された場合、どのスタイルが優先されるのでしょうか？</p>
+<pre class="codehilite"><code class="language-css">p {
+  color: blue;
+}
+
+.text {
+  color: red;
+}
+
+#intro {
+  color: green;
+}
+</code></pre>
+
+<pre class="codehilite"><code class="language-html">&lt;p class=&quot;text&quot; id=&quot;intro&quot;&gt;この文字は何色？&lt;/p&gt;
+</code></pre>
+
+<p>この場合、文字は<strong>緑色</strong>になります。なぜでしょうか？その答えが「<strong>詳細度（Specificity）</strong>」です。</p>
+<h2 id="_3">詳細度とは</h2>
+<p><strong>詳細度</strong>とは、CSSのセレクタがどれだけ「具体的」かを数値で表したものです。複数のスタイルが同じ要素に適用される場合、詳細度が高いセレクタのスタイルが優先されます。</p>
+<blockquote>
+<p><strong>💡 比喩で理解:</strong> 詳細度は「住所の詳しさ」に例えられます。「日本」より「東京都」、「東京都」より「東京都渋谷区」の方が具体的です。CSSも同様に、より具体的なセレクタが優先されます。</p>
+</blockquote>
+<h2 id="_4">詳細度の計算方法</h2>
+<p>詳細度は<strong>4つの桁</strong>で計算されます。左の桁ほど優先度が高くなります。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">桁</th>
+<th style="text-align: left;">対象</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1桁目</strong></td>
+<td style="text-align: left;">インラインスタイル</td>
+<td style="text-align: left;"><code>style="..."</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2桁目</strong></td>
+<td style="text-align: left;">IDセレクタ</td>
+<td style="text-align: left;"><code>#header</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3桁目</strong></td>
+<td style="text-align: left;">クラス、属性、擬似クラス</td>
+<td style="text-align: left;"><code>.card</code>, <code>[type="text"]</code>, <code>:hover</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4桁目</strong></td>
+<td style="text-align: left;">要素、擬似要素</td>
+<td style="text-align: left;"><code>div</code>, <code>p</code>, <code>::before</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">計算例</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">セレクタ</th>
+<th style="text-align: left;">詳細度</th>
+<th style="text-align: left;">解説</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>p</code></td>
+<td style="text-align: left;">0-0-0-1</td>
+<td style="text-align: left;">要素セレクタ1つ</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>.card</code></td>
+<td style="text-align: left;">0-0-1-0</td>
+<td style="text-align: left;">クラスセレクタ1つ</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>#header</code></td>
+<td style="text-align: left;">0-1-0-0</td>
+<td style="text-align: left;">IDセレクタ1つ</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>p.text</code></td>
+<td style="text-align: left;">0-0-1-1</td>
+<td style="text-align: left;">要素1 + クラス1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>#header .nav a</code></td>
+<td style="text-align: left;">0-1-1-1</td>
+<td style="text-align: left;">ID1 + クラス1 + 要素1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>style="..."</code></td>
+<td style="text-align: left;">1-0-0-0</td>
+<td style="text-align: left;">インラインスタイル</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">詳細度の比較</h3>
+<p>詳細度は<strong>左から順に比較</strong>します。左の桁が大きい方が優先されます。</p>
+<pre class="codehilite"><code>0-1-0-0 &gt; 0-0-10-0  （IDセレクタ1つ &gt; クラスセレクタ10個）
+0-0-1-0 &gt; 0-0-0-10  （クラスセレクタ1つ &gt; 要素セレクタ10個）
+</code></pre>
+
+<blockquote>
+<p><strong>⚠️ 注意:</strong> クラスセレクタをいくつ重ねても、IDセレクタ1つには勝てません。同様に、要素セレクタをいくつ重ねても、クラスセレクタ1つには勝てません。</p>
+</blockquote>
+<h2 id="_7">🏃 実践: 詳細度を確認する</h2>
+<p>実際にコードを書いて、詳細度の動作を確認しましょう。</p>
+<h3 id="step-1-html">Step 1: HTMLを作成</h3>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;詳細度の確認&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p class=&quot;text&quot; id=&quot;intro&quot;&gt;この文字は何色になるでしょうか？&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3 id="step-2-css">Step 2: CSSを作成</h3>
+<pre class="codehilite"><code class="language-css">/* 詳細度: 0-0-0-1 */
+p {
+  color: blue;
+}
+
+/* 詳細度: 0-0-1-0 */
+.text {
+  color: red;
+}
+
+/* 詳細度: 0-1-0-0 */
+#intro {
+  color: green;
+}
+</code></pre>
+
+<h3 id="step-3">Step 3: 結果を確認</h3>
+<p>ブラウザで確認すると、文字は<strong>緑色</strong>になります。</p>
+<p><strong>理由:</strong> <code>#intro</code>（0-1-0-0）が最も詳細度が高いため、緑色が適用されます。</p>
+<h3 id="step-4">Step 4: 詳細度を変えてみる</h3>
+<p>CSSを以下のように変更してみましょう。</p>
+<pre class="codehilite"><code class="language-css">/* 詳細度: 0-0-0-1 */
+p {
+  color: blue;
+}
+
+/* 詳細度: 0-0-1-1 */
+p.text {
+  color: red;
+}
+
+/* 詳細度: 0-0-1-0 */
+.text {
+  color: orange;
+}
+</code></pre>
+
+<p>この場合、文字は<strong>赤色</strong>になります。<code>p.text</code>（0-0-1-1）が最も詳細度が高いためです。</p>
+<h2 id="_8">同じ詳細度の場合</h2>
+<p>詳細度が同じ場合は、<strong>後に書かれたスタイルが優先</strong>されます（カスケード）。</p>
+<pre class="codehilite"><code class="language-css">.text {
+  color: blue;
+}
+
+.text {
+  color: red;  /* こちらが適用される */
+}
+</code></pre>
+
+<h2 id="important"><code>!important</code> について</h2>
+<p><code>!important</code>を使うと、詳細度を無視してスタイルを強制適用できます。</p>
+<pre class="codehilite"><code class="language-css">p {
+  color: blue !important;  /* 最優先で適用される */
+}
+
+#intro {
+  color: green;  /* 無視される */
+}
+</code></pre>
+
+<blockquote>
+<p><strong>⚠️ 注意:</strong> <code>!important</code>は<strong>最後の手段</strong>です。多用すると、どのスタイルが適用されているか分からなくなり、保守が困難になります。実務では、詳細度を適切に管理することで<code>!important</code>を使わずに済むようにしましょう。</p>
+</blockquote>
+<h2 id="_9">詳細度のベストプラクティス</h2>
+<h3 id="1-id">1. IDセレクタは避ける</h3>
+<p>IDセレクタは詳細度が高すぎるため、後からスタイルを上書きしにくくなります。</p>
+<pre class="codehilite"><code class="language-css">/* ❌ 避ける */
+#header {
+  background: blue;
+}
+
+/* ✅ 推奨 */
+.header {
+  background: blue;
+}
+</code></pre>
+
+<h3 id="2">2. セレクタはシンプルに保つ</h3>
+<p>セレクタを深くネストすると、詳細度が上がりすぎて管理が困難になります。</p>
+<pre class="codehilite"><code class="language-css">/* ❌ 避ける（詳細度が高すぎる） */
+.header .nav .menu .item .link {
+  color: blue;
+}
+
+/* ✅ 推奨（シンプル） */
+.nav-link {
+  color: blue;
+}
+</code></pre>
+
+<h3 id="3-bem">3. BEM記法を活用する</h3>
+<p><strong>BEM（Block Element Modifier）</strong>記法を使うと、詳細度を低く保ちながら、意味のあるクラス名を付けられます。</p>
+<pre class="codehilite"><code class="language-css">/* BEM記法の例 */
+.card { }           /* Block */
+.card__title { }    /* Element */
+.card--featured { } /* Modifier */
+</code></pre>
+
+<blockquote>
+<p><strong>💡 TIP:</strong> Tailwind CSSを使う場合、詳細度の問題はほとんど発生しません。Tutorial 3で詳しく学びます。</p>
+</blockquote>
+<h2 id="_10">開発者ツールで詳細度を確認する</h2>
+<p>ブラウザの開発者ツール（F12）を使うと、どのスタイルが適用されているか、なぜ上書きされているかを確認できます。</p>
+<ol>
+<li>要素を右クリック →「検証」を選択</li>
+<li>「Styles」タブで適用されているスタイルを確認</li>
+<li>取り消し線が引かれているスタイルは、より詳細度の高いスタイルに上書きされています</li>
+</ol>
+<h2 id="_11">よくある間違いと対処法</h2>
+<h3 id="_12">問題: スタイルが適用されない</h3>
+<pre class="codehilite"><code class="language-css">.card {
+  color: blue;
+}
+</code></pre>
+
+<pre class="codehilite"><code class="language-html">&lt;div id=&quot;card&quot; class=&quot;card&quot;&gt;テキスト&lt;/div&gt;
+</code></pre>
+
+<p>別の場所で<code>#card</code>にスタイルが指定されている場合、クラスセレクタのスタイルは適用されません。</p>
+<p><strong>対処法:</strong><br />
+1. 開発者ツールで競合しているスタイルを確認<br />
+2. IDセレクタを使っている場合は、クラスセレクタに変更<br />
+3. どうしても上書きできない場合のみ、詳細度を上げる</p>
+<h2 id="_13">✨ まとめ</h2>
+<ul>
+<li><strong>詳細度</strong>は、セレクタの「具体性」を数値で表したもの</li>
+<li>詳細度は「インライン &gt; ID &gt; クラス &gt; 要素」の順で高い</li>
+<li>同じ詳細度の場合、<strong>後に書かれたスタイルが優先</strong>される</li>
+<li><code>!important</code>は最後の手段。多用は避ける</li>
+<li><strong>IDセレクタは避け、クラスセレクタを使う</strong>のがベストプラクティス</li>
+</ul>
+<h2 id="_14">📝 学習のポイント</h2>
+<ul>
+<li>[ ] 詳細度の概念を説明できる</li>
+<li>[ ] 詳細度の計算方法を理解している</li>
+<li>[ ] 複数のスタイルが競合した場合、どれが適用されるか予測できる</li>
+<li>[ ] 開発者ツールで詳細度を確認できる</li>
+<li>[ ] 詳細度を意識したCSSを書ける</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-2: セレクタの種類と使い分け.html" class="prev">セレクタの種類と使い分け</a>
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-4: ボックスモデルとmargin・paddingの使い分け.html" class="next">ボックスモデルとmargin・paddingの使い分け</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

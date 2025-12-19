@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.eslintrc.jsと.prettierrcの役割 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定.html">Chapter 2: TypeScriptの開発環境設定</a><span>></span>.eslintrc.jsと.prettierrcの役割</div>
+                    <div class="section-content">
+<h1 id="6-2-2-eslintrcjsprettierrc">6-2-2: .eslintrc.jsと.prettierrcの役割</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><strong>リンター（Linter）</strong>と<strong>フォーマッター（Formatter）</strong>の役割の違いを明確に説明できるようになる</li>
+<li><strong>ESLint</strong>の役割と、<code>.eslintrc.js</code>による設定方法を理解する</li>
+<li><strong>Prettier</strong>の役割と、<code>.prettierrc</code>による設定方法を理解する</li>
+<li>これら2つのツールを連携させ、コードの品質と一貫性を自動的に維持する方法を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>チームで開発を進める際、コードの書き方が人によってバラバラだと、レビューの効率が落ちたり、思わぬバグが生まれたりします。例えば、インデントがスペース2つの人もいれば4つの人もいる、<code>var</code>を使う人もいれば<code>const</code>しか使わない人もいる、といった状況です。</p>
+<p>このようなコードの「<strong>品質</strong>」と「<strong>スタイル</strong>」の問題を自動的に解決してくれるのが、<strong>ESLint（リンター）</strong>と<strong>Prettier（フォーマッター）</strong>です。これらは現代のフロントエンド開発において、<code>tsconfig.json</code>と並んでほぼ必須とされるツールです。このセクションでは、それぞれの役割と設定方法を学び、クリーンで一貫性のあるコードを保つための環境を構築します。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="vs">🔑 リンター vs フォーマッター</h3>
+<p>まず、この2つのツールの根本的な違いを理解することが重要です。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ツール</th>
+<th style="text-align: left;">役割</th>
+<th style="text-align: left;">主な関心事</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>ESLint (リンター)</strong></td>
+<td style="text-align: left;"><strong>コードの品質をチェックする</strong></td>
+<td style="text-align: left;">「これはバグに繋がる可能性がある」<br>「この書き方は非推奨だ」</td>
+<td style="text-align: left;">- 使われていない変数を検出<br>- <code>var</code>の使用を禁止<br>- 無限ループの可能性を警告</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prettier (フォーマッター)</strong></td>
+<td style="text-align: left;"><strong>コードのスタイルを整形する</strong></td>
+<td style="text-align: left;">「このコードは読みにくい」<br>「インデントが揃っていない」</td>
+<td style="text-align: left;">- インデントをスペース2つに統一<br>- セミコロンを自動で付ける/消す<br>- 一行の長さを超えたら自動で改行</td>
+</tr>
+</tbody>
+</table>
+<p>簡単に言えば、<strong>ESLintは「コードの意味的な問題」</strong>を、<strong>Prettierは「コードの見た目の問題」</strong>を扱います。これらは競合する部分もありますが、うまく設定することで強力な協力関係を築けます。</p>
+<h3 id="eslint-javascript">ESLint: JavaScriptの静的解析ツール</h3>
+<p>ESLintは、コードを実行する前に潜在的な問題点やバグを検出するためのツールです。設定ファイルは <code>.eslintrc.js</code> (または <code>.json</code>, <code>.yml</code>) です。</p>
+<h4 id="eslintrcjs"><code>.eslintrc.js</code> の主要な設定</h4>
+<pre class="codehilite"><code class="language-javascript">module.exports = {
+  // パーサー：どのバージョンのJavaScriptか、TypeScriptかなどをESLintに教える
+  parser: &quot;@typescript-eslint/parser&quot;,
+
+  // 拡張：基本的なルールセットを読み込む
+  extends: [
+    &quot;eslint:recommended&quot;, // ESLintが推奨する基本的なルール
+    &quot;plugin:@typescript-eslint/recommended&quot;, // TypeScript向けの推奨ルール
+    &quot;plugin:react/recommended&quot;, // React向けの推奨ルール
+    &quot;prettier&quot; // Prettierと競合するルールを無効化（重要！）
+  ],
+
+  // プラグイン：特定のライブラリやフレームワーク向けのルールを追加する
+  plugins: [&quot;@typescript-eslint&quot;, &quot;react&quot;],
+
+  // ルール：個別のルールを上書き・追加する
+  rules: {
+    &quot;react/react-in-jsx-scope&quot;: &quot;off&quot;, // React 17以降では不要なルールをオフに
+    &quot;no-unused-vars&quot;: &quot;warn&quot; // 未使用の変数はエラーではなく警告にする
+  },
+
+  // 環境：コードがどの環境で実行されるかを指定
+  env: {
+    browser: true, // ブラウザ環境
+    node: true // Node.js環境
+  }
+};
+</code></pre>
+
+<ul>
+<li><strong><code>extends</code></strong>: 他の設定ファイルを継承します。<code>eslint:recommended</code> のような基本的なルールセットから、<code>prettier</code> のように他のツールとの連携設定まで、配列の末尾に書かれたものが優先されます。</li>
+<li><strong><code>plugins</code></strong>: ESLint本体だけでは解釈できない構文（例: TypeScript, React）を扱えるようにしたり、特定のライブラリに関するルールを追加したりします。</li>
+<li><strong><code>rules</code></strong>: <code>extends</code>で読み込んだルールを個別に上書きします。<code>"off"</code>, <code>"warn"</code>, <code>"error"</code> の3段階で設定できます。</li>
+</ul>
+<h3 id="prettier">Prettier: コードフォーマッター</h3>
+<p>Prettierは、コードのスタイルに関するあらゆる議論を終わらせるための「独善的な」フォーマッターです。設定項目は意図的に少なくされており、細かい調整よりも「統一性」を重視します。設定ファイルは <code>.prettierrc</code> (または <code>.json</code>, <code>.js</code>) です。</p>
+<h4 id="prettierrc"><code>.prettierrc</code> の主要な設定</h4>
+<pre class="codehilite"><code class="language-json">{
+  &quot;semi&quot;: true, // 文末にセミコロンを付ける
+  &quot;singleQuote&quot;: true, // シングルクォートを使用する
+  &quot;tabWidth&quot;: 2, // インデントの幅をスペース2つ分にする
+  &quot;trailingComma&quot;: &quot;es5&quot; // 配列やオブジェクトの末尾のカンマを付ける (ES5互換)
+}
+</code></pre>
+
+<p>これらの設定に従って、ファイルを保存したときなどに自動でコードが整形されます。</p>
+<h3 id="eslintprettier">ESLintとPrettierの連携</h3>
+<p>ESLintにもフォーマットに関するルールがあるため、Prettierと競合することがあります。例えば、「一行の最大文字数」を両方で設定していると、どちらを優先すべきか混乱します。</p>
+<p>この問題を解決するのが <code>eslint-config-prettier</code> です。これをESLintの <code>extends</code> 配列の<strong>一番最後</strong>に追加することで、「<strong>フォーマットに関するルールはすべてPrettierに任せる</strong>」という意味になり、ESLintのフォーマット関連ルールが一括で無効化されます。</p>
+<pre class="codehilite"><code class="language-javascript">// .eslintrc.js
+{
+  extends: [
+    // ...他の設定
+    &quot;prettier&quot; // 必ず最後に記述！
+  ]
+}
+</code></pre>
+
+<p>これにより、<strong>ESLintはコード品質のチェックに専念</strong>し、<strong>Prettierはコードスタイルの整形に専念する</strong>という、理想的な役割分担が実現できます。</p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>VS Codeの拡張機能「<strong>ESLint</strong>」と「<strong>Prettier - Code formatter</strong>」をインストールし、<code>settings.json</code> で「ファイル保存時に自動でフォーマットする」設定を有効にすると、開発体験が劇的に向上します。手動でコマンドを実行する手間がなくなり、常に整形されたコードを保つことができます。</li>
+</ul>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><strong>ESLint</strong>はコードの<strong>品質</strong>をチェックする<strong>リンター</strong>であり、<code>.eslintrc.js</code>で設定する。</li>
+<li><strong>Prettier</strong>はコードの<strong>スタイル</strong>を整形する<strong>フォーマッター</strong>であり、<code>.prettierrc</code>で設定する。</li>
+<li>これら2つは役割が異なる。ESLintに <code>eslint-config-prettier</code> を設定することで、フォーマットはPrettierに一任し、両者を効果的に連携させることができる。</li>
+<li>この環境を整えることで、チーム内でのコードの一貫性が保たれ、開発者は本質的なロジックの実装に集中できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定_6-2-1: tsconfig.jsonの役割と主要な設定.html" class="prev">tsconfig.jsonの役割と主要な設定</a>
+<a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定_6-2-3: .envファイルと環境変数の管理.html" class="next">.envファイルと環境変数の管理</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storybookとは何か | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter03_ビジュアルリグレッションテスト_Storybook.html">Chapter 3: ビジュアルリグレッションテスト Storybook</a><span>></span>Storybookとは何か</div>
+                    <div class="section-content">
+<h1 id="11-3-1-storybook">11-3-1: Storybookとは何か</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Storybookの定義と目的を理解する</li>
+<li>Storybookが解決する課題（UIコンポーネントの開発とテストの効率化）を学ぶ</li>
+<li>ビジュアルリグレッションテストの概念と、Storybookがどのように役立つかを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p><a href="https://storybook.js.org/">Storybook</a>は、UIコンポーネントをアプリケーション本体から切り離し、独立した環境で開発・確認・テストするためのツールです。コンポーネントの一つ一つを「物語（Story）」のページのように一覧化し、カタログのように閲覧できることからこの名前がついています。</p>
+<p><img alt="StorybookのUI" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-11/storybook-ui.png" /></p>
+<p>Storybookは単なるコンポーネントビューアではありません。UI開発のハブとして、以下のような多くの利点をもたらします。</p>
+<ul>
+<li><strong>分離された開発環境</strong>: アプリケーション全体のビジネスロジックやルーティング、API通信などを気にすることなく、UIコンポーネントの見た目とインタラクションだけに集中して開発できます。</li>
+<li><strong>コンポーネントカタログ</strong>: プロジェクトに存在するコンポーネントが一覧化され、どのようなコンポーネントがあるのか、それぞれがどのような見た目や状態（props）を持つのかが一目瞭然になります。これにより、デザイナーとエンジニア間のコミュニケーションが円滑になり、コンポーネントの再利用も促進されます。</li>
+<li><strong>多様な状態のシミュレーション</strong>: <code>primary</code>なボタン、<code>disabled</code>なボタン、エラー状態のテキストフィールドなど、コンポーネントが取りうる様々な状態（バリエーション）を簡単に再現し、確認できます。</li>
+<li><strong>テストとの連携</strong>: Storybookは、ユニットテスト、E2Eテスト、そして特に<strong>ビジュアルリグレッションテスト</strong>と強力に連携します。</li>
+</ul>
+<h2 id="_3">ビジュアルリグレッションテストとは？</h2>
+<p>ビジュアルリグレッションテスト（Visual Regression Testing, VRT）は、「見た目の回帰テスト」です。コードの変更によって、意図せずUIの見た目が変わってしまっていないかを検出するのが目的です。</p>
+<p>テストの基本的な流れは以下の通りです。</p>
+<ol>
+<li><strong>基準（Baseline）画像の作成</strong>: 正常な状態のコンポーネントのスクリーンショットを撮り、「正解」の画像として保存します。</li>
+<li><strong>比較画像の作成</strong>: コードを変更した後、同じコンポーネントのスクリーンショットを再度撮影します。</li>
+<li><strong>差分の検出</strong>: 基準画像と比較画像をピクセル単位で比較し、差分がないかをチェックします。</li>
+<li><strong>結果の確認</strong>: もし差分があれば、テストは失敗します。開発者はその差分が意図したものか（例: デザイン変更）、意図しないものか（例: バグ）を確認し、必要であれば基準画像を更新します。</li>
+</ol>
+<h3 id="vrt">なぜVRTが重要なのか？</h3>
+<p>ユニットテストやE2Eテストは、主に「機能」が壊れていないかを検証します。例えば、「ボタンをクリックしたら、<code>onClick</code>ハンドラが呼ばれるか」はテストできますが、「ボタンの角丸が消えてしまった」や「テキストの色が変わってしまった」といった<strong>見た目の変化</strong>を検出するのは困難です。</p>
+<p>CSSの変更は、意図しない場所に影響を及ぼすことがよくあります。VRTを導入することで、こうした「見た目のデグレード（リグレッション）」を自動で検出し、UIの品質を一貫して高く保つことができます。</p>
+<h2 id="storybookvrt">StorybookとVRT</h2>
+<p>Storybookは、VRTと非常に相性が良いツールです。なぜなら、Storybookはコンポーネントの様々な状態を分離してカタログ化しているため、VRTのテストケースを体系的に作成するのに最適だからです。</p>
+<ul>
+<li><code>Button/Primary</code>のStory</li>
+<li><code>Button/Secondary</code>のStory</li>
+<li><code>Button/Disabled</code>のStory</li>
+</ul>
+<p>といった各Storyに対してスクリーンショットを撮影することで、コンポーネントのあらゆる状態の見た目を網羅的にテストできます。</p>
+<p>Storybook自体はVRTの機能を持っていませんが、<a href="https://www.chromatic.com/">Chromatic</a>（Storybookのメンテナーが開発）や<a href="https://percy.io/">Percy</a>、あるいはPlaywrightと組み合わせることで、VRTを実現できます。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>Storybookは、UIコンポーネントを分離された環境で開発・確認・テストするためのツールである。</li>
+<li>コンポーネントカタログとして機能し、チーム内のコミュニケーションを円滑にする。</li>
+<li>ビジュアルリグレッションテスト（VRT）は、UIの「見た目」が意図せず変わっていないかを自動で検出するテスト手法である。</li>
+<li>Storybookは、コンポーネントの様々な状態をカタログ化しているため、VRTと非常に相性が良い。</li>
+</ul>
+<p>次のセクションでは、実際にNext.jsプロジェクトにStorybookを導入し、基本的な使い方を学びます。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial11_テスト_chapter03_ビジュアルリグレッションテスト_Storybook_11-3-2: Storybookの基本.html" class="next">Storybookの基本</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ボックスモデルとmargin・paddingの使い分け | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎.html">Chapter 2: CSSの基礎</a><span>></span>ボックスモデルとmargin・paddingの使い分け</div>
+                    <div class="section-content">
+<h1 id="2-2-3-margin_padding">2-2-3: ボックスモデルとmargin_paddingの使い分け</h1>
+<h2 id="chapter-2-css">Chapter 2: CSSの基礎</h2>
+<h3 id="section-3-marginpadding">Section 3: ボックスモデルとmargin/paddingの使い分け</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、CSSレイアウトの根幹である「ボックスモデル」を学びます。要素の「内側の余白（padding）」と「外側の余白（margin）」を使い分けることで、以下のようにコンテンツと要素間のスペースを自在にコントロールする方法を理解します。</p>
+<p><em>ここにスクリーンショットを挿入: 2つのボックスが並んでおり、片方のボックスはpaddingで内側のテキストとの間に余白があり、もう片方はmarginで隣のボックスとの間に距離が空いている様子がわかる図</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、すべてのHTML要素が持つ「ボックス」としての性質と、そのスペースを管理するための<code>margin</code>と<code>padding</code>プロパティについて学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>CSSのボックスモデル（content, padding, border, margin）を図解で説明できるようになる。</li>
+<li><code>padding</code>（内側の余白）と<code>margin</code>（外側の余白）の役割の違いを明確に説明できる。</li>
+<li>要素の内部のスペースを空けたい時と、要素間の距離を取りたい時に、<code>padding</code>と<code>margin</code>を正しく使い分けられるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>Webページ上のすべてのHTML要素は、ブラウザによって長方形の「ボックス」として描画されます。CSSでレイアウトを組むということは、これらのボックスの大きさや配置をコントロールすることに他なりません。このボックスの構造を理解するための概念が「ボックスモデル」です。そして、そのボックスの余白を操る上で最も重要なのが <code>padding</code> と <code>margin</code> です。この二つの違いをマスターすることは、CSSレイアウトの第一歩です。</p>
+<h3 id="_2">概念の説明</h3>
+<p>CSSのボックスモデルは、一つのボックスが以下の4つの領域で構成されていると考えます。</p>
+<ol>
+<li><strong>Content（コンテンツ）:</strong> テキストや画像など、要素の実際の内容が表示される中心領域。</li>
+<li><strong>Padding（パディング）:</strong> コンテンツとボーダー（枠線）の間の「内側の余白」。</li>
+<li><strong>Border（ボーダー）:</strong> パディングの外側を囲む「枠線」。</li>
+<li><strong>Margin（マージン）:</strong> ボーダーの外側にある「外側の余白」。この余白は透明で、他の要素との距離を定義します。</li>
+</ol>
+<p><strong>図解：ボックスモデル</strong></p>
+<pre class="codehilite"><code>+-------------------------------------------+
+|                  Margin                   |
+|  +-------------------------------------+  |
+|  |                Border               |  |
+|  |  +-------------------------------+  |  |
+|  |  |            Padding            |  |  |
+|  |  |  +-------------------------+  |  |  |
+|  |  |  |         Content         |  |  |  |
+|  |  |  +-------------------------+  |  |  |
+|  |  |                               |  |  |
+|  |  +-------------------------------+  |  |
+|  |                                     |  |
+|  +-------------------------------------+  |
+|                                           |
++-------------------------------------------+
+</code></pre>
+
+<p><code>padding</code> と <code>margin</code> の最も重要な違いは、<strong>ボーダー（枠線）の内側にあるか、外側にあるか</strong>です。</p>
+<ul>
+<li><strong>Padding:</strong> ボックスの<strong>内側</strong>の余白。<code>padding</code>を増やすと、コンテンツは小さいまま、ボックス自体が大きくなります。背景色や背景画像は<code>padding</code>領域にも適用されます。</li>
+<li><strong>Margin:</strong> ボックスの<strong>外側</strong>の余白。<code>margin</code>を増やしても、ボックス自体の大きさは変わりません。隣接する他の要素との距離が広がります。</li>
+</ul>
+<h3 id="_3">詳細解説</h3>
+<p><code>padding</code>と<code>margin</code>の具体的な使い方と、その挙動の違いを見ていきましょう。</p>
+<h4 id="padding"><code>padding</code> の使い方</h4>
+<p><code>padding</code>は、コンテンツが窮屈に見えないように、要素の内部にスペースを作りたい時に使います。例えば、ボタンのテキストの周りに余白を持たせて、クリックしやすく見栄えを良くする、といった場面です。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;style&gt;
+      .button {
+        background-color: dodgerblue;
+        color: white;
+        border: 2px solid navy;
+        padding: 10px 20px; /* 上下10px, 左右20pxのpadding */
+      }
+    &lt;/style&gt;
+    &lt;button class="button"&gt;クリックしてください&lt;/button&gt;</code></li>
+<li><strong>コードリーディング:</strong><ul>
+<li><code>padding: 10px 20px;</code> → <code>padding</code>プロパティに値を2つ指定すると、1つ目が「上下」、2つ目が「左右」の余白になります。</li>
+<li>この指定により、ボタンのテキスト「クリックしてください」の上下に10px、左右に20pxの余白ができます。</li>
+<li>この余白部分にも、背景色である<code>dodgerblue</code>が適用されている点に注目してください。</li>
+</ul>
+</li>
+</ul>
+<h4 id="margin"><code>margin</code> の使い方</h4>
+<p><code>margin</code>は、要素と要素の間に距離を取りたい、レイアウト上の間隔を調整したい時に使います。例えば、2つのボタンがくっつきすぎないように、間にスペースを空ける、といった場面です。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;style&gt;
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: tomato;
+        border: 2px solid black;
+      }
+      .box-2 {
+        margin-top: 30px; /* 上に30pxのmargin */
+      }
+    &lt;/style&gt;
+    &lt;div class="box"&gt;ボックス1&lt;/div&gt;
+    &lt;div class="box box-2"&gt;ボックス2&lt;/div&gt;</code></li>
+<li><strong>コードリーディング:</strong><ul>
+<li><code>.box-2</code> に <code>margin-top: 30px;</code> を指定しています。</li>
+<li>これにより、「ボックス2」の上側に30pxの透明な余白ができ、真上にある「ボックス1」との間に30pxの距離が生まれます。</li>
+<li>ボックス自体の大きさ（100px × 100px）は変わっていない点に注目してください。</li>
+</ul>
+</li>
+</ul>
+<h4 id="_4">値の指定方法（ショートハンド）</h4>
+<p><code>padding</code>と<code>margin</code>は、上下左右の値をまとめて指定する「ショートハンド」という書き方ができます。これは非常によく使われるので必ず覚えましょう。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">値の数</th>
+<th style="text-align: left;">適用順</th>
+<th style="text-align: left;">例 (<code>padding: 10px 20px 30px 40px;</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">4つ</td>
+<td style="text-align: left;">上 → 右 → 下 → 左（時計回り）</td>
+<td style="text-align: left;">上:10px, 右:20px, 下:30px, 左:40px</td>
+</tr>
+<tr>
+<td style="text-align: left;">3つ</td>
+<td style="text-align: left;">上 → 左右 → 下</td>
+<td style="text-align: left;">上:10px, 左右:20px, 下:30px</td>
+</tr>
+<tr>
+<td style="text-align: left;">2つ</td>
+<td style="text-align: left;">上下 → 左右</td>
+<td style="text-align: left;">上下:10px, 左右:20px</td>
+</tr>
+<tr>
+<td style="text-align: left;">1つ</td>
+<td style="text-align: left;">上下左右すべて</td>
+<td style="text-align: left;">上下左右すべて:10px</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>marginの相殺:</strong> 隣接するブロックレベル要素の上下の<code>margin</code>は、大きい方の値に「相殺」されるという特殊なルールがあります。例えば、上の要素の<code>margin-bottom</code>が20px、下の要素の<code>margin-top</code>が30pxの場合、間の余白は50pxではなく、30pxになります。これは最初は混乱するかもしれませんが、そういうものだと覚えておきましょう。</li>
+<li><strong><code>box-sizing</code>プロパティ:</strong> 古いブラウザでは、<code>width</code>に<code>padding</code>と<code>border</code>が含まれないため、計算が複雑でした。現在では、CSSの冒頭で <code>* { box-sizing: border-box; }</code> と指定するのが一般的です。これにより、<code>width</code>や<code>height</code>に<code>padding</code>と<code>border</code>が含まれるようになり、直感的なサイズ指定が可能になります。この設定は、後のチュートリアルで詳しく扱います。</li>
+</ul>
+<h3 id="_5">✨ まとめ</h3>
+<ul>
+<li>すべてのHTML要素は、Content, Padding, Border, Marginから成る「ボックス」である。</li>
+<li><code>padding</code>はボーダーの<strong>内側</strong>の余白で、要素の大きさに影響する。</li>
+<li><code>margin</code>はボーダーの<strong>外側</strong>の余白で、他の要素との距離を調整する。</li>
+<li>「内側の余白」には<code>padding</code>、「外側の距離」には<code>margin</code>と使い分ける。</li>
+<li>値の指定は、時計回りに「上→右→下→左」の順番で覚える。</li>
+</ul>
+<h3 id="_6">📝 学習のポイント</h3>
+<ul>
+<li>[ ] ボックスモデルを構成する4つの領域を順番に言えるか？</li>
+<li>[ ] <code>padding</code>と<code>margin</code>の決定的な違いを「ボーダー」という言葉を使って説明できるか？</li>
+<li>[ ] ボタンの文字の周りに余白を作りたい場合、<code>padding</code>と<code>margin</code>のどちらを使うべきか判断できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-3: 詳細度（Specificity）の基礎.html" class="prev">詳細度（Specificity）の基礎</a>
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-5: 色、フォント、背景の指定.html" class="next">色、フォント、背景の指定</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

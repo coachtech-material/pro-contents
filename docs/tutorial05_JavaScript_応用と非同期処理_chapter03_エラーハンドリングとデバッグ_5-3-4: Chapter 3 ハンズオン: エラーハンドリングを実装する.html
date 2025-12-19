@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: エラーハンドリングを実装する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ.html">Chapter 3: エラーハンドリングとデバッグ</a><span>></span>Chapter 3 ハンズオン: エラーハンドリングを実装する</div>
+                    <div class="section-content">
+<h1 id="5-3-4">5-3-4: 実践 🚀 チャプターハンズオン</h1>
+<h2 id="_1">🎯 課題</h2>
+<p><strong>Chapter 2で作成した「ブログ投稿一覧ページ」に、このチャプターで学んだエラーハンドリングと状態管理を実装しましょう。</strong></p>
+<h3 id="_2">完成要件</h3>
+<ol>
+<li><strong>ローディング表示</strong>: APIからデータを取得している最中は、「読み込み中...」というテキストが表示されること。</li>
+<li><strong>エラー表示</strong>: APIからのデータ取得に失敗した場合（例: オフライン、URLの間違い）、「エラーが発生しました。時間をおいて再読み込みしてください。」というテキストが表示されること。</li>
+<li><strong>Empty表示</strong>: データ取得に成功したものの、投稿が1件もなかった場合、「投稿がありません。」と表示されること。</li>
+<li><strong>データ表示</strong>: データ取得に成功し、投稿が1件以上ある場合は、これまで通り投稿の一覧がカード形式で表示されること。</li>
+</ol>
+<h2 id="_3">🛠️ 手順</h2>
+<ol>
+<li>
+<p><strong>HTMLの準備</strong>: Chapter 2で作成した <code>index.html</code> に、ローディング、エラー、Empty状態を表示するための要素（例: <code>&lt;div id="loading"&gt;</code>, <code>&lt;div id="error"&gt;</code>, <code>&lt;div id="empty"&gt;</code>）を追加します。CSSでこれらの要素を初期状態では非表示（<code>display: none;</code>）にしておきます。</p>
+</li>
+<li>
+<p><strong>JavaScriptの準備</strong>: <code>app.js</code> の <code>fetchPosts</code> 関数を修正します。</p>
+</li>
+<li>
+<p><strong>状態管理の実装</strong>: <code>fetch</code> を呼び出す前に、ローディング要素を表示し、他の要素（リスト、エラー、Empty）を非表示にします。</p>
+</li>
+<li>
+<p><strong>エラーハンドリングの実装</strong>: <code>fetch</code> を含む非同期処理全体を <code>try...catch</code> ブロックで囲みます。</p>
+<ul>
+<li><code>catch</code> ブロックでは、ローディング要素を非表示にし、エラー要素を表示するようにします。</li>
+</ul>
+</li>
+<li>
+<p><strong>成功時の処理</strong>: <code>try</code> ブロック内で、データ取得に成功した後の処理を実装します。</p>
+<ul>
+<li>まずローディング要素を非表示にします。</li>
+<li>取得した <code>posts</code> 配列の <code>length</code> を確認します。</li>
+<li><code>length</code> が <code>0</code> ならば、Empty要素を表示します。</li>
+<li><code>length</code> が <code>1</code> 以上ならば、リスト要素を表示し、投稿データを描画します。</li>
+</ul>
+</li>
+</ol>
+<h2 id="_4">🏆 解答例</h2>
+<p><strong>HTML (<code>index.html</code>)</strong></p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Blog Posts with State Handling&lt;/title&gt;
+  &lt;style&gt;
+    .post-card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 10px; }
+    /* 初期状態では状態表示用の要素を隠す */
+    #loading, #error, #empty {
+      display: none;
+      font-size: 1.2em;
+      color: #555;
+    }
+    #error { color: red; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Blog Posts&lt;/h1&gt;
+
+  &lt;!-- コンテナ --&gt;
+  &lt;div id=&quot;posts-container&quot;&gt;&lt;/div&gt;
+
+  &lt;!-- 状態表示 --&gt;
+  &lt;div id=&quot;loading&quot;&gt;読み込み中...&lt;/div&gt;
+  &lt;div id=&quot;error&quot;&gt;エラーが発生しました。時間をおいて再読み込みしてください。&lt;/div&gt;
+  &lt;div id=&quot;empty&quot;&gt;投稿がありません。&lt;/div&gt;
+
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><strong>JavaScript (<code>app.js</code>)</strong></p>
+<pre class="codehilite"><code class="language-javascript">// UI要素を取得
+const postsContainer = document.querySelector(&quot;#posts-container&quot;);
+const loading = document.querySelector(&quot;#loading&quot;);
+const error = document.querySelector(&quot;#error&quot;);
+const empty = document.querySelector(&quot;#empty&quot;);
+
+// 要素の表示・非表示を管理する関数
+function show(element) { element.style.display = 'block'; }
+function hide(element) { element.style.display = 'none'; }
+
+async function fetchPosts() {
+  // 1. 初期化：ローディング表示
+  show(loading);
+  hide(postsContainer);
+  hide(error);
+  hide(empty);
+
+  try {
+    const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    const posts = await response.json();
+
+    // 成功したのでローディングを非表示
+    hide(loading);
+
+    // 2. 成功時の状態分岐
+    if (posts.length === 0) {
+      // データが空の場合
+      show(empty);
+    } else {
+      // データがある場合
+      show(postsContainer);
+      postsContainer.innerHTML = ''; // コンテナをクリア
+      posts.forEach(post =&gt; {
+        const card = document.createElement(&quot;div&quot;);
+        card.className = &quot;post-card&quot;;
+        card.innerHTML = `&lt;h2&gt;${post.title}&lt;/h2&gt;&lt;p&gt;${post.body}&lt;/p&gt;`;
+        postsContainer.appendChild(card);
+      });
+    }
+
+  } catch (e) {
+    // 3. エラー発生時の状態
+    hide(loading);
+    show(error);
+    console.error('投稿の取得に失敗しました:', e);
+  }
+}
+
+// 実行
+fetchPosts();
+</code></pre>
+</div>
+<div class="section-nav">
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ_5-3-3: Loading_Error_Empty状態の管理.html" class="prev">Loading_Error_Empty状態の管理</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

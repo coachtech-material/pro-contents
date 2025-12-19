@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Types（Partial, Pick, Omit, Record） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter04_Utility_Typesとベストプラクティス.html">Chapter 4: Utility Typesとベストプラクティス</a><span>></span>Utility Types（Partial, Pick, Omit, Record）</div>
+                    <div class="section-content">
+<h1 id="6-4-1-utility-typespartial-pick-omit-record">6-4-1: Utility Types（Partial, Pick, Omit, Record）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>既存の型から新しい型を効率的に作成するための<strong>Utility Types</strong>の概念を理解する</li>
+<li><code>Partial&lt;T&gt;</code> を使って、型のすべてのプロパティをオプショナルにする方法を習得する</li>
+<li><code>Pick&lt;T, K&gt;</code> と <code>Omit&lt;T, K&gt;</code> を使って、既存の型から特定のプロパティを選択または除外した新しい型を作る方法を習得する</li>
+<li><code>Record&lt;K, T&gt;</code> を使って、キーと値の型が定まったオブジェクト型を動的に作成する方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>TypeScriptでアプリケーションを開発していると、「この型と似ているけど、一部だけ違う型が欲しい」という状況が頻繁に発生します。例えば、</p>
+<ul>
+<li>ユーザー情報を更新するAPIでは、全項目ではなく一部の項目だけを送りたい</li>
+<li>ユーザー一覧画面では、全情報ではなくIDと名前だけを表示したい</li>
+<li>新規ユーザーを作成する際には、サーバーが自動生成する<code>id</code>や<code>createdAt</code>は不要</li>
+</ul>
+<p>これらの要求のために、毎回新しい<code>interface</code>をゼロから定義するのは非常に手間がかかり、コードの重複にも繋がります。</p>
+<p>このような一般的な型の変換操作を簡単に行うために、TypeScriptには<strong>Utility Types（ユーティリティ型）</strong>という便利なツールが組み込まれています。これらは、既存の型を引数として受け取り、新しい型を返すジェネリクスベースの型です。このセクションでは、実務で特に頻繁に使われる4つの重要なUtility Typeを学びます。</p>
+<h2 id="_3">詳細解説</h2>
+<p>以下の解説では、基準となる<code>User</code>インターフェースを使用します。</p>
+<pre class="codehilite"><code class="language-typescript">interface User {
+  id: number;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  createdAt: Date;
+}
+</code></pre>
+
+<h3 id="1-partialt">1. <code>Partial&lt;T&gt;</code></h3>
+<p><code>Partial&lt;T&gt;</code>は、型<code>T</code>の<strong>すべてのプロパティをオプショナル（<code>?</code>を付けた状態）にした新しい型</strong>を構築します。</p>
+<p><strong>ユースケース</strong>: ユーザー情報の一部だけを更新する関数の引数など。</p>
+<pre class="codehilite"><code class="language-typescript">// Userのすべてのプロパティがオプショナルになる
+// type PartialUser = { 
+//   id?: number; 
+//   name?: string; 
+//   email?: string; 
+//   isAdmin?: boolean; 
+//   createdAt?: Date; 
+// }
+type PartialUser = Partial&lt;User&gt;;
+
+function updateUser(id: number, fieldsToUpdate: PartialUser) {
+  // ...更新処理
+}
+
+// nameとemailだけを更新する
+updateUser(1, { name: 'Taro Yamada', email: 'taro@new-example.com' });
+</code></pre>
+
+<h3 id="2-pickt-k">2. <code>Pick&lt;T, K&gt;</code></h3>
+<p><code>Pick&lt;T, K&gt;</code>は、型<code>T</code>から、指定したキー<code>K</code>（Union型で複数指定可）の<strong>プロパティだけを選択（Pick）して</strong>新しい型を構築します。</p>
+<p><strong>ユースケース</strong>: ユーザーの一覧表示に必要な、最小限の情報の型を作りたい場合など。</p>
+<pre class="codehilite"><code class="language-typescript">// Userからidとnameプロパティだけを抜き出した型
+// type UserPreview = { 
+//   id: number; 
+//   name: string; 
+// }
+type UserPreview = Pick&lt;User, 'id' | 'name'&gt;;
+
+const user: UserPreview = {
+  id: 1,
+  name: 'Taro'
+};
+</code></pre>
+
+<h3 id="3-omitt-k">3. <code>Omit&lt;T, K&gt;</code></h3>
+<p><code>Omit&lt;T, K&gt;</code>は<code>Pick</code>の逆で、型<code>T</code>から、指定したキー<code>K</code>の<strong>プロパティを除外（Omit）して</strong>新しい型を構築します。</p>
+<p><strong>ユースケース</strong>: 新規ユーザー作成時に、サーバー側で自動採番される<code>id</code>や<code>createdAt</code>を除いた型を作りたい場合など。</p>
+<pre class="codehilite"><code class="language-typescript">// UserからidとcreatedAtプロパティを除外した型
+// type UserCreationPayload = { 
+//   name: string; 
+//   email: string; 
+//   isAdmin: boolean; 
+// }
+type UserCreationPayload = Omit&lt;User, 'id' | 'createdAt'&gt;;
+
+function createUser(payload: UserCreationPayload) {
+  // ...作成処理
+}
+
+createUser({ name: 'Jiro', email: 'jiro@example.com', isAdmin: false });
+</code></pre>
+
+<h3 id="4-recordk-t">4. <code>Record&lt;K, T&gt;</code></h3>
+<p><code>Record&lt;K, T&gt;</code>は、キーの型が<code>K</code>、値の型が<code>T</code>である<strong>オブジェクト型を構築します</strong>。<code>K</code>には通常、<code>string</code>や<code>number</code>、または具体的な文字列リテラルのUnion型を指定します。</p>
+<p><strong>ユースケース</strong>: 特定のキーを持つことが決まっている設定オブジェクトや、辞書（連想配列）のようなデータ構造を表現したい場合など。</p>
+<pre class="codehilite"><code class="language-typescript">// 'home' | 'about' | 'contact' のいずれかをキーに持ち、
+// 値として { title: string; path: string } を持つオブジェクトの型
+type PageKey = 'home' | 'about' | 'contact';
+
+interface PageInfo {
+  title: string;
+  path: string;
+}
+
+type Pages = Record&lt;PageKey, PageInfo&gt;;
+
+const siteNav: Pages = {
+  home: { title: 'Home', path: '/' },
+  about: { title: 'About Us', path: '/about' },
+  contact: { title: 'Contact', path: '/contact' }
+  // 'extra': { title: 'Extra', path: '/extra' } // エラー: 'extra'はPageKeyに含まれない
+};
+</code></pre>
+
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>Utility Typesはネストして組み合わせることも可能です。例えば、「ユーザー作成ペイロードだが、すべての項目をオプショナルにしたい」場合は <code>Partial&lt;Omit&lt;User, 'id' | 'createdAt'&gt;&gt;</code> のように書くことができます。</li>
+<li>ここで紹介したもの以外にも、<code>Readonly&lt;T&gt;</code>（全プロパティを読み取り専用にする）、<code>Required&lt;T&gt;</code>（全プロパティを必須にする）、<code>ReturnType&lt;T&gt;</code>（関数の戻り値の型を取得する）など、多くの便利なUtility Typeが存在します。</li>
+</ul>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><strong>Utility Types</strong>は、既存の型を元に新しい型を効率的に作成するための、TypeScript組み込みの型ツールである。</li>
+<li><strong><code>Partial&lt;T&gt;</code></strong>: 型<code>T</code>のすべてのプロパティをオプショナルにする。</li>
+<li><strong><code>Pick&lt;T, K&gt;</code></strong>: 型<code>T</code>から指定したキー<code>K</code>のプロパティのみを抽出する。</li>
+<li><strong><code>Omit&lt;T, K&gt;</code></strong>: 型<code>T</code>から指定したキー<code>K</code>のプロパティを除外する。</li>
+<li><strong><code>Record&lt;K, T&gt;</code></strong>: キーが<code>K</code>型、値が<code>T</code>型であるオブジェクト型を生成する。</li>
+<li>これらを活用することで、型の定義をDRY（Don't Repeat Yourself）に保ち、メンテナンス性の高いコードを書くことができる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial06_TypeScript入門_chapter04_Utility_Typesとベストプラクティス_6-4-2: tsconfigで品質を上げる（strict系の設定）.html" class="next">tsconfigで品質を上げる（strict系の設定）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

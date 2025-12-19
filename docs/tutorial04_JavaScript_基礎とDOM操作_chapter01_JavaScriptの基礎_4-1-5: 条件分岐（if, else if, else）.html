@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条件分岐（if, else if, else） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎.html">Chapter 1: JavaScriptの基礎</a><span>></span>条件分岐（if, else if, else）</div>
+                    <div class="section-content">
+<h1 id="4-1-4-if-else-if-else">4-1-4: 条件分岐（if, else if, else）</h1>
+<h2 id="chapter-1-javascript">Chapter 1: JavaScriptの基礎</h2>
+<h3 id="section-4-if-else-if-else">Section 4: 条件分岐（if, else if, else）</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li><code>if</code>文を使い、特定の条件が真（true）の場合にのみコードを実行できるようになる。</li>
+<li><code>else</code>を使い、条件が偽（false）の場合の処理を記述できるようになる。</li>
+<li><code>else if</code>を使い、複数の条件を順番に評価し、分岐処理を記述できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：プログラムに「判断」させる</h3>
+<p>前のセクションで学んだ比較演算子と論理演算子は、条件を評価して<code>true</code>か<code>false</code>を返すものでした。しかし、その結果に基づいて実際のプログラムの動きを変えるには、「もし（if）〜なら、Aの処理をする。そうでなければ、Bの処理をする」という<strong>条件分岐</strong>の仕組みが必要です。</p>
+<p>その中心的な役割を担うのが<code>if</code>文です。<code>if</code>文は、あらゆるプログラミング言語に存在する最も基本的な制御構造の一つであり、プログラムに知性を与える第一歩と言えます。PHPの<code>if</code>文と構文は全く同じなので、Laravelエンジニアにとっては非常に馴染みやすいでしょう。</p>
+<hr />
+<h3 id="1-if">⚙️ 1. <code>if</code>文：もし〜なら</h3>
+<p><code>if</code>文は、指定した条件が<code>true</code>の場合にのみ、続く波括弧<code>{}</code>ブロック内のコードを実行します。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">if (条件式) {
+  // 条件式がtrueの場合に実行される処理
+}
+</code></pre>
+
+<p><strong>例：</strong></p>
+<pre class="codehilite"><code class="language-javascript">const score = 80;
+
+if (score &gt;= 60) {
+  console.log(&quot;合格です！&quot;); // &quot;合格です！&quot; と表示される
+}
+
+const age = 18;
+if (age &lt; 20) {
+  console.log(&quot;未成年です。&quot;); // 表示されない
+}
+</code></pre>
+
+<ul>
+<li><code>score &gt;= 60</code>は<code>true</code>なので、ブロック内の<code>console.log</code>が実行されます。</li>
+<li><code>age &lt; 20</code>は<code>false</code>なので、ブロック内の処理はスキップされます。</li>
+</ul>
+<h3 id="2-else">⚙️ 2. <code>else</code>文：そうでなければ</h3>
+<p><code>else</code>文は、<code>if</code>文の条件が<code>false</code>だった場合に実行される処理を記述するために使います。<code>if</code>文とセットで使われ、単独で使うことはできません。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">if (条件式) {
+  // 条件式がtrueの場合に実行される処理
+} else {
+  // 条件式がfalseの場合に実行される処理
+}
+</code></pre>
+
+<p><strong>例：</strong></p>
+<pre class="codehilite"><code class="language-javascript">const age = 22;
+
+if (age &lt; 20) {
+  console.log(&quot;未成年です。入場できません。&quot;);
+} else {
+  console.log(&quot;成人です。どうぞお入りください。&quot;); // &quot;成人です。どうぞお入りください。&quot; と表示される
+}
+</code></pre>
+
+<ul>
+<li><code>age &lt; 20</code>は<code>false</code>なので、<code>if</code>ブロックはスキップされ、<code>else</code>ブロック内のコードが実行されます。</li>
+</ul>
+<h3 id="3-else-if">⚙️ 3. <code>else if</code>文：さらに別の条件の場合</h3>
+<p>3つ以上の条件で分岐させたい場合は、<code>else if</code>を使います。<code>if</code>の条件が<code>false</code>だった場合に、さらに別の条件で評価を行うことができます。<code>else if</code>はいくつでも繋げることができます。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">if (条件式1) {
+  // 条件式1がtrueの場合の処理
+} else if (条件式2) {
+  // 条件式1がfalseで、条件式2がtrueの場合の処理
+} else {
+  // すべての条件がfalseだった場合の処理
+}
+</code></pre>
+
+<p><strong>例：</strong></p>
+<pre class="codehilite"><code class="language-javascript">const score = 75;
+
+if (score &gt;= 90) {
+  console.log(&quot;優&quot;);
+} else if (score &gt;= 70) {
+  console.log(&quot;良&quot;); // &quot;良&quot; と表示される
+} else if (score &gt;= 50) {
+  console.log(&quot;可&quot;);
+} else {
+  console.log(&quot;不可&quot;);
+}
+</code></pre>
+
+<ul>
+<li><strong>評価の順序が重要です。</strong><ol>
+<li>まず<code>score &gt;= 90</code>が評価されます → <code>false</code>。</li>
+<li>次に<code>score &gt;= 70</code>が評価されます → <code>true</code>。このブロックが実行され、<code>console.log("良")</code>が実行されます。</li>
+<li>一度いずれかのブロックが実行されると、それ以降の<code>else if</code>や<code>else</code>は<strong>すべて無視</strong>されます。</li>
+</ol>
+</li>
+</ul>
+<h3 id="if-else">💡 三項演算子：シンプルな<code>if-else</code>のショートカット</h3>
+<p><code>if-else</code>の処理が非常にシンプルな場合、<strong>三項演算子</strong>（<code>? :</code>）を使うと、コードを1行で簡潔に書くことができます。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">条件式 ? (trueの場合の値) : (falseの場合の値)
+</code></pre>
+
+<p><strong>例：</strong></p>
+<pre class="codehilite"><code class="language-javascript">const age = 20;
+
+// if-else文の場合
+let message;
+if (age &gt;= 20) {
+  message = &quot;成人&quot;;
+} else {
+  message = &quot;未成年&quot;;
+}
+
+// 三項演算子の場合
+const message = age &gt;= 20 ? &quot;成人&quot; : &quot;未成年&quot;;
+
+console.log(message); // &quot;成人&quot;
+</code></pre>
+
+<p>三項演算子は、特にReactなどのフレームワークで、コンポーネントの表示を条件によって切り替える際などによく使われます。ただし、処理が複雑になる場合は、可読性の観点から通常の<code>if-else</code>文を使う方が適切です。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><code>if</code>は、条件が<code>true</code>のときに処理を実行する、条件分岐の基本である。</li>
+<li><code>else</code>は、<code>if</code>の条件が<code>false</code>だった場合の「それ以外」の処理を記述する。</li>
+<li><code>else if</code>は、複数の条件を順番に評価し、複雑な分岐を実現する。</li>
+<li>シンプルな<code>if-else</code>は、三項演算子（<code>? :</code>）で簡潔に記述できる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] <code>else if</code>を使う際に、条件の順序が重要になるのはなぜですか？具体的な例を挙げて説明できますか？</li>
+<li>[ ] <code>const num = 0;</code> のとき、<code>if (num &gt; 0) { ... } else if (num &lt; 0) { ... } else { ... }</code> のどのブロックが実行されますか？</li>
+<li>[ ] <code>const isLoggedIn = true;</code> のとき、三項演算子を使って<code>loginStatus</code>という変数に<code>"ログイン中"</code>または<code>"ログアウト"</code>という文字列を代入するコードを書いてみてください。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-4: 演算子（算術、比較、論理）.html" class="prev">演算子（算術、比較、論理）</a>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-6: 繰り返し処理（for, for...of）.html" class="next">繰り返し処理（for, for...of）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

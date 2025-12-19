@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: ナビゲーションバーを作成する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト.html">Chapter 3: Flexboxによるレイアウト</a><span>></span>Chapter 3 ハンズオン: ナビゲーションバーを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-2-htmlcss">Tutorial 2: HTML/CSS基礎</h1>
+<h2 id="chapter-3-flexbox">Chapter 3: Flexboxによるレイアウト</h2>
+<h3 id="chapter-3-flexbox_1">Chapter 3 ハンズオン: Flexboxでプロフィールページをモダンなレイアウトに改良する</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このハンズオンでは、Chapter 2でスタイリングしたプロフィールページにFlexboxを導入し、よりモダンで柔軟なレイアウトにアップグレードします。特に、SNSリンクがただ縦に並んでいるだけだった部分を、綺麗に横並びで中央に配置します。</p>
+<p><em>ここに完成したプロフィールページのスクリーンショットを挿入: ヘッダー部分がFlexboxで左右に配置され、SNSリンクのリストが横並びになり、カードフッターも左右に要素が配置されている様子</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このハンズオンを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>既存のレイアウトにFlexboxを段階的に導入し、コンポーネントを改良できるようになる。</li>
+<li><code>justify-content</code> と <code>align-items</code> を使って、実際のUI（ナビゲーションリストなど）を意図通りに配置できるようになる。</li>
+<li>Flexboxの入れ子構造を使い、複雑なレイアウトをシンプルに解決する感覚を掴む。</li>
+</ul>
+<hr />
+<h3 id="_1">🏃 実践: 一緒に作ってみましょう！</h3>
+<p>Chapter 2で作成したプロフィールページは、まだレイアウトに古さが残っています。特に、SNSリンクが縦に並んでいる部分は改善の余地がありそうです。ここにFlexboxの力を注入して、洗練されたレイアウトを完成させましょう。</p>
+<h4 id="_2">💭 実装の思考プロセス</h4>
+<p>今回修正するのは、主に「SNSリンク」の部分です。現状は<code>&lt;ul&gt;</code>のデフォルトの振る舞いで縦に並んでいますが、これを横並びにして、さらに見た目も整えたい。どうすれば実現できるか、思考プロセスを追ってみましょう。</p>
+<p><strong>このハンズオンのゴール:</strong></p>
+<ol>
+<li><strong>SNSリストの横並び:</strong> <code>&lt;ul&gt;</code>をFlexコンテナにして、<code>&lt;li&gt;</code>を横に並べる。</li>
+<li><strong>中央揃え:</strong> 並べたリストを、セクション内で水平方向の中央に配置する。</li>
+<li><strong>見た目の調整:</strong> 各リンクをボタンのようなデザインに装飾する。</li>
+</ol>
+<p>💡 <strong>ポイント:</strong> 小さなコンポーネントからFlexboxを適用していくのがコツです。ページ全体を一度にFlexboxで制御しようとすると混乱します。まずは「ここの横並びを実現したい」という具体的な箇所を見つけて、その親要素に<code>display: flex;</code>を適用することから始めましょう。</p>
+<h4 id="_3">📝 ステップバイステップで実装</h4>
+<h5 id="step-1-snsflexbox">Step 1: SNSリストをFlexboxで横並びにする</h5>
+<p>まず、縦に並んでいるSNSリンクを横に並べます。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「SNSリンクのリスト(<code>&lt;ul&gt;</code>)を横並びにしたい。ということは、<code>&lt;ul&gt;</code>をFlexコンテナにすれば、その子要素である<code>&lt;li&gt;</code>がFlexアイテムになって横に並ぶはずだ。やってみよう。」</li>
+</ul>
+<p>1-1. <code>index.html</code>のSNSリスト部分の<code>&lt;ul&gt;</code>に、<code>class="social-links"</code>を追加します。これにより、CSSからこのリストを特定しやすくなります。</p>
+<ul>
+<li><strong>コマンド/コード (index.html):</strong><br />
+<code>html
+    &lt;ul class="social-links"&gt;
+      &lt;li&gt;&lt;a href="#" target="_blank"&gt;GitHub&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#" target="_blank"&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#" target="_blank"&gt;ブログ&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;</code></li>
+</ul>
+<p>1-2. <code>style.css</code>に以下のコードを追加します。</p>
+<ul>
+<li><strong>コマンド/コード (style.css):</strong><br />
+<code>css
+    .social-links {
+      display: flex; /* これで&lt;li&gt;が横に並ぶ */
+      justify-content: center; /* アイテムを中央に寄せる */
+      gap: 15px; /* アイテム間の隙間を15pxに */
+      list-style: none; /* 黒丸を削除 */
+      padding: 0;
+      margin-top: 20px;
+    }</code></li>
+<li><strong>コマンド解説/コードリーディング:</strong><ul>
+<li><code>display: flex;</code>: <code>&lt;ul&gt;</code>をFlexコンテナにします。これで子要素の<code>&lt;li&gt;</code>が横に並びます。</li>
+<li><code>justify-content: center;</code>: Flexアイテム（<code>&lt;li&gt;</code>たち）を、コンテナ（<code>&lt;ul&gt;</code>）の主軸（横方向）の中央に配置します。</li>
+<li><code>gap: 15px;</code>: Flexアイテムの間に15pxの隙間を設けます。<code>margin</code>で指定するより簡単です。</li>
+</ul>
+</li>
+</ul>
+<h5 id="step-2">Step 2: リンクをボタン風にデザインする</h5>
+<p>横に並んだリンクを、よりクリックしやすいようにボタン風のデザインに装飾します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「ただのテキストリンクだと味気ない。<code>&lt;a&gt;</code>タグに背景色と<code>padding</code>を指定して、ボタンみたいに見せよう。マウスが乗ったら少し色が変わるエフェクトも付け加えたい。」</li>
+</ul>
+<p>2-1. <code>style.css</code>の<code>li a</code>セレクタを、<code>.social-links a</code>に修正し、以下のスタイルを追加します。（より具体的にセレクタを指定することで、他の箇所のリンクに影響を与えないようにします）</p>
+<ul>
+<li>
+<p><strong>コマンド/コード (style.css):</strong><br />
+    ```css<br />
+    /<em> 既存の li a スタイルをこちらに統合・修正 </em>/<br />
+    .social-links a {<br />
+      display: block; /<em> paddingを有効にするためブロック要素に </em>/<br />
+      padding: 10px 20px;<br />
+      background-color: #3498db; /<em> 青い背景 </em>/<br />
+      color: white; /<em> 白い文字 </em>/<br />
+      text-decoration: none;<br />
+      border-radius: 5px; /<em> 少し角を丸める </em>/<br />
+      transition: background-color 0.3s; /<em> 背景色の変化を滑らかに </em>/<br />
+    }</p>
+<p>/<em> 既存の li a:hover スタイルをこちらに修正 </em>/<br />
+.social-links a:hover {<br />
+  background-color: #2980b9; /<em> 少し濃い青に </em>/<br />
+  text-decoration: none; /<em> hover時も下線は不要 </em>/<br />
+}<br />
+<code>``
+-   **コマンド解説/コードリーディング:**
+-</code>display: block;<code>:</code><a><code>タグはインライン要素なので、</code>padding<code>や</code>margin<code>を正しく適用するためにブロック要素に変換します。
+-</code>transition: background-color 0.3s;<code>:</code>background-color`プロパティが変更される際に、0.3秒かけて滑らかに変化するアニメーション効果を追加します。これにより、マウスオーバー時の色の変化がスムーズになります。</p>
+</li>
+</ul>
+<h4 id="_4">✨ 完成！</h4>
+<p>お疲れ様でした！ブラウザでページをリロードしてみてください。縦に並んでいたSNSリンクが、中央揃えの綺麗なボタン群に変わっているはずです。このように、既存のCSSに少し手を加えるだけで、Flexboxはレイアウトを劇的に改善してくれます。</p>
+<p>このハンズオンを通じて、あなたは単に要素を横に並べるだけでなく、「どのように揃えるか」「どのように装飾するか」まで含めて、コンポーネントを自在にデザインする強力な武器を手に入れました。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト_2-3-3: 実務でよく使うFlexboxパターン.html" class="prev">実務でよく使うFlexboxパターン</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4 ハンズオン: Utility Typesを使った型操作 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter04_Utility_Typesとベストプラクティス.html">Chapter 4: Utility Typesとベストプラクティス</a><span>></span>Chapter 4 ハンズオン: Utility Typesを使った型操作</div>
+                    <div class="section-content">
+<h1 id="6-4-4-utility-types">6-4-4: 実践 🚀 チャプターハンズオン: Utility Typesを使った型操作</h1>
+<h2 id="_1">🎯 課題</h2>
+<p>このチャプターで学んだUtility Typesを駆使して、Todoアプリケーションで必要となる様々な型を、一つの基本となる型から効率的に作成してみましょう。</p>
+<p>DRY（Don't Repeat Yourself）の原則に従い、型の定義を再利用することの重要性を体感することが目的です。</p>
+<h3 id="_2">基準となる型</h3>
+<p>すべての課題は、以下の<code>Todo</code>インターフェースを元にして作成します。</p>
+<pre class="codehilite"><code class="language-typescript">interface Todo {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: Date;
+}
+</code></pre>
+
+<h3 id="_3">完成要件</h3>
+<ol>
+<li>
+<p><strong><code>Pick&lt;T, K&gt;</code> を使った型定義</strong></p>
+<ul>
+<li>Todoの一覧表示用に、<code>id</code>, <code>title</code>, <code>completed</code> のみを持つ <code>TodoPreview</code> 型を作成してください。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Omit&lt;T, K&gt;</code> を使った型定義</strong></p>
+<ul>
+<li>新しいTodoを作成する際のAPIペイロードとして、<code>id</code> と <code>createdAt</code>（サーバー側で自動生成される）を除外した <code>TodoCreation</code> 型を作成してください。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Partial&lt;T&gt;</code> を使った型定義</strong></p>
+<ul>
+<li>Todoを更新する際には、任意のプロパティ（<code>title</code>, <code>description</code>, <code>completed</code>）を更新できるものとします。<code>id</code>と<code>createdAt</code>は更新対象外です。この更新用ペイロードを表す <code>TodoUpdate</code> 型を作成してください。（ヒント: <code>Omit</code> と <code>Partial</code> を組み合わせます）</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Record&lt;K, T&gt;</code> を使った型定義</strong></p>
+<ul>
+<li>Todoを完了済み（<code>'done'</code>）と未完了（<code>'pending'</code>）にグループ分けして保持するオブジェクトの型 <code>GroupedTodos</code> を作成してください。キーは <code>'done'</code> または <code>'pending'</code> で、値は <code>TodoPreview</code> の配列 (<code>TodoPreview[]</code>) とします。</li>
+</ul>
+</li>
+</ol>
+<h2 id="_4">🛠️ 手順</h2>
+<ol>
+<li>まず、基準となる <code>Todo</code> インターフェースをコードに記述します。</li>
+<li><code>Pick</code> を使って <code>TodoPreview</code> 型を定義します。</li>
+<li><code>Omit</code> を使って <code>TodoCreation</code> 型を定義します。</li>
+<li><code>Omit</code> と <code>Partial</code> を組み合わせて <code>TodoUpdate</code> 型を定義します。</li>
+<li><code>Record</code> を使って <code>GroupedTodos</code> 型を定義します。</li>
+<li>それぞれの型が正しく定義できているか、ダミーの変数に型注釈を付けて確認してみましょう。</li>
+</ol>
+<h2 id="_5">🏆 解答例</h2>
+<pre class="codehilite"><code class="language-typescript">// 基準となるTodoインターフェース
+interface Todo {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: Date;
+}
+
+// 1. `Pick` を使って一覧表示用の型を作成
+type TodoPreview = Pick&lt;Todo, 'id' | 'title' | 'completed'&gt;;
+
+// 動作確認
+const todoPreview: TodoPreview = {
+  id: 1,
+  title: 'TypeScriptを学ぶ',
+  completed: false,
+  // description: 'Utility Typesは便利' // エラー: Object literal may only specify known properties
+};
+console.log('TodoPreview:', todoPreview);
+
+
+// 2. `Omit` を使って新規作成用の型を作成
+type TodoCreation = Omit&lt;Todo, 'id' | 'createdAt'&gt;;
+
+// 動作確認
+const newTodo: TodoCreation = {
+  title: 'ハンズオンを完了する',
+  description: 'Utility Typesの課題を解く',
+  completed: false,
+  // id: 2 // エラー: 'id' は TodoCreation 型に存在しない
+};
+console.log('\nTodoCreation:', newTodo);
+
+
+// 3. `Partial` と `Omit` を組み合わせて更新用の型を作成
+type TodoUpdate = Partial&lt;Omit&lt;Todo, 'id' | 'createdAt'&gt;&gt;;
+
+// 動作確認
+const updatePayload: TodoUpdate = {
+  description: 'より詳細な説明を追記',
+  completed: true,
+};
+console.log('\nTodoUpdate:', updatePayload);
+
+
+// 4. `Record` を使ってグループ化されたTodoの型を作成
+type TodoStatus = 'done' | 'pending';
+type GroupedTodos = Record&lt;TodoStatus, TodoPreview[]&gt;;
+
+// 動作確認
+const groupedTodos: GroupedTodos = {
+  done: [
+    { id: 2, title: 'Reactの学習', completed: true },
+  ],
+  pending: [
+    { id: 1, title: 'TypeScriptを学ぶ', completed: false },
+    { id: 3, title: 'GitHubにプッシュする', completed: false },
+  ],
+  // in_progress: [] // エラー: 'in_progress' は TodoStatus 型にない
+};
+console.log('\nGroupedTodos:', groupedTodos);
+
+/*
+--- 期待される出力 ---
+
+TodoPreview: { id: 1, title: 'TypeScriptを学ぶ', completed: false }
+
+TodoCreation: { title: 'ハンズオンを完了する', description: 'Utility Typesの課題を解く', completed: false }
+
+TodoUpdate: { description: 'より詳細な説明を追記', completed: true }
+
+GroupedTodos: {
+  done: [ { id: 2, title: 'Reactの学習', completed: true } ],
+  pending: [
+    { id: 1, title: 'TypeScriptを学ぶ', completed: false },
+    { id: 3, title: 'GitHubにプッシュする', completed: false }
+  ]
+}
+
+*/
+</code></pre>
+
+<h3 id="_6">💡 コードのポイント</h3>
+<p>このハンズオンの最大のポイントは、<code>Todo</code> という<strong>単一の信頼できる情報源（Single Source of Truth）</strong>から、アプリケーションの様々な場面で必要とされる型を、重複なく効率的に生成している点です。</p>
+<p>もし将来、<code>Todo</code> インターフェースに <code>dueDate: Date</code> というプロパティが追加されたとしても、<code>TodoCreation</code> や <code>TodoUpdate</code> の型定義は自動的に <code>dueDate</code> を含むようになり、手動で修正する必要はありません。これがUtility Typesを使う大きなメリットであり、メンテナンス性の高いコードに繋がります。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter04_Utility_Typesとベストプラクティス_6-4-3: TypeScriptのベストプラクティス.html" class="prev">TypeScriptのベストプラクティス</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

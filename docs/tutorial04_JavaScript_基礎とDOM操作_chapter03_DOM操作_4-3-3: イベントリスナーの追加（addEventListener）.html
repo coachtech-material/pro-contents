@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イベントリスナーの追加（addEventListener） | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作.html">Chapter 3: DOM操作</a><span>></span>イベントリスナーの追加（addEventListener）</div>
+                    <div class="section-content">
+<h1 id="4-3-3-addeventlistener">4-3-3: イベントリスナーの追加（addEventListener）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>addEventListener</code> を使って、ユーザーのアクション（クリックなど）を検知できるようになる</li>
+<li>イベントオブジェクトから詳細な情報を取得できるようになる</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>インタラクティブなWebページを作成するには、ユーザーの操作（イベント）に応じて処理を実行する必要があります。<code>addEventListener</code> メソッドを使うと、特定の要素で発生したイベントを監視し、対応する処理（イベントリスナー）を登録できます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="addeventlistener"><code>addEventListener</code> の基本構文</h3>
+<pre class="codehilite"><code class="language-javascript">const myButton = document.querySelector(&quot;#my-button&quot;);
+
+function handleClick() {
+  alert(&quot;ボタンがクリックされました！&quot;);
+}
+
+// ボタンがクリックされたらhandleClick関数を実行
+myButton.addEventListener(&quot;click&quot;, handleClick);
+</code></pre>
+
+<p><code>addEventListener</code> は、第一引数にイベントの種類（<code>"click"</code>, <code>"mouseover"</code>など）、第二引数に実行する関数を指定します。</p>
+<h3 id="_4">イベントオブジェクト</h3>
+<p>イベントリスナーとして登録された関数には、<strong>イベントオブジェクト</strong>が引数として渡されます。イベントオブジェクトには、発生したイベントに関する詳細な情報が含まれています。</p>
+<pre class="codehilite"><code class="language-javascript">const input = document.querySelector(&quot;#my-input&quot;);
+
+input.addEventListener(&quot;input&quot;, function(event) {
+  // event.target はイベントが発生した要素（この場合はinput要素）
+  // event.target.value はその要素の現在の値
+  console.log(&quot;入力内容:&quot;, event.target.value);
+});
+</code></pre>
+
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li><code>addEventListener</code> を使うと、1つのイベントに対して複数のイベントリスナーを登録できます。</li>
+</ul>
+<h2 id="_5">✨ まとめ</h2>
+<ul>
+<li><code>addEventListener</code> でイベントを監視し、処理を登録する</li>
+<li>イベントリスナーにはイベントオブジェクトが渡され、詳細な情報を取得できる</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作_4-3-2: 要素の取得と変更（querySelector, innerHTML）.html" class="prev">要素の取得と変更（querySelector, innerHTML）</a>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作_4-3-4: Chapter 3 ハンズオン: ToDoリストを作成する.html" class="next">Chapter 3 ハンズオン: ToDoリストを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

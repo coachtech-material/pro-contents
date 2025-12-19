@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 ハンズオン: ログインフォームのテストを書く | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright.html">Chapter 2: E2Eテスト Playwright</a><span>></span>Chapter 2 ハンズオン: ログインフォームのテストを書く</div>
+                    <div class="section-content">
+<h1 id="11-2-3-chapter-2">11-2-3: Chapter 2 ハンズオン: ログインフォームのテストを書く</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Playwrightを使って、実際のNext.jsアプリケーションのE2Eテストを作成する方法を学ぶ</li>
+<li><code>getByRole</code>や<code>getByLabel</code>といった、より堅牢なロケーターの選び方を習得する</li>
+<li>ログイン成功と失敗のシナリオをテストコードとして表現する方法を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションで、Playwrightの基本的な概念と使い方を学びました。このハンズオンでは、Tutorial 10で作成したLaravel + Next.jsアプリケーションのログイン機能を対象に、E2Eテストを実際に書いていきます。</p>
+<h3 id="_3">テストシナリオ</h3>
+<p>今回は、以下の2つの主要なシナリオをテストします。</p>
+<ol>
+<li><strong>ログイン成功シナリオ</strong>: 正しい認証情報（メールアドレスとパスワード）を入力すると、ホームページにリダイレクトされ、ユーザー名が表示されること。</li>
+<li><strong>ログイン失敗シナリオ</strong>: 間違った認証情報を入力すると、エラーメッセージが表示され、ログインページに留まること。</li>
+</ol>
+<h2 id="e2e">ハンズオン: ログイン機能のE2Eテスト</h2>
+<h3 id="1">ステップ1: テストファイルの作成</h3>
+<p>Playwrightのセットアップ時に作成された<code>tests</code>ディレクトリ内に、<code>login.spec.ts</code>という新しいテストファイルを作成します。</p>
+<pre class="codehilite"><code class="language-typescript">// tests/login.spec.ts
+
+import { test, expect } from &quot;@playwright/test&quot;;
+
+// テストをグループ化
+test.describe(&quot;ログイン機能&quot;, () =&gt; {
+  // 各テストの前にログインページにアクセスする
+  test.beforeEach(async ({ page }) =&gt; {
+    await page.goto(&quot;http://localhost:3000/login&quot;);
+  });
+
+  // ログイン成功のテストケース
+  test(&quot;正しい認証情報でログインできること&quot;, async ({ page }) =&gt; {
+    // 1. フォームを入力する
+    await page.getByLabel(&quot;メールアドレス&quot;).fill(&quot;test@example.com&quot;);
+    await page.getByLabel(&quot;パスワード&quot;).fill(&quot;password&quot;);
+
+    // 2. ログインボタンをクリックする
+    await page.getByRole(&quot;button&quot;, { name: &quot;ログイン&quot; }).click();
+
+    // 3. ホームページにリダイレクトされたことを確認する
+    await expect(page).toHaveURL(&quot;http://localhost:3000/&quot;);
+
+    // 4. ユーザー名が表示されていることを確認する
+    await expect(page.getByText(&quot;ようこそ, Test Userさん&quot;)).toBeVisible();
+  });
+
+  // ログイン失敗のテストケース
+  test(&quot;間違った認証情報ではログインできないこと&quot;, async ({ page }) =&gt; {
+    // 1. フォームに間違った情報を入力する
+    await page.getByLabel(&quot;メールアドレス&quot;).fill(&quot;wrong@example.com&quot;);
+    await page.getByLabel(&quot;パスワード&quot;).fill(&quot;wrongpassword&quot;);
+
+    // 2. ログインボタンをクリックする
+    await page.getByRole(&quot;button&quot;, { name: &quot;ログイン&quot; }).click();
+
+    // 3. エラーメッセージが表示されることを確認する
+    await expect(
+      page.getByText(&quot;メールアドレスまたはパスワードが正しくありません。&quot;)
+    ).toBeVisible();
+
+    // 4. ログインページに留まっていることを確認する
+    await expect(page).toHaveURL(&quot;http://localhost:3000/login&quot;);
+  });
+});
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>test.beforeEach(async ({ page }) =&gt; { ... })</code></strong>: <code>describe</code>ブロック内の各テストケースが実行される<strong>前</strong>に、必ず実行される処理を定義します。ここでは、各テストの開始時にログインページにアクセスするという共通の準備作業を行っています。</li>
+<li><strong><code>getByLabel(text)</code></strong>: <code>&lt;label&gt;</code>要素のテキストを使って、関連付けられたフォーム要素（<code>&lt;input&gt;</code>など）を特定します。CSSセレクタよりも意味的で、ユーザーの操作に近い方法で要素を選択できるため、より堅牢なテストになります。</li>
+<li><strong><code>getByRole(role, { name })</code></strong>: <a href="https://developer.mozilla.org/ja/docs/Web/Accessibility/ARIA/Roles">ARIA role</a>に基づいて要素を特定します。例えば、<code>&lt;button&gt;</code>は<code>button</code>ロールを持ちます。<code>name</code>オプションで、ボタンのテキスト（アクセシブルネーム）を指定することで、より正確に要素を特定できます。「<code>ログイン</code>という名前の<code>button</code>ロールを持つ要素」という意味になります。これも非常に推奨されるロケーターです。</li>
+<li><strong><code>toHaveURL(url)</code></strong>: ページのURLが期待通りであるかを検証します。</li>
+<li><strong><code>toBeVisible()</code></strong>: 要素がページ上で表示されている（非表示ではない）ことを検証します。</li>
+</ul>
+<h3 id="2">ステップ2: テストの実行</h3>
+<p>テストを実行する前に、<strong>必ずLaravelとNext.jsの両方の開発サーバーを起動してください</strong>。E2Eテストは、実際に動作しているアプリケーションに対して行われるためです。</p>
+<ul>
+<li>Laravel: <code>sail up -d</code></li>
+<li>Next.js: <code>npm run dev</code></li>
+</ul>
+<p>両方のサーバーが起動したら、新しいターミナルを開いてE2Eテストを実行します。</p>
+<pre class="codehilite"><code class="language-bash">npm run test:e2e
+</code></pre>
+
+<p>テストが実行され、すべてのテストがパスすることを確認します。</p>
+<pre class="codehilite"><code>Running 2 tests using 1 worker
+
+  ✓  tests/login.spec.ts:9:7 › ログイン機能 › 正しい認証情報でログインできること (2s)
+  ✓  tests/login.spec.ts:25:7 › ログイン機能 › 間違った認証情報ではログインできないこと (1s)
+
+
+  2 tests passed (4s)
+</code></pre>
+
+<p>もし特定のテストだけを実行したい場合は、ファイル名を指定します。</p>
+<pre class="codehilite"><code class="language-bash">npm run test:e2e tests/login.spec.ts
+</code></pre>
+
+<p>また、<code>--headed</code>フラグをつけると、ブラウザが実際に立ち上がり、テストが実行される様子を視覚的に確認できます。</p>
+<pre class="codehilite"><code class="language-bash">npm run test:e2e -- --headed
+</code></pre>
+
+<h3 id="3">ステップ3: レポートの確認</h3>
+<p>テスト実行後、<code>npx playwright show-report</code>を実行して、HTMLレポートを確認してみましょう。各ステップでの動作や、成功・失敗の詳細を見ることができます。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><code>test.beforeEach</code>を使うと、テストケース間の共通の準備作業をまとめることができる。</li>
+<li><code>getByLabel</code>や<code>getByRole</code>といった、ユーザーの操作を模倣したセマンティックなロケーターを使うことで、変更に強いテストを書くことができる。</li>
+<li>E2Eテストを実行する際は、対象のアプリケーションが起動している必要がある。</li>
+</ul>
+<p>これで、アプリケーションの最も重要な機能の一つであるログインフローが、期待通りに動作することを自動で保証できるようになりました。次のチャプターでは、UIの「見た目」をテストするビジュアルリグレッションテストについて学びます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright_11-2-2: Playwrightの基本.html" class="prev">Playwrightの基本</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

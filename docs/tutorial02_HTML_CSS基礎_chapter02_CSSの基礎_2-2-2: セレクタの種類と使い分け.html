@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セレクタの種類と使い分け | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎.html">Chapter 2: CSSの基礎</a><span>></span>セレクタの種類と使い分け</div>
+                    <div class="section-content">
+<h1 id="2-2-2">2-2-2: セレクタと詳細度の基礎</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>CSSセレクタの基本的な種類と使い方を理解する</li>
+<li>詳細度（Specificity）の概念を理解し、スタイルが上書きされるルールを説明できる</li>
+<li>擬似クラスと擬似要素を使ったスタイリングができるようになる</li>
+</ul>
+<h2 id="_2">🖼️ 完成イメージ</h2>
+<p>このセクションでは、特定の要素にスタイルを適用する方法を学びます。例えば、リストの奇数番目と偶数番目で背景色を変えたり、リンクにマウスが乗った時に色を変えたりします。</p>
+<h2 id="_3">導入</h2>
+<p>CSSは「どの要素に」「どんなスタイルを」適用するかを指定する言語です。この「どの要素に」を指定するのが<strong>セレクタ</strong>です。セレクタを使いこなすことで、HTML文書内の特定の要素を正確に狙ってスタイルを適用できます。</p>
+<h2 id="_4">概念の説明</h2>
+<h3 id="_5">セレクタとは？</h3>
+<p>セレクタは、スタイルを適用するHTML要素を選択するためのパターンです。基本的なセレクタには以下の種類があります。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">セレクタの種類</th>
+<th style="text-align: left;">説明</th>
+<th style="text-align: left;">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>要素セレクタ</strong></td>
+<td style="text-align: left;">指定されたHTML要素すべてにスタイルを適用</td>
+<td style="text-align: left;"><code>p { color: blue; }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>クラスセレクタ</strong></td>
+<td style="text-align: left;">指定されたクラス属性を持つ要素にスタイルを適用</td>
+<td style="text-align: left;"><code>.my-class { font-size: 16px; }</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>IDセレクタ</strong></td>
+<td style="text-align: left;">指定されたID属性を持つ要素にスタイルを適用</td>
+<td style="text-align: left;"><code>#my-id { background-color: yellow; }</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="specificity">詳細度（Specificity）とは？</h3>
+<p>複数のスタイルが同じ要素に適用される場合、どのスタイルが優先されるかを決定するのが<strong>詳細度</strong>です。詳細度は、セレクタの種類によって計算される点数のようなものです。点数が高いほど優先されます。</p>
+<ul>
+<li><strong>IDセレクタ</strong>: 100点</li>
+<li><strong>クラスセレクタ、属性セレクタ、擬似クラス</strong>: 10点</li>
+<li><strong>要素セレクタ、擬似要素</strong>: 1点</li>
+</ul>
+<p>例えば、<code>#my-id</code>（100点）は <code>.my-class</code>（10点）より優先されます。</p>
+<h2 id="_6">詳細解説</h2>
+<h3 id="_7">擬似クラスと擬似要素</h3>
+<ul>
+<li><strong>擬似クラス</strong>: 要素の特定の状態を表します。（例: <code>:hover</code>, <code>:focus</code>, <code>:nth-child()</code>）</li>
+<li><strong>擬似要素</strong>: 要素の特定の部分を表します。（例: <code>::before</code>, <code>::after</code>, <code>::first-letter</code>）</li>
+</ul>
+<pre class="codehilite"><code class="language-css">/* リンクにマウスが乗った時のスタイル */
+a:hover {
+  color: red;
+}
+
+/* リストの奇数番目の背景色 */
+li:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+
+/* 段落の最初の文字を大きくする */
+p::first-letter {
+  font-size: 2em;
+}
+</code></pre>
+
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>詳細度が同じ場合は、後から読み込まれたスタイルが優先されます。</li>
+<li><code>!important</code>を使うと詳細度を無視して強制的にスタイルを適用できますが、多用は避けるべきです。</li>
+</ul>
+<h2 id="_8">🏃 実践</h2>
+<p>前のセクションで作成したプロフィールページに、以下のスタイルを追加してみましょう。</p>
+<ol>
+<li>リンクにマウスが乗ったら色が変わるようにする</li>
+<li>スキルリストの奇数番目と偶数番目で背景色を変える</li>
+</ol>
+<h2 id="_9">✨ まとめ</h2>
+<ul>
+<li>セレクタはスタイルを適用する要素を選択するためのパターン</li>
+<li>詳細度はスタイルの優先順位を決めるルール</li>
+<li>擬似クラスと擬似要素を使うと、より細かいスタイリングが可能になる</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-1: CSSの基本構文と適用方法.html" class="prev">CSSの基本構文と適用方法</a>
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-3: 詳細度（Specificity）の基礎.html" class="next">詳細度（Specificity）の基礎</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

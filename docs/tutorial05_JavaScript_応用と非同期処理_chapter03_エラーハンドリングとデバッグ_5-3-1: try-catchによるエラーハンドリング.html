@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>try-catchによるエラーハンドリング | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ.html">Chapter 3: エラーハンドリングとデバッグ</a><span>></span>try-catchによるエラーハンドリング</div>
+                    <div class="section-content">
+<h1 id="5-3-1-try-catch">5-3-1: try-catchによるエラーハンドリング</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>try...catch</code> 構文を使って、プログラム実行中に発生するエラーを捕捉し、適切に処理できるようになる</li>
+<li><code>async/await</code> と組み合わせた非同期処理のエラーハンドリング方法を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>プログラムを書いていると、予期せぬエラーはつきものです。例えば、ネットワーク接続が切れてAPIからデータを取得できなかったり、存在しない変数を参照しようとしたり。エラーが発生したときにプログラムがクラッシュしてしまうのを防ぎ、ユーザーに状況を伝えたり、代替処理を行ったりするのが<strong>エラーハンドリング</strong>です。</p>
+<p>このセクションでは、JavaScriptの基本的なエラーハンドリング構文である <code>try...catch</code> を学びます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="trycatch"><code>try...catch</code> の基本構文</h3>
+<p><code>try...catch</code> 構文は、エラーが発生する可能性のあるコードブロックを <code>try</code> ブロックで囲み、エラーが発生した場合の処理を <code>catch</code> ブロックに記述します。</p>
+<pre class="codehilite"><code class="language-javascript">try {
+  // エラーが発生する可能性のあるコード
+  console.log(&quot;tryブロックの処理を開始します&quot;);
+
+  // 意図的にエラーを発生させる
+  undefinedFunction(); 
+
+  console.log(&quot;この行は実行されません&quot;);
+
+} catch (error) {
+  // エラーが発生した場合に実行されるコード
+  console.error(&quot;エラーが発生しました！&quot;);
+  console.error(error); // 発生したエラーオブジェクト
+}
+
+console.log(&quot;try...catchブロックの外の処理は続行されます&quot;);
+</code></pre>
+
+<p><strong>実行結果:</strong></p>
+<pre class="codehilite"><code>tryブロックの処理を開始します
+エラーが発生しました！
+ReferenceError: undefinedFunction is not defined
+    at ...
+try...catchブロックの外の処理は続行されます
+</code></pre>
+
+<p><code>try</code> ブロック内でエラーが発生すると、その時点から <code>try</code> ブロックの実行は中断され、直ちに <code>catch</code> ブロックに処理が移ります。<code>catch</code> ブロックは、発生したエラー情報を含む<strong>エラーオブジェクト</strong>を引数として受け取ります。</p>
+<h3 id="asyncawait-trycatch"><code>async/await</code> と <code>try...catch</code></h3>
+<p><code>async/await</code> を使った非同期処理のエラーハンドリングは、<code>try...catch</code> と非常に相性が良いです。<code>await</code> したPromiseが <code>rejected</code>（失敗）状態になると、<code>try...catch</code> はそれを同期的なエラーと同様に捕捉できます。</p>
+<p>前のチャプターで作成した <code>fetch</code> の例にエラーハンドリングを追加してみましょう。</p>
+<pre class="codehilite"><code class="language-javascript">async function fetchUsers() {
+  try {
+    // 意図的に無効なURLを指定してエラーを発生させる
+    const response = await fetch(&quot;https://jsonplaceholder.typicode.com/invalid-url&quot;);
+
+    // fetchは404のようなHTTPエラーでは例外をスローしない
+    // response.okプロパティで成功したかを確認する必要がある
+    if (!response.ok) {
+      // サーバーからのエラーレスポンスをエラーとして扱う
+      throw new Error(`HTTPエラー: ${response.status}`);
+    }
+
+    const users = await response.json();
+    console.log(users);
+
+  } catch (error) {
+    // ネットワークエラーや、throwされたエラーがここで捕捉される
+    console.error(&quot;データの取得に失敗しました:&quot;, error);
+  }
+}
+
+fetchUsers();
+</code></pre>
+
+<p>この例では、2種類のエラーを捕捉しています。</p>
+<ol>
+<li><strong>ネットワークエラー</strong>: <code>fetch</code> 自体が失敗した場合（例: DNS解決に失敗、オフラインなど）。この場合、<code>await fetch(...)</code> がPromiseを <code>rejected</code> にし、<code>catch</code> ブロックが実行されます。</li>
+<li><strong>HTTPエラーステータス</strong>: <code>fetch</code> は、サーバーが404（Not Found）や500（Internal Server Error）のようなエラーステータスを返しても、それをネットワークエラーとは見なしません。リクエスト自体は完了しているため、Promiseは <code>fulfilled</code> になります。そのため、<code>response.ok</code> プロパティ（ステータスコードが200-299の範囲なら <code>true</code>）をチェックし、<code>false</code> であれば <code>throw new Error(...)</code> を使って意図的にエラーを発生させ、<code>catch</code> ブロックに処理を移しています。</li>
+</ol>
+<h3 id="finally"><code>finally</code> ブロック</h3>
+<p><code>try...catch</code> には、<code>finally</code> ブロックを追加することもできます。<code>finally</code> ブロック内のコードは、<code>try</code> ブロックでエラーが発生したかどうかに関わらず、<strong>必ず最後に実行されます</strong>。</p>
+<pre class="codehilite"><code class="language-javascript">try {
+  // ...
+} catch (error) {
+  // ...
+} finally {
+  console.log('処理が完了しました');
+}
+</code></pre>
+
+<p>ローディング表示を終了させる処理など、成功・失敗にかかわらず実行したい後処理を記述するのに便利です。</p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>Laravelなどのサーバーサイドフレームワークでは、例外（Exception）を <code>throw</code> してエラーを処理するのが一般的です。JavaScriptの <code>throw</code> と <code>try...catch</code> は、その概念と非常によく似ており、PHPの経験がある方には馴染みやすいでしょう。</li>
+</ul>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><code>try</code> ブロックにエラーの可能性がある処理を記述する。</li>
+<li><code>catch</code> ブロックでエラーを捕捉し、エラー発生時の処理を記述する。</li>
+<li><code>async/await</code> と組み合わせることで、非同期処理のエラーも同期処理のように捕捉できる。</li>
+<li><code>fetch</code> を使う際は、<code>response.ok</code> をチェックしてHTTPエラーステータスをハンドリングすることが重要。</li>
+<li><code>finally</code> ブロックは、エラーの有無にかかわらず最後に必ず実行される。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter03_エラーハンドリングとデバッグ_5-3-2: Networkタブでのデバッグ方法.html" class="next">Networkタブでのデバッグ方法</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

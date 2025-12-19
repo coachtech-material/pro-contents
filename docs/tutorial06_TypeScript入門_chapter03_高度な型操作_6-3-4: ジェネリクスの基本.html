@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ジェネリクスの基本 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter03_高度な型操作.html">Chapter 3: 高度な型操作</a><span>></span>ジェネリクスの基本</div>
+                    <div class="section-content">
+<h1 id="6-3-4">6-3-4: ジェネリクスの基本</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>ジェネリクス（Generics）がなぜ必要とされるのか、その動機を理解する</li>
+<li>型を引数として受け取るジェネリック関数やジェネリッククラスの基本的な作り方を習得する</li>
+<li><code>extends</code> キーワードを使ったジェネリック制約によって、型の安全性をさらに高める方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>これまで、関数の引数や戻り値には <code>string</code> や <code>number</code> のような具体的な型を指定してきました。しかし、もし「受け取った値をそのまま返す」という、どんな型にも対応できる関数を作りたい場合、どうすればよいでしょうか？</p>
+<pre class="codehilite"><code class="language-typescript">function identity(arg: any): any {
+  return arg;
+}
+</code></pre>
+
+<p><code>any</code> を使えば実現できますが、これではTypeScriptの最大の利点である<strong>型安全性</strong>が失われてしまいます。<code>identity("hello")</code> の戻り値が <code>string</code> であることをTypeScriptは知ることができず、<code>string</code> 型のメソッドを補完してくれません。</p>
+<p>この「<strong>型安全性を保ちつつ、様々な型に対応できる再利用可能なコンポーネント（関数やクラス）を作りたい</strong>」という要求に応えるのが<strong>ジェネリクス（Generics）</strong>です。ジェネリクスは、型そのものを引数のように動的に扱うことを可能にする、TypeScriptの非常に強力な機能です。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="generic-functions">🔑 ジェネリック関数 (Generic Functions)</h3>
+<p>ジェネリクスは、関数名やクラス名の後に <code>&lt;T&gt;</code> のような形で<strong>型変数（Type Variable）</strong>を宣言することで使用します。この <code>T</code> は、関数が呼び出されるときに具体的な型に置き換えられます。</p>
+<p>先ほどの <code>identity</code> 関数をジェネリクスを使って書き換えてみましょう。</p>
+<pre class="codehilite"><code class="language-typescript">// &lt;T&gt; で型変数Tを宣言し、引数argと戻り値の型として使用する
+function identity&lt;T&gt;(arg: T): T {
+  return arg;
+}
+
+// --- 使い方の例 ---
+
+// 1. 型を明示的に指定する
+let output1 = identity&lt;string&gt;(&quot;myString&quot;);
+// output1 は string 型
+
+// 2. 型推論に任せる（こちらが一般的）
+let output2 = identity(&quot;myString&quot;);
+// output2 は string 型だと推論される
+
+let output3 = identity(123);
+// output3 は number 型だと推論される
+</code></pre>
+
+<p><code>any</code> を使った場合との決定的な違いは、<strong>引数の型と戻り値の型の関係性が保たれる</strong>ことです。<code>identity&lt;string&gt;</code> を呼び出せば、TypeScriptは戻り値が <code>string</code> であることを正確に把握しているため、<code>output1.toUpperCase()</code> のようなメソッド呼び出しも安全に行えます。</p>
+<h3 id="_4">複数の型変数</h3>
+<p>型変数はカンマ区切りで複数宣言することもできます。</p>
+<pre class="codehilite"><code class="language-typescript">function pair&lt;T, U&gt;(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+let result = pair&lt;string, number&gt;(&quot;hello&quot;, 123);
+// result は [string, number] 型
+</code></pre>
+
+<h3 id="generic-constraints">🔑 ジェネリック制約 (Generic Constraints)</h3>
+<p>ジェネリクスは非常に柔軟ですが、時には型変数 <code>T</code> が<strong>特定のプロパティやメソッドを持つこと</strong>を保証したい場合があります。例えば、「受け取ったオブジェクトの <code>length</code> プロパティにアクセスしたい」というケースを考えます。</p>
+<pre class="codehilite"><code class="language-typescript">function loggingIdentity&lt;T&gt;(arg: T): T {
+  console.log(arg.length); // エラー: Property 'length' does not exist on type 'T'.
+  return arg;
+}
+</code></pre>
+
+<p>このコードはエラーになります。なぜなら、型 <code>T</code> は現時点ではどんな型にもなりうるため、<code>length</code> プロパティを持つとは限らないからです（例えば <code>number</code> 型など）。</p>
+<p>ここで役立つのが<strong>ジェネリック制約</strong>です。<code>extends</code> キーワードを使って、型変数が特定のインターフェースを実装していることを強制できます。</p>
+<pre class="codehilite"><code class="language-typescript">// lengthプロパティを持つ型を定義
+interface Lengthwise {
+  length: number;
+}
+
+// 型変数Tは、Lengthwiseインターフェースの要件を満たす型でなければならない
+function loggingIdentity&lt;T extends Lengthwise&gt;(arg: T): T {
+  console.log(arg.length); // OK! Tには必ずlengthプロパティがあると保証されている
+  return arg;
+}
+
+loggingIdentity(&quot;hello&quot;);       // OK. stringはlengthプロパティを持つ
+loggingIdentity([1, 2, 3]);     // OK. 配列はlengthプロパティを持つ
+// loggingIdentity(123);        // エラー: Argument of type 'number' is not assignable to parameter of type 'Lengthwise'.
+</code></pre>
+
+<p><code>T extends Lengthwise</code> という制約により、<code>loggingIdentity</code> 関数は <code>length</code> プロパティを持つ型の引数しか受け付けなくなりました。これにより、関数内部で安全に <code>arg.length</code> にアクセスできるようになります。</p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>型変数名には、慣習的に <code>T</code> (Type) が最初の型変数として使われ、以降 <code>U</code>, <code>V</code> と続きます。しかし、より意味が分かりやすい名前を付けることも推奨されます。例えば、キーと値のペアを扱う場合は <code>&lt;K, V&gt;</code> (Key, Value)、要素の型を扱う場合は <code>&lt;E&gt;</code> (Element) などがよく使われます。</li>
+</ul>
+<h2 id="_5">✨ まとめ</h2>
+<ul>
+<li><strong>ジェネリクス</strong>は、型を引数のように扱い、<strong>型安全で再利用可能な</strong>コンポーネントを作成するための機能である。</li>
+<li><code>&lt;T&gt;</code> のように<strong>型変数</strong>を宣言し、それを関数の引数や戻り値の型として使用する。</li>
+<li>TypeScriptの<strong>型推論</strong>により、多くの場合、ジェネリック関数を呼び出す際に型を明示的に指定する必要はない。</li>
+<li><strong><code>extends</code></strong> キーワードを使って<strong>ジェネリック制約</strong>を設けることで、型変数が特定の構造を持つことを保証し、より安全なコードを書くことができる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-3: null_undefinedの扱い.html" class="prev">null_undefinedの扱い</a>
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-5: Chapter 3 ハンズオン: ジェネリクスを使った共通部品を作成する.html" class="next">Chapter 3 ハンズオン: ジェネリクスを使った共通部品を作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

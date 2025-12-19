@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Hook Formによるフォーム管理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter03_ライブラリ活用術.html">Chapter 3: ライブラリ活用術</a><span>></span>React Hook Formによるフォーム管理</div>
+                    <div class="section-content">
+<h1 id="8-3-1-react-hook-form">8-3-1: React Hook Formによるフォーム管理</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Reactにおけるフォーム管理の複雑さと、フォームライブラリの必要性を理解する</li>
+<li><code>React Hook Form</code> の基本的な使い方（<code>useForm</code>, <code>register</code>, <code>handleSubmit</code>）を習得する</li>
+<li>Controlled Componentsとの違いを理解し、<code>React Hook Form</code> がパフォーマンスに優れる理由を学ぶ</li>
+<li>フォームの状態（<code>formState</code>）を監視し、エラーメッセージなどを表示する方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Reactの基本的なフォーム管理方法として「Controlled Components」を学びました。これは<code>useState</code>を使って入力値を管理する直感的な方法ですが、フォームが複雑になるにつれていくつかの課題が顕在化します。</p>
+<ul>
+<li><strong>パフォーマンスの問題</strong>: 一文字入力するたびにコンポーネントが再レンダリングされるため、大規模なフォームではパフォーマンスが低下する可能性がある。</li>
+<li><strong>ボイラープレートコードの増加</strong>: フォーム項目が増えるたびに、<code>useState</code>、<code>onChange</code>ハンドラ、<code>value</code>属性のセットが増えていき、コードが冗長になりがち。</li>
+<li><strong>複雑なバリデーション</strong>: 必須入力、文字数制限、メール形式など、複雑なバリデーションロジックを自前で実装するのは大変。</li>
+</ul>
+<p>これらの課題を解決するために、Reactのエコシステムには多くの優れたフォーム管理ライブラリが存在します。その中でも、現在最も人気があり、デファクトスタンダードとされいるのが <strong><code>React Hook Form</code></strong> です。</p>
+<p><code>React Hook Form</code> は、パフォーマンス、柔軟性、そしてDX（開発者体験）に重点を置いて設計されており、シンプルかつ高機能なフォームを驚くほど簡単に構築できます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="react-hook-form">🔑 React Hook Formの基本コンセプト</h3>
+<p><code>React Hook Form</code> の最大の特徴は、<strong>非制御コンポーネント（Uncontrolled Components）</strong>のアプローチをベースにしている点です。Controlled Componentsが入力のたびにReactのStateを更新するのに対し、<code>React Hook Form</code> はフォーム要素への<strong>参照（ref）</strong>を使って入力を追跡します。これにより、ユーザーの入力中は不要な再レンダリングが発生せず、パフォーマンスが大幅に向上します。</p>
+<h3 id="useform"><code>useForm</code>フック</h3>
+<p><code>React Hook Form</code> を使うには、まず <code>useForm</code> フックを呼び出します。このフックが、フォームの状態管理やバリデーションに必要なメソッドと状態を提供してくれます。</p>
+<pre class="codehilite"><code class="language-bash">npm install react-hook-form
+</code></pre>
+
+<pre class="codehilite"><code class="language-tsx">import { useForm, SubmitHandler } from &quot;react-hook-form&quot;;
+
+// フォームのデータ型を定義
+interface IFormInput {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+
+function MyForm() {
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+  } = useForm&lt;IFormInput&gt;();
+
+  // ...
+}
+</code></pre>
+
+<p><code>useForm</code> から分割代入で取り出す主要なものは以下の通りです。</p>
+<ul>
+<li><strong><code>register</code></strong>: フォームの入力要素を<code>React Hook Form</code>に「登録」するためのメソッド。このメソッドの戻り値を、<code>&lt;input&gt;</code>などの<code>props</code>として展開します。</li>
+<li><strong><code>handleSubmit</code></strong>: フォームの送信をハンドルする高階関数。自作の送信処理関数を引数として渡します。<code>handleSubmit</code>は、フォームのバリデーションを自動的に実行し、バリデーションが通った場合のみ、引数で渡された関数を呼び出します。</li>
+<li><strong><code>formState</code></strong>: フォームの状態（エラー、入力済みか、送信中かなど）を保持するオブジェクト。<code>formState.errors</code> には、バリデーションエラーの情報が格納されます。</li>
+</ul>
+<h3 id="_4">実装例</h3>
+<pre class="codehilite"><code class="language-tsx">import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+interface IFormInput {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+
+function App() {
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+  } = useForm&lt;IFormInput&gt;();
+
+  // バリデーションが成功した時に実行される関数
+  const onSubmit: SubmitHandler&lt;IFormInput&gt; = data =&gt; {
+    console.log(data);
+    alert(`Hello, ${data.firstName} ${data.lastName}!`);
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit(onSubmit)}&gt;
+      {/* 1. `register`で入力要素を登録 */}
+      {/* 2. バリデーションルールを第2引数に指定 */}
+      &lt;div&gt;
+        &lt;label&gt;First Name&lt;/label&gt;
+        &lt;input {...register(&quot;firstName&quot;, { required: true, maxLength: 20 })} /&gt;
+        {/* 3. エラーがあればメッセージを表示 */}
+        {errors.firstName &amp;&amp; &lt;p style={{ color: 'red' }}&gt;First name is required.&lt;/p&gt;}
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Last Name&lt;/label&gt;
+        &lt;input {...register(&quot;lastName&quot;, { pattern: /^[A-Za-z]+$/i })} /&gt;
+        {errors.lastName &amp;&amp; &lt;p style={{ color: 'red' }}&gt;Last name must be alphabet.&lt;/p&gt;}
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Age&lt;/label&gt;
+        &lt;input type=&quot;number&quot; {...register(&quot;age&quot;, { min: 18, max: 99 })} /&gt;
+        {errors.age &amp;&amp; &lt;p style={{ color: 'red' }}&gt;Age must be between 18 and 99.&lt;/p&gt;}
+      &lt;/div&gt;
+
+      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+export default App;
+</code></pre>
+
+<h4 id="_5">コードのポイント</h4>
+<ol>
+<li><strong><code>register("firstName", { ... })</code></strong>: 第一引数にフィールド名を指定し、入力要素を登録します。第二引数には、<code>required</code>（必須）、<code>maxLength</code>（最大長）、<code>pattern</code>（正規表現）、<code>min</code>/<code>max</code>（最小/最大値）などのバリデーションルールをオブジェクトで渡せます。</li>
+<li><strong><code>{...register(...) }</code></strong>: <code>register</code>メソッドは、<code>onChange</code>, <code>onBlur</code>, <code>name</code>, <code>ref</code> といった、入力要素に必要な<code>props</code>をまとめて返します。これをスプレッド構文で展開することで、手動で<code>onChange</code>などを書く必要がなくなります。</li>
+<li><strong><code>errors.firstName</code></strong>: <code>register</code>の第一引数で指定したフィールド名に対応するエラーオブジェクトが<code>formState.errors</code>に格納されます。エラーがあればこのオブジェクトが存在するので、条件付きレンダリングでエラーメッセージを表示できます。</li>
+<li><strong><code>handleSubmit(onSubmit)</code></strong>: <code>form</code>の<code>onSubmit</code>には、<code>handleSubmit</code>でラップした自作の送信関数を渡します。これにより、送信ボタンが押されたときに、まずバリデーションが走り、成功した場合にのみ<code>onSubmit</code>関数がフォームのデータ（<code>data</code>）を引数に呼び出されます。</li>
+</ol>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li><code>React Hook Form</code> は、パフォーマンスと開発者体験に優れた、Reactのデファクトスタンダードなフォーム管理ライブラリである。</li>
+<li>非制御コンポーネントのアプローチを採用しており、入力中の不要な再レンダリングを抑制する。</li>
+<li><code>useForm</code>フックから得られる <strong><code>register</code></strong>, <strong><code>handleSubmit</code></strong>, <strong><code>formState</code></strong> を使うのが基本。</li>
+<li><code>register</code>メソッドで入力要素を登録し、バリデーションルールを宣言的に記述できる。</li>
+<li><code>handleSubmit</code>が高階関数としてバリデーションと送信処理をラップしてくれるため、ボイラープレートコードを大幅に削減できる。</li>
+<li>次のセクションで学ぶ<code>Zod</code>などのバリデーションライブラリと組み合わせることで、さらに強力で型安全なフォームを構築できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial08_React応用_chapter03_ライブラリ活用術_8-3-2: Zodによるバリデーション.html" class="next">Zodによるバリデーション</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

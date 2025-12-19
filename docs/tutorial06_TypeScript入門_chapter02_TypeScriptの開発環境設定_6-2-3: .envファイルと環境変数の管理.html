@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.envファイルと環境変数の管理 | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定.html">Chapter 2: TypeScriptの開発環境設定</a><span>></span>.envファイルと環境変数の管理</div>
+                    <div class="section-content">
+<h1 id="6-2-3-env">6-2-3: .envファイルと環境変数の管理</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>環境変数がなぜ重要なのか、特にセキュリティの観点から説明できるようになる</li>
+<li><code>.env</code> ファイルを使って、開発環境と本番環境で異なる設定値を管理する方法を習得する</li>
+<li>フロントエンド（特にReact/Next.js）で環境変数を安全に読み込む方法を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Laravel開発者であれば、<code>.env</code> ファイルは非常にお馴染みの存在でしょう。データベースの接続情報やAPIキーなど、環境によって異なり、かつGitなどのバージョン管理に含めてはいけない機密情報を管理するために使います。</p>
+<p>この「<strong>設定とコードの分離</strong>」という考え方は、フロントエンド開発においても同様に非常に重要です。接続するAPIのエンドポイントURLは、ローカル開発環境と本番環境では異なります。また、外部サービスのAPIキーをGitHubに公開してしまうと、不正利用され、高額な請求に繋がる重大なセキュリティインシデントを引き起こします。</p>
+<p>このセクションでは、フロントエンド開発における環境変数の標準的な管理方法として、<code>.env</code> ファイルの役割と安全な使い方を学びます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="_4">🔑 環境変数とは？</h3>
+<p>環境変数とは、アプリケーションが実行される環境（OSやビルドプロセス）から渡される、動的な設定値のことです。主な利点は以下の通りです。</p>
+<ul>
+<li><strong>セキュリティの向上</strong>: APIキーやパスワードなどの機密情報をコードベースから分離し、Gitリポジトリに含めないようにできる。</li>
+<li><strong>ポータビリティの向上</strong>: 同じコードを、異なる設定（開発、ステージング、本番）で動かすことができる。</li>
+<li><strong>設定管理の簡素化</strong>: 環境ごとの設定値を一箇所（<code>.env</code>ファイル）で管理できる。</li>
+</ul>
+<h3 id="env"><code>.env</code> ファイルの役割</h3>
+<p><code>.env</code> ファイルは、<code>キー=値</code> の形式で環境変数を定義するシンプルなテキストファイルです。このファイルは、プロジェクトのルートディレクトリに配置します。</p>
+<pre class="codehilite"><code class="language-env"># データベース接続情報 (バックエンドの例)
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=password
+
+# フロントエンドで使うAPIのエンドポイント
+API_BASE_URL=http://localhost:8000/api
+
+# 外部サービスのAPIキー
+GOOGLE_MAPS_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXX
+</code></pre>
+
+<p><strong>⚠️ 最も重要なルール: <code>.gitignore</code> に <code>.env</code> を追加する</strong></p>
+<p><code>.env</code> ファイルには機密情報が含まれるため、<strong>絶対にGitで管理してはいけません</strong>。プロジェクトの <code>.gitignore</code> ファイルに以下の1行を必ず追加してください。</p>
+<pre class="codehilite"><code>.env
+</code></pre>
+
+<p>代わりに、チームメンバーがどのような環境変数を設定すべきか分かるように、<code>env.example</code> というファイルをリポジトリに含めるのが一般的です。このファイルには、実際の値の代わりにダミーの値を記述します。</p>
+<pre class="codehilite"><code class="language-env"># .env.example
+API_BASE_URL=http://localhost:8000/api
+GOOGLE_MAPS_API_KEY=
+</code></pre>
+
+<h3 id="_5">フロントエンドでの環境変数の扱い</h3>
+<p>Laravelでは、PHPがサーバーサイドで <code>.env</code> ファイルを読み込み、<code>env()</code> ヘルパーで簡単にアクセスできました。しかし、フロントエンドのJavaScriptはユーザーのブラウザ上で実行されるため、サーバー上の <code>.env</code> ファイルに直接アクセスすることはできません。</p>
+<p>フロントエンドで環境変数を利用するには、<strong>ビルドプロセス</strong>中に <code>.env</code> ファイルの内容をコードに埋め込む必要があります。ViteやNext.jsのようなモダンなフロントエンドツールには、この仕組みが標準で組み込まれています。</p>
+<h4 id="vite-create-react-app">Vite / Create React App での規約</h4>
+<p>ViteやCreate React Appでは、セキュリティ上の理由から、特定のプレフィックスが付いた環境変数のみがフロントエンドのコードに公開されます。</p>
+<ul>
+<li><strong><code>VITE_</code></strong> (Viteの場合)</li>
+<li><strong><code>REACT_APP_</code></strong> (Create React Appの場合)</li>
+</ul>
+<pre class="codehilite"><code class="language-env"># この変数はフロントエンドのコードからアクセスできる
+VITE_API_BASE_URL=http://localhost:8000/api
+
+# この変数はフロントエンドからはアクセスできない（ビルドサーバー内でのみ利用可能）
+SECRET_KEY=my-secret-key
+</code></pre>
+
+<p>JavaScriptコードからは、<code>import.meta.env</code> (Vite) や <code>process.env</code> (CRA) を通じてアクセスします。</p>
+<pre class="codehilite"><code class="language-typescript">// Viteの場合
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+console.log(apiUrl); // &quot;http://localhost:8000/api&quot;
+
+// Create React Appの場合
+// const apiUrl = process.env.REACT_APP_API_BASE_URL;
+</code></pre>
+
+<h4 id="nextjs">Next.js での規約</h4>
+<p>Next.jsでは、プレフィックス <strong><code>NEXT_PUBLIC_</code></strong> を付けた環境変数がブラウザに公開されます。</p>
+<pre class="codehilite"><code class="language-env"># この変数はブラウザ（フロントエンド）からアクセスできる
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
+
+# この変数はサーバーサイド（getStaticPropsなど）でのみアクセスできる
+API_SERVER_KEY=server-side-secret
+</code></pre>
+
+<p>コードからは <code>process.env</code> を使ってアクセスします。</p>
+<pre class="codehilite"><code class="language-typescript">const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+</code></pre>
+
+<p><strong>なぜプレフィックスが必要なのか？</strong></p>
+<p>この仕組みは、誤ってサーバーサイド専用の秘密鍵などをフロントエンドに公開してしまう事故を防ぐための、重要な<strong>セーフガード</strong>です。「<code>VITE_</code>」や「<code>NEXT_PUBLIC_</code>」を付けることで、「<strong>この変数はクライアントサイドに公開しても安全である</strong>」という開発者の明確な意思表示となります。</p>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>環境変数の型定義を行うことで、TypeScriptの恩恵をさらに享受できます。例えば、<code>import.meta.env</code> の型定義ファイルを作成し、<code>VITE_API_BASE_URL</code> が <code>string</code> 型であることを保証できます。これにより、環境変数名のタイポなどを防ぐことができます。</li>
+</ul>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li><code>.env</code> ファイルは、APIキーなどの機密情報や環境依存の設定をコードから分離するために使用する。</li>
+<li><code>.env</code> ファイルは、必ず <code>.gitignore</code> に追加し、バージョン管理から除外する。</li>
+<li>フロントエンドで環境変数を使うには、ビルドプロセスで値を埋め込む必要があり、ViteやNext.jsなどのツールにはその仕組みが組み込まれている。</li>
+<li>セキュリティのため、フロントエンドに公開する環境変数には、<code>VITE_</code> や <code>NEXT_PUBLIC_</code> といった特定のプレフィックスを付ける必要がある。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定_6-2-2: .eslintrc.jsと.prettierrcの役割.html" class="prev">.eslintrc.jsと.prettierrcの役割</a>
+<a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定_6-2-4: Chapter 2 ハンズオン: TypeScriptプロジェクトのセットアップ.html" class="next">Chapter 2 ハンズオン: TypeScriptプロジェクトのセットアップ</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

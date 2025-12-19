@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 ハンズオン: HTTPリクエストを観察する | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html" class="current">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め_chapter02_Webの仕組みを理解する.html">Chapter 2: Webの仕組みを理解する</a><span>></span>Chapter 2 ハンズオン: HTTPリクエストを観察する</div>
+                    <div class="section-content">
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Chrome DevToolsの「Network」タブを使い、Webページの通信の様子を実際に観察します。</li>
+<li>ブラウザがサーバーに送信している「リクエストヘッダー」と、サーバーから返ってくる「レスポンスヘッダー」の中身を覗き見します。</li>
+<li>HTTPメソッドやステータスコードが、実際の通信でどのように使われているかを目で見て確認します。</li>
+</ul>
+<h3 id="_2">🏃 実践: 一緒に作ってみましょう！</h3>
+<p>理論の学習の後は、いよいよ実践です。百聞は一見にしかず。このチャプターで学んだURL、DNS、HTTPといった概念が、実際のWebページでどのように動いているのか、Chromeの強力な開発ツール「DevTools」を使って探偵のように調査してみましょう。</p>
+<h4 id="_3">💭 実装の思考プロセス</h4>
+<p>Webの仕組みは目に見えないため、初学者にとっては非常に抽象的で理解しにくいものです。そこで、プロのエンジニアは「ツールを使って、見えないものを見える化する」というアプローチを取ります。Chrome DevToolsのNetworkタブは、まさにそのための最強の武器です。ブラウザとサーバーの間で行われているすべての通信を「盗み見る」ことで、これまで学んだ理論が現実の世界でどう動いているのかを実感できます。</p>
+<p><strong>このハンズオンのゴール:</strong></p>
+<ol>
+<li><strong>通信の可視化:</strong> DevToolsのNetworkタブを開き、Webページをリロードした際に発生する通信の一覧を表示させます。</li>
+<li><strong>リクエストの調査:</strong> 主要なリクエスト（HTMLドキュメント）を選択し、そのリクエストヘッダーに含まれる情報（リクエストURL, メソッドなど）を確認します。</li>
+<li><strong>レスポンスの調査:</strong> 同じリクエストに対するレスポンスヘッダーと、サーバーから返ってきた実際のコンテンツ（HTMLソースコード）を確認します。</li>
+<li><strong>理論と現実の接続:</strong> 確認した情報と、このチャプターで学んだ「URLの構造」「HTTPメソッド」「ステータスコード」といった知識を結びつけます。</li>
+</ol>
+<p>💡 <strong>ポイント:</strong> ツールは、エンジニアの「目」を拡張してくれる存在。見えないものを可視化する術を身につけることが、問題解決能力向上の鍵です。</p>
+<h4 id="_4">📝 ステップバイステップで実装</h4>
+<h5 id="step-1-devtools">Step 1: 調査対象のページを開き、DevToolsを起動する</h5>
+<p>まずは、調査対象となるWebページを開きます。ここでは、多くの人が利用する検索エンジン「Google」を例に取ります。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「身近なサイトが、裏側でどんな通信をしているのか見てみたい。一番シンプルなGoogleのトップページを観察対象にしてみよう。」</li>
+</ul>
+<p>1-1. Chromeブラウザを起動し、Googleのトップページ <code>https://www.google.com</code> を開きます。</p>
+<p>1-2. ページ上で右クリックし、表示されたメニューから「検証」を選択します。または、キーボードショートカット <code>[Ctrl] + [Shift] + [I]</code> (Windows) / <code>[⌘] + [Option] + [I]</code> (Mac) を押します。</p>
+<p>1-3. 画面の右側または下側に、Chrome DevToolsのパネルが表示されます。</p>
+<p>1-4. DevToolsのパネル上部にあるタブの中から、「Network」タブをクリックします。最初は何も表示されていないか、いくつかの項目が表示されているかもしれません。</p>
+<h5 id="step-2">Step 2: 通信をキャプチャする</h5>
+<p>Networkタブを開いた状態でページをリロードすることで、そのページの読み込みに関するすべての通信を記録（キャプチャ）します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「よし、盗み見る準備はできた。今からページを再読み込みして、ブラウザとサーバーの間でどんな手紙（リクエスト/レスポンス）がやり取りされるのか、全部記録してやろう。」</li>
+</ul>
+<p>2-1. Networkタブが開かれていることを確認した上で、ブラウザの再読み込みボタンを押すか、<code>[F5]</code> キーまたは <code>[Ctrl] + [R]</code> / <code>[⌘] + [R]</code> を押してページをリロードします。</p>
+<p>2-2. すると、Networkタブのログに、たくさんの通信記録が滝のように表示されるはずです。これが、Googleのトップページを表示するために行われたすべての通信です。</p>
+<h5 id="step-3">Step 3: 主要なリクエストを特定し、ヘッダー情報を確認する</h5>
+<p>たくさんの通信記録の中から、最も重要である「ページ本体（HTMLドキュメント）」のリクエストを探し出し、その詳細を確認します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「通信がたくさんあって複雑だな。でも、一番重要なのは、このページの大元であるHTMLファイルのはずだ。まずはその通信を見つけて、中身を詳しく調べてみよう。」</li>
+</ul>
+<p>3-1. 通信ログの一番上にある、<code>www.google.com</code> という名前のリクエストを探してクリックします。（Typeが <code>document</code> になっているはずです）</p>
+<p>3-2. 右側に新しいパネルが開き、そのリクエストに関する詳細情報が表示されます。「Headers」タブが選択されていることを確認してください。</p>
+<p>3-3. 「General」セクションを見てみましょう。ここに、リクエストとレスポンスの基本情報がまとまっています。</p>
+<pre class="codehilite"><code>*   **Request URL:** `https://www.google.com/` → この通信の宛先URLです。
+*   **Request Method:** `GET` → このリクエストがGETメソッドであることがわかります。
+*   **Status Code:** `200` → このリクエストが成功したことを示すステータスコードです。
+</code></pre>
+
+<p>3-4. 少し下にスクロールして、「Request Headers」セクションを見てみましょう。これは、ブラウザがサーバーに送信したリクエストの詳細な内容（ヘッダー）です。<code>User-Agent</code> などの情報が含まれています。</p>
+<p>3-5. さらに下にスクロールして、「Response Headers」セクションを見てみましょう。これは、サーバーがブラウザに返信したレスポンスの詳細な内容（ヘッダー）です。<code>content-type: text/html; charset=UTF-8</code> といった情報から、返ってきたコンテンツがUTF-8でエンコードされたHTMLであることがわかります。</p>
+<h5 id="step-4">Step 4: レスポンスの中身を確認する</h5>
+<p>最後に、サーバーから実際に返ってきたコンテンツの中身を見てみましょう。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「リクエストとレスポンスのヘッダーは確認できた。じゃあ、実際にサーバーから送られてきた『中身』、つまりページの設計図であるHTMLソースコードはどんな感じなんだろう？」</li>
+</ul>
+<p>4-1. 詳細パネルのタブの中から、「Response」タブをクリックします。</p>
+<p>4-2. そこには、サーバーから返されたHTMLソースコードが表示されています。<code>&lt;!doctype html&gt;</code> から始まる、見慣れた（あるいはこれから見慣れる）コードが表示されていれば成功です。</p>
+<h4 id="_5">✨ 完成！</h4>
+<p>お疲れ様でした！あなたは今、Chrome DevToolsという強力な武器を使い、普段何気なく見ているWebページが、裏側でどのような通信を行っているのかを「可視化」することに成功しました。HTTPメソッド、ステータスコード、ヘッダー情報といった抽象的な概念が、現実のデータとして目の前に現れた瞬間です。この経験は、今後のフロントエンド開発において、問題解決の強力な助けとなるでしょう。</p>
+<h3 id="_6">💡 ヒント</h3>
+<ul>
+<li>Networkタブの上部にあるフィルタ機能（<code>Fetch/XHR</code>, <code>JS</code>, <code>CSS</code>, <code>Img</code>など）を使うと、特定の種類の通信だけを絞り込んで表示することができます。API通信をデバッグする際は <code>Fetch/XHR</code> が非常に役立ちます。</li>
+<li>「Headers」タブの「General」セクションにあるStatus Codeが <code>200</code> 以外（例えば <code>301</code> や <code>404</code>）になっているリクエストを探してみるのも、良い学習になります。</li>
+</ul>
+<h3 id="_7">📖 模範解答</h3>
+<p>このハンズオンを終えた時点で、あなたはChrome DevToolsのNetworkタブを開き、以下の情報を自分の目で確認できているはずです。</p>
+<ul>
+<li><code>www.google.com</code> へのリクエストが <code>GET</code> メソッドで行われていること。</li>
+<li>そのレスポンスのステータスコードが <code>200</code> であること。</li>
+<li>レスポンスヘッダーの <code>content-type</code> が <code>text/html</code> であること。</li>
+<li>「Response」タブで、GoogleのトップページのHTMLソースコードが確認できること。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial01_開発環境とWebの基礎固め_chapter02_Webの仕組みを理解する_1-2-3: HTTPメソッドとステータスコード.html" class="prev">HTTPメソッドとステータスコード</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>このチュートリアルで学ぶこと | Laravelエンジニアのためのフロントエンド学習ロードマップ</title>
+    <meta name="description" content="PHP/Laravelエンジニアがフロントエンド開発を習得するための教材">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a></h1>
+            <p class="description">PHP/Laravelエンジニアがフロントエンド開発を習得するための教材</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest.html">Chapter 1: ユニットテスト Vitest</a><span>></span>このチュートリアルで学ぶこと</div>
+                    <div class="section-content">
+<h1 id="11-1-1">11-1-1: このチュートリアルで学ぶこと</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>現代のフロントエンド開発におけるテストの重要性を理解する</li>
+<li>「ユニットテスト」「E2Eテスト」「ビジュアルリグレッションテスト」という3つの主要なテスト手法の目的と違いを学ぶ</li>
+<li>このチュートリアルで利用するテストツール（Vitest, Playwright, Storybook）の概要を把握する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>これまでのチュートリアルで、ReactとNext.jsを使ったモダンなフロントエンドアプリケーションの構築方法を学んできました。しかし、アプリケーションが大規模かつ複雑になるにつれて、手動での動作確認だけでは品質を維持することが困難になります。</p>
+<ul>
+<li>新しい機能を追加したら、既存の機能が壊れてしまった（デグレード）</li>
+<li>見た目には問題ないが、特定の操作をするとエラーが発生する</li>
+<li>CSSを修正したら、意図しない部分のレイアウトが崩れてしまった</li>
+</ul>
+<p>このような問題を未然に防ぎ、開発者が自信を持ってコードをリリースできるようにするために不可欠なのが<strong>自動テスト</strong>です。</p>
+<p>このチュートリアルでは、フロントエンド開発における主要な3つのテスト手法を、具体的なツールを使いながらハンズオン形式で学びます。</p>
+<h2 id="3">このチュートリアルで扱う3種類のテスト</h2>
+<p>フロントエンドのテストは、その目的やテスト対象の範囲によって、いくつかの種類に分類されます。このチュートリアルでは、特に重要となる以下の3つに焦点を当てます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">テストの種類</th>
+<th style="text-align: left;">主な目的</th>
+<th style="text-align: left;">テスト対象</th>
+<th style="text-align: left;">使用するツール</th>
+<th style="text-align: left;">特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>ユニットテスト</strong></td>
+<td style="text-align: left;">個々の関数やコンポーネントが正しく動作するかを検証する</td>
+<td style="text-align: left;">関数、カスタムフック、UIコンポーネント単体</td>
+<td style="text-align: left;"><strong>Vitest</strong></td>
+<td style="text-align: left;">高速に実行でき、問題の特定が容易。ビジネスロジックの検証に最適。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>E2Eテスト</strong></td>
+<td style="text-align: left;">ユーザーの一連の操作（ログインして投稿するなど）が全体として正しく機能するかを検証する</td>
+<td style="text-align: left;">アプリケーション全体</td>
+<td style="text-align: left;"><strong>Playwright</strong></td>
+<td style="text-align: left;">実際のユーザー操作を模倣。複数ページにまたがるシナリオをテストできる。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ビジュアルリグレッションテスト</strong></td>
+<td style="text-align: left;">UIコンポーネントの見た目が意図せず変わっていないかを検証する</td>
+<td style="text-align: left;">UIコンポーネントの外観</td>
+<td style="text-align: left;"><strong>Storybook</strong></td>
+<td style="text-align: left;">コンポーネントの見た目をカタログ化し、変更点を画像で比較・検出する。</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="テストピラミッド" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-11/test-pyramid.png" /></p>
+<p>これらのテストは、それぞれが異なる役割を担っており、組み合わせることでアプリケーションの品質を多角的に保証します。一般的に、下層のテスト（ユニットテスト）ほど数は多く、実行速度は速く、上層のテスト（E2Eテスト）ほど数は少なく、実行速度は遅くなる傾向があります。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>アプリケーションの品質を維持し、安全に開発を進めるために自動テストは不可欠である。</li>
+<li><strong>ユニットテスト</strong>は、コンポーネントや関数のロジックを検証する。</li>
+<li><strong>E2Eテスト</strong>は、ユーザー視点でアプリケーション全体の振る舞いを検証する。</li>
+<li><strong>ビジュアルリグレッションテスト</strong>は、UIの見た目の変化を検証する。</li>
+</ul>
+<p>次のセクションから、早速<strong>ユニットテスト</strong>の世界に飛び込んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest_11-1-2: ユニットテストとは何か.html" class="next">ユニットテストとは何か</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 Laravelエンジニアのためのフロントエンド学習ロードマップ
+        </footer>
+    </div>
+</body>
+</html>
