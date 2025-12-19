@@ -242,7 +242,7 @@ def md_to_html(md_content):
 def generate_top_index_page(contents):
     """トップページ（コンテンツ一覧）を生成"""
     content = '<h2>コンテンツ一覧</h2>\n'
-    content += '<p>プログラミング学習のための教材コンテンツです。</p>\n'
+    content += '<p>Pro生がさらなる技術力を高めていくための学習コンテンツです。</p>\n'
     content += '<div class="tutorial-list">\n'
     
     for content_dir, info in sorted(contents.items(), key=lambda x: x[1]["order"]):
