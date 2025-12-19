@@ -16,7 +16,7 @@ OUTPUT_DIR = BASE_DIR / "docs"
 
 # サイト情報
 SITE_TITLE = "pro-contents"
-SITE_DESCRIPTION = "プログラミング教材コンテンツ"
+SITE_DESCRIPTION = "Pro生用プログラミング教材コンテンツ"
 
 # コンテンツ情報（リポジトリ内のディレクトリ）
 CONTENTS_INFO = {
