@@ -24,8 +24,13 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
 body {
-    background-color: var(--bg-color);
+    background-color: var(--primary-dark);
     font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     line-height: 1.8;
     color: var(--text-color);
@@ -46,12 +51,11 @@ a:hover {
 #outer {
     margin: 0 auto;
     width: 100%;
-    max-width: 1400px;
+    max-width: 100%;
     background-color: var(--white);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
 }
 
 /* ヘッダー */
@@ -89,6 +93,7 @@ header .description {
 #container {
     display: flex;
     flex: 1;
+    background-color: var(--bg-color);
 }
 
 /* サイドバー */
@@ -500,7 +505,7 @@ footer {
 }
 
 /* レスポンシブ対応 */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     #container {
         flex-direction: column;
     }
@@ -510,29 +515,12 @@ footer {
     }
     
     #side-inner {
-        position: static;
+        position: relative;
         max-height: none;
     }
     
-    .side ul {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 10px;
-    }
-    
-    .side ul li {
-        border: none;
-    }
-    
-    .side ul li a {
-        padding: 8px 15px;
-        font-size: 0.85em;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    #outer {
-        margin: 0;
+    #content {
+        padding: 20px;
     }
     
     header {
@@ -543,34 +531,12 @@ footer {
         font-size: 1.4em;
     }
     
-    #content {
-        padding: 25px;
-    }
-    
-    h2 {
-        font-size: 1.3em;
-    }
-    
-    .tutorial-card {
-        padding: 18px;
-    }
-    
     .section-nav {
         flex-direction: column;
-        gap: 12px;
+        gap: 15px;
     }
     
     .section-nav a {
         text-align: center;
-    }
-    
-    .section-item {
-        padding: 15px;
-    }
-    
-    .section-number {
-        min-width: 40px;
-        height: 40px;
-        font-size: 0.8em;
     }
 }
