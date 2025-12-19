@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: 簡単な計算機を作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎.html">Chapter 1: JavaScriptの基礎</a><span>></span>Chapter 1 ハンズオン: 簡単な計算機を作成する</div>
+                    <div class="section-content">
+<h1 id="4-1-7-chapter-1">4-1-7: Chapter 1 ハンズオン: 簡単な計算機を作成する</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このハンズオンでは、Chapter 1で学んだ変数、関数、演算子、条件分岐、繰り返し処理を使って、簡単な計算機プログラムを作成します。</p>
+<h2 id="_2">準備</h2>
+<p>作業用のHTMLファイルを作成します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;JavaScript 計算機&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;JavaScript 計算機&lt;/h1&gt;
+  &lt;script src=&quot;calculator.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2 id="1">課題1: 基本的な計算関数を作成する</h2>
+<p><code>calculator.js</code>ファイルを作成し、四則演算を行う関数を作成してください。</p>
+<h3 id="_3">要件</h3>
+<ol>
+<li><code>add(a, b)</code> - 足し算</li>
+<li><code>subtract(a, b)</code> - 引き算</li>
+<li><code>multiply(a, b)</code> - 掛け算</li>
+<li><code>divide(a, b)</code> - 割り算（0で割る場合はエラーメッセージを返す）</li>
+</ol>
+<h3 id="_4">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">// 足し算
+const add = (a, b) =&gt; a + b;
+
+// 引き算
+const subtract = (a, b) =&gt; a - b;
+
+// 掛け算
+const multiply = (a, b) =&gt; a * b;
+
+// 割り算（0除算チェック付き）
+const divide = (a, b) =&gt; {
+  if (b === 0) {
+    return &quot;エラー: 0で割ることはできません&quot;;
+  }
+  return a / b;
+};
+
+// テスト
+console.log(&quot;足し算: 10 + 5 =&quot;, add(10, 5));       // 15
+console.log(&quot;引き算: 10 - 5 =&quot;, subtract(10, 5)); // 5
+console.log(&quot;掛け算: 10 * 5 =&quot;, multiply(10, 5)); // 50
+console.log(&quot;割り算: 10 / 5 =&quot;, divide(10, 5));   // 2
+console.log(&quot;割り算: 10 / 0 =&quot;, divide(10, 0));   // エラーメッセージ
+</code></pre>
+
+<h2 id="2">課題2: 計算機関数を作成する</h2>
+<p>演算子を文字列で受け取り、適切な計算を行う<code>calculate</code>関数を作成してください。</p>
+<h3 id="_5">要件</h3>
+<ol>
+<li>演算子として <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> を受け取る</li>
+<li>不正な演算子の場合はエラーメッセージを返す</li>
+<li>課題1で作成した関数を再利用する</li>
+</ol>
+<h3 id="_6">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">const calculate = (a, operator, b) =&gt; {
+  if (operator === &quot;+&quot;) {
+    return add(a, b);
+  } else if (operator === &quot;-&quot;) {
+    return subtract(a, b);
+  } else if (operator === &quot;*&quot;) {
+    return multiply(a, b);
+  } else if (operator === &quot;/&quot;) {
+    return divide(a, b);
+  } else {
+    return &quot;エラー: 不正な演算子です&quot;;
+  }
+};
+
+// テスト
+console.log(&quot;10 + 5 =&quot;, calculate(10, &quot;+&quot;, 5));  // 15
+console.log(&quot;10 - 5 =&quot;, calculate(10, &quot;-&quot;, 5));  // 5
+console.log(&quot;10 * 5 =&quot;, calculate(10, &quot;*&quot;, 5));  // 50
+console.log(&quot;10 / 5 =&quot;, calculate(10, &quot;/&quot;, 5));  // 2
+console.log(&quot;10 % 5 =&quot;, calculate(10, &quot;%&quot;, 5));  // エラーメッセージ
+</code></pre>
+
+<h2 id="3">課題3: 複数の計算を連続で行う</h2>
+<p>配列に格納された複数の計算式を順番に処理し、結果を表示する機能を作成してください。</p>
+<h3 id="_7">要件</h3>
+<ol>
+<li>計算式は <code>{ a: 数値, operator: 演算子, b: 数値 }</code> の形式で配列に格納</li>
+<li><code>for...of</code>を使って配列を順番に処理</li>
+<li>各計算結果をコンソールに表示</li>
+</ol>
+<h3 id="_8">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">const calculations = [
+  { a: 100, operator: &quot;+&quot;, b: 50 },
+  { a: 100, operator: &quot;-&quot;, b: 30 },
+  { a: 25, operator: &quot;*&quot;, b: 4 },
+  { a: 100, operator: &quot;/&quot;, b: 5 },
+  { a: 10, operator: &quot;/&quot;, b: 0 }
+];
+
+console.log(&quot;=== 計算結果 ===&quot;);
+
+for (const calc of calculations) {
+  const result = calculate(calc.a, calc.operator, calc.b);
+  console.log(`${calc.a} ${calc.operator} ${calc.b} = ${result}`);
+}
+</code></pre>
+
+<h2 id="4">課題4: 計算履歴を保存する</h2>
+<p>計算結果を履歴として保存し、後から確認できる機能を追加してください。</p>
+<h3 id="_9">要件</h3>
+<ol>
+<li>計算履歴を配列で管理</li>
+<li>計算するたびに履歴に追加</li>
+<li>履歴を表示する関数を作成</li>
+</ol>
+<h3 id="_10">解答例</h3>
+<pre class="codehilite"><code class="language-javascript">// 計算履歴を保存する配列
+const history = [];
+
+// 履歴付き計算関数
+const calculateWithHistory = (a, operator, b) =&gt; {
+  const result = calculate(a, operator, b);
+  const record = {
+    expression: `${a} ${operator} ${b}`,
+    result: result,
+    timestamp: new Date().toLocaleString(&quot;ja-JP&quot;)
+  };
+  history.push(record);
+  return result;
+};
+
+// 履歴を表示する関数
+const showHistory = () =&gt; {
+  console.log(&quot;=== 計算履歴 ===&quot;);
+  if (history.length === 0) {
+    console.log(&quot;履歴がありません&quot;);
+    return;
+  }
+  for (let i = 0; i &lt; history.length; i++) {
+    const record = history[i];
+    console.log(`${i + 1}. ${record.expression} = ${record.result} (${record.timestamp})`);
+  }
+};
+
+// テスト
+calculateWithHistory(100, &quot;+&quot;, 200);
+calculateWithHistory(50, &quot;*&quot;, 3);
+calculateWithHistory(100, &quot;/&quot;, 4);
+
+showHistory();
+</code></pre>
+
+<h2 id="_11">✨ まとめ</h2>
+<p>このハンズオンでは、以下のことを実践しました。</p>
+<ul>
+<li>関数を定義して処理を再利用可能にする</li>
+<li>条件分岐を使ってエラーハンドリングを行う</li>
+<li>配列と繰り返し処理を組み合わせてデータを処理する</li>
+<li>オブジェクトを使って構造化されたデータを管理する</li>
+</ul>
+<p>これらの基礎知識は、今後学ぶReactやNext.jsでも頻繁に使用します。次のチャプターでは、配列とオブジェクトについてより詳しく学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-6: 繰り返し処理（for, for...of）.html" class="prev">繰り返し処理（for, for...of）</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

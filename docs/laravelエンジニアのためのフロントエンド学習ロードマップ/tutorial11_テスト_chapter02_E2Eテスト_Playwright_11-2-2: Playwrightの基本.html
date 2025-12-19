@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwrightの基本 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright.html">Chapter 2: E2Eテスト Playwright</a><span>></span>Playwrightの基本</div>
+                    <div class="section-content">
+<h1 id="11-2-2-playwright">11-2-2: Playwrightの基本</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Playwrightの概要と特徴（クロスブラウザ、高速、高機能）を理解する</li>
+<li>Playwrightのセットアップ方法と、主要な概念（<code>test</code>, <code>page</code>, <code>locator</code>, <code>expect</code>）を学ぶ</li>
+<li>Playwright Codegenを使って、ブラウザ操作を自動でテストコードに記録する方法を体験する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p><a href="https://playwright.dev/">Playwright</a>は、Microsoftが開発するモダンなE2Eテストフレームワークです。信頼性が高く、高速で、豊富な機能を備えていることから、近年急速に人気が高まっています。</p>
+<h3 id="playwright">Playwrightの主な特徴</h3>
+<ul>
+<li><strong>クロスブラウザ対応</strong>: Chromium（Google Chrome, Microsoft Edge）、Firefox、WebKit（Safari）の3つの主要なブラウザエンジンすべてに対応しており、同じテストコードで異なるブラウザでの動作を検証できます。</li>
+<li><strong>自動待機（Auto-wait）</strong>: Playwrightの最大の特徴の一つです。要素が表示される、クリック可能になる、といった状態になるまで自動で待機してくれるため、不安定になりがちなE2Eテストを安定して実行できます。<code>sleep</code>のような不安定な待機処理をテストコードに書く必要がほとんどありません。</li>
+<li><strong>豊富な機能</strong>: スクリーンショット撮影、ビデオ録画、ネットワークのモック、認証状態の保存など、E2Eテストに必要な機能がオールインワンで提供されています。</li>
+<li><strong>テストジェネレーター（Codegen）</strong>: ブラウザ上で行った操作を自動で記録し、テストコードを生成してくれる強力なツールです。これにより、テスト作成の生産性が劇的に向上します。</li>
+</ul>
+<h2 id="playwright_1">Playwrightのセットアップ</h2>
+<p>Playwrightは、簡単なコマンドで対話的にセットアップできます。プロジェクトのルートで以下のコマンドを実行してください。</p>
+<pre class="codehilite"><code class="language-bash">npm init playwright@latest
+</code></pre>
+
+<p>すると、いくつか質問されます。基本的にはデフォルトのままで問題ありません。</p>
+<ul>
+<li><code>Where to put your end-to-end tests?</code> -&gt; <code>tests</code> （テストファイルの置き場所）</li>
+<li><code>Add a GitHub Actions workflow?</code> -&gt; <code>false</code> （CI/CDの設定は後で可能）</li>
+<li><code>Install Playwright browsers?</code> -&gt; <code>true</code> （テスト用のブラウザをインストール）</li>
+</ul>
+<p>セットアップが完了すると、以下のファイル・ディレクトリが生成されます。</p>
+<ul>
+<li><code>playwright.config.ts</code>: Playwright全体の設定ファイル。</li>
+<li><code>tests/</code>: テストファイルを格納するディレクトリ。</li>
+<li><code>tests-examples/</code>: サンプルのテストファイル。</li>
+</ul>
+<h2 id="playwright_2">Playwrightの主要な概念</h2>
+<p>Playwrightのテストコードは、Vitestとも似た、<code>test</code>と<code>expect</code>を使った直感的な構文で記述します。</p>
+<pre class="codehilite"><code class="language-typescript">// tests/example.spec.ts
+
+import { test, expect } from &quot;@playwright/test&quot;;
+
+test(&quot;ホームページにタイトルがあること&quot;, async ({ page }) =&gt; {
+  // 1. ページにアクセス
+  await page.goto(&quot;https://playwright.dev/&quot;);
+
+  // 2. 要素を特定（Locator）
+  const title = page.locator(&quot;.navbar__inner .navbar__title&quot;);
+
+  // 3. アサーション
+  await expect(title).toHaveText(&quot;Playwright&quot;);
+});
+</code></pre>
+
+<ul>
+<li><strong><code>test(title, callback)</code></strong>: テストケースを定義します。Vitestの<code>it</code>に相当します。</li>
+<li><strong><code>page</code></strong>: ブラウザのページ（タブ）を操作するためのメインのAPIです。<code>page.goto()</code>でURLにアクセスしたり、<code>page.click()</code>で要素をクリックしたりします。</li>
+<li><strong><code>locator(selector)</code></strong>: ページ上の要素を特定するための仕組みです。「ロケーター」は、要素を見つけるための指示書のようなものです。CSSセレクタやテキスト、テストIDなど、様々な方法で要素を指定できます。<code>page.locator()</code>は、要素が実際に表示されるまで待機する、Playwrightの自動待機機能の心臓部です。</li>
+<li><strong><code>expect(locator)</code></strong>: アサーションを行います。Playwrightの<code>expect</code>は、ロケーターを引数に取り、<code>.toHaveText()</code>（テキストを持つか）、<code>.toBeVisible()</code>（表示されているか）など、E2Eテストに特化したマッチャーを提供します。</li>
+</ul>
+<h2 id="playwright-codegen">Playwright Codegenを体験しよう</h2>
+<p>Playwrightの最も強力な機能の一つが<strong>Codegen</strong>です。これを使うと、ブラウザでの操作を記録して、自動でテストコードを生成できます。</p>
+<p>以下のコマンドを実行してみてください。</p>
+<pre class="codehilite"><code class="language-bash">npx playwright codegen https://tailwindcss.com/docs/installation
+</code></pre>
+
+<p>すると、指定したURLのブラウザウィンドウと、Playwright Inspectorというツールウィンドウが立ち上がります。</p>
+<ol>
+<li>ブラウザ上で、検索ボックスをクリックします。</li>
+<li>「flexbox」と入力します。</li>
+<li>検索結果の「Flexbox &amp; Grid」をクリックします。</li>
+</ol>
+<p>すると、Playwright Inspectorのウィンドウに、あなたの操作に対応するテストコードがリアルタイムで生成されていくのが分かります。</p>
+<p><img alt="Playwright Codegen" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-11/playwright-codegen.gif" /></p>
+<p>生成されたコードはコピーして、自分のテストファイルに貼り付けて利用できます。これにより、複雑な操作のテストコードも素早く作成することができます。</p>
+<h2 id="_3">テストの実行</h2>
+<p><code>package.json</code>の<code>scripts</code>に、Playwright用のコマンドが自動で追加されているはずですが、なければ追加します。</p>
+<pre class="codehilite"><code class="language-json">// package.json
+{
+  ...
+  &quot;scripts&quot;: {
+    ...
+    &quot;test:e2e&quot;: &quot;playwright test&quot;
+  },
+  ...
+}
+</code></pre>
+
+<p>以下のコマンドでテストを実行します。</p>
+<pre class="codehilite"><code class="language-bash">npm run test:e2e
+</code></pre>
+
+<p>デフォルトでは、Chromium, Firefox, WebKitの3つのブラウザで並行してテストが実行されます（ヘッドレスモード）。</p>
+<p>テスト結果は、HTMLレポートとして自動生成されます。以下のコマンドでレポートを表示できます。</p>
+<pre class="codehilite"><code class="language-bash">npx playwright show-report
+</code></pre>
+
+<p>ブラウザでレポートが開き、各テストの成功/失敗、実行時間、ブラウザごとの結果などをインタラクティブに確認できます。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>Playwrightは、クロスブラウザ対応で高機能なE2Eテストフレームワークである。</li>
+<li><code>page</code>でページを操作し、<code>locator</code>で要素を特定し、<code>expect</code>でアサーションを行うのが基本的な流れ。</li>
+<li>Playwrightの自動待機機能により、テストが安定しやすい。</li>
+<li><code>playwright codegen</code>を使うと、ブラウザ操作を記録してテストコードを自動生成できる。</li>
+</ul>
+<p>次のハンズオンでは、これらの知識を使って、実際に自分たちのアプリケーションのログインフォームのE2Eテストを作成します。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright_11-2-1: E2Eテストとは何か.html" class="prev">E2Eテストとは何か</a>
+<a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright_11-2-3: Chapter 2 ハンズオン: ログインフォームのテストを書く.html" class="next">Chapter 2 ハンズオン: ログインフォームのテストを書く</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

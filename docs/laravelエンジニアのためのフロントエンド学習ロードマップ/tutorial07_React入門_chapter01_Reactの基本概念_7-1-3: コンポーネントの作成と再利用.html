@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コンポーネントの作成と再利用 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html" class="current">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial07_React入門.html">Tutorial 7: React入門</a><span>></span><a href="tutorial07_React入門_chapter01_Reactの基本概念.html">Chapter 1: Reactの基本概念</a><span>></span>コンポーネントの作成と再利用</div>
+                    <div class="section-content">
+<h1 id="7-1-3">7-1-3: コンポーネントの作成と再利用</h1>
+<h2 id="chapter-1-react">Chapter 1: Reactの基本概念</h2>
+<h3 id="section-3">Section 3: コンポーネントの作成と再利用</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>Reactにおける<strong>コンポーネント</strong>の概念を理解する。</li>
+<li><strong>関数コンポーネント</strong>を自分で定義し、別のコンポーネントから呼び出せるようになる。</li>
+<li>コンポーネントを再利用することで、コードの重複をなくし、保守性を高めるメリットを体験する。</li>
+</ul>
+<hr />
+<h3 id="ui">イントロダクション：UIを「部品」に分割する</h3>
+<p>React開発の核となる考え方が、<strong>コンポーネント指向</strong>です。これは、複雑なUIを、再利用可能な独立した「部品」＝<strong>コンポーネント</strong>に分割して組み立てていくアプローチです。</p>
+<p>例えば、Twitterのタイムラインを考えてみましょう。これは、以下のようなコンポーネントの組み合わせとして捉えることができます。</p>
+<ul>
+<li><code>Header</code>コンポーネント</li>
+<li><code>TweetForm</code>コンポーネント（ツイート入力欄）</li>
+<li><code>TweetList</code>コンポーネント<ul>
+<li><code>Tweet</code>コンポーネント（個々のツイート）<ul>
+<li><code>Avatar</code>コンポーネント（アイコン）</li>
+<li><code>UserInfo</code>コンポーネント（名前やID）</li>
+<li><code>TweetActions</code>コンポーネント（返信、RT、いいねボタン）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>このようにUIを部品化することで、一つ一つの部品の開発に集中でき、また、一度作った部品は別の場所でも再利用できます。このセクションでは、この強力なコンポーネントを作成する方法を学びます。</p>
+<hr />
+<h3 id="_1">⚙️ 関数コンポーネントの作成</h3>
+<p>Reactのコンポーネントは、現在では<strong>関数コンポーネント</strong>として作成するのが主流です。関数コンポーネントは、その名の通り、<strong>JSXを返すJavaScriptの関数</strong>です。</p>
+<p>コンポーネントを作成する際には、2つの重要なルールがあります。</p>
+<ol>
+<li><strong>コンポーネント名の最初の文字は必ず大文字にする。</strong> (<code>MyButton</code>など)<ul>
+<li>これにより、Reactは通常のHTMLタグ（<code>div</code>, <code>p</code>など）とカスタムコンポーネントを区別します。</li>
+</ul>
+</li>
+<li><strong>コンポーネントはJSXを<code>return</code>する。</strong></li>
+</ol>
+<p><strong>例：単純なボタンコンポーネント</strong></p>
+<pre class="codehilite"><code class="language-jsx">// Button.js
+
+// &quot;Button&quot; という名前の関数コンポーネントを定義
+function Button() {
+  return (
+    &lt;button&gt;私はボタンです&lt;/button&gt;
+  );
+}
+</code></pre>
+
+<p>これだけで、<code>Button</code>という名前のReactコンポーネントが完成です。</p>
+<hr />
+<h3 id="_2">🚀 コンポーネントの呼び出しと再利用</h3>
+<p>作成したコンポーネントは、他のコンポーネントの中から、まるでHTMLタグのようにして呼び出すことができます。</p>
+<p>まず、アプリケーションのルートとなる<code>App</code>コンポーネントを作成し、その中で先ほどの<code>Button</code>コンポーネントを呼び出してみましょう。</p>
+<p>コンポーネントを別のファイルから利用するには、<code>export</code>と<code>import</code>を使います。</p>
+<p><strong>1. コンポーネントをエクスポートする</strong></p>
+<pre class="codehilite"><code class="language-jsx">// Button.js
+
+function Button() {
+  return (
+    &lt;button&gt;私はボタンです&lt;/button&gt;
+  );
+}
+
+// 他のファイルで使えるようにエクスポート
+export default Button;
+</code></pre>
+
+<p><strong>2. コンポーネントをインポートして利用する</strong></p>
+<pre class="codehilite"><code class="language-jsx">// App.js
+
+import Button from './Button'; // Buttonコンポーネントをインポート
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;ようこそ、私のアプリへ！&lt;/h1&gt;
+      &lt;Button /&gt; {/* Buttonコンポーネントを呼び出し */}
+    &lt;/div&gt;
+  );
+}
+
+export default App;
+</code></pre>
+
+<p><code>App</code>コンポーネントの中で<code>&lt;Button /&gt;</code>と記述するだけで、<code>Button.js</code>で定義したボタンがその場所にレンダリング（描画）されます。</p>
+<h4 id="_3">コンポーネントの再利用</h4>
+<p>コンポーネントの真価は、その<strong>再利用性</strong>にあります。一度定義したコンポーネントは、何度でも好きなだけ呼び出すことができます。</p>
+<pre class="codehilite"><code class="language-jsx">// App.js
+
+import Button from './Button';
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;ようこそ、私のアプリへ！&lt;/h1&gt;
+      &lt;Button /&gt;
+      &lt;Button /&gt;
+      &lt;Button /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p>もしボタンのデザインを変更したくなった場合、<code>Button.js</code>ファイルを修正するだけで、アプリケーション内のすべての<code>&lt;Button /&gt;</code>コンポーネントに一括で変更が反映されます。これにより、コードの重複が避けられ、保守性が劇的に向上します。</p>
+<hr />
+<h3 id="_4">⚙️ コンポーネントの親子関係（ネスト）</h3>
+<p>コンポーネントは、他のコンポーネントを内包することもできます。これにより、UIの階層構造を直感的に表現できます。</p>
+<p><strong>例：プロフィールカード</strong></p>
+<pre class="codehilite"><code class="language-jsx">// Avatar.js
+export default function Avatar() {
+  return &lt;img src=&quot;/avatar.png&quot; alt=&quot;アバター&quot; /&gt;;
+}
+
+// UserInfo.js
+export default function UserInfo() {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;名前: 山田 太郎&lt;/p&gt;
+      &lt;p&gt;職業: エンジニア&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// ProfileCard.js
+import Avatar from './Avatar';
+import UserInfo from './UserInfo';
+
+export default function ProfileCard() {
+  return (
+    &lt;div className=&quot;card&quot;&gt;
+      &lt;Avatar /&gt;   {/* 子コンポーネント */}
+      &lt;UserInfo /&gt; {/* 子コンポーネント */}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><code>ProfileCard</code>コンポーネントは、<code>Avatar</code>と<code>UserInfo</code>という2つの子コンポーネントから構成されています。このように、小さな部品を組み合わせて、より大きな部品を作っていくのがReactの基本的な開発スタイルです。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><strong>コンポーネント</strong>は、UIを構成する独立した再利用可能な部品である。</li>
+<li>Reactでは、<strong>JSXを返すJavaScript関数</strong>としてコンポーネントを定義する（<strong>関数コンポーネント</strong>）。</li>
+<li>コンポーネント名の<strong>先頭は必ず大文字</strong>にする。</li>
+<li><code>export</code>と<code>import</code>を使って、コンポーネントをファイル間でやり取りする。</li>
+<li>作成したコンポーネントは、HTMLタグのように<code>&lt;MyComponent /&gt;</code>と記述して呼び出すことができる。</li>
+<li>コンポーネントを再利用することで、コードの重複をなくし、保守性を大幅に向上させることができる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] なぜコンポーネント名の先頭を大文字にする必要があるのでしょうか？ もし小文字で始めた場合、Reactはそれを何として解釈しようとするでしょうか？</li>
+<li>[ ] あなたの好きなWebサイトのヘッダー部分を想像してください。これをReactで実装する場合、どのようなコンポーネントに分割できるか考えてみましょう。（例: <code>Logo</code>, <code>NavigationLinks</code>, <code>SearchForm</code>, <code>LoginButton</code>など）</li>
+<li>[ ] <code>Button</code>コンポーネントを100回再利用した場合と、<code>&lt;button&gt;</code>タグを100回コピペした場合の、保守性の違いについて説明してください。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial07_React入門_chapter01_Reactの基本概念_7-1-2: JSXの基本ルール.html" class="prev">JSXの基本ルール</a>
+<a href="tutorial07_React入門_chapter01_Reactの基本概念_7-1-4: Chapter 1 ハンズオン: 最初のReactコンポーネントを作成する.html" class="next">Chapter 1 ハンズオン: 最初のReactコンポーネントを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

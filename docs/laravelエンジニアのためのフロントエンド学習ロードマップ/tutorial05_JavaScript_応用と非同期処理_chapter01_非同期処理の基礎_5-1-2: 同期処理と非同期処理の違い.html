@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同期処理と非同期処理の違い | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter01_非同期処理の基礎.html">Chapter 1: 非同期処理の基礎</a><span>></span>同期処理と非同期処理の違い</div>
+                    <div class="section-content">
+<h1 id="5-1-2">5-1-2: 同期処理と非同期処理の違い</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>同期処理と非同期処理の違いを理解する</li>
+<li>なぜ非同期処理が必要なのかを理解する</li>
+<li>コールバック関数の基本を学ぶ</li>
+</ul>
+<h2 id="_2">はじめに</h2>
+<p>JavaScriptのコードは、基本的に上から下へ順番に実行されます。これを「同期処理」と呼びます。しかし、API通信やファイル読み込みなど、時間のかかる処理を同期的に行うと、その処理が完了するまで次の処理に進めません。この問題を解決するのが「非同期処理」です。</p>
+<h2 id="1">1. 同期処理とは</h2>
+<p>同期処理では、コードが上から下へ順番に実行されます。前の処理が完了するまで、次の処理は待機します。</p>
+<pre class="codehilite"><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
+console.log(&quot;2. 次の処理&quot;);
+console.log(&quot;3. 最後の処理&quot;);
+
+// 出力順序:
+// 1. 最初の処理
+// 2. 次の処理
+// 3. 最後の処理
+</code></pre>
+
+<h3 id="_3">同期処理の問題点</h3>
+<p>時間のかかる処理があると、その間、他の処理が止まってしまいます。</p>
+<pre class="codehilite"><code class="language-javascript">// 仮に「重い処理」があった場合のイメージ
+console.log(&quot;1. 処理開始&quot;);
+// heavyProcess(); // 5秒かかる処理（この間、画面が固まる）
+console.log(&quot;2. 処理完了&quot;);
+</code></pre>
+
+<h2 id="2">2. 非同期処理とは</h2>
+<p>非同期処理では、時間のかかる処理を「バックグラウンド」で実行し、その間も他の処理を続けることができます。</p>
+<pre class="codehilite"><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
+
+// setTimeout は非同期処理
+setTimeout(() =&gt; {
+  console.log(&quot;2. 1秒後の処理&quot;);
+}, 1000);
+
+console.log(&quot;3. 最後の処理&quot;);
+
+// 出力順序:
+// 1. 最初の処理
+// 3. 最後の処理
+// 2. 1秒後の処理（1秒後に出力）
+</code></pre>
+
+<p>「3. 最後の処理」が「2. 1秒後の処理」より先に出力されることに注目してください。<code>setTimeout</code>の中の処理は、1秒後に実行されるため、その間に次の処理が先に実行されます。</p>
+<h2 id="3-settimeout">3. setTimeoutを使った非同期処理</h2>
+<p><code>setTimeout</code>は、指定した時間（ミリ秒）後に処理を実行する関数です。</p>
+<pre class="codehilite"><code class="language-javascript">// 基本構文
+setTimeout(() =&gt; {
+  // 実行したい処理
+}, 待機時間（ミリ秒）);
+
+// 例: 2秒後にメッセージを表示
+setTimeout(() =&gt; {
+  console.log(&quot;2秒経過しました&quot;);
+}, 2000);
+</code></pre>
+
+<h3 id="settimeout">複数のsetTimeoutを使った例</h3>
+<pre class="codehilite"><code class="language-javascript">console.log(&quot;カウントダウン開始&quot;);
+
+setTimeout(() =&gt; {
+  console.log(&quot;3&quot;);
+}, 1000);
+
+setTimeout(() =&gt; {
+  console.log(&quot;2&quot;);
+}, 2000);
+
+setTimeout(() =&gt; {
+  console.log(&quot;1&quot;);
+}, 3000);
+
+setTimeout(() =&gt; {
+  console.log(&quot;スタート！&quot;);
+}, 4000);
+
+console.log(&quot;（カウントダウン中...）&quot;);
+
+// 出力順序:
+// カウントダウン開始
+// （カウントダウン中...）
+// 3（1秒後）
+// 2（2秒後）
+// 1（3秒後）
+// スタート！（4秒後）
+</code></pre>
+
+<h2 id="4">4. コールバック関数</h2>
+<p>非同期処理が完了した後に実行したい処理は、「コールバック関数」として渡します。</p>
+<pre class="codehilite"><code class="language-javascript">// コールバック関数を使った非同期処理
+function fetchData(callback) {
+  console.log(&quot;データ取得開始...&quot;);
+
+  setTimeout(() =&gt; {
+    const data = { name: &quot;太郎&quot;, age: 25 };
+    callback(data); // 処理完了後にコールバック関数を呼び出す
+  }, 2000);
+}
+
+// 使用例
+fetchData((result) =&gt; {
+  console.log(&quot;データ取得完了:&quot;, result);
+});
+
+console.log(&quot;他の処理を続行...&quot;);
+
+// 出力順序:
+// データ取得開始...
+// 他の処理を続行...
+// データ取得完了: { name: &quot;太郎&quot;, age: 25 }（2秒後）
+</code></pre>
+
+<h3 id="_4">コールバック地獄</h3>
+<p>コールバック関数をネストすると、コードが読みにくくなります。これを「コールバック地獄」と呼びます。</p>
+<pre class="codehilite"><code class="language-javascript">// コールバック地獄の例（読みにくい）
+fetchUser((user) =&gt; {
+  fetchPosts(user.id, (posts) =&gt; {
+    fetchComments(posts[0].id, (comments) =&gt; {
+      fetchLikes(comments[0].id, (likes) =&gt; {
+        console.log(&quot;いいね数:&quot;, likes.length);
+      });
+    });
+  });
+});
+</code></pre>
+
+<p>この問題を解決するために、次のセクションで学ぶ「Promise」が導入されました。</p>
+<h2 id="5">5. 同期処理と非同期処理の比較</h2>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>同期処理</th>
+<th>非同期処理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>実行順序</td>
+<td>上から下へ順番</td>
+<td>完了順に実行</td>
+</tr>
+<tr>
+<td>待機</td>
+<td>前の処理が完了するまで待つ</td>
+<td>待たずに次の処理へ進む</td>
+</tr>
+<tr>
+<td>画面の応答性</td>
+<td>重い処理中は固まる</td>
+<td>重い処理中も操作可能</td>
+</tr>
+<tr>
+<td>主な用途</td>
+<td>計算、変数操作など</td>
+<td>API通信、タイマー、ファイル操作など</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">✨ まとめ</h2>
+<p>同期処理はコードが順番に実行されるのに対し、非同期処理は時間のかかる処理をバックグラウンドで実行しながら、他の処理を続けることができます。<code>setTimeout</code>やコールバック関数を使って非同期処理を実現できますが、コールバックのネストが深くなると読みにくくなります。</p>
+<p>次のセクションでは、この問題を解決する「Promise」について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter01_非同期処理の基礎_5-1-1: このチュートリアルで学ぶこと.html" class="prev">このチュートリアルで学ぶこと</a>
+<a href="tutorial05_JavaScript_応用と非同期処理_chapter01_非同期処理の基礎_5-1-3: Promiseの基本.html" class="next">Promiseの基本</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

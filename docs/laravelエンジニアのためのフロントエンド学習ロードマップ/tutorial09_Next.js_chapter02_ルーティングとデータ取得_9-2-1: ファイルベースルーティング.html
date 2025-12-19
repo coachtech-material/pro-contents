@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ファイルベースルーティング | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得.html">Chapter 2: ルーティングとデータ取得</a><span>></span>ファイルベースルーティング</div>
+                    <div class="section-content">
+<h1 id="9-2-1">9-2-1: ファイルベースルーティング</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.js App Routerのファイルベースルーティングの基本的な仕組みを理解する</li>
+<li>フォルダ構造がどのようにURLパスに対応するかを学ぶ</li>
+<li>ルートを公開するために必要な<code>page.tsx</code>ファイルの役割を理解する</li>
+<li>ネストされたルート（Nested Routes）を作成する方法を習得する</li>
+<li>ルートセグメントを整理するためのルートグループ（Route Groups）について学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Next.jsの最も強力で直感的な機能の一つが、<strong>ファイルベースルーティング</strong>です。これは、アプリケーションのURL構造が、ファイルシステムのフォルダ構造に直接マッピングされるという考え方です。</p>
+<p>Laravelのようなフレームワークでは、<code>routes/web.php</code>のようなファイルにルート定義を明示的に記述する必要がありました。</p>
+<pre class="codehilite"><code class="language-php">// Laravelのルート定義例
+Route::get(&quot;/dashboard&quot;, [DashboardController::class, &quot;index&quot;]);
+Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
+</code></pre>
+
+<p>一方、Next.jsでは、<code>app</code>ディレクトリ内にフォルダを作成するだけで、自動的にルートが生成されます。これにより、ルート定義ファイルを見なくても、フォルダ構造を見るだけでアプリケーション全体のURL構造を把握することができます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="_4">🔑 基本的な考え方</h3>
+<p>App Routerでは、<code>app</code>ディレクトリ内の<strong>フォルダ</strong>を使ってURLのセグメントを定義します。そして、そのフォルダ内に<code>page.tsx</code>（または<code>.js</code>, <code>.jsx</code>）という名前のファイルを作成することで、そのURLパスが公開され、アクセス可能になります。</p>
+<ul>
+<li><strong>フォルダ</strong>: URLのパスを定義します。</li>
+<li><strong><code>page.tsx</code></strong>: そのパスにアクセスしたときに表示されるUIを定義するReactコンポーネントです。</li>
+</ul>
+<h4 id="_5">例：</h4>
+<ul>
+<li><code>app/page.tsx</code> → <code>/</code></li>
+<li><code>app/dashboard/page.tsx</code> → <code>/dashboard</code></li>
+<li><code>app/dashboard/settings/page.tsx</code> → <code>/dashboard/settings</code></li>
+</ul>
+<p><code>page.tsx</code>ファイルがないフォルダは、それ自体は公開されたルートにはならず、単にURLセグメントを構成するための中間フォルダとして機能します。</p>
+<h3 id="url">フォルダ構造とURLのマッピング</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ファイルシステムのパス</th>
+<th style="text-align: left;">対応するURLパス</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>app/page.tsx</code></td>
+<td style="text-align: left;"><code>/</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>app/about/page.tsx</code></td>
+<td style="text-align: left;"><code>/about</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>app/blog/page.tsx</code></td>
+<td style="text-align: left;"><code>/blog</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>app/blog/2024/first-post/page.tsx</code></td>
+<td style="text-align: left;"><code>/blog/2024/first-post</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nested-routes">ネストされたルート (Nested Routes)</h3>
+<p>フォルダをネストさせることで、階層的なルートを簡単に作成できます。例えば、ブログ機能を作成する場合を考えてみましょう。</p>
+<pre class="codehilite"><code>app/
+├── blog/                  # /blog セグメント
+│   ├── page.tsx            # /blog のページ
+│   ├── layout.tsx          # /blog とその子ルートに適用されるレイアウト
+│   └── [slug]/             # /blog/:slug の動的セグメント (次のセクションで解説)
+│       └── page.tsx        # /blog/some-post のページ
+└── page.tsx                # / (ルート) のページ
+</code></pre>
+
+<p>この構造では、<code>/blog</code>というパスと、その配下に個別のブログ記事ページ（例: <code>/blog/my-first-post</code>）が存在することを示しています。</p>
+<h3 id="_6">レイアウトとの連携</h3>
+<p>ファイルベースルーティングは、<code>layout.tsx</code>と密接に連携します。特定のフォルダ内に<code>layout.tsx</code>を配置すると、そのレイアウトはそのフォルダ内の<code>page.tsx</code>と、すべての<strong>子孫ルート</strong>に適用されます。</p>
+<p>上記の例では、<code>app/blog/layout.tsx</code>は<code>/blog</code>ページと<code>/blog/[slug]</code>ページの両方に適用され、共通のヘッダーやサイドバーなどを提供できます。これにより、特定のセクションだけで共通のUIを簡単に実現できます。</p>
+<h3 id="route-groups">🗂️ ルートグループ (Route Groups)</h3>
+<p>URL構造に影響を与えずに、ルートセグメント（フォルダ）を整理したい場合があります。例えば、マーケティング関連のページ（<code>/about</code>, <code>/contact</code>）と、アプリケーション内のページ（<code>/dashboard</code>, <code>/settings</code>）をフォルダレベルで分けて管理したいが、URLにその管理用のフォルダ名（例: <code>/marketing/about</code>）は含めたくない、というケースです。</p>
+<p>このような場合、フォルダ名を括弧 <code>()</code> で囲むことで<strong>ルートグループ</strong>を作成できます。括弧で囲まれたフォルダ名はURLパスから完全に無視されます。</p>
+<h4 id="_7">例：</h4>
+<pre class="codehilite"><code>app/
+├── (marketing)/          # URLに影響しないグループ
+│   ├── about/
+│   │   └── page.tsx        # → /about
+│   └── contact/
+│       └── page.tsx        # → /contact
+├── (app)/
+│   ├── dashboard/
+│   │   └── page.tsx        # → /dashboard
+│   └── settings/
+│       └── page.tsx        # → /settings
+└── page.tsx
+</code></pre>
+
+<p>ルートグループは、特定のセクションごとに異なるレイアウトを適用したい場合にも非常に便利です。例えば、<code>(marketing)</code>グループのルートにのみ適用される<code>layout.tsx</code>を<code>(marketing)/layout.tsx</code>に配置できます。</p>
+<h2 id="_8">✨ まとめ</h2>
+<ul>
+<li>Next.js App Routerでは、<strong>フォルダ構造がそのままURL構造になる</strong>ファイルベースルーティングを採用している。</li>
+<li>各フォルダ内に<code>page.tsx</code>ファイルを作成することで、そのルートが公開され、UIが定義される。</li>
+<li>フォルダをネストさせることで、直感的に階層的なルートを構築できる。</li>
+<li>フォルダ名を括弧<code>()</code>で囲む<strong>ルートグループ</strong>を使うと、URLパスに影響を与えずにルートを整理したり、セクションごとに異なるレイアウトを適用したりできる。</li>
+<li>この仕組みにより、ルート定義が不要になり、アプリケーションの全体像が把握しやすくなる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial09_Next.js_chapter02_ルーティングとデータ取得_9-2-2: 動的ルーティング.html" class="next">動的ルーティング</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

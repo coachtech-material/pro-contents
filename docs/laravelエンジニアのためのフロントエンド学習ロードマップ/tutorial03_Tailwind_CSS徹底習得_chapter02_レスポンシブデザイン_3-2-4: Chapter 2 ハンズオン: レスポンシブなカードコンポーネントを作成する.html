@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 ハンズオン: レスポンシブなカードコンポーネントを作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン.html">Chapter 2: レスポンシブデザイン</a><span>></span>Chapter 2 ハンズオン: レスポンシブなカードコンポーネントを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-3-tailwind-css">Tutorial 3: Tailwind CSS 徹底習得</h1>
+<h2 id="chapter-2">Chapter 2: レスポンシブデザイン</h2>
+<h3 id="chapter-2_1">Chapter 2 ハンズオン: レスポンシブなカードレイアウトを作成する</h3>
+<p>🎯 <strong>このハンズオンで達成すること</strong></p>
+<ul>
+<li>モバイルファーストのアプローチに基づき、レスポンシブなカードコンポーネントを構築できるようになる。</li>
+<li>Flexboxとブレークポイントを組み合わせ、画面サイズに応じてカード内のレイアウトを変更できるようになる。</li>
+<li><code>grid</code>とブレークポイントを組み合わせ、カードを並べるグリッドレイアウトをレスポンシブにできるようになる。</li>
+</ul>
+<hr />
+<p>🖼️ <strong>完成イメージ</strong></p>
+<p>このハンズオンでは、以下のようなレスポンシブなカードレイアウトを作成します。</p>
+<ul>
+<li><strong>スマートフォン（モバイル）表示:</strong> カードの画像が上、テキストが下に配置された1列のレイアウト。</li>
+<li><strong>タブレット（<code>md</code>）以上での表示:</strong> 画面左に画像、右にテキストが配置された2カラムのレイアウト。カード自体は2列のグリッドで表示。</li>
+<li><strong>ノートPC（<code>lg</code>）以上での表示:</strong> カードは3列のグリッドで表示。</li>
+</ul>
+<p><em>ここにスクリーンショットを挿入: (1) スマホ画面で、画像とテキストが縦に並んだカードが1列で表示されている様子。 (2) タブレット画面で、画像とテキストが横に並んだカードが2列で表示されている様子。 (3) PC画面で、同じく横並びのカードが3列で表示されている様子。</em></p>
+<hr />
+<h3 id="_1">🧠 先輩エンジニアの思考プロセス</h3>
+<p>「レスポンシブなカード一覧を作ってください」と頼まれたとき、頭の中では以下のように「モバイルから」考え始めます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">手順</th>
+<th style="text-align: left;">思考プロセス</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. モバイルのカード構造 (HTML)</strong></td>
+<td style="text-align: left;">まずはスマホでの見た目を考える。画像が上で、その下にタイトルと説明文が来るのが自然だな。HTMLの骨格を作ろう。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. モバイルのカードスタイリング</strong></td>
+<td style="text-align: left;">カード全体に背景色、角丸、影を付けてカードらしくしよう。画像とテキストの間の余白も調整する。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. モバイルのグリッドレイアウト</strong></td>
+<td style="text-align: left;">スマホではカードは1列で縦に並べよう。<code>grid</code>と<code>grid-cols-1</code>を使う。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. タブレットでのカードレイアウト</strong></td>
+<td style="text-align: left;">次に<code>md</code>サイズ。画面が広くなったから、カードの中は画像とテキストを横並びにしよう。<code>md:flex</code>が使えそうだ。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5. タブレットでのグリッドレイアウト</strong></td>
+<td style="text-align: left;">カード自体も横に並べられるな。<code>md:grid-cols-2</code>で2列にしよう。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6. PCでのグリッドレイアウト</strong></td>
+<td style="text-align: left;">さらに広い<code>lg</code>サイズなら、<code>lg:grid-cols-3</code>で3列にすればもっと見やすいな。</td>
+</tr>
+</tbody>
+</table>
+<p>💡 <strong>ポイント:</strong> <strong>「コンポーネント単体（カードの中身）」と「コンポーネントの集合（カードの並び）」</strong>のレスポンシブ対応を、それぞれモバイルから順番に考えていくのがコツです。</p>
+<hr />
+<h3 id="step-by-step">🏃 実践: Step by Stepでカードレイアウトを作成しよう</h3>
+<p><code>tailwind-handson</code>プロジェクトの<code>src/index.html</code>を編集していきます。</p>
+<h4 id="step-1-html">Step 1: HTMLの基本構造（モバイルファースト）</h4>
+<p>まず、<code>&lt;body&gt;</code>タグの中身をすべて削除し、カード1つ分のHTML構造を記述します。この時点ではまだレスポンシブ対応は考えず、モバイルでの表示だけを意識します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
+
+  &lt;!-- カードコンテナ --&gt;
+  &lt;div class=&quot;max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
+    &lt;!-- カード画像 --&gt;
+    &lt;div&gt;
+      &lt;img class=&quot;w-full h-48 object-cover&quot; src=&quot;https://via.placeholder.com/400x250&quot; alt=&quot;Card Image&quot;&gt;
+    &lt;/div&gt;
+    &lt;!-- カード本文 --&gt;
+    &lt;div class=&quot;p-6&quot;&gt;
+      &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードのタイトル&lt;/h2&gt;
+      &lt;p class=&quot;text-gray-600 text-base&quot;&gt;
+        ここにカードの詳細な説明文が入ります。モバイルではこのように画像の下にテキストが表示されます。
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/body&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>max-w-sm mx-auto</code>: カードの最大幅を<code>sm</code>（Tailwindのサイズ単位）に制限し、中央に配置します。</li>
+<li><code>overflow-hidden</code>: カードの角丸に合わせて、中身（特に画像）がはみ出ないようにします。</li>
+<li><code>w-full h-48 object-cover</code>: 画像が親要素の幅いっぱいに広がり、高さは<code>h-48</code>に固定されます。<code>object-cover</code>は、アスペクト比を保ったまま要素を埋め尽くすように画像をリサイズしてくれます。</li>
+</ul>
+</li>
+</ul>
+<p>この時点でブラウザを見ると、モバイル表示を想定した縦積みのカードが1つ表示されます。</p>
+<h4 id="step-2">Step 2: カードレイアウトのレスポンシブ対応</h4>
+<p>次に、<code>md</code>ブレークポイント以上で、カード内のレイアウトが「画像が左、テキストが右」になるように変更します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- 変更前 --&gt;
+&lt;div class=&quot;max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
+
+&lt;!-- 変更後 --&gt;
+&lt;div class=&quot;max-w-sm md:max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex&quot;&gt;
+</code></pre>
+
+<p>カードの親コンテナに<code>md:flex</code>を追加し、最大幅も<code>md:max-w-2xl</code>に広げます。さらに、画像と本文のコンテナの幅を調整します。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
+
+  &lt;!-- カードコンテナ --&gt;
+  &lt;div class=&quot;max-w-sm md:max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex&quot;&gt;
+    &lt;!-- カード画像 --&gt;
+    &lt;div class=&quot;md:w-1/3&quot;&gt;
+      &lt;img class=&quot;w-full h-full object-cover&quot; src=&quot;https://via.placeholder.com/400x250&quot; alt=&quot;Card Image&quot;&gt;
+    &lt;/div&gt;
+    &lt;!-- カード本文 --&gt;
+    &lt;div class=&quot;p-6 md:w-2/3&quot;&gt;
+      &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードのタイトル&lt;/h2&gt;
+      &lt;p class=&quot;text-gray-600 text-base&quot;&gt;
+        ここにカードの詳細な説明文が入ります。モバイルではこのように画像の下にテキストが表示されます。
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/body&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>md:flex</code>: <code>md</code>以上でカードコンテナをFlexboxにします。</li>
+<li><code>md:w-1/3</code>: <code>md</code>以上で画像コンテナの幅を1/3にします。</li>
+<li><code>md:w-2/3</code>: <code>md</code>以上で本文コンテナの幅を2/3にします。</li>
+<li>画像の<code>h-48</code>を<code>h-full</code>に変更し、Flexアイテムとして高さいっぱいに広がるようにします。</li>
+</ul>
+</li>
+</ul>
+<p>ブラウザのウィンドウ幅を広げたり狭めたりして、768pxを境にカードのレイアウトが変わることを確認してください。</p>
+<h4 id="step-3">Step 3: グリッドレイアウトの作成とレスポンシブ対応</h4>
+<p>最後に、このカードを複数並べ、グリッドレイアウトをレスポンシブにします。</p>
+<p>まず、<code>&lt;body&gt;</code>タグの直下にグリッドコンテナを配置し、先ほど作ったカードのHTMLをその中にコピー＆ペーストして3つに増やします。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
+
+  &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6&quot;&gt;
+
+    &lt;!-- カード1 --&gt;
+    &lt;div class=&quot;max-w-sm md:max-w-none mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex md:flex-col&quot;&gt;
+      &lt;!-- カード画像 --&gt;
+      &lt;div class=&quot;md:h-48&quot;&gt;
+        &lt;img class=&quot;w-full h-full object-cover&quot; src=&quot;https://via.placeholder.com/400x250&quot; alt=&quot;Card Image&quot;&gt;
+      &lt;/div&gt;
+      &lt;!-- カード本文 --&gt;
+      &lt;div class=&quot;p-6 flex-1&quot;&gt;
+        &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードのタイトル 1&lt;/h2&gt;
+        &lt;p class=&quot;text-gray-600 text-base&quot;&gt;
+          ここにカードの詳細な説明文が入ります。
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- カード2 (カード1と同じ内容をコピー) --&gt;
+    &lt;!-- ... --&gt;
+
+    &lt;!-- カード3 (カード1と同じ内容をコピー) --&gt;
+    &lt;!-- ... --&gt;
+
+  &lt;/div&gt;
+
+&lt;/body&gt;
+</code></pre>
+
+<p>おや？少しレイアウトが崩れてしまいました。グリッドの子要素になったことで、カードのレイアウトを少し調整する必要があります。カードコンテナのクラスを以下のように修正します。</p>
+<ul>
+<li><code>max-w-sm md:max-w-2xl</code> → <code>w-full</code> (グリッドセルいっぱいに広がるように)</li>
+<li><code>md:flex</code> → <code>md:block</code> (カードの中は常に縦積みでOK)</li>
+</ul>
+<p>最終的なコードは以下のようになります。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+&lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
+  &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6&quot;&gt;
+    &lt;!-- カード1 --&gt;
+    &lt;div class=&quot;w-full bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
+      &lt;img class=&quot;w-full h-48 object-cover&quot; src=&quot;https://via.placeholder.com/400x250/8b5cf6/ffffff&quot; alt=&quot;Card 1&quot;&gt;
+      &lt;div class=&quot;p-6&quot;&gt;
+        &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードタイトル 1&lt;/h2&gt;
+        &lt;p class=&quot;text-gray-600 text-base&quot;&gt;モバイルでは1列、タブレットでは2列、PCでは3列で表示されます。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- カード2 --&gt;
+    &lt;div class=&quot;w-full bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
+      &lt;img class=&quot;w-full h-48 object-cover&quot; src=&quot;https://via.placeholder.com/400x250/ec4899/ffffff&quot; alt=&quot;Card 2&quot;&gt;
+      &lt;div class=&quot;p-6&quot;&gt;
+        &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードタイトル 2&lt;/h2&gt;
+        &lt;p class=&quot;text-gray-600 text-base&quot;&gt;ウィンドウ幅を変えて、レイアウトの変化を確認してください。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- カード3 --&gt;
+    &lt;div class=&quot;w-full bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
+      &lt;img class=&quot;w-full h-48 object-cover&quot; src=&quot;https://via.placeholder.com/400x250/10b981/ffffff&quot; alt=&quot;Card 3&quot;&gt;
+      &lt;div class=&quot;p-6&quot;&gt;
+        &lt;h2 class=&quot;text-xl font-bold text-gray-800 mb-2&quot;&gt;カードタイトル 3&lt;/h2&gt;
+        &lt;p class=&quot;text-gray-600 text-base&quot;&gt;モバイルファーストでスタイルを組み立てるのがコツです。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6</code>: グリッドコンテナ。画面幅に応じてカラム数を変更し、アイテム間の隙間を<code>gap-6</code>に設定します。</li>
+<li>カード自体のクラスはシンプルになりました。<code>w-full</code>でグリッドセルいっぱいに広がり、<code>md:flex</code>などのレスポンシブクラスは不要です。なぜなら、カードの中身は常に「画像が上、テキストが下」のままで、カード自体の並び方だけがレスポンシブに変化するからです。</li>
+</ul>
+</li>
+</ul>
+<p>ブラウザで確認し、ウィンドウ幅を変えながら、カードの列数が<code>1 -&gt; 2 -&gt; 3</code>と変化することを確認してください。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>モバイルファーストで、まず最小画面でのコンポーネントの見た目とレイアウトを完成させることが重要である。</li>
+<li>ブレークポイントプレフィックスを使い、画面が大きくなるにつれてスタイルを「追加」または「上書き」していく。</li>
+<li>「コンポーネント単体」のレスポンシブと、「コンポーネントの集合（グリッドなど）」のレスポンシブを分けて考えると、複雑なレイアウトも整理しやすい。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] なぜ最初のステップで<code>md:flex</code>を使ったカードレイアウトが、グリッドの子要素になったときにうまく機能しなかったのでしょうか？（ヒント: グリッドとFlexboxの特性の違い）</li>
+<li>[ ] このハンズオンで作成したカードの画像とテキストの比率を、<code>md</code>サイズで「画像が1/4、テキストが3/4」に変更するには、どのクラスを修正すればよいですか？</li>
+<li>[ ] もし4列目のブレークポイント<code>xl:grid-cols-4</code>を追加した場合、どのような画面サイズでレイアウトが変化しますか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン_3-2-3: 実務でよく使うレスポンシブパターン.html" class="prev">実務でよく使うレスポンシブパターン</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

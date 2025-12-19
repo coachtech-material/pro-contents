@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3 ハンズオン: カウンターアプリを作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html" class="current">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial07_React入門.html">Tutorial 7: React入門</a><span>></span><a href="tutorial07_React入門_chapter03_Stateによる状態管理.html">Chapter 3: Stateによる状態管理</a><span>></span>Chapter 3 ハンズオン: カウンターアプリを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-7-react">Tutorial 7: React基礎</h1>
+<h2 id="chapter-3-state">Chapter 3: Stateによる状態管理</h2>
+<h3 id="chapter-3-todo">Chapter 3 ハンズオン: 簡単なTODOリストアプリの作成</h3>
+<p>🎯 <strong>このハンズオンで達成すること</strong></p>
+<ul>
+<li><code>useState</code>を使って、インタラクティブなコンポーネントを作成できるようになる。</li>
+<li>フォーム入力とStateを連携させる<strong>制御コンポーネント</strong>を実装できるようになる。</li>
+<li>配列のStateを、<strong>イミュータブル</strong>に追加・削除・更新する方法を実践で習得する。</li>
+<li>イベントハンドリング、条件付きレンダリング、リストレンダリング（<code>map</code>）といった、これまでに学んだ知識を総動員して、一つのアプリケーションを完成させる。</li>
+</ul>
+<hr />
+<p>🖼️ <strong>完成イメージ</strong></p>
+<p>入力フォームにテキストを入れて「追加」ボタンを押すと、TODOリストに項目が追加されます。各TODO項目の「削除」ボタンを押すと、その項目がリストから削除されます。</p>
+<p><img alt="完成イメージ" src="https://placehold.jp/800x600.png?text=TODOリスト%0A%0A[____テキスト入力欄____] [追加]%0A%0A・Reactを学ぶ [削除]%0A・寝る [削除]%0A・買い物に行く [削除]" /></p>
+<hr />
+<h3 id="_1">🧠 先輩エンジニアの思考プロセス</h3>
+<p>「簡単なTODOアプリ作って」と言われたら、こう考える。</p>
+<ol>
+<li><strong>コンポーネント設計:</strong> まずはUIを部品に分解する。<ul>
+<li>アプリケーション全体を管理する<code>TodoApp</code>コンポーネントが必要だな。</li>
+<li>TODOを入力するフォーム部分は<code>TodoForm</code>コンポーネントとして切り出せそうだ。</li>
+<li>TODOの一覧を表示する部分は<code>TodoList</code>コンポーネントにしよう。</li>
+<li><code>TodoList</code>の中の各項目は、<code>TodoItem</code>コンポーネントとして独立させると、削除ボタンのロジックをカプセル化できて綺麗になりそうだ。</li>
+</ul>
+</li>
+<li><strong>Stateの置き場所:</strong> 次に、アプリケーションの状態（データ）は何か、そしてそれはどこに置くべきか考える。<ul>
+<li>このアプリの最も重要なデータは「TODOのリスト（配列）」だ。このリストは<code>TodoForm</code>（追加のため）と<code>TodoList</code>（表示・削除のため）の両方からアクセスする必要がある。ということは、これらの親である<code>TodoApp</code>コンポーネントにStateとして置くのが正解だ（<strong>リフティング・ステート・アップ</strong>）。</li>
+<li>入力フォームの現在のテキストもStateで管理する必要がある。これは<code>TodoForm</code>コンポーネント内だけで完結するから、<code>TodoForm</code>自身のStateとして持てばいい。</li>
+</ul>
+</li>
+<li><strong>データフロー（Propsの設計）:</strong> Stateを親に置いたので、子にどうやって情報を渡すか、子からどうやって親のStateを変更してもらうか決める。<ul>
+<li><code>TodoApp</code> → <code>TodoList</code>: TODOリストの配列 (<code>todos</code>) をPropsで渡す。</li>
+<li><code>TodoApp</code> → <code>TodoForm</code>: TODOを追加する関数 (<code>addTodo</code>) をPropsで渡す。</li>
+<li><code>TodoApp</code> → <code>TodoList</code> → <code>TodoItem</code>: TODOを削除する関数 (<code>deleteTodo</code>) と、個々のTODOの情報 (<code>todo</code>) をPropsで渡す。</li>
+</ul>
+</li>
+<li><strong>実装（ボトムアップ）:</strong> 小さな部品から作っていくのが確実だ。<ul>
+<li><code>TodoItem.tsx</code>: <code>todo</code>と<code>onDelete</code>をPropsで受け取り、TODOのテキストと削除ボタンを表示する。ボタンが押されたら<code>onDelete(todo.id)</code>を呼ぶ。</li>
+<li><code>TodoList.tsx</code>: <code>todos</code>と<code>onDelete</code>をPropsで受け取り、<code>todos.map()</code>で各TODOを<code>TodoItem</code>コンポーネントに変換してリスト表示する。</li>
+<li><code>TodoForm.tsx</code>: <code>onAdd</code>をPropsで受け取る。入力テキスト用の<code>text</code> Stateを持つ。フォームが送信されたら、<code>onAdd(text)</code>を呼び出し、<code>text</code> Stateを空にする。</li>
+<li><code>TodoApp.tsx</code>: <code>todos</code> Stateと、<code>addTodo</code>, <code>deleteTodo</code>関数を定義する。そして、<code>TodoForm</code>と<code>TodoList</code>を配置し、必要なPropsを渡す。これで完成だ。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="step-by-steptodo">🏃 実践: Step by StepでTODOアプリを作ろう</h3>
+<h4 id="step-1">Step 1: ファイルの準備</h4>
+<p><code>src/components</code>ディレクトリに、以下の4つのファイルを新規作成します。</p>
+<ul>
+<li><code>TodoApp.tsx</code> (アプリケーション全体)</li>
+<li><code>TodoForm.tsx</code> (入力フォーム)</li>
+<li><code>TodoList.tsx</code> (TODOリスト)</li>
+<li><code>TodoItem.tsx</code> (TODOリストの各項目)</li>
+</ul>
+<p>そして、<code>src/App.tsx</code>の中身を、<code>TodoApp</code>コンポーネントを呼び出すだけのシンプルなものに書き換えます。</p>
+<pre class="codehilite"><code class="language-tsx">// src/App.tsx
+import TodoApp from &quot;./components/TodoApp&quot;;
+
+function App() {
+  return &lt;TodoApp /&gt;;
+}
+
+export default App;
+</code></pre>
+
+<h4 id="step-2-todoitem">Step 2: <code>TodoItem</code>コンポーネントの実装</h4>
+<p>まずは一番小さい部品から作ります。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/TodoItem.tsx
+
+// このコンポーネントが受け取るPropsの型
+type TodoItemProps = {
+  todo: { id: number; text: string };
+  onDelete: (id: number) =&gt; void; // idを受け取り何も返さない関数の型
+};
+
+function TodoItem({ todo, onDelete }: TodoItemProps) {
+  return (
+    &lt;li&gt;
+      {todo.text}
+      {/* ボタンクリックで、親から渡されたonDelete関数を呼び出す */}
+      &lt;button onClick={() =&gt; onDelete(todo.id)} style={{ marginLeft: 8 }}&gt;
+        削除
+      &lt;/button&gt;
+    &lt;/li&gt;
+  );
+}
+
+export default TodoItem;
+</code></pre>
+
+<h4 id="step-3-todolist">Step 3: <code>TodoList</code>コンポーネントの実装</h4>
+<p>次に、<code>TodoItem</code>をリスト表示するコンポーネントです。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/TodoList.tsx
+import TodoItem from &quot;./TodoItem&quot;;
+
+// このコンポーネントが受け取るPropsの型
+type TodoListProps = {
+  todos: { id: number; text: string }[]; // TODOオブジェクトの配列
+  onDelete: (id: number) =&gt; void;
+};
+
+function TodoList({ todos, onDelete }: TodoListProps) {
+  return (
+    &lt;ul&gt;
+      {/* 配列をmapでループ処理し、各要素をTodoItemコンポーネントに変換 */}
+      {todos.map((todo) =&gt; (
+        // リストレンダリングでは、各要素に一意な`key` propsを渡す必要がある
+        &lt;TodoItem key={todo.id} todo={todo} onDelete={onDelete} /&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+export default TodoList;
+</code></pre>
+
+<ul>
+<li><strong><code>key={todo.id}</code></strong>: Reactがリストの各項目を効率的に識別・更新するために、配列を<code>map</code>でレンダリングする際には、各要素にユニークな<code>key</code>というPropsを渡す必要があります。通常は、データが持つIDを使います。</li>
+</ul>
+<h4 id="step-4-todoform">Step 4: <code>TodoForm</code>コンポーネントの実装</h4>
+<p>TODOを追加するためのフォームです。制御コンポーネントのパターンを使います。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/TodoForm.tsx
+import { useState } from &quot;react&quot;;
+
+type TodoFormProps = {
+  onAdd: (text: string) =&gt; void;
+};
+
+function TodoForm({ onAdd }: TodoFormProps) {
+  // フォームの入力値を管理するState
+  const [text, setText] = useState(&quot;&quot;);
+
+  const handleSubmit = (e: React.FormEvent) =&gt; {
+    e.preventDefault(); // フォーム送信によるページリロードを防ぐ
+    if (!text.trim()) return; // 空文字の場合は何もしない
+
+    onAdd(text); // 親から渡されたonAdd関数を呼び出す
+    setText(&quot;&quot;); // 入力フォームを空にする
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        type=&quot;text&quot; 
+        value={text} 
+        onChange={(e) =&gt; setText(e.target.value)} 
+      /&gt;
+      &lt;button type=&quot;submit&quot;&gt;追加&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+export default TodoForm;
+</code></pre>
+
+<h4 id="step-5-todoapp">Step 5: <code>TodoApp</code>コンポーネントで全体を組み立てる</h4>
+<p>最後に、すべての部品をまとめ、Stateとロジックを実装します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/TodoApp.tsx
+import { useState } from &quot;react&quot;;
+import TodoList from &quot;./TodoList&quot;;
+import TodoForm from &quot;./TodoForm&quot;;
+
+// TODOの型を定義しておくと便利
+type Todo = { id: number; text: string };
+
+function TodoApp() {
+  // アプリケーションのメインState
+  const [todos, setTodos] = useState&lt;Todo[]&gt;([
+    { id: 1, text: &quot;Reactを学ぶ&quot; },
+    { id: 2, text: &quot;寝る&quot; },
+  ]);
+
+  // TODOを追加する関数
+  const addTodo = (text: string) =&gt; {
+    const newTodo = { id: Date.now(), text };
+    // イミュータブルに追加
+    setTodos([...todos, newTodo]);
+  };
+
+  // TODOを削除する関数
+  const deleteTodo = (id: number) =&gt; {
+    // イミュータブルに削除
+    setTodos(todos.filter((todo) =&gt; todo.id !== id));
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;TODOリスト&lt;/h1&gt;
+      {/* State更新用の関数をPropsとして渡す */}
+      &lt;TodoForm onAdd={addTodo} /&gt;
+      &lt;TodoList todos={todos} onDelete={deleteTodo} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default TodoApp;
+</code></pre>
+
+<ul>
+<li><strong><code>useState&lt;Todo[]&gt;</code></strong>: <code>useState</code>にジェネリクスで型を渡すことで、<code>todos</code>が<code>Todo</code>の配列であることを明示できます。</li>
+</ul>
+<p>これでTODOアプリの完成です！ブラウザで動作を確認してみましょう。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>複数のコンポーネントで共有されるStateは、それらの最も近い共通の親に配置する（<strong>リフティング・ステート・アップ</strong>）。</li>
+<li>親は、Stateの値をPropsとして子に渡し、Stateを更新する関数もPropsとして子に渡す。</li>
+<li>子は、受け取った関数をイベントハンドラ内で呼び出すことで、親のStateを間接的に更新する。</li>
+<li>配列を<code>map</code>でレンダリングする際は、パフォーマンスのためにユニークな<code>key</code> Propsを渡す必要がある。</li>
+<li>配列のStateの追加・削除は、スプレッド構文や<code>filter</code>メソッドを使ってイミュータブルに行う。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial07_React入門_chapter03_Stateによる状態管理_7-3-3: オブジェクトと配列のState管理.html" class="prev">オブジェクトと配列のState管理</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

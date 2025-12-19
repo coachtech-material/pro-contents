@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexboxの基本概念 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト.html">Chapter 3: Flexboxによるレイアウト</a><span>></span>Flexboxの基本概念</div>
+                    <div class="section-content">
+<h1 id="2-3-1-flexbox">2-3-1: Flexboxの基本概念</h1>
+<h2 id="chapter-3-flexbox">Chapter 3: Flexboxによるレイアウト</h2>
+<h3 id="section-1-flexbox">Section 1: Flexboxの基本概念</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、CSSレイアウトの強力なツール「Flexbox」の基本的な仕組みを学びます。Flexboxを使うことで、これまで難しかった「要素の横並び」や「中央揃え」が、驚くほど簡単に実現できることを体感します。</p>
+<p><em>ここにスクリーンショットを挿入: 3つのボックスが綺麗に横に並び、均等な間隔で配置されている様子</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、モダンCSSレイアウトの主流であるFlexboxの基本的な概念と使い方を学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>Flexboxが解決する従来のレイアウトの課題を説明できるようになる。</li>
+<li>Flexboxの基本構造である「親要素（Flexコンテナ）」と「子要素（Flexアイテム）」の関係を理解する。</li>
+<li><code>display: flex;</code> を使って、要素を横並びに配置できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>これまで学んだCSSでは、要素を縦に並べるのは簡単でしたが、横に並べるのは一苦労でした（<code>float</code>や<code>inline-block</code>といった古い手法には多くの問題がありました）。特に、高さの違う要素を綺麗に揃えたり、均等な間隔で配置したりするのは非常に困難でした。Flexboxは、こうしたレイアウトの課題を解決するために登場した、非常に強力で柔軟なレイアウトモジュールです。現代のWeb制作において、Flexboxを使いこなすことは必須のスキルと言えます。</p>
+<h3 id="_2">概念の説明</h3>
+<p>Flexboxを理解する鍵は、<strong>「親要素」</strong>と<strong>「子要素」</strong>という2つの役割を意識することです。</p>
+<ol>
+<li>
+<p><strong>親要素 (Flex Container / フレックスコンテナ):</strong></p>
+<ul>
+<li>レイアウトをコントロールしたい要素たちの「親」となる要素です。</li>
+<li>この親要素に <code>display: flex;</code> を指定することで、Flexboxの機能が有効になります。</li>
+<li>このコンテナが、中のアイテムをどのように並べるかの「司令塔」の役割を果たします。</li>
+</ul>
+</li>
+<li>
+<p><strong>子要素 (Flex Item / フレックスアイテム):</strong></p>
+<ul>
+<li>Flexコンテナの<strong>直下</strong>にある子要素のことです。</li>
+<li>これらのアイテムが、コンテナの指示に従って並べられます。</li>
+<li>孫要素以降にはFlexboxの能力は直接影響しません。</li>
+</ul>
+</li>
+</ol>
+<p><strong>図解：Flexboxの親子関係</strong></p>
+<pre class="codehilite"><code class="language-html">&lt;div class=&quot;flex-container&quot;&gt; &lt;!-- 親要素 --&gt;
+  &lt;div class=&quot;flex-item&quot;&gt;アイテム1&lt;/div&gt; &lt;!-- 子要素 --&gt;
+  &lt;div class=&quot;flex-item&quot;&gt;アイテム2&lt;/div&gt; &lt;!-- 子要素 --&gt;
+  &lt;div class=&quot;flex-item&quot;&gt;アイテム3&lt;/div&gt; &lt;!-- 子要素 --&gt;
+&lt;/div&gt;
+</code></pre>
+
+<pre class="codehilite"><code class="language-css">.flex-container {
+  display: flex; /* この一行で魔法が始まる！ */
+}
+</code></pre>
+
+<p>たったこれだけで、通常は縦に並ぶはずの<code>div</code>要素（ブロックレベル要素）が、綺麗に横に並びます。これがFlexboxの基本です。</p>
+<h4 id="main-axis-cross-axis">主軸 (Main Axis) と 交差軸 (Cross Axis)</h4>
+<p>Flexboxには「軸」という重要な概念があります。</p>
+<ul>
+<li><strong>主軸 (Main Axis):</strong> Flexアイテムが並ぶ方向の軸です。デフォルトでは<strong>水平方向（左から右）</strong>です。</li>
+<li><strong>交差軸 (Cross Axis):</strong> 主軸に直交する軸です。デフォルトでは<strong>垂直方向（上から下）</strong>です。</li>
+</ul>
+<p><em>ここに主軸と交差軸を示す図を挿入: 横に並んだアイテムに対して、水平方向の矢印が「主軸」、垂直方向の矢印が「交差軸」と示されている</em></p>
+<p>なぜこの「軸」が重要かというと、Flexboxのプロパティは「主軸方向の揃え」と「交差軸方向の揃え」を別々にコントロールするからです。この後のセクションで学ぶ<code>justify-content</code>は主軸方向、<code>align-items</code>は交差軸方向の揃えをそれぞれ担当します。</p>
+<h3 id="_3">詳細解説</h3>
+<p>実際に<code>display: flex;</code>を指定すると、何が起こるのかを見てみましょう。</p>
+<ul>
+<li>
+<p><strong>HTML:</strong><br />
+<code>html
+    &lt;div class="container"&gt;
+      &lt;div&gt;アイテム1&lt;/div&gt;
+      &lt;div&gt;アイテム2&lt;/div&gt;
+      &lt;div&gt;アイテム3&lt;/div&gt;
+    &lt;/div&gt;</code></p>
+</li>
+<li>
+<p><strong>CSS (Flexbox適用前):</strong><br />
+<code>css
+    .container div {
+      background-color: lightblue;
+      border: 1px solid blue;
+      padding: 10px;
+    }</code></p>
+<ul>
+<li><strong>表示結果:</strong> アイテム1, 2, 3がそれぞれ改行され、縦に並びます。</li>
+</ul>
+</li>
+<li>
+<p><strong>CSS (Flexbox適用後):</strong><br />
+<code>css
+    .container {
+      display: flex; /* 親要素にこれを追加 */
+    }
+    .container div {
+      background-color: lightblue;
+      border: 1px solid blue;
+      padding: 10px;
+    }</code></p>
+<ul>
+<li><strong>表示結果:</strong> アイテム1, 2, 3が改行されず、横に並びます。</li>
+</ul>
+</li>
+</ul>
+<h4 id="flex-direction"><code>flex-direction</code>プロパティ</h4>
+<p>アイテムを並べる主軸の方向は、<code>flex-direction</code>プロパティで変更することができます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">プロパティ値</th>
+<th style="text-align: left;">説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>row</code> (デフォルト)</td>
+<td style="text-align: left;">左から右へ水平に並べる</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>row-reverse</code></td>
+<td style="text-align: left;">右から左へ水平に並べる</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>column</code></td>
+<td style="text-align: left;">上から下へ垂直に並べる</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>column-reverse</code></td>
+<td style="text-align: left;">下から上へ垂直に並べる</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>コード例 (<code>column</code>):</strong><br />
+<code>css
+    .container {
+      display: flex;
+      flex-direction: column; /* 主軸を垂直方向に */
+    }</code><ul>
+<li><strong>表示結果:</strong> アイテムは縦に並びます（通常のブロック要素の並び方と同じに見えますが、Flexboxのコンテキストで制御されている点が異なります）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>Flexboxが効くのは直下の子だけ:</strong> Flexコンテナの孫要素には、Flexboxの整列能力は直接働きません。もし孫要素もFlexboxでレイアウトしたい場合は、その親（Flexコンテナの子）に<code>display: flex;</code>を指定して、入れ子にする必要があります。</li>
+<li><strong>インライン要素もFlexアイテムに:</strong> <code>span</code>などのインライン要素も、Flexコンテナの直下にあればFlexアイテムとなり、ブロックレベル要素のように振る舞います。</li>
+</ul>
+<h3 id="_4">✨ まとめ</h3>
+<ul>
+<li>Flexboxは、要素を柔軟に整列させるためのCSSレイアウトモジュールである。</li>
+<li>レイアウトしたい要素の<strong>親要素</strong>に<code>display: flex;</code>を指定して「Flexコンテナ」にする。</li>
+<li>Flexコンテナの<strong>直下の子要素</strong>は「Flexアイテム」となり、デフォルトで横に並ぶ。</li>
+<li>Flexboxには「主軸（アイテムが並ぶ方向）」と「交差軸（それに直交する方向）」という概念がある。</li>
+<li><code>flex-direction</code>プロパティで、主軸の方向（並ぶ方向）を変更できる。</li>
+</ul>
+<h3 id="_5">📝 学習のポイント</h3>
+<ul>
+<li>[ ] <code>display: flex;</code>は、レイアウトしたい要素自身と親要素のどちらに指定するか説明できるか？</li>
+<li>[ ] Flexコンテナの直下の子要素のことを何と呼ぶか？</li>
+<li>[ ] デフォルトの主軸と交差軸は、それぞれどの方向か説明できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial02_HTML_CSS基礎_chapter03_Flexboxによるレイアウト_2-3-2: justify-contentとalign-itemsの使い分け.html" class="next">justify-contentとalign-itemsの使い分け</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

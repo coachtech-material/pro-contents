@@ -12,12 +12,21 @@ from html import escape
 
 # パス設定
 BASE_DIR = Path("/home/ubuntu/pro-contents")
-CONTENT_DIR = BASE_DIR / "laravelエンジニアのためのフロントエンド学習ロードマップ"
 OUTPUT_DIR = BASE_DIR / "docs"
 
 # サイト情報
-SITE_TITLE = "Laravelエンジニアのためのフロントエンド学習ロードマップ"
-SITE_DESCRIPTION = "PHP/Laravelエンジニアがフロントエンド開発を習得するための教材"
+SITE_TITLE = "pro-contents"
+SITE_DESCRIPTION = "プログラミング教材コンテンツ"
+
+# コンテンツ情報（リポジトリ内のディレクトリ）
+CONTENTS_INFO = {
+    "laravelエンジニアのためのフロントエンド学習ロードマップ": {
+        "order": 1,
+        "title": "Laravelエンジニアのためのフロントエンド学習ロードマップ",
+        "description": "PHP/Laravelエンジニアがフロントエンド開発（JavaScript/TypeScript/React/Next.js）を習得し、2年目レベルのスキルを身につけるための教材です。",
+        "time": "700時間"
+    }
+}
 
 # チュートリアル情報（順序と説明）
 TUTORIAL_INFO = {
@@ -96,7 +105,7 @@ TUTORIAL_INFO = {
 }
 
 
-def get_html_template(title, content, breadcrumb, sidebar_html):
+def get_html_template(title, content, breadcrumb, sidebar_html, css_path="style.css"):
     """HTMLテンプレートを生成"""
     return f'''<!DOCTYPE html>
 <html lang="ja">
@@ -105,7 +114,7 @@ def get_html_template(title, content, breadcrumb, sidebar_html):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{escape(title)} | {SITE_TITLE}</title>
     <meta name="description" content="{SITE_DESCRIPTION}">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{css_path}">
 </head>
 <body>
     <div id="outer">
@@ -135,8 +144,20 @@ def get_html_template(title, content, breadcrumb, sidebar_html):
 '''
 
 
-def generate_sidebar(tutorials, current_tutorial=None):
-    """サイドバーHTMLを生成"""
+def generate_sidebar_top(contents):
+    """トップページ用サイドバーHTMLを生成"""
+    html = '<div class="side-title">コンテンツ一覧</div>\n'
+    html += '<div class="side"><ul>\n'
+    
+    for content_dir, info in sorted(contents.items(), key=lambda x: x[1]["order"]):
+        html += f'<li><a href="{content_dir}/index.html">{info["title"]}</a></li>\n'
+    
+    html += '</ul></div>\n'
+    return html
+
+
+def generate_sidebar_tutorials(tutorials, current_tutorial=None):
+    """チュートリアル用サイドバーHTMLを生成"""
     html = '<div class="side-title">チュートリアル一覧</div>\n'
     html += '<div class="side"><ul>\n'
     
@@ -146,6 +167,16 @@ def generate_sidebar(tutorials, current_tutorial=None):
     
     html += '</ul></div>\n'
     return html
+
+
+def get_tutorials(content_path):
+    """コンテンツ内のチュートリアルを取得"""
+    tutorials = {}
+    if content_path.exists():
+        for tutorial_dir, info in TUTORIAL_INFO.items():
+            if (content_path / tutorial_dir).exists():
+                tutorials[tutorial_dir] = info
+    return tutorials
 
 
 def get_chapters(tutorial_path):
@@ -208,14 +239,46 @@ def md_to_html(md_content):
     return md.convert(md_content)
 
 
-def generate_index_page(tutorials):
-    """トップページ（チュートリアル一覧）を生成"""
-    content = '<h2>チュートリアル一覧</h2>\n'
-    content += '<p>このロードマップは、PHP/Laravelエンジニアがフロントエンド開発（JavaScript/TypeScript/React/Next.js）を習得し、2年目レベルのスキルを身につけるための教材です。</p>\n'
+def generate_top_index_page(contents):
+    """トップページ（コンテンツ一覧）を生成"""
+    content = '<h2>コンテンツ一覧</h2>\n'
+    content += '<p>プログラミング学習のための教材コンテンツです。</p>\n'
     content += '<div class="tutorial-list">\n'
     
+    for content_dir, info in sorted(contents.items(), key=lambda x: x[1]["order"]):
+        content_path = BASE_DIR / content_dir
+        tutorials = get_tutorials(content_path)
+        tutorial_count = len(tutorials)
+        
+        content += f'''<div class="tutorial-card">
+    <h3><a href="{content_dir}/index.html">{info["title"]}</a></h3>
+    <div class="meta">学習時間: {info["time"]} | {tutorial_count}チュートリアル</div>
+    <div class="description">{info["description"]}</div>
+</div>
+'''
+    
+    content += '</div>\n'
+    
+    breadcrumb = '<div class="breadcrumb"><a href="index.html">ホーム</a></div>'
+    sidebar = generate_sidebar_top(contents)
+    
+    html = get_html_template("ホーム", content, breadcrumb, sidebar)
+    
+    output_path = OUTPUT_DIR / "index.html"
+    output_path.write_text(html, encoding="utf-8")
+    print(f"Generated: {output_path}")
+
+
+def generate_content_index_page(content_dir, content_info, tutorials):
+    """コンテンツのトップページ（チュートリアル一覧）を生成"""
+    content = f'<h2>{content_info["title"]}</h2>\n'
+    content += f'<p>{content_info["description"]}</p>\n'
+    content += '<div class="tutorial-list">\n'
+    
+    content_path = BASE_DIR / content_dir
+    
     for tutorial_dir, info in sorted(tutorials.items(), key=lambda x: x[1]["order"]):
-        tutorial_path = CONTENT_DIR / tutorial_dir
+        tutorial_path = content_path / tutorial_dir
         chapters = get_chapters(tutorial_path)
         chapter_count = len(chapters)
         
@@ -228,24 +291,29 @@ def generate_index_page(tutorials):
     
     content += '</div>\n'
     
-    breadcrumb = '<div class="breadcrumb"><a href="index.html">ホーム</a></div>'
-    sidebar = generate_sidebar(tutorials)
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span>{content_info["title"]}</div>'
+    sidebar = generate_sidebar_tutorials(tutorials)
     
-    html = get_html_template("ホーム", content, breadcrumb, sidebar)
+    html = get_html_template(content_info["title"], content, breadcrumb, sidebar, css_path="../style.css")
     
-    output_path = OUTPUT_DIR / "index.html"
+    # コンテンツ用のディレクトリを作成
+    content_output_dir = OUTPUT_DIR / content_dir
+    content_output_dir.mkdir(exist_ok=True)
+    
+    output_path = content_output_dir / "index.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
 
 
-def generate_tutorial_page(tutorial_dir, info, tutorials):
+def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_info, tutorials):
     """チュートリアルページ（チャプター一覧）を生成"""
-    tutorial_path = CONTENT_DIR / tutorial_dir
+    content_path = BASE_DIR / content_dir
+    tutorial_path = content_path / tutorial_dir
     chapters = get_chapters(tutorial_path)
     
-    content = f'<h2>{info["title"]}</h2>\n'
-    content += f'<p>学習時間: {info["time"]}</p>\n'
-    content += f'<p>{info["description"]}</p>\n'
+    content = f'<h2>{tutorial_info["title"]}</h2>\n'
+    content += f'<p>学習時間: {tutorial_info["time"]}</p>\n'
+    content += f'<p>{tutorial_info["description"]}</p>\n'
     content += '<div class="chapter-list">\n'
     
     for chapter in chapters:
@@ -263,17 +331,18 @@ def generate_tutorial_page(tutorial_dir, info, tutorials):
     
     content += '</div>\n'
     
-    breadcrumb = f'<div class="breadcrumb"><a href="index.html">ホーム</a><span>></span>{info["title"]}</div>'
-    sidebar = generate_sidebar(tutorials, tutorial_dir)
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span>{tutorial_info["title"]}</div>'
+    sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
     
-    html = get_html_template(info["title"], content, breadcrumb, sidebar)
+    html = get_html_template(tutorial_info["title"], content, breadcrumb, sidebar, css_path="../style.css")
     
-    output_path = OUTPUT_DIR / f"{tutorial_dir}.html"
+    content_output_dir = OUTPUT_DIR / content_dir
+    output_path = content_output_dir / f"{tutorial_dir}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
 
 
-def generate_chapter_page(tutorial_dir, chapter, info, tutorials):
+def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials):
     """チャプターページ（セクション一覧）を生成"""
     chapter_title = format_chapter_title(chapter.name)
     sections = get_sections(chapter)
@@ -295,17 +364,18 @@ def generate_chapter_page(tutorial_dir, chapter, info, tutorials):
     content += '</div>\n'
     
     chapter_id = f"{tutorial_dir}_{chapter.name}"
-    breadcrumb = f'<div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="{tutorial_dir}.html">{info["title"]}</a><span>></span>{chapter_title}</div>'
-    sidebar = generate_sidebar(tutorials, tutorial_dir)
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_dir}.html">{tutorial_info["title"]}</a><span>></span>{chapter_title}</div>'
+    sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
     
-    html = get_html_template(chapter_title, content, breadcrumb, sidebar)
+    html = get_html_template(chapter_title, content, breadcrumb, sidebar, css_path="../style.css")
     
-    output_path = OUTPUT_DIR / f"{chapter_id}.html"
+    content_output_dir = OUTPUT_DIR / content_dir
+    output_path = content_output_dir / f"{chapter_id}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
 
 
-def generate_section_page(tutorial_dir, chapter, section, info, tutorials, sections, section_index):
+def generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, section_index):
     """セクションページを生成"""
     chapter_title = format_chapter_title(chapter.name)
     section_title = clean_title(section.name)
@@ -340,12 +410,13 @@ def generate_section_page(tutorial_dir, chapter, section, info, tutorials, secti
     chapter_id = f"{tutorial_dir}_{chapter.name}"
     section_id = f"{tutorial_dir}_{chapter.name}_{section.stem}"
     
-    breadcrumb = f'<div class="breadcrumb"><a href="index.html">ホーム</a><span>></span><a href="{tutorial_dir}.html">{info["title"]}</a><span>></span><a href="{chapter_id}.html">{chapter_title}</a><span>></span>{section_title}</div>'
-    sidebar = generate_sidebar(tutorials, tutorial_dir)
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_dir}.html">{tutorial_info["title"]}</a><span>></span><a href="{chapter_id}.html">{chapter_title}</a><span>></span>{section_title}</div>'
+    sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
     
-    html = get_html_template(section_title, content, breadcrumb, sidebar)
+    html = get_html_template(section_title, content, breadcrumb, sidebar, css_path="../style.css")
     
-    output_path = OUTPUT_DIR / f"{section_id}.html"
+    content_output_dir = OUTPUT_DIR / content_dir
+    output_path = content_output_dir / f"{section_id}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
 
@@ -357,35 +428,43 @@ def main():
     # 出力ディレクトリを作成
     OUTPUT_DIR.mkdir(exist_ok=True)
     
-    # 存在するチュートリアルのみを対象にする
-    tutorials = {}
-    for tutorial_dir, info in TUTORIAL_INFO.items():
-        if (CONTENT_DIR / tutorial_dir).exists():
-            tutorials[tutorial_dir] = info
+    # 存在するコンテンツのみを対象にする
+    contents = {}
+    for content_dir, info in CONTENTS_INFO.items():
+        if (BASE_DIR / content_dir).exists():
+            contents[content_dir] = info
     
-    # トップページを生成
-    generate_index_page(tutorials)
+    # トップページを生成（コンテンツ一覧）
+    generate_top_index_page(contents)
     
-    # 各チュートリアルのページを生成
-    for tutorial_dir, info in tutorials.items():
-        tutorial_path = CONTENT_DIR / tutorial_dir
+    # 各コンテンツのページを生成
+    for content_dir, content_info in contents.items():
+        content_path = BASE_DIR / content_dir
+        tutorials = get_tutorials(content_path)
         
-        # チュートリアルページ（チャプター一覧）
-        generate_tutorial_page(tutorial_dir, info, tutorials)
+        # コンテンツのトップページ（チュートリアル一覧）
+        generate_content_index_page(content_dir, content_info, tutorials)
         
-        # 各チャプターのページ
-        chapters = get_chapters(tutorial_path)
-        for chapter in chapters:
-            # チャプターページ（セクション一覧）
-            generate_chapter_page(tutorial_dir, chapter, info, tutorials)
+        # 各チュートリアルのページを生成
+        for tutorial_dir, tutorial_info in tutorials.items():
+            tutorial_path = content_path / tutorial_dir
             
-            # 各セクションのページ
-            sections = get_sections(chapter)
-            for i, section in enumerate(sections):
-                generate_section_page(tutorial_dir, chapter, section, info, tutorials, sections, i)
+            # チュートリアルページ（チャプター一覧）
+            generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_info, tutorials)
+            
+            # 各チャプターのページ
+            chapters = get_chapters(tutorial_path)
+            for chapter in chapters:
+                # チャプターページ（セクション一覧）
+                generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials)
+                
+                # 各セクションのページ
+                sections = get_sections(chapter)
+                for i, section in enumerate(sections):
+                    generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, i)
     
     print(f"\n生成完了！出力先: {OUTPUT_DIR}")
-    print(f"生成されたHTMLファイル数: {len(list(OUTPUT_DIR.glob('*.html')))}")
+    print(f"生成されたHTMLファイル数: {len(list(OUTPUT_DIR.rglob('*.html')))}")
 
 
 if __name__ == "__main__":

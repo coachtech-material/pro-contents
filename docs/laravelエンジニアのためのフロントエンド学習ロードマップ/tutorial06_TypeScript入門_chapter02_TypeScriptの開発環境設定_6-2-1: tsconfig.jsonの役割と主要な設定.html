@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tsconfig.jsonの役割と主要な設定 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定.html">Chapter 2: TypeScriptの開発環境設定</a><span>></span>tsconfig.jsonの役割と主要な設定</div>
+                    <div class="section-content">
+<h1 id="6-2-1-tsconfigjson">6-2-1: tsconfig.jsonの役割と主要な設定</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>tsconfig.json</code> ファイルがTypeScriptプロジェクトにおいて果たす中心的な役割を理解する</li>
+<li>コンパイラオプションの主要な設定（<code>target</code>, <code>module</code>, <code>strict</code>など）の意味と影響を説明できるようになる</li>
+<li>プロジェクトの要件に合わせて <code>tsconfig.json</code> を適切に設定するための基礎知識を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>TypeScriptプロジェクトを始めると、必ずルートディレクトリに <code>tsconfig.json</code> というファイルが存在します。このファイルは、TypeScriptコンパイラ（<code>tsc</code>）に対する<strong>設定ファイル</strong>であり、プロジェクト全体の振る舞いを定義する、いわば「<strong>憲法</strong>」のような存在です。</p>
+<p>Laravel開発における <code>composer.json</code> がパッケージを管理し、<code>.env</code> が環境を定義するように、<code>tsconfig.json</code> は「どのファイルをコンパイル対象とするか」「どのバージョンのJavaScriptに変換するか」「どれだけ厳格に型チェックを行うか」といった、コンパイルに関するあらゆるルールを定めます。このファイルを理解することは、TypeScriptを使いこなし、堅牢なアプリケーションを構築するための第一歩です。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="tsconfigjson"><code>tsconfig.json</code> の役割</h3>
+<p><code>tsconfig.json</code> ファイルがプロジェクトのルートディレクトリに存在することで、そのディレクトリがTypeScriptプロジェクトのルートであることを示します。主な役割は以下の2つです。</p>
+<ol>
+<li><strong>コンパイル対象のファイルを指定する</strong>: どの <code>.ts</code> ファイルをコンパイルし、どのファイルを除外するかを定義します。</li>
+<li><strong>コンパイラオプションを指定する</strong>: TypeScriptコードをJavaScriptコードに変換する際のルールや、型チェックの厳格度などを細かく設定します。</li>
+</ol>
+<p><code>tsc</code> コマンドを引数なしで実行すると、カレントディレクトリから親ディレクトリを遡って <code>tsconfig.json</code> を探し、その設定に従ってコンパイルが実行されます。</p>
+<h3 id="_4">⚙️ 主要な設定項目</h3>
+<p>設定は主に <code>compilerOptions</code> オブジェクト内で行います。ここでは、実務で特に重要となる項目を解説します。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">オプション</th>
+<th style="text-align: left;">設定例</th>
+<th style="text-align: left;">説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>target</code></strong></td>
+<td style="text-align: left;"><code>"ES2020"</code>, <code>"ESNext"</code></td>
+<td style="text-align: left;"><strong>どのバージョンのJavaScriptにコンパイルするか</strong>を指定します。新しいバージョンほどモダンな構文が使えますが、古いブラウザのサポートが必要な場合は <code>ES6</code> など低いバージョンを指定します。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>module</code></strong></td>
+<td style="text-align: left;"><code>"CommonJS"</code>, <code>"ESNext"</code></td>
+<td style="text-align: left;"><strong>モジュールシステムの種類</strong>を指定します。Node.js環境では <code>CommonJS</code>、ブラウザ環境やモダンな開発では <code>ESNext</code>（ES Modules）が一般的です。<code>import/export</code> 構文の扱いに影響します。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>strict</code></strong></td>
+<td style="text-align: left;"><code>true</code></td>
+<td style="text-align: left;"><strong>すべての厳格な型チェックオプションを有効にする</strong>メタオプションです。<code>true</code> にすることが強く推奨され、TypeScriptの恩恵を最大限に引き出します。（例: <code>strictNullChecks</code>, <code>noImplicitAny</code> などが含まれます）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>esModuleInterop</code></strong></td>
+<td style="text-align: left;"><code>true</code></td>
+<td style="text-align: left;">CommonJS形式で書かれたモジュールを、ES Modulesの <code>import</code> 構文で自然に扱えるようにするための互換性オプションです。<code>import React from 'react'</code> のような記述に必要で、ほぼ必須の設定です。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>jsx</code></strong></td>
+<td style="text-align: left;"><code>"react-jsx"</code>, <code>"preserve"</code></td>
+<td style="text-align: left;">JSX（<code>.tsx</code> ファイル）の構文をどのように処理するかを指定します。React 17以降では <code>"react-jsx"</code> が推奨されます。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>outDir</code></strong></td>
+<td style="text-align: left;"><code>"./dist"</code></td>
+<td style="text-align: left;">コンパイル後に生成される <strong>JavaScriptファイルの出力先ディレクトリ</strong>を指定します。Laravelでいう <code>public</code> ディレクトリのようなイメージです。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>rootDir</code></strong></td>
+<td style="text-align: left;"><code>"./src"</code></td>
+<td style="text-align: left;"><strong>コンパイル対象のTypeScriptファイルが含まれるルートディレクトリ</strong>を指定します。このディレクトリ内のファイルのみが <code>outDir</code> に出力されます。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="include-exclude"><code>include</code> と <code>exclude</code></h3>
+<p><code>compilerOptions</code> と同階層で、コンパイルに含めるファイルや除外するファイルを指定できます。</p>
+<ul>
+<li><strong><code>include</code></strong>: コンパイル対象に含めるファイルのパターンを配列で指定します。</li>
+<li><strong><code>exclude</code></strong>: コンパイル対象から除外するファイルのパターンを配列で指定します。デフォルトでは <code>node_modules</code> などが除外されます。</li>
+</ul>
+<h3 id="tsconfigjson_1">サンプル <code>tsconfig.json</code></h3>
+<p>モダンなReactプロジェクトでよく使われる設定例です。</p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    /* --- 基本設定 --- */
+    &quot;target&quot;: &quot;ES2020&quot;,
+    &quot;module&quot;: &quot;ESNext&quot;,
+    &quot;lib&quot;: [&quot;DOM&quot;, &quot;DOM.Iterable&quot;, &quot;ESNext&quot;],
+    &quot;jsx&quot;: &quot;react-jsx&quot;,
+
+    /* --- 厳格な型チェック --- */
+    &quot;strict&quot;: true,
+
+    /* --- モジュール解決 --- */
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;esModuleInterop&quot;: true,
+    &quot;allowSyntheticDefaultImports&quot;: true,
+
+    /* --- 高度な設定 --- */
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src&quot;], // srcディレクトリ内のファイルのみをコンパイル対象とする
+  &quot;exclude&quot;: [&quot;node_modules&quot;] // node_modulesはコンパイルから除外する
+}
+</code></pre>
+
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>新しいプロジェクトで <code>tsconfig.json</code> を作成するには、ターミナルで <code>tsc --init</code> コマンドを実行します。これにより、すべてのオプションがコメント付きで記述された、非常に詳細な設定ファイルが生成されます。最初は圧倒されるかもしれませんが、この中から必要な設定を有効にしていくのが良いでしょう。</li>
+<li>Next.jsやViteなどのフレームワークは、プロジェクト作成時に最適な <code>tsconfig.json</code> を自動で生成してくれます。しかし、その設定内容を理解しておくことで、後々のカスタマイズやトラブルシューティングに大いに役立ちます。</li>
+</ul>
+<h2 id="_5">✨ まとめ</h2>
+<ul>
+<li><code>tsconfig.json</code> は、TypeScriptコンパイラ（<code>tsc</code>）の挙動を制御する設定ファイルである。</li>
+<li><code>compilerOptions</code> 内で、出力するJavaScriptのバージョン（<code>target</code>）、モジュールシステム（<code>module</code>）、型チェックの厳格度（<code>strict</code>）などを設定する。</li>
+<li><strong><code>"strict": true</code></strong> は、TypeScriptの型安全性を最大限に活用するために、現代の開発では必須のオプションである。</li>
+<li><code>include</code> と <code>exclude</code> を使うことで、コンパイルの対象範囲を正確にコントロールできる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial06_TypeScript入門_chapter02_TypeScriptの開発環境設定_6-2-2: .eslintrc.jsと.prettierrcの役割.html" class="next">.eslintrc.jsと.prettierrcの役割</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

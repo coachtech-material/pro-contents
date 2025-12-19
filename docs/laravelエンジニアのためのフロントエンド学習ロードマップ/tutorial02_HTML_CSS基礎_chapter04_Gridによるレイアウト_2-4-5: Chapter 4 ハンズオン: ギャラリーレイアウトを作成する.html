@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4 ハンズオン: ギャラリーレイアウトを作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter04_Gridによるレイアウト.html">Chapter 4: Gridによるレイアウト</a><span>></span>Chapter 4 ハンズオン: ギャラリーレイアウトを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-2-htmlcss">Tutorial 2: HTML/CSS基礎</h1>
+<h2 id="chapter-4-grid">Chapter 4: Gridによるレイアウト</h2>
+<h3 id="chapter-4-grid_1">Chapter 4 ハンズオン: Gridでプロフィールカードの内部レイアウトを再構築する</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このハンズオンでは、これまでFlexboxで部分的に整えてきたプロフィールカードの内部レイアウトを、CSS Gridを使ってより堅牢で意味的に分かりやすい構造に再構築します。<code>grid-template-areas</code>を使い、カード内を「画像エリア」「自己紹介エリア」「SNSリンクエリア」に分割し、各要素を配置します。</p>
+<p><em>ここに完成したプロフィールページのスクリーンショットを挿入: 見た目は大きく変わらないかもしれないが、開発者ツールでGridのオーバーレイを表示すると、カード内が綺麗なグリッドで分割されている様子がわかる</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このハンズオンを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>既存のコンポーネントのレイアウトを、FlexboxからGridにリファクタリングできるようになる。</li>
+<li><code>grid-template-columns</code>, <code>grid-template-rows</code>, <code>grid-template-areas</code>を組み合わせて、コンポーネントレベルの二次元レイアウトを定義できるようになる。</li>
+<li><code>grid-area</code>を使って、各要素を意図したグリッドセルに配置できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">🏃 実践: 一緒に作ってみましょう！</h3>
+<p>現在のプロフィールカードは、Flexboxや<code>margin: auto</code>などを駆使してレイアウトされていますが、これは部分的な最適化の集まりとも言えます。ここでは、カード全体のレイアウトをGridという一つの大きな設計図に基づいて再定義し、より管理しやすく、意味的に明確な構造へと進化させます。</p>
+<h4 id="_2">💭 実装の思考プロセス</h4>
+<p><strong>このハンズオンのゴール:</strong></p>
+<ol>
+<li><strong>レイアウトの再定義:</strong> プロフィールカード(<code>id="profile-card"</code>)をGridコンテナとし、内部を「画像」「名前」「自己紹介文」「SNSセクション」の4つのエリアに分割する設計図を<code>grid-template-areas</code>で描く。</li>
+<li><strong>アイテムの配置:</strong> 各要素（<code>&lt;img&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h2&gt;</code>と<code>&lt;ul&gt;</code>をまとめた<code>div</code>）に<code>grid-area</code>を指定し、設計図通りの位置に配置する。</li>
+<li><strong>既存スタイルの調整:</strong> Grid化に伴い不要になったり、調整が必要になったりした既存のCSS（<code>margin</code>など）を整理する。</li>
+</ol>
+<p>💡 <strong>ポイント:</strong> 見た目が同じでも、その裏側にある構造が美しいかどうかは、将来のメンテナンス性に大きく影響します。Gridを使ってレイアウトの意図を明確にコードで表現する、という感覚を掴みましょう。</p>
+<h4 id="_3">📝 ステップバイステップで実装</h4>
+<h5 id="step-1-htmlgrid">Step 1: HTMLの構造をGrid用に少し変更する</h5>
+<p><code>grid-area</code>で配置するために、SNSセクション（<code>&lt;h2&gt;</code>と<code>&lt;ul&gt;</code>）を一つの<code>&lt;div&gt;</code>でグループ化しておくと便利です。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「<code>grid-area</code>は一つの要素に一つのエリアを割り当てるのが基本。SNSの<code>h2</code>と<code>ul</code>はセットで『SNSエリア』に配置したいから、これらを<code>div</code>で囲んで一つのGridアイテムにしてしまおう。」</li>
+</ul>
+<p>1-1. <code>index.html</code>のSNSセクションを、<code>class="social-section"</code>を持つ<code>&lt;div&gt;</code>で囲みます。</p>
+<ul>
+<li>
+<p><strong>コマンド/コード (index.html):</strong><br />
+    ```html<br />
+    <!-- 変更前 --><br />
+    <h2>SNS &amp; Links</h2><br />
+    <ul class="social-links">...</ul></p>
+<p><!-- 変更後 --><br />
+<div class="social-section"><br />
+  <h2>SNS &amp; Links</h2><br />
+  <ul class="social-links">...</ul><br />
+</div><br />
+```</p>
+</li>
+</ul>
+<h5 id="step-2-grid">Step 2: プロフィールカードをGridコンテナにする</h5>
+<p><code>#profile-card</code>にGrid関連のプロパティを追加し、レイアウトの設計図を定義します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「カード内を、上から『名前』、その下に『画像』と『自己紹介文』を並べ、最下部に『SNSセクション』を配置する2列3行のグリッドにしよう。<code>grid-template-areas</code>でこの構造を視覚的に表現するぞ。」</li>
+</ul>
+<p>2-1. <code>style.css</code>の<code>#profile-card</code>セレクタに、<code>display: grid;</code>と関連プロパティを追加します。また、Gridで中央揃えを行うため、既存の<code>text-align</code>や<code>margin</code>を調整します。</p>
+<ul>
+<li><strong>コマンド/コード (style.css):</strong><br />
+<code>css
+    #profile-card {
+      /* ...既存のスタイル... */
+      display: grid; /* Gridコンテナにする */
+      grid-template-columns: 150px 1fr; /* 左列150px, 右列は残り全部 */
+      grid-template-rows: auto 1fr auto; /* 3行。中段は可変高 */
+      grid-template-areas:
+        "name     name"
+        "image    intro"
+        "social   social";
+      gap: 20px; /* エリア間の隙間 */
+      /* Grid化に伴い不要になる、または変更するスタイル */
+      padding: 30px; /* paddingは維持 */
+    }</code></li>
+</ul>
+<h5 id="step-3-grid-area">Step 3: 各要素をGrid Areaに配置する</h5>
+<p>各要素に<code>grid-area</code>を指定して、設計図の所定の位置に送り込みます。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「HTMLの各要素に、さっき設計図で定義したエリア名を<code>grid-area</code>で割り当てていく。<code>h1</code>は<code>name</code>エリアへ、<code>img</code>は<code>image</code>エリアへ...という感じだ。これに伴って、これまで中央揃えのために使っていた<code>margin: auto</code>などは不要になるから削除しよう。」</li>
+</ul>
+<p>3-1. <code>style.css</code>に以下のコードを追加し、既存のスタイルを修正します。</p>
+<ul>
+<li>
+<p><strong>コマンド/コード (style.css):</strong><br />
+    ```css<br />
+    /<em> 既存のh1スタイルを修正 </em>/<br />
+    h1 {<br />
+      grid-area: name; /<em> nameエリアに配置 </em>/<br />
+      text-align: center;<br />
+      color: #2c3e50;<br />
+      margin: 0; /<em> Gridで配置するので不要なmarginはリセット </em>/<br />
+    }</p>
+<p>/<em> 既存の.profile-imageスタイルを修正 </em>/<br />
+.profile-image {<br />
+  grid-area: image; /<em> imageエリアに配置 </em>/<br />
+  width: 150px; /<em> 幅を列のサイズに合わせる </em>/<br />
+  height: 150px; /<em> 高さも指定して正円を維持 </em>/<br />
+  border-radius: 50%;<br />
+  /<em> display: block; margin: auto; は不要になるので削除 </em>/<br />
+}</p>
+<p>/<em> 自己紹介文を配置するための新しいセレクタ </em>/</p>
+<h1 id="profile-card-p">profile-card &gt; p {</h1>
+<p>grid-area: intro; /<em> introエリアに配置 </em>/<br />
+  margin: 0; /<em> 不要なmarginはリセット </em>/<br />
+}</p>
+<p>/<em> SNSセクションを配置するための新しいセレクタ </em>/<br />
+.social-section {<br />
+  grid-area: social; /<em> socialエリアに配置 </em>/<br />
+}</p>
+<p>/<em> 既存のh2スタイルを修正 </em>/<br />
+h2 {<br />
+  margin-top: 0; /<em> Gridのgapで余白ができるのでリセット </em>/<br />
+  /<em> ...その他のスタイルは維持... </em>/<br />
+}<br />
+```</p>
+</li>
+</ul>
+<h4 id="_4">✨ 完成！</h4>
+<p>お疲れ様でした！ブラウザをリロードしてください。見た目はほとんど変わらないかもしれませんが、開発者ツールで<code>#profile-card</code>を選択し、Gridのオーバーレイを表示してみてください。カード内が綺麗に定義したエリアに分割され、各要素がその中に収まっているのが確認できるはずです。</p>
+<p>あなたは今、コンポーネントのレイアウトをより構造的かつ宣言的に定義する強力なスキルを身につけました。これにより、複雑なレイアウトでも、その意図が誰にでも明確に伝わる、メンテナンス性の高いコードを書くことができるようになります。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter04_Gridによるレイアウト_2-4-4: grid-areaによるアイテムの配置.html" class="prev">grid-areaによるアイテムの配置</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

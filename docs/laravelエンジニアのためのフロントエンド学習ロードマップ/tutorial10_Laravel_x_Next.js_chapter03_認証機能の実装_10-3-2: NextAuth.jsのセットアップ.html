@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextAuth.jsのセットアップ | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter03_認証機能の実装.html">Chapter 3: 認証機能の実装</a><span>></span>NextAuth.jsのセットアップ</div>
+                    <div class="section-content">
+<h1 id="10-3-2-nextauthjs">10-3-2: NextAuth.jsのセットアップ</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>NextAuth.jsとは何か、Next.jsアプリケーションにおける認証の役割を理解する</li>
+<li>NextAuth.jsをインストールし、基本的な設定ファイルを作成する方法を学ぶ</li>
+<li>Laravel Sanctumと連携するための<code>CredentialsProvider</code>を設定する方法を習得する</li>
+<li>認証状態をアプリケーション全体で共有するための<code>SessionProvider</code>をセットアップする</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>バックエンド（Laravel Sanctum）の準備が整いました。次はフロントエンド（Next.js）に認証機能を組み込みます。ここで登場するのが<strong>NextAuth.js</strong>です。</p>
+<p>NextAuth.jsは、Next.jsアプリケーションのための完全な認証ソリューションです。ソーシャルログイン（Google, GitHubなど）、メール/パスワード認証、そして今回のような独自のバックエンドAPI（Laravel）と連携するクレデンシャル認証など、様々な認証方法を驚くほど簡単に実装できます。</p>
+<p>このセクションでは、NextAuth.jsをインストールし、Laravel Sanctumと通信してユーザー認証を行うための設定を進めていきます。</p>
+<h2 id="_3">詳細解説</h2>
+<p><strong>注意</strong>: これ以降の作業は、すべてNext.jsプロジェクトのディレクトリ（<code>next-frontend-app</code>）で行います。</p>
+<h3 id="1-nextauthjs">ステップ1: NextAuth.jsのインストール</h3>
+<p>まず、npmを使ってNextAuth.jsをインストールします。</p>
+<pre class="codehilite"><code class="language-bash">npm install next-auth
+</code></pre>
+
+<h3 id="2-api">ステップ2: APIルートの作成</h3>
+<p>NextAuth.jsは、自身の認証処理（サインイン、サインアウト、セッション管理など）を行うためのAPIエンドポイントを必要とします。<code>src/app/api/auth/[...nextauth]/route.ts</code>というファイルを作成します。この<code>[...nextauth]</code>という動的ルートが、NextAuth.jsに関連するすべてのAPIリクエストをキャッチします。</p>
+<p><code>src/app/api/auth/[...nextauth]/route.ts</code>に以下のコードを記述してください。</p>
+<pre class="codehilite"><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
+
+import NextAuth from &quot;next-auth&quot;;
+import CredentialsProvider from &quot;next-auth/providers/credentials&quot;;
+
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: &quot;Credentials&quot;,
+      credentials: {
+        email: { label: &quot;Email&quot;, type: &quot;email&quot; },
+        password: { label: &quot;Password&quot;, type: &quot;password&quot; },
+      },
+      async authorize(credentials, req) {
+        // Laravel APIへのログインリクエスト
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/login`,
+          {
+            method: &quot;POST&quot;,
+            headers: {
+              &quot;Content-Type&quot;: &quot;application/json&quot;,
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          return null;
+        }
+
+        // ユーザー情報を取得
+        const userRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
+          {
+            headers: {
+              // ログインリクエストのレスポンスからCookieヘッダーを取得して設定
+              Cookie: res.headers.get(&quot;set-cookie&quot;) || &quot;&quot;,
+            },
+          }
+        );
+
+        if (!userRes.ok) {
+          return null;
+        }
+
+        const user = await userRes.json();
+
+        // ユーザーオブジェクトを返す
+        return user;
+      },
+    }),
+  ],
+  // 他の設定...
+});
+
+export { handler as GET, handler as POST };
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>CredentialsProvider</code></strong>: メールアドレスとパスワードのような、任意のクレデンシャル（資格情報）を使った認証方法を定義します。</li>
+<li><strong><code>authorize</code>関数</strong>: ログインフォームから送信された<code>credentials</code>（メール、パスワード）を受け取り、認証ロジックを実行する最も重要な部分です。<ol>
+<li>まず、Laravelの<code>/login</code>エンドポイント（まだ作成していません）に<code>fetch</code>でPOSTリクエストを送信します。</li>
+<li>ログインが成功すると、Laravelはセッションを開始し、レスポンスの<code>Set-Cookie</code>ヘッダーにセッションIDを含めて返します。</li>
+<li>次に、その<code>Set-Cookie</code>ヘッダーを<code>Cookie</code>ヘッダーとして次のリクエストに含め、Laravelの<code>/api/user</code>エンドポイント（これもまだ作成していません）にアクセスして、認証済みユーザーの情報を取得します。</li>
+<li>取得したユーザー情報をNextAuth.jsに返すことで、セッションが確立されます。</li>
+</ol>
+</li>
+</ul>
+<h3 id="3">ステップ3: セッション管理とコールバックの設定</h3>
+<p><code>authorize</code>関数で返されたユーザー情報を、NextAuth.jsのセッションやJWT（JSON Web Token）にどのように保存するかを定義します。<code>route.ts</code>に<code>callbacks</code>と<code>pages</code>の設定を追加します。</p>
+<pre class="codehilite"><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
+
+// ... (importとprovidersは変更なし)
+
+const handler = NextAuth({
+  providers: [
+    // ... (CredentialsProviderは変更なし)
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // ログイン時に返されたユーザー情報をトークンに含める
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // JWTトークンの情報をセッションに含める
+      session.user = token.user as any;
+      return session;
+    },
+  },
+  pages: {
+    signIn: &quot;/login&quot;, // カスタムログインページのパス
+  },
+});
+
+export { handler as GET, handler as POST };
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>callbacks</code></strong>: 認証フローの特定のタイミングで呼び出される関数を定義します。<ul>
+<li><code>jwt</code>: JWTが作成・更新されるたびに呼び出されます。<code>authorize</code>から返された<code>user</code>オブジェクトをトークンに含めています。</li>
+<li><code>session</code>: セッションがアクセスされるたびに呼び出されます。<code>jwt</code>コールバックで設定したトークン情報を、クライアント側でアクセス可能な<code>session</code>オブジェクトに渡しています。</li>
+</ul>
+</li>
+<li><strong><code>pages</code></strong>: NextAuth.jsが使用するデフォルトのページを、カスタムページで上書きします。<code>signIn</code>に<code>/login</code>を指定することで、認証が必要な場合に自動的に<code>/login</code>ページにリダイレクトされるようになります。</li>
+</ul>
+<h3 id="4">ステップ4: セッションプロバイダーのセットアップ</h3>
+<p>NextAuth.jsの<code>useSession</code>フックや<code>getSession</code>関数をクライアントコンポーネントで使えるようにするには、アプリケーションのルートで<code>SessionProvider</code>コンポーネントを配置する必要があります。</p>
+<p><code>src/app/providers.tsx</code>という新しいファイルを作成します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/app/providers.tsx
+&quot;use client&quot;;
+
+import { SessionProvider } from &quot;next-auth/react&quot;;
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return &lt;SessionProvider&gt;{children}&lt;/SessionProvider&gt;;
+}
+</code></pre>
+
+<p>そして、ルートレイアウトである<code>src/app/layout.tsx</code>で、この<code>Providers</code>コンポーネントを使います。</p>
+<pre class="codehilite"><code class="language-tsx">// src/app/layout.tsx
+
+import type { Metadata } from &quot;next&quot;;
+import { Inter } from &quot;next/font/google&quot;;
+import &quot;./globals.css&quot;;
+import { Providers } from &quot;./providers&quot;; // Providersをインポート
+
+const inter = Inter({ subsets: [&quot;latin&quot;] });
+
+export const metadata: Metadata = {
+  title: &quot;Create Next App&quot;,
+  description: &quot;Generated by create next app&quot;,
+};
+
+export default function RootLayout({
+  children,
+}: Readonly&lt;{
+  children: React.ReactNode;
+}&gt;) {
+  return (
+    &lt;html lang=&quot;en&quot;&gt;
+      &lt;body className={inter.className}&gt;
+        &lt;Providers&gt;{children}&lt;/Providers&gt; {/* childrenをProvidersでラップ */}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+</code></pre>
+
+<p><code>SessionProvider</code>は内部でReactのContext APIを使用しているため、<code>"use client"</code>ディレクティブが必要です。しかし、ルートレイアウト(<code>layout.tsx</code>)はServer Componentである必要があるため、<code>SessionProvider</code>をラップした別のClient Component (<code>providers.tsx</code>) を作成し、それをレイアウトから呼び出す、という構成にしています。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>NextAuth.jsは、Next.jsアプリケーションに認証機能を簡単に追加できるライブラリである。</li>
+<li><code>src/app/api/auth/[...nextauth]/route.ts</code>に認証設定を記述する。</li>
+<li><code>CredentialsProvider</code>を使い、独自のバックエンド（Laravel Sanctum）と連携する認証ロジックを<code>authorize</code>関数内に実装する。</li>
+<li><code>callbacks</code>を設定して、認証されたユーザー情報をセッションデータに正しく反映させる。</li>
+<li>アプリケーションのルートで<code>SessionProvider</code>を配置し、クライアントサイドで認証状態にアクセスできるようにする。</li>
+</ul>
+<p>これでフロントエンド側の認証設定の骨格が完成しました。しかし、この設定が参照しているLaravel側のログインAPI（<code>/login</code>）やユーザー情報取得API（<code>/api/user</code>）はまだ存在しません。</p>
+<p>次のセクションでは、これらのAPIをLaravelに実装し、実際にログイン・ログアウトができるようにします。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial10_Laravel_x_Next.js_chapter03_認証機能の実装_10-3-1: Laravel Sanctumのセットアップ.html" class="prev">Laravel Sanctumのセットアップ</a>
+<a href="tutorial10_Laravel_x_Next.js_chapter03_認証機能の実装_10-3-3: ログイン・ログアウト機能の実装.html" class="next">ログイン・ログアウト機能の実装</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

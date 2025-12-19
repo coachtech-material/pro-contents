@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: 開発環境を構築する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter01_開発環境構築.html">Chapter 1: 開発環境構築</a><span>></span>Chapter 1 ハンズオン: 開発環境を構築する</div>
+                    <div class="section-content">
+<h1 id="10-1-4-chapter-1">10-1-4: 実践 🚀 Chapter 1 ハンズオン: 開発環境を構築する</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このチャプターで学んだ手順に従い、Laravel + Next.jsアプリケーション開発のための環境を実際に構築します。すべてのステップを完了すると、バックエンド（Laravel）とフロントエンド（Next.js）それぞれの開発サーバーがローカルで動作している状態になります。</p>
+<h2 id="_2">ハンズオン</h2>
+<h3 id="1-laravel">ステップ1: バックエンド（Laravel）のセットアップ</h3>
+<ol>
+<li>
+<p><strong>プロジェクトの作成</strong></p>
+<ul>
+<li>ターミナルを開き、作業用のディレクトリ（例: <code>~/develop</code>）に移動します。</li>
+<li>以下のコマンドを実行して、<code>laravel-next-app</code>という名前のLaravelプロジェクトを作成します。<br />
+<code>bash
+    curl -s "https://laravel.build/laravel-next-app" | bash</code></li>
+<li>完了するまで数分待ちます。</li>
+</ul>
+</li>
+<li>
+<p><strong>Sailの起動</strong></p>
+<ul>
+<li>作成されたプロジェクトディレクトリに移動します。<br />
+<code>bash
+    cd laravel-next-app</code></li>
+<li>Sailをバックグラウンドで起動します。<br />
+<code>bash
+    ./vendor/bin/sail up -d</code></li>
+<li>初回はDockerイメージのビルドに時間がかかります。</li>
+</ul>
+</li>
+<li>
+<p><strong>動作確認</strong></p>
+<ul>
+<li>ブラウザで <code>http://localhost</code> にアクセスし、Laravelのウェルカムページが表示されることを確認してください。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-nextjs">ステップ2: フロントエンド（Next.js）のセットアップ</h3>
+<ol>
+<li>
+<p><strong>プロジェクトの作成</strong></p>
+<ul>
+<li>ターミナルで、Laravelプロジェクトと同じ階層のディレクトリに戻ります。<br />
+<code>bash
+    # laravel-next-app ディレクトリから一つ上の階層に移動
+    cd ..</code></li>
+<li>以下のコマンドを実行して、<code>next-frontend-app</code>という名前のNext.jsプロジェクトを作成します。<br />
+<code>bash
+    npx create-next-app@latest</code></li>
+<li>対話形式の質問には、以下のように回答します。<ul>
+<li>Project name: <code>next-frontend-app</code></li>
+<li>TypeScript: <code>Yes</code></li>
+<li>ESLint: <code>Yes</code></li>
+<li>Tailwind CSS: <code>Yes</code></li>
+<li><code>src/</code> directory: <code>Yes</code></li>
+<li>App Router: <code>Yes</code></li>
+<li>Default import alias: <code>No</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>開発サーバーの起動</strong></p>
+<ul>
+<li>作成されたプロジェクトディレクトリに移動します。<br />
+<code>bash
+    cd next-frontend-app</code></li>
+<li>開発サーバーを起動します。<br />
+<code>bash
+    npm run dev</code></li>
+</ul>
+</li>
+<li>
+<p><strong>動作確認</strong></p>
+<ul>
+<li>ブラウザで <code>http://localhost:3000</code> にアクセスし、Next.jsのウェルカムページが表示されることを確認してください。</li>
+</ul>
+</li>
+<li>
+<p><strong>初期ページのクリーンアップ</strong></p>
+<ul>
+<li>エディタで <code>src/app/page.tsx</code> を開き、内容を以下のように書き換えます。<br />
+<code>tsx
+    // src/app/page.tsx
+    export default function Home() {
+      return (
+        &lt;main className="flex min-h-screen flex-col items-center justify-center p-24"&gt;
+          &lt;h1 className="text-4xl font-bold"&gt;Hello, Frontend!&lt;/h1&gt;
+        &lt;/main&gt;
+      );
+    }</code></li>
+<li>保存後、ブラウザの表示が自動で切り替わることを確認します。</li>
+</ul>
+</li>
+</ol>
+<h2 id="_3">✨ まとめ</h2>
+<p>お疲れ様でした！これで、あなたのローカルマシンには、</p>
+<ul>
+<li><code>http://localhost</code> で動作するLaravelバックエンド</li>
+<li><code>http://localhost:3000</code> で動作するNext.jsフロントエンド</li>
+</ul>
+<p>の2つの開発環境が整いました。</p>
+<p>次のチャプターでは、いよいよこの2つを接続し、Laravelで作成したAPIからデータを取得してNext.jsで表示する、というヘッドレス構成の基本を実装していきます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial10_Laravel_x_Next.js_chapter01_開発環境構築_10-1-3: Next.jsプロジェクトのセットアップ.html" class="prev">Next.jsプロジェクトのセットアップ</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

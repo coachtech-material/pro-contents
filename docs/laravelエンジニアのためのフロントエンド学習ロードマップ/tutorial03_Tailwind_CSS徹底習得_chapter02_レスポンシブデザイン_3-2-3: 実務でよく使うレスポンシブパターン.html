@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実務でよく使うレスポンシブパターン | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン.html">Chapter 2: レスポンシブデザイン</a><span>></span>実務でよく使うレスポンシブパターン</div>
+                    <div class="section-content">
+<h1 id="3-2-3">3-2-3: 実務でよく使うレスポンシブパターン</h1>
+<h2 id="chapter-2">Chapter 2: レスポンシブデザイン</h2>
+<h3 id="section-3">Section 3: 実務でよく使うレスポンシブパターン</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>レスポンシブなナビゲーションメニュー（ハンバーガーメニュー）の基本的な考え方を理解する。</li>
+<li>レスポンシブなグリッドレイアウトを組めるようになる。</li>
+<li>特定のブレークポイントで要素を表示・非表示させる方法を習得する。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：レスポンシブデザインの「型」を学ぶ</h3>
+<p>モバイルファーストの考え方とブレークポイントの使い方を学んだ今、実務で頻繁に登場する具体的なレスポンシブデザインのパターンをいくつか見ていきましょう。</p>
+<p>これらの「型」を覚えておくことで、ゼロからレイアウトを考える時間を大幅に短縮し、より効率的にUIを構築できるようになります。このセクションでは、特に重要な3つのパターン「レスポンシブ・ナビゲーション」「レスポンシブ・グリッド」「要素の表示/非表示」に焦点を当てます。</p>
+<hr />
+<h3 id="1">⚙️ パターン1: レスポンシブ・ナビゲーション（ハンバーガーメニュー）</h3>
+<p>PCではヘッダーにメニュー項目が横並びになっていますが、スマートフォンではスペースが足りないため、ハンバーガーアイコン（≡）をタップするとメニューが開く、というUIは非常によく見られます。</p>
+<p>Tailwind CSSだけでこの開閉機能を実装するには少しJavaScriptが必要になりますが、ここではそのレイアウトの切り替え部分に焦点を当てます。</p>
+<pre class="codehilite"><code class="language-html">&lt;nav class=&quot;bg-gray-800 p-4&quot;&gt;
+  &lt;div class=&quot;container mx-auto flex justify-between items-center&quot;&gt;
+    &lt;!-- ロゴ --&gt;
+    &lt;div class=&quot;text-white font-bold text-xl&quot;&gt;MySite&lt;/div&gt;
+
+    &lt;!-- PC用メニュー (md以上で表示) --&gt;
+    &lt;div class=&quot;hidden md:flex space-x-4&quot;&gt;
+      &lt;a href=&quot;#&quot; class=&quot;text-gray-300 hover:text-white&quot;&gt;Home&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;text-gray-300 hover:text-white&quot;&gt;About&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;text-gray-300 hover:text-white&quot;&gt;Contact&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;!-- ハンバーガーアイコン (md未満で表示) --&gt;
+    &lt;div class=&quot;md:hidden&quot;&gt;
+      &lt;button class=&quot;text-white&quot;&gt;
+        &lt;svg class=&quot;w-6 h-6&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 12h16m-7 6h7&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><strong>PC用メニュー:</strong><ul>
+<li><code>hidden</code>: これがモバイルの基本スタイルです。デフォルトではメニューを<strong>非表示</strong>にしています。</li>
+<li><code>md:flex</code>: 画面幅が<code>md</code>（768px）以上になると、<code>display: flex;</code>が適用され、メニューが<strong>表示</strong>されるようになります。（<code>hidden</code>は<code>display: none;</code>なので、<code>display</code>プロパティが上書きされる形）</li>
+</ul>
+</li>
+<li><strong>ハンバーガーアイコン:</strong><ul>
+<li><code>md:hidden</code>: 画面幅が<code>md</code>（768px）以上になると、<code>display: none;</code>が適用され、ハンバーガーアイコンが<strong>非表示</strong>になります。</li>
+<li>プレフィックスなしのクラスがないため、デフォルト（モバイル）では表示されます。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>このように、<code>hidden</code>と<code>md:flex</code>（または<code>md:block</code>など）を組み合わせることで、特定のブレークポイントを境に要素の表示/非表示を切り替えることができます。</p>
+<h3 id="2">⚙️ パターン2: レスポンシブ・グリッド</h3>
+<p>商品一覧ページやブログ記事一覧などでよく使われる、画面サイズに応じてカラム数を変更するグリッドレイアウトです。これは前のセクションでも少し触れましたが、非常に重要なパターンです。</p>
+<pre class="codehilite"><code class="language-html">&lt;div class=&quot;container mx-auto p-4&quot;&gt;
+  &lt;div class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4&quot;&gt;
+    &lt;!-- カード1 --&gt;
+    &lt;div class=&quot;bg-white p-4 rounded-lg shadow&quot;&gt;カードコンテンツ&lt;/div&gt;
+    &lt;!-- カード2 --&gt;
+    &lt;div class=&quot;bg-white p-4 rounded-lg shadow&quot;&gt;カードコンテンツ&lt;/div&gt;
+    &lt;!-- カード3 --&gt;
+    &lt;div class=&quot;bg-white p-4 rounded-lg shadow&quot;&gt;カードコンテンツ&lt;/div&gt;
+    &lt;!-- カード4 --&gt;
+    &lt;div class=&quot;bg-white p-4 rounded-lg shadow&quot;&gt;カードコンテンツ&lt;/div&gt;
+    &lt;!-- ...さらにカードが続く --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>grid-cols-1</code>: モバイル（デフォルト）では1列。</li>
+<li><code>sm:grid-cols-2</code>: <code>sm</code>（640px）以上で2列。</li>
+<li><code>lg:grid-cols-3</code>: <code>lg</code>（1024px）以上で3列。</li>
+<li><code>xl:grid-cols-4</code>: <code>xl</code>（1280px）以上で4列。</li>
+</ul>
+</li>
+</ul>
+<p>モバイルファーストの考え方に基づき、小さい画面から大きい画面へと、カラム数を<strong>追加</strong>していくように定義しているのがポイントです。</p>
+<h3 id="3">⚙️ パターン3: レスポンシブな余白とフォントサイズ</h3>
+<p>画面が大きくなるにつれて、セクション間の余白（マージン）や、見出しのフォントサイズを大きくして、全体のバランスを取りたい場合があります。</p>
+<pre class="codehilite"><code class="language-html">&lt;div class=&quot;py-8 md:py-12 lg:py-16&quot;&gt;
+  &lt;h1 class=&quot;text-3xl md:text-4xl lg:text-5xl font-bold&quot;&gt;
+    レスポンシブな見出し
+  &lt;/h1&gt;
+  &lt;p class=&quot;mt-4 text-base md:text-lg&quot;&gt;
+    画面サイズに応じて、このセクションの上下の余白と、見出しのフォントサイズが変わります。
+  &lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>py-8 md:py-12 lg:py-16</code>: 親<code>div</code>の垂直方向（上下）のパディングを、モバイルでは<code>py-8</code>、<code>md</code>以上で<code>py-12</code>、<code>lg</code>以上で<code>py-16</code>と、段階的に大きくしています。</li>
+<li><code>text-3xl md:text-4xl lg:text-5xl</code>: <code>h1</code>タグのフォントサイズも同様に、画面が大きくなるにつれて段階的に大きくしています。</li>
+</ul>
+</li>
+</ul>
+<p>これにより、どの画面サイズで見ても間延びしたり、窮屈になったりすることのない、バランスの取れたデザインを維持することができます。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><code>hidden</code>とブレークポイントプレフィックス付きの<code>display</code>クラス（例: <code>md:flex</code>）を組み合わせることで、要素の表示/非表示をレスポンシブに切り替えられる。</li>
+<li><code>grid-cols-*</code>とブレークポイントプレフィックスを組み合わせることで、レスポンシブなグリッドレイアウトを簡単に実装できる。</li>
+<li>余白（<code>p*</code>, <code>m*</code>）やフォントサイズ（<code>text-*</code>）も、ブレークポイントプレフィックスを使ってレスポンシブに対応させることが、デザインのバランスを保つ上で重要である。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] PCではサイドバーがあり、スマートフォンではサイドバーが非表示になるレイアウトを作りたい場合、サイドバーのコンテナにどのようなクラスを指定しますか？</li>
+<li>[ ] <code>class="w-full md:w-1/2 lg:w-1/3"</code>というクラスが指定された要素の幅は、画面サイズに応じてどのように変化しますか？</li>
+<li>[ ] なぜレスポンシブデザインでは、余白やフォントサイズも画面サイズに応じて調整する必要があるのでしょうか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン_3-2-2: モバイルファーストの考え方.html" class="prev">モバイルファーストの考え方</a>
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter02_レスポンシブデザイン_3-2-4: Chapter 2 ハンズオン: レスポンシブなカードコンポーネントを作成する.html" class="next">Chapter 2 ハンズオン: レスポンシブなカードコンポーネントを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

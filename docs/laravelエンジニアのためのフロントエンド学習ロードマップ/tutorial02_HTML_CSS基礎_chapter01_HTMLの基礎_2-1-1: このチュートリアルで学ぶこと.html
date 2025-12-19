@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>このチュートリアルで学ぶこと | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎.html">Chapter 1: HTMLの基礎</a><span>></span>このチュートリアルで学ぶこと</div>
+                    <div class="section-content">
+<h1 id="2-1-1">2-1-1: このチュートリアルで学ぶこと</h1>
+<h2 id="chapter-1-html">Chapter 1: HTMLの基礎</h2>
+<h3 id="section-1">Section 1: このチュートリアルで学ぶこと</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このTutorial 2を終える頃には、以下のようなシンプルなブログ記事のレイアウトを作成できるようになります。まずはHTMLで骨格を作り、その後のチャプターでCSSを使って装飾していきます。</p>
+<p><em>ここにブログ記事のレイアウトのスクリーンショットを挿入: ヘッダー、記事本文、フッターがわかるシンプルなデザイン</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、Webページの「骨格」を作るHTMLと、「見た目」を装飾するCSSの基本的な役割分担について学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>HTMLがWebページの「構造」を定義する言語であることを説明できるようになる。</li>
+<li>CSSがWebページの「見た目」を定義する言語であることを説明できるようになる。</li>
+<li>なぜ「構造と見た目の分離」が重要なのか、そのメリットを説明できるようになる。</li>
+</ul>
+<hr />
+<h3 id="htmlcss">導入：なぜHTML/CSSから学ぶのか？</h3>
+<p>前のチュートリアルでは、Webがどのように動いているかの裏側の仕組みを探検しました。このチュートリアルからは、いよいよWebページの「表側」、つまりユーザーが直接目にする部分の作成に入ります。その主役となるのが、<strong>HTML</strong>と<strong>CSS</strong>です。</p>
+<p>Laravelエンジニアであるあなたは、Bladeテンプレートを使ってHTMLを生成することに慣れているかもしれません。しかし、フロントエンドの世界では、HTMLとCSSの深い理解が、よりリッチでインタラクティブなUIを構築するための絶対的な土台となります。このチュートリアルでは、改めてHTMLとCSSの基礎を固め、その役割と関係性を明確に理解することを目指します。</p>
+<h3 id="_1">概念の説明</h3>
+<p>HTMLとCSSの関係は、よく「人間」や「建物」に例えられます。</p>
+<ul>
+<li>
+<p><strong>HTML (HyperText Markup Language):</strong> Webページの<strong>骨格</strong>や<strong>構造</strong>を定義する言語です。人間で言えば「骨格」、建物で言えば「鉄骨や柱」に相当します。見出し、段落、リスト、画像、リンクなど、ページに「何が」存在するかを意味づけします。</p>
+</li>
+<li>
+<p><strong>CSS (Cascading Style Sheets):</strong> HTMLで定義された骨格に対して、<strong>見た目</strong>や<strong>装飾</strong>を施す言語です。人間で言えば「服装、髪型、メイク」、建物で言えば「壁紙、塗装、インテリア」に相当します。文字の色、大きさ、背景、配置など、ページが「どのように」見えるかを定義します。</p>
+</li>
+</ul>
+<p>重要なのは、<strong>HTMLが構造を、CSSが見た目を担当する</strong>という役割分担です。この「構造と見た目の分離」は、メンテナンス性が高く、効率的なWeb開発を行うための非常に重要な原則です。</p>
+<h3 id="_2">詳細解説</h3>
+<h4 id="html">HTMLの役割：文書の構造化</h4>
+<p>HTMLは「マークアップ言語」と呼ばれます。これは、文章の各部分が「これは見出しです」「これは段落です」といったように、「意味（セマンティクス）」を<strong>マーク（目印）</strong>付けしていくことから来ています。</p>
+<p>例えば、以下のような簡単なHTMLを見てみましょう。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;私の最初のページ&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;こんにちは、世界！&lt;/h1&gt;
+  &lt;p&gt;これは私の最初のWebページです。&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>このコードは、ブラウザに対して以下のような情報を伝えています。</p>
+<ul>
+<li><code>&lt;h1&gt;</code>: 「こんにちは、世界！」というテキストは、このページで最も重要なレベル1の見出しです。</li>
+<li><code>&lt;p&gt;</code>: 「これは私の最初のWebページです。」というテキストは、一つの段落です。</li>
+</ul>
+<p>この時点では、文字の色や大きさといった「見た目」の情報は一切含まれていません。ただ、文書の構造だけが定義されています。</p>
+<h4 id="css">CSSの役割：見た目の装飾</h4>
+<p>次に、CSSを使ってこのHTMLにスタイルを適用してみましょう。CSSは、どの要素に（セレクタ）、どのようなスタイルを（プロパティと値）適用するかを記述します。</p>
+<pre class="codehilite"><code class="language-css">h1 {
+  color: blue;
+  font-size: 32px;
+}
+
+p {
+  color: gray;
+}
+</code></pre>
+
+<p>このCSSは、ブラウザに対して以下のように指示します。</p>
+<ul>
+<li><code>h1</code>: <code>&lt;h1&gt;</code>タグで囲まれた要素の文字色を青（<code>blue</code>）に、文字サイズを32ピクセル（<code>32px</code>）にしなさい。</li>
+<li><code>p</code>: <code>&lt;p&gt;</code>タグで囲まれた要素の文字色を灰色（<code>gray</code>）にしなさい。</li>
+</ul>
+<h4 id="htmlcss_1">HTMLとCSSの連携</h4>
+<p>HTMLファイルからこのCSSファイルを読み込むことで、初めて構造と見た目が結びつきます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;私の最初のページ&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt; &lt;!-- この行でCSSファイルを読み込む --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;こんにちは、世界！&lt;/h1&gt;
+  &lt;p&gt;これは私の最初のWebページです。&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>こうすることで、ブラウザはまずHTMLを解釈してページの骨格を作り、次にCSSを解釈してその骨格にデザインを施し、最終的にスタイルが適用されたWebページを画面に表示するのです。</p>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>なぜ分離するのか？:</strong> もしHTMLに直接スタイルを書き込んでしまうと（古い手法では可能でした）、サイト全体のデザインを変更したい場合に、すべてのHTMLファイルを一つ一つ修正する必要があり、非常に手間がかかります。CSSファイルを一つ修正するだけでサイト全体の見た目を変更できる「構造と見た目の分離」は、大規模な開発において不可欠です。</li>
+<li><strong>セマンティックHTML:</strong> HTMLタグは、その意味に合ったものを使うことが非常に重要です。これを「セマンティックHTML」と呼びます。例えば、単に文字を太くしたいだけで見出しタグ<code>&lt;h1&gt;</code>を使うべきではありません。これは、検索エンジンがページの構造を理解する上でも重要になります（SEO）。</li>
+</ul>
+<h3 id="_3">✨ まとめ</h3>
+<ul>
+<li><strong>HTML</strong>はWebページの「骨格」や「構造」を定義する。</li>
+<li><strong>CSS</strong>はHTMLで作られた骨格に「見た目」や「装飾」を施す。</li>
+<li>「構造と見た目の分離」は、効率的でメンテナンス性の高いWeb開発の基本原則である。</li>
+<li>ブラウザはHTMLを解釈して構造を作り、CSSを解釈してスタイルを適用し、最終的なページを表示する。</li>
+</ul>
+<h3 id="_4">📝 学習のポイント</h3>
+<ul>
+<li>[ ] HTMLタグが文書の「意味」を表すものであることを説明できるか？</li>
+<li>[ ] CSSがHTML要素の「見た目」を定義するものであることを説明できるか？</li>
+<li>[ ] なぜHTMLとCSSを分離して書く必要があるのか、そのメリットを説明できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-2: HTMLの基本構造と主要タグ.html" class="next">HTMLの基本構造と主要タグ</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

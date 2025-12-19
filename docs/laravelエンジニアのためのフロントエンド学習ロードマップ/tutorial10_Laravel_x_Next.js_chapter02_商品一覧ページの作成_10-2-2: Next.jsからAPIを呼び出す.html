@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next.jsからAPIを呼び出す | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成.html">Chapter 2: 商品一覧ページの作成</a><span>></span>Next.jsからAPIを呼び出す</div>
+                    <div class="section-content">
+<h1 id="10-2-2-nextjsapi">10-2-2: Next.jsからAPIを呼び出す</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.jsのServer Componentから外部API（Laravel API）を<code>fetch</code>する方法を学ぶ</li>
+<li>環境変数（<code>.env.local</code>）を使って、APIのベースURLを安全に管理する方法を習得する</li>
+<li>取得したデータの型をTypeScriptで定義し、安全に扱う方法を学ぶ</li>
+<li>CORS（Cross-Origin Resource Sharing）エラーとは何か、そしてなぜ発生するのかを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>バックエンドに商品APIが準備できました。次はいよいよ、フロントエンド（Next.js）からこのAPIを呼び出し、商品データを取得します。</p>
+<p>Next.jsのApp Routerでは、Server Componentがデフォルトです。Server Componentはサーバーサイドで実行されるため、<code>fetch</code> APIを使って外部のAPIサーバーと直接通信することができます。これは、PHP（Laravel）で<code>curl</code>や<code>Guzzle</code>を使って他のAPIを叩くのと似た感覚です。</p>
+<p>このセクションでは、商品一覧を表示するための新しいページ（<code>/products</code>）を作成し、そのページのServer Componentから、先ほど作成したLaravelのAPI（<code>http://localhost/api/products</code>）を呼び出します。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="1">ステップ1: 環境変数の設定</h3>
+<p>APIのエンドポイントURLをコード内に直接書き込む（ハードコーディングする）のは良い習慣ではありません。開発環境と本番環境でURLが異なる場合に対応しづらくなりますし、URLが変更された際の修正も大変です。</p>
+<p>そこで、環境変数を使ってAPIのベースURLを管理します。Next.jsプロジェクトのルートに<code>.env.local</code>というファイルを作成し、以下のように記述してください。</p>
+<pre class="codehilite"><code class="language-env"># .env.local
+
+NEXT_PUBLIC_API_BASE_URL=http://localhost/api
+</code></pre>
+
+<ul>
+<li><code>.env.local</code>: このファイルに定義された環境変数は、ローカル開発環境でのみ読み込まれます。Gitの管理対象から除外（<code>.gitignore</code>に記載済み）されているため、個人の環境設定や秘密情報を安全に管理できます。</li>
+<li><code>NEXT_PUBLIC_</code>: Next.jsでは、プレフィックスとして<code>NEXT_PUBLIC_</code>が付いた環境変数のみが、ブラウザ側（Client Component）でもアクセス可能な変数として扱われます。今回はServer Componentからのみアクセスしますが、今後の拡張性を考えて付けておくのが一般的です。</li>
+</ul>
+<p><strong>重要</strong>: <code>.env.local</code>ファイルを変更した後は、Next.jsの開発サーバーを一度停止し、再度<code>npm run dev</code>で起動し直す必要があります。</p>
+<h3 id="2-api">ステップ2: 商品ページの作成とAPI呼び出し</h3>
+<p>次に、商品一覧を表示するためのページを作成します。</p>
+<ol>
+<li><code>src/app/</code>ディレクトリの中に<code>products/</code>という新しいディレクトリを作成します。</li>
+<li><code>src/app/products/</code>の中に<code>page.tsx</code>というファイルを作成します。</li>
+</ol>
+<p><code>src/app/products/page.tsx</code>に、APIを呼び出してデータを取得するコードを記述します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/app/products/page.tsx
+
+// APIから返される商品データの型を定義
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// 商品データを取得するための非同期関数
+async function getProducts(): Promise&lt;Product[]&gt; {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/products`;
+  console.log(`Fetching data from: ${url}`); // デバッグ用にURLをログ出力
+
+  const res = await fetch(url, {
+    // SSRではキャッシュが強力に効くため、開発中はキャッシュを無効にする
+    cache: &quot;no-store&quot;,
+  });
+
+  if (!res.ok) {
+    // エラーハンドリング
+    throw new Error(&quot;Failed to fetch products&quot;);
+  }
+
+  return res.json();
+}
+
+// 商品一覧ページのコンポーネント (Server Component)
+export default async function ProductsPage() {
+  const products = await getProducts();
+
+  return (
+    &lt;main className=&quot;container mx-auto p-8&quot;&gt;
+      &lt;h1 className=&quot;text-3xl font-bold mb-8&quot;&gt;商品一覧&lt;/h1&gt;
+      {/* 取得したデータをとりあえずJSON形式で表示してみる */}
+      &lt;pre className=&quot;bg-gray-100 p-4 rounded-lg&quot;&gt;
+        {JSON.stringify(products, null, 2)}
+      &lt;/pre&gt;
+    &lt;/main&gt;
+  );
+}
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong>型定義</strong>: <code>interface Product</code>で、APIから受け取るデータの構造を定義しています。これにより、<code>product.name</code>のようなプロパティアクセス時にエディタの補完が効き、タイプミスを防ぐことができます。</li>
+<li><strong>Server Component</strong>: <code>ProductsPage</code>コンポーネントは<code>async</code>キーワード付きで定義されています。これにより、コンポーネントのレンダリングを<code>await getProducts()</code>の完了まで待たせることができます。これはServer Componentならではの機能です。</li>
+<li><strong><code>fetch</code>の実行</strong>: <code>getProducts</code>関数内で、<code>fetch</code>を使ってLaravelのAPIを呼び出しています。URLは<code>.env.local</code>から読み込んだ環境変数を使って組み立てています。</li>
+<li><strong>キャッシュの無効化</strong>: <code>fetch(url, { cache: "no-store" })</code>は、Next.jsの強力なキャッシュ機能を一時的に無効にするためのオプションです。開発中にAPIのレスポンスを変更しても、古いデータが表示され続けるのを防ぎます。本番環境では、<code>{ next: { revalidate: 60 } }</code>のように、適切なキャッシュ戦略を設定します。</li>
+</ul>
+<h3 id="3-cors">ステップ3: CORSエラーとの遭遇</h3>
+<p>開発サーバーを再起動し、ブラウザで<code>http://localhost:3000/products</code>にアクセスしてみてください。ページには何も表示されず、ブラウザのコンソールと、Next.jsの開発サーバーのターミナル（VSCodeのターミナルなど）の両方に、以下のような<strong>CORSエラー</strong>が表示されるはずです。</p>
+<p><strong>ブラウザのコンソール:</strong></p>
+<pre class="codehilite"><code>Access to fetch at 'http://localhost/api/products' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+</code></pre>
+
+<p><strong>Next.jsサーバーのターミナル:</strong></p>
+<pre class="codehilite"><code>Error: Failed to fetch products
+... (エラー詳細)
+</code></pre>
+
+<p>これは正常な動作です。なぜこのエラーが起こるのでしょうか？</p>
+<h4 id="cors-cross-origin-resource-sharing">CORS (Cross-Origin Resource Sharing) とは？</h4>
+<p>CORSは、Webブラウザが持つセキュリティ機能の一つです。デフォルトでは、ブラウザは<strong>異なるオリジン</strong>からのリソース読み込みをブロックします。</p>
+<ul>
+<li><strong>オリジン</strong>: スキーム（<code>http</code>）、ホスト（<code>localhost</code>）、ポート（<code>:3000</code>）の組み合わせ。</li>
+</ul>
+<p>今回のケースでは、</p>
+<ul>
+<li>リクエスト元: Next.jsアプリケーション (<code>http://localhost:3000</code>)</li>
+<li>リクエスト先: Laravel API (<code>http://localhost:80</code> ※ポート80は省略されている)</li>
+</ul>
+<p>となり、ポート番号が異なるため「異なるオリジン」と判断されます。そのため、ブラウザ（正確には、Next.jsサーバーがブラウザのように振る舞っている）は、Laravel APIからのレスポンスに「<code>http://localhost:3000</code>からのリクエストを許可しますよ」という特別なヘッダー（<code>Access-Control-Allow-Origin</code>）が含まれていない限り、リソースの読み込みをブロックします。</p>
+<p>この問題を解決するには、<strong>サーバーサイド（Laravel側）</strong>で、「このオリジンからのリクエストは安全なので許可します」と設定してあげる必要があります。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>Next.jsのServer Componentでは、<code>async/await</code>を使ってコンポーネント内で直接<code>fetch</code>によるAPI呼び出しができる。</li>
+<li>APIのURLなどは<code>.env.local</code>ファイルに環境変数として定義し、<code>process.env</code>でアクセスするのが定石である。</li>
+<li>TypeScriptの<code>interface</code>でAPIレスポンスの型を定義することで、コードの安全性が向上する。</li>
+<li>異なるオリジン間でAPI通信を行うと、デフォルトでブラウザのCORSポリシーによってブロックされる。</li>
+</ul>
+<p>CORSエラーは、多くの初学者がつまずくポイントですが、その仕組みを理解すれば怖くありません。次のセクションでは、このCORSエラーを解決するために、Laravel側で必要な設定を行っていきます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-1: LaravelでAPIを作成する.html" class="prev">LaravelでAPIを作成する</a>
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-3: 取得したデータを表示する.html" class="next">取得したデータを表示する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

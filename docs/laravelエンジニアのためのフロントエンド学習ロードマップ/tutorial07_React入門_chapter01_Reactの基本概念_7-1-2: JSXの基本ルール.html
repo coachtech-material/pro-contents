@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSXの基本ルール | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html" class="current">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial07_React入門.html">Tutorial 7: React入門</a><span>></span><a href="tutorial07_React入門_chapter01_Reactの基本概念.html">Chapter 1: Reactの基本概念</a><span>></span>JSXの基本ルール</div>
+                    <div class="section-content">
+<h1 id="7-1-2-jsx">7-1-2: JSXの基本ルール</h1>
+<h2 id="chapter-1-react">Chapter 1: Reactの基本概念</h2>
+<h3 id="section-2-jsx">Section 2: JSXの基本ルール</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>JSXがJavaScriptの構文拡張であり、最終的にJavaScriptオブジェクトに変換されることを理解する。</li>
+<li>JSXを記述する上での3つの重要なルール（単一のルート要素、閉じタグの必須、<code>camelCase</code>の属性名）を習得する。</li>
+<li>JSX内で波括弧<code>{}</code>を使って、JavaScriptの変数を埋め込む方法を習得する。</li>
+</ul>
+<hr />
+<h3 id="javascripthtml">イントロダクション：JavaScriptの中にHTMLを書く？</h3>
+<p>Reactのコードを初めて見ると、多くの人が驚きます。なぜなら、JavaScriptのファイル（<code>.js</code>または<code>.jsx</code>, <code>.tsx</code>）の中に、HTMLのようなコードが直接書かれているからです。</p>
+<pre class="codehilite"><code class="language-jsx">const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;;
+</code></pre>
+
+<p>このHTMLのような構文が<strong>JSX (JavaScript XML)</strong> です。JSXは、ReactでUIの構造を記述するために使われる、JavaScriptの構文拡張です。</p>
+<p>一見すると奇妙に感じるかもしれませんが、JSXはUIの構造とロジックを同じ場所に記述できるため、コンポーネントの全体像を把握しやすくなるという大きなメリットがあります。このセクションでは、JSXを正しく書くための基本的なルールを学びます。</p>
+<hr />
+<h3 id="jsx-javascript">⚙️ JSXとは？ JavaScriptへの変換</h3>
+<p>JSXはブラウザが直接解釈できるものではありません。Babelのような<strong>トランスパイラ</strong>によって、最終的に<code>React.createElement()</code>という関数呼び出しに変換されます。この関数は、UIの構造を表すJavaScriptオブジェクトを生成します。</p>
+<p><strong>JSX:</strong></p>
+<pre class="codehilite"><code class="language-jsx">const element = &lt;h1 className=&quot;greeting&quot;&gt;Hello, world!&lt;/h1&gt;;
+</code></pre>
+
+<p><strong>上記が変換されたJavaScriptコード:</strong></p>
+<pre class="codehilite"><code class="language-javascript">const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+</code></pre>
+
+<p>つまり、JSXは<code>React.createElement()</code>をより直感的で書きやすくするための<strong>シンタックスシュガー（糖衣構文）</strong>なのです。開発者はHTMLを書く感覚でUIを構築できますが、その実体はJavaScriptである、という点を理解しておくことが重要です。</p>
+<hr />
+<h3 id="jsx3">🚀 JSXの3大ルール</h3>
+<p>JSXを書く際には、HTMLとは異なるいくつかの重要なルールを守る必要があります。</p>
+<h4 id="1">ルール1：コンポーネントは単一のルート要素を返さなければならない</h4>
+<p>コンポーネントが返すJSXは、必ず<strong>一つの親要素</strong>で囲まれている必要があります。複数の要素を並べて返すことはできません。</p>
+<p><strong>❌ 間違い:</strong></p>
+<pre class="codehilite"><code class="language-jsx">return (
+  &lt;h1&gt;Title&lt;/h1&gt;
+  &lt;p&gt;Paragraph&lt;/p&gt;
+);
+</code></pre>
+
+<p><strong>⭕ 正しい:</strong></p>
+<pre class="codehilite"><code class="language-jsx">return (
+  &lt;div&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+  &lt;/div&gt;
+);
+</code></pre>
+
+<p>もし、余計な<code>div</code>要素をDOMに追加したくない場合は、<strong>フラグメント (<code>&lt;&gt;&lt;/&gt;</code>)</strong> を使って要素をグループ化できます。</p>
+<p><strong>⭕ フラグメントを使った正しい書き方:</strong></p>
+<pre class="codehilite"><code class="language-jsx">return (
+  &lt;&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+  &lt;/&gt;
+);
+</code></pre>
+
+<h4 id="2">ルール2：すべてのタグは閉じなければならない</h4>
+<p>HTMLでは<code>&lt;br&gt;</code>や<code>&lt;img&gt;</code>のように閉じタグが不要な要素もありますが、JSXでは<strong>すべてのタグを明示的に閉じる</strong>必要があります。子要素を持たないタグは、<code>/&gt;</code>で自己終了させます。</p>
+<p><strong>❌ 間違い:</strong></p>
+<pre class="codehilite"><code class="language-jsx">return (
+  &lt;&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;img src=&quot;image.png&quot;&gt;
+  &lt;/&gt;
+);
+</code></pre>
+
+<p><strong>⭕ 正しい:</strong></p>
+<pre class="codehilite"><code class="language-jsx">return (
+  &lt;&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;img src=&quot;image.png&quot; /&gt;
+  &lt;/&gt;
+);
+</code></pre>
+
+<h4 id="3camelcase">ルール3：属性名は<code>camelCase</code>で書く</h4>
+<p>JSXの属性は、最終的にJavaScriptオブジェクトのプロパティになります。そのため、HTMLの属性名とは少し異なる命名規則に従います。</p>
+<ul>
+<li><code>class</code> → <code>className</code></li>
+<li><code>for</code> → <code>htmlFor</code></li>
+<li><code>onclick</code> → <code>onClick</code></li>
+<li><code>tabindex</code> → <code>tabIndex</code></li>
+</ul>
+<p><code>class</code>や<code>for</code>はJavaScriptの予約語であるため、そのままでは使えません。その他の多くの属性（例: <code>onclick</code>）は、<code>camelCase</code>形式で記述するのがルールです。</p>
+<p><strong>❌ 間違い (HTMLの書き方):</strong></p>
+<pre class="codehilite"><code class="language-jsx">&lt;div class=&quot;my-class&quot; onclick=&quot;handleClick()&quot;&gt;Click me&lt;/div&gt;
+</code></pre>
+
+<p><strong>⭕ 正しい (JSXの書き方):</strong></p>
+<pre class="codehilite"><code class="language-jsx">&lt;div className=&quot;my-class&quot; onClick={handleClick}&gt;Click me&lt;/div&gt;
+</code></pre>
+
+<hr />
+<h3 id="javascript">⚙️ 波括弧<code>{}</code>によるJavaScriptの埋め込み</h3>
+<p>JSXの最も強力な機能の一つが、波括弧<code>{}</code>を使って、その中にJavaScriptの式を直接埋め込めることです。</p>
+<h4 id="_1">変数の表示</h4>
+<pre class="codehilite"><code class="language-jsx">const name = &quot;Taro&quot;;
+const element = &lt;h1&gt;Hello, {name}!&lt;/h1&gt;; // &quot;Hello, Taro!&quot; と表示される
+</code></pre>
+
+<h4 id="_2">関数の結果の表示</h4>
+<pre class="codehilite"><code class="language-jsx">function formatName(user) {
+  return `${user.firstName} ${user.lastName}`;
+}
+
+const user = { firstName: 'Hanako', lastName: 'Suzuki' };
+const element = &lt;h1&gt;Hello, {formatName(user)}!&lt;/h1&gt;; // &quot;Hello, Hanako Suzuki!&quot; と表示される
+</code></pre>
+
+<h4 id="_3">属性への適用</h4>
+<p>属性の値として文字列リテラルではなく、JavaScriptの変数を渡したい場合も波括弧を使います。</p>
+<pre class="codehilite"><code class="language-jsx">const imageUrl = &quot;/images/profile.png&quot;;
+const element = &lt;img src={imageUrl} /&gt;;
+</code></pre>
+
+<p><strong>注意:</strong> 波括弧の中には、<strong>値を返す式</strong>（変数、関数呼び出し、三項演算子など）のみ記述できます。<code>if</code>文や<code>for</code>ループのような文は直接記述できません。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><strong>JSX</strong>は、ReactでUIを記述するためのJavaScriptの構文拡張である。</li>
+<li>JSXは、最終的に<code>React.createElement()</code>という関数呼び出しに変換される。</li>
+<li>JSXの3大ルール:<ol>
+<li><strong>単一のルート要素</strong>で全体を囲む（<code>&lt;div&gt;</code>またはフラグメント<code>&lt;&gt;&lt;/&gt;</code>）。</li>
+<li>すべてのタグは<strong>必ず閉じる</strong>（自己終了タグは<code>&lt;img /&gt;</code>のように書く）。</li>
+<li>属性名は<code>class</code> -&gt; <code>className</code>のように<strong><code>camelCase</code></strong>で書く。</li>
+</ol>
+</li>
+<li>波括弧<code>{}</code>を使うことで、JSX内にJavaScriptの変数や式を埋め込むことができる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] なぜJSXでは<code>class</code>の代わりに<code>className</code>を使わなければならないのでしょうか？</li>
+<li>[ ] 以下のHTMLコードを、JSXのルールに従って書き直してください。<br />
+<code>html
+    &lt;div&gt;
+      &lt;label for="name"&gt;名前:&lt;/label&gt;
+      &lt;input type="text" id="name"&gt;
+      &lt;img src="icon.png"&gt;
+    &lt;/div&gt;</code></li>
+<li>[ ] <code>const element = &lt;h1&gt;{if (user) { return user.name; }}&lt;/h1&gt;;</code> というJSXがエラーになるのはなぜですか？ これを正しく書くにはどうすればよいでしょうか？（ヒント: 三項演算子）</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial07_React入門_chapter01_Reactの基本概念_7-1-1: なぜReactなのか？.html" class="prev">なぜReactなのか？</a>
+<a href="tutorial07_React入門_chapter01_Reactの基本概念_7-1-3: コンポーネントの作成と再利用.html" class="next">コンポーネントの作成と再利用</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

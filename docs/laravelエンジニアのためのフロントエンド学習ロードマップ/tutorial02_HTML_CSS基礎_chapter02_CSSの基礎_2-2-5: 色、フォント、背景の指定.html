@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色、フォント、背景の指定 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎.html">Chapter 2: CSSの基礎</a><span>></span>色、フォント、背景の指定</div>
+                    <div class="section-content">
+<h1 id="2-2-4">2-2-4: 色、フォント、背景の指定</h1>
+<h2 id="chapter-2-css">Chapter 2: CSSの基礎</h2>
+<h3 id="section-4">Section 4: 色、フォント、背景の指定</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、ページの印象を大きく左右する「色」「フォント」「背景」のスタイリング方法を学びます。これらのプロパティを組み合わせることで、以下のようにデザイン性の高い要素を作成できるようになります。</p>
+<p><em>ここにスクリーンショットを挿入: 特定のフォントが適用され、文字色と背景色が設定された見出しと、背景画像が敷かれたカードコンポーネントがわかるデザイン</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、Webページの視覚的な魅力を高めるための基本的な装飾プロパティを学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li><code>color</code>プロパティを使って、テキストの色を自由に変更できるようになる。</li>
+<li><code>font-family</code>, <code>font-size</code>, <code>font-weight</code>を使って、フォントの種類、大きさ、太さを指定できるようになる。</li>
+<li><code>background-color</code>と<code>background-image</code>を使って、要素の背景を装飾できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>これまでのセクションで、HTMLでページの構造を作り、CSSでレイアウトの骨格（ボックスモデル）を整える方法を学びました。このセクションでは、さらに一歩進んで、ページの「装飾」に焦点を当てます。文字の色やフォント、要素の背景を変えるだけで、Webページの印象は劇的に変わります。ユーザーに情報を分かりやすく伝え、ブランドイメージを表現するための基本的なテクニックをマスターしましょう。</p>
+<h3 id="_2">詳細解説</h3>
+<h4 id="1-color">1. 色の指定 (<code>color</code>)</h4>
+<p>テキストの色を指定するには、<code>color</code>プロパティを使います。色の指定方法にはいくつか種類があります。</p>
+<ul>
+<li><strong>カラーネーム:</strong> <code>red</code>, <code>blue</code>, <code>black</code> のように、あらかじめ定義された名前で指定します。手軽ですが、指定できる色の種類は限られます。</li>
+<li><strong>HEX（16進数カラーコード）:</strong> <code>#RRGGBB</code> の形式で、赤(R)・緑(G)・青(B)の光の三原色をそれぞれ16進数（00〜FF）で指定します。デザインツールなどでも一般的に使われる最もポピュラーな形式です。例: <code>#000000</code> (黒), <code>#FFFFFF</code> (白), <code>#FF0000</code> (赤)。</li>
+<li>
+<p><strong>RGB:</strong> <code>rgb(R, G, B)</code> の形式で、赤・緑・青をそれぞれ0〜255の数値で指定します。<code>rgba(R, G, B, A)</code> のように <code>A</code> (アルファ値: 0〜1) を追加すると、透明度も指定できます。</p>
+</li>
+<li>
+<p><strong>コード例:</strong><br />
+    ```css<br />
+    /<em> カラーネーム </em>/<br />
+    h1 {<br />
+      color: darkcyan;<br />
+    }</p>
+<p>/<em> HEX </em>/<br />
+p {<br />
+  color: #333333; /<em> やや薄い黒 </em>/<br />
+}</p>
+<p>/<em> RGBA（透明度あり） </em>/<br />
+.sub-text {<br />
+  color: rgba(0, 0, 0, 0.5); /<em> 黒の半透明 </em>/<br />
+}<br />
+```</p>
+</li>
+</ul>
+<h4 id="2-font-">2. フォントの指定 (<code>font-*</code>)</h4>
+<p>フォント関連のプロパティは、ページの読みやすさとデザイン性を大きく左右します。</p>
+<ul>
+<li>
+<p><strong><code>font-family</code> (フォントの種類):</strong><br />
+    どのフォントで表示するかを指定します。複数のフォントをカンマ区切りで指定すると、ユーザーの環境に最初のフォントがなければ、次のフォントが試されます。最後に <code>sans-serif</code> (ゴシック体) や <code>serif</code> (明朝体) といった「総称フォントファミリー」を指定するのが一般的です。</p>
+</li>
+<li>
+<p><strong><code>font-size</code> (文字の大きさ):</strong><br />
+    文字の大きさを指定します。単位には <code>px</code> (ピクセル), <code>rem</code> (ルート要素に対する相対的な大きさ), <code>em</code> (親要素に対する相対的な大きさ) などがあります。最初は <code>px</code> で感覚を掴むのが分かりやすいでしょう。</p>
+</li>
+<li>
+<p><strong><code>font-weight</code> (文字の太さ):</strong><br />
+    文字の太さを指定します。<code>normal</code> (標準), <code>bold</code> (太字) といったキーワードや、100〜900の数値で指定できます（フォントがその太さに対応している必要があります）。</p>
+</li>
+<li>
+<p><strong><code>line-height</code> (行の高さ):</strong><br />
+    行と行の間隔を調整します。文字サイズだけを指定すると行間が詰まって見えることがあるため、<code>1.5</code> のように単位なしの数値を指定して、文字サイズの1.5倍の高さを確保すると、読みやすさが向上します。</p>
+</li>
+<li>
+<p><strong>コード例:</strong><br />
+    ```css<br />
+    body {<br />
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;<br />
+      font-size: 16px;<br />
+      line-height: 1.6;<br />
+    }</p>
+<p>h2 {<br />
+  font-size: 24px;<br />
+  font-weight: bold;<br />
+}<br />
+```</p>
+</li>
+</ul>
+<h4 id="3-background-">3. 背景の指定 (<code>background-*</code>)</h4>
+<p>要素の背景に色や画像を指定することで、コンテンツを際立たせることができます。</p>
+<ul>
+<li>
+<p><strong><code>background-color</code> (背景色):</strong><br />
+    要素の背景色を指定します。値の指定方法は <code>color</code> プロパティと同じです。</p>
+</li>
+<li>
+<p><strong><code>background-image</code> (背景画像):</strong><br />
+<code>url()</code> 関数を使って、背景に表示したい画像のパスを指定します。デフォルトでは画像が繰り返し表示されます。</p>
+</li>
+<li>
+<p><strong>背景画像の調整プロパティ:</strong></p>
+<ul>
+<li><code>background-repeat</code>: 画像の繰り返し方法を指定します (<code>no-repeat</code>, <code>repeat-x</code>, <code>repeat-y</code> など)。</li>
+<li><code>background-position</code>: 背景画像の表示位置を指定します (<code>center</code>, <code>top right</code> など)。</li>
+<li><code>background-size</code>: 背景画像の大きさを指定します (<code>cover</code> は要素全体を覆うように拡大・縮小、<code>contain</code> は画像全体が収まるように調整)。</li>
+</ul>
+</li>
+<li>
+<p><strong>コード例:</strong><br />
+    ```css<br />
+    .card {<br />
+      background-color: #f0f0f0; /<em> 薄いグレーの背景色 </em>/<br />
+      border: 1px solid #ddd;<br />
+      padding: 20px;<br />
+    }</p>
+<p>.hero-header {<br />
+  background-image: url('../images/hero.jpg');<br />
+  background-size: cover;<br />
+  background-position: center;<br />
+  color: white; /<em> 背景画像が暗いので文字色を白に </em>/<br />
+  padding: 100px 20px;<br />
+}<br />
+```</p>
+</li>
+</ul>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>Webフォント:</strong> ユーザーの環境に依存しない美しいフォントを使いたい場合は、Google FontsなどのWebフォントサービスを利用するのが一般的です。指定された<code>&lt;link&gt;</code>タグをHTMLの<code>&lt;head&gt;</code>に追加し、<code>font-family</code>でそのフォント名を指定するだけで簡単に導入できます。</li>
+<li><strong>色のコントラスト:</strong> 背景色と文字色のコントラスト（明暗差）が低いと、文字が非常に読みにくくなります。特に高齢者や視覚に障がいのある方にとっては深刻な問題です。デザインする際は、十分なコントラスト比を確保するように心がけましょう。Chrome DevToolsなどでチェックすることができます。</li>
+</ul>
+<h3 id="_3">✨ まとめ</h3>
+<ul>
+<li>テキストの色は <code>color</code> プロパティで指定する。</li>
+<li>色の指定方法には、カラーネーム、HEX、RGB(A)などがある。</li>
+<li>フォントの種類は <code>font-family</code>、大きさは <code>font-size</code>、太さは <code>font-weight</code> で指定する。</li>
+<li>行の高さは <code>line-height</code> で調整し、読みやすさを確保する。</li>
+<li>要素の背景には <code>background-color</code> で色を、<code>background-image</code> で画像を指定できる。</li>
+</ul>
+<h3 id="_4">📝 学習のポイント</h3>
+<ul>
+<li>[ ] テキストの色をHEXコードで <code>#333</code> に変更できるか？</li>
+<li>[ ] <code>font-family</code> で、第一候補に "Arial"、第二候補として <code>sans-serif</code> を指定できるか？</li>
+<li>[ ] ある <code>div</code> 要素の背景に、<code>images/bg.png</code> という画像を表示し、それが繰り返されないように設定できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-4: ボックスモデルとmargin・paddingの使い分け.html" class="prev">ボックスモデルとmargin・paddingの使い分け</a>
+<a href="tutorial02_HTML_CSS基礎_chapter02_CSSの基礎_2-2-6: Chapter 2 ハンズオン: プロフィールカードをスタイリングする.html" class="next">Chapter 2 ハンズオン: プロフィールカードをスタイリングする</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

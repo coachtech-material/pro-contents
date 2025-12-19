@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitestの基本 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest.html">Chapter 1: ユニットテスト Vitest</a><span>></span>Vitestの基本</div>
+                    <div class="section-content">
+<h1 id="11-1-3-vitest">11-1-3: Vitestの基本</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Vitestの概要と特徴（Viteネイティブ、高速、Jest互換）を理解する</li>
+<li>Vitestの基本的なAPI（<code>describe</code>, <code>it</code>, <code>expect</code>）の使い方を習得する</li>
+<li>簡単な純粋関数のテストを実際に書いて、実行する方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p><a href="https://vitest.dev/">Vitest</a>は、Viteベースの高速なテストフレームワークです。Viteを利用するプロジェクト（このチュートリアルで作成するNext.jsプロジェクトも含む）と非常に相性が良く、設定もシンプルです。</p>
+<h3 id="vitest">Vitestの主な特徴</h3>
+<ul>
+<li><strong>高速な実行</strong>: ViteのHMR（ホットモジュールリプレイスメント）の仕組みを利用して、変更されたテストだけを即座に再実行します。開発中のフィードバックループが非常に高速です。</li>
+<li><strong>シンプルな設定</strong>: Viteの設定ファイル（<code>vite.config.ts</code>）を共有するため、テストのための複雑な設定が不要です。</li>
+<li><strong>Jest互換のAPI</strong>: 最も広く使われているテストフレームワークである<a href="https://jestjs.io/">Jest</a>と互換性のあるAPIを提供しています。<code>describe</code>, <code>it</code>, <code>expect</code>といったおなじみの構文でテストを書くことができ、Jestからの移行も容易です。</li>
+</ul>
+<h2 id="vitestapi">Vitestの基本API</h2>
+<p>Vitestでテストを書く際には、主に3つのグローバル関数を利用します。これらの関数は、テストファイル内で<code>import</code>文なしに利用できます。</p>
+<ol>
+<li>
+<p><code>describe(name, factory)</code></p>
+<ul>
+<li>複数の関連するテストをグループ化するために使います。</li>
+<li><code>name</code>には、テストグループの分かりやすい名前（例: 「<code>useCounter</code>フックのテスト」）を文字列で指定します。</li>
+<li><code>factory</code>には、実際のテストコードを含む関数を指定します。</li>
+</ul>
+</li>
+<li>
+<p><code>it(name, factory)</code> または <code>test(name, factory)</code></p>
+<ul>
+<li>個々のテストケースを定義します。<code>it</code>と<code>test</code>はエイリアスであり、機能は全く同じです。どちらを使うかは好みの問題ですが、一般的に「It should ...（それは〜するべきである）」という英文のように読めることから<code>it</code>が好まれる傾向があります。</li>
+<li><code>name</code>には、そのテストケースが何を検証しているのか（仕様）を具体的に記述します。（例: 「<code>increment</code>を呼ぶとカウントが1増える」）</li>
+</ul>
+</li>
+<li>
+<p><code>expect(value)</code></p>
+<ul>
+<li>アサーション（assertion）を開始するために使います。「アサーション」とは、「値が期待通りであること」を表明するコードです。</li>
+<li><code>expect</code>に検証したい値（<code>value</code>）を渡すと、マッチャー（matcher）メソッドを持つオブジェクトが返されます。</li>
+</ul>
+</li>
+</ol>
+<h3 id="matcher">マッチャー（Matcher）とは？</h3>
+<p>マッチャーは、<code>expect</code>で渡された値が期待値とどのように一致するかを検証するためのメソッドです。よく使われるマッチャーには以下のようなものがあります。</p>
+<ul>
+<li><code>.toBe(expected)</code>: プリミティブ値（数値、文字列、真偽値など）が厳密に等しいか（<code>===</code>）を検証します。</li>
+<li><code>.toEqual(expected)</code>: オブジェクトや配列が、再帰的に見て同じ値を持つかを検証します。</li>
+<li><code>.toBeTruthy()</code>: 値が<code>true</code>であることを検証します。</li>
+<li><code>.toBeFalsy()</code>: 値が<code>false</code>であることを検証します。</li>
+<li><code>.toContain(item)</code>: 配列や文字列に特定の値が含まれているかを検証します。</li>
+<li><code>.toThrow()</code>: 関数が例外をスローするかを検証します。</li>
+</ul>
+<p>その他にも多くのマッチャーが存在します。詳しくは<a href="https://vitest.dev/api/expect.html">Vitestの公式ドキュメント</a>を参照してください。</p>
+<h2 id="_3">実際にテストを書いてみよう</h2>
+<p>それでは、簡単な純粋関数のテストを書いてみましょう。</p>
+<h4 id="1">ステップ1: テスト対象の関数の作成</h4>
+<p><code>src/utils/math.ts</code>というファイルを作成し、2つの数値を足し合わせる簡単な関数を定義します。</p>
+<pre class="codehilite"><code class="language-typescript">// src/utils/math.ts
+
+export const add = (a: number, b: number): number =&gt; {
+  return a + b;
+};
+</code></pre>
+
+<h4 id="2">ステップ2: テストファイルの作成</h4>
+<p>Vitestは、<code>.test.ts</code>または<code>.spec.ts</code>という接尾辞を持つファイルをテストファイルとして自動的に認識します。一般的に、テスト対象のファイルと同じ階層にテストファイルを置くのが管理しやすいため推奨されます。</p>
+<p><code>src/utils/math.test.ts</code>を作成し、以下のテストコードを記述します。</p>
+<pre class="codehilite"><code class="language-typescript">// src/utils/math.test.ts
+
+import { describe, it, expect } from &quot;vitest&quot;;
+import { add } from &quot;./math&quot;;
+
+// `add`関数に関するテストをグループ化
+describe(&quot;add&quot;, () =&gt; {
+  // テストケース1: 正の数の足し算
+  it(&quot;2つの正の数を正しく足し算できる&quot;, () =&gt; {
+    // 期待値の表明: add(1, 2)の結果は3であるべき
+    expect(add(1, 2)).toBe(3);
+  });
+
+  // テストケース2: 負の数を含む足し算
+  it(&quot;負の数を含む足し算が正しくできる&quot;, () =&gt; {
+    expect(add(-1, 5)).toBe(4);
+  });
+
+  // テストケース3: ゼロとの足し算
+  it(&quot;ゼロを足しても値が変わらない&quot;, () =&gt; {
+    expect(add(10, 0)).toBe(10);
+  });
+});
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><code>describe</code>で<code>add</code>関数に関するテストをまとめています。</li>
+<li><code>it</code>で3つの異なるテストケース（仕様）を定義しています。テストケース名は、そのテストが何を検証しているのかが明確に分かるように記述するのが重要です。</li>
+<li><code>expect(...).toBe(...)</code>を使って、<code>add</code>関数の実行結果が期待通りであるかを検証しています。</li>
+</ul>
+<h4 id="3">ステップ3: テストの実行</h4>
+<p><code>package.json</code>にテスト実行用のスクリプトを追加します。</p>
+<pre class="codehilite"><code class="language-json">// package.json
+{
+  ...
+  &quot;scripts&quot;: {
+    &quot;dev&quot;: &quot;next dev&quot;,
+    &quot;build&quot;: &quot;next build&quot;,
+    &quot;start&quot;: &quot;next start&quot;,
+    &quot;lint&quot;: &quot;next lint&quot;,
+    &quot;test&quot;: &quot;vitest&quot; // この行を追加
+  },
+  ...
+}
+</code></pre>
+
+<p>ターミナルで以下のコマンドを実行します。</p>
+<pre class="codehilite"><code class="language-bash">npm test
+</code></pre>
+
+<p>すると、Vitestが起動し、プロジェクト内のテストファイルを実行します。すべてのテストが成功すれば、以下のような出力が表示されます。</p>
+<pre class="codehilite"><code> ✓ src/utils/math.test.ts (3)
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  10:00:00
+   Duration  123ms (transform 45ms, setup 0ms, collect 12ms, tests 1ms)
+
+
+ PASS  Waiting for file changes...
+       press h to show help, press q to quit
+</code></pre>
+
+<p><code>PASS</code>と表示されれば成功です！Vitestはデフォルトでウォッチモードで起動するため、ファイルの変更を監視し続けます。<code>q</code>キーを押すと終了します。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>VitestはViteベースの高速なテストフレームワークである。</li>
+<li><code>describe</code>でテストをグループ化し、<code>it</code>で個々のテストケースを定義する。</li>
+<li><code>expect</code>とマッチャーを使って、値が期待通りであるかを検証（アサーション）する。</li>
+<li>テストファイルは<code>.test.ts</code>または<code>.spec.ts</code>という名前にし、<code>npm test</code>で実行する。</li>
+</ul>
+<p>これで、純粋関数のユニットテストを書く準備が整いました。次のハンズオンでは、この知識を使ってカスタムフックのテスト作成に挑戦します。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest_11-1-2: ユニットテストとは何か.html" class="prev">ユニットテストとは何か</a>
+<a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest_11-1-4: Chapter 1 ハンズオン: カスタムフックのテストを書く.html" class="next">Chapter 1 ハンズオン: カスタムフックのテストを書く</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

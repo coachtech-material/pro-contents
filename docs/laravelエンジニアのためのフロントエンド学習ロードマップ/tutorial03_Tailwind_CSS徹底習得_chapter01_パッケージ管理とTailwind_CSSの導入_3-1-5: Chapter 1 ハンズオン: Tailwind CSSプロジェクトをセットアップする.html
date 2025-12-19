@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: Tailwind CSSプロジェクトをセットアップする | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter01_パッケージ管理とTailwind_CSSの導入.html">Chapter 1: パッケージ管理とTailwind CSSの導入</a><span>></span>Chapter 1 ハンズオン: Tailwind CSSプロジェクトをセットアップする</div>
+                    <div class="section-content">
+<h1 id="tutorial-3-tailwind-css">Tutorial 3: Tailwind CSS 徹底習得</h1>
+<h2 id="chapter-1-tailwind-css">Chapter 1: パッケージ管理とTailwind CSSの導入</h2>
+<h3 id="chapter-1-npmtailwind-css">Chapter 1 ハンズオン: npmでTailwind CSSを導入し、ボタンを作成する</h3>
+<p>🎯 <strong>このハンズオンで達成すること</strong></p>
+<ul>
+<li>npmを使ってTailwind CSSをゼロからセットアップできるようになる。</li>
+<li>Tailwind CSSの基本的なユーティリティクラス（色、余白、フォントサイズ、角丸など）を使い、インタラクティブなボタンコンポーネントを作成できるようになる。</li>
+<li><code>hover:</code>などの状態バリアントを使い、マウスポインタが乗った時のスタイルを定義できるようになる。</li>
+</ul>
+<hr />
+<p>🖼️ <strong>完成イメージ</strong></p>
+<p>このハンズオンでは、以下のようなモダンでインタラクティブなボタンを作成します。マウスポインタを乗せると背景色が少し暗くなり、クリックしたときにはさらに暗くなることで、ユーザーにフィードバックを返します。</p>
+<p><em>ここにスクリーンショットを挿入: (1) 通常状態の青いボタン。 (2) マウスホバー状態で少し暗くなった青いボタン。 (3) クリック（アクティブ）状態でもっと暗くなった青いボタン。</em></p>
+<hr />
+<h3 id="_1">🧠 先輩エンジニアの思考プロセス</h3>
+<p>「モダンなボタンを一つ作ってください」と頼まれたとき、頭の中では以下のような手順を考えます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">手順</th>
+<th style="text-align: left;">思考プロセス</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1. 構造の定義 (HTML)</strong></td>
+<td style="text-align: left;">まずはボタンの骨格となるHTML要素（<code>&lt;button&gt;</code>タグ）を用意しよう。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. 基本のスタイリング</strong></td>
+<td style="text-align: left;">次に、ボタンの基本的な見た目を整える。背景色、文字色、余白（パディング）が必要だな。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. テキストの調整</strong></td>
+<td style="text-align: left;">文字の大きさや太さを調整して、視認性を高めよう。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4. 装飾の追加</strong></td>
+<td style="text-align: left;">角を少し丸くして、柔らかい印象にしよう。影を付けて立体感を出すのもいいな。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5. インタラクションの追加</strong></td>
+<td style="text-align: left;">ユーザーが操作したことがわかるように、ホバーした時とクリックした時のスタイルを追加しよう。</td>
+</tr>
+</tbody>
+</table>
+<p>💡 <strong>ポイント:</strong> <strong>「構造 → 見た目 → インタラクション」</strong>の順でスタイルを積み上げていくと、論理的にコンポーネントを構築できます。Tailwind CSSは、この思考プロセスをそのままクラス名としてHTMLに記述していくだけで実現できます。</p>
+<hr />
+<h3 id="step-by-step">🏃 実践: Step by Stepでボタンを作成しよう</h3>
+<p>前のセクションで作成した<code>tailwind-handson</code>プロジェクトをそのまま使います。まだ準備ができていない場合は、前のセクションの手順に従ってセットアップを完了してください。</p>
+<h4 id="step-1-html">Step 1: HTMLの準備</h4>
+<p>まず、<code>src/index.html</code>を開き、<code>&lt;body&gt;</code>タグの中身を以下のように書き換えます。既存の<code>&lt;h1&gt;</code>タグは削除して構いません。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;body class=&quot;bg-slate-100 flex justify-center items-center h-screen&quot;&gt;
+  &lt;button&gt;
+    Click me
+  &lt;/button&gt;
+&lt;/body&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>bg-slate-100</code>: 背景色を薄いグレーに設定します。</li>
+<li><code>flex justify-center items-center h-screen</code>: Flexboxを使って、画面（高さ<code>h-screen</code>）の中央に子要素（今回は<code>&lt;button&gt;</code>）を配置するためのお決まりのパターンです。</li>
+</ul>
+</li>
+</ul>
+<p>この時点でブラウザをリロードすると、OSデフォルトの味気ないボタンが画面中央に表示されます。</p>
+<h4 id="step-2">Step 2: 基本的なスタイリング</h4>
+<p>次に、<code>&lt;button&gt;</code>タグにクラスを追加して、基本的な見た目を整えます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;button class=&quot;bg-blue-500 text-white px-4 py-2&quot;&gt;
+  Click me
+&lt;/button&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>bg-blue-500</code>: 背景色を青色（Tailwindが定義している500番の濃さ）に設定します。</li>
+<li><code>text-white</code>: 文字色を白に設定します。</li>
+<li><code>px-4</code>: 水平方向（左右）のパディングを<code>1rem</code> (16px)に設定します。</li>
+<li><code>py-2</code>: 垂直方向（上下）のパディングを<code>0.5rem</code> (8px)に設定します。</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-3">Step 3: テキストと装飾の調整</h4>
+<p>さらにクラスを追加して、ボタンの印象を良くしていきましょう。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;button class=&quot;bg-blue-500 text-white px-4 py-2 rounded-md font-semibold shadow-md&quot;&gt;
+  Click me
+&lt;/button&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>rounded-md</code>: 角を中くらい（<code>md</code>）に丸くします（<code>border-radius: 0.375rem</code>）。</li>
+<li><code>font-semibold</code>: フォントの太さをセミボールド（<code>font-weight: 600</code>）にします。</li>
+<li><code>shadow-md</code>: 中くらいのドロップシャドウを追加し、ボタンに立体感を与えます。</li>
+</ul>
+</li>
+</ul>
+<p>ここまでで、かなりボタンらしい見た目になったはずです。</p>
+<h4 id="step-4">Step 4: インタラクションの追加</h4>
+<p>最後に、ユーザーのアクションに反応するスタイルを追加します。Tailwind CSSでは、<code>hover:</code>や<code>active:</code>のような<strong>状態バリアント</strong>をクラス名の前につけるだけで、簡単に実装できます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+
+&lt;button class=&quot;bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold shadow-md&quot;&gt;
+  Click me
+&lt;/button&gt;
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>hover:bg-blue-600</code>: マウスポインタがボタンの上に乗った（ホバーした）ときに、背景色を少し濃い青（600番）に変更します。</li>
+<li><code>active:bg-blue-700</code>: ボタンがクリックされている（アクティブな）ときに、背景色をさらに濃い青（700番）に変更します。</li>
+</ul>
+</li>
+</ul>
+<h4 id="step-5">Step 5: ビルドと確認</h4>
+<p>ターミナルで<code>npm run watch</code>を実行していることを確認してください。実行していない場合は、<code>npm run watch</code>を起動します。</p>
+<p><code>src/index.html</code>を保存し、ブラウザをリロードしてください。完成イメージ通りのインタラクティブなボタンが表示されれば成功です！</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>Tailwind CSSでは、ユーティリティクラスをHTMLに直接記述することで、迅速なスタイリングが可能である。</li>
+<li><code>bg-*</code>, <code>text-*</code>, <code>px-*</code>, <code>py-*</code>, <code>rounded-*</code>, <code>font-*</code>, <code>shadow-*</code>など、直感的なクラス名でスタイルを適用できる。</li>
+<li><code>hover:</code>や<code>active:</code>のような状態バリアントを使うことで、インタラクティブなUIを簡単に実装できる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] <code>px-4</code>の<code>4</code>や<code>bg-blue-500</code>の<code>500</code>が、具体的なピクセル値やカラーコードではなく、Tailwindが定義したデザインシステム上の単位であることを理解していますか？</li>
+<li>[ ] <code>hover:</code>の後に指定したクラスは、どのような時に適用されますか？</li>
+<li>[ ] このボタンのスタイルを、もし通常のCSSで書くとしたら、どのようなコードになるか想像できますか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter01_パッケージ管理とTailwind_CSSの導入_3-1-4: Tailwind_CSSのインストールと設定.html" class="prev">Tailwind_CSSのインストールと設定</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

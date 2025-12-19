@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: カスタムフックのテストを書く | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest.html">Chapter 1: ユニットテスト Vitest</a><span>></span>Chapter 1 ハンズオン: カスタムフックのテストを書く</div>
+                    <div class="section-content">
+<h1 id="11-1-4-chapter-1">11-1-4: Chapter 1 ハンズオン: カスタムフックのテストを書く</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Reactのカスタムフックをテストする方法を学ぶ</li>
+<li><code>@testing-library/react</code>の<code>renderHook</code>と<code>act</code>の使い方を習得する</li>
+<li>実際にカウンターフックのユニットテストを作成し、実行する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでは、純粋関数のテスト方法を学びました。しかし、Reactアプリケーションでは、状態（<code>useState</code>）や副作用（<code>useEffect</code>）を持つカスタムフックのロジックをテストしたい場面が頻繁にあります。</p>
+<p>フックは通常のJavaScript関数とは異なり、Reactコンポーネントの内部でしか呼び出すことができません。では、どうすればフックを単体でテストできるのでしょうか？</p>
+<p>ここで登場するのが、<strong><code>@testing-library/react</code></strong> というライブラリです。このライブラリは、Reactコンポーネントやフックをテストするための便利なユーティリティを提供します。</p>
+<h2 id="testing-libraryreact"><code>@testing-library/react</code> のセットアップ</h2>
+<p>まず、必要なライブラリをインストールします。<code>@testing-library/react</code>は、Reactコンポーネントをテスト用の仮想DOMにレンダリングする機能を提供します。また、テスト環境でDOMを扱えるようにするために<code>jsdom</code>も必要です。</p>
+<pre class="codehilite"><code class="language-bash">npm install -D @testing-library/react jsdom
+</code></pre>
+
+<p>次に、Vitestの設定ファイル <code>vitest.config.ts</code> をプロジェクトのルートに作成し、テスト環境として<code>jsdom</code>を使用するように設定します。</p>
+<pre class="codehilite"><code class="language-typescript">// vitest.config.ts
+
+import { defineConfig } from &quot;vitest/config&quot;;
+import react from &quot;@vitejs/plugin-react&quot;;
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,
+    environment: &quot;jsdom&quot;, // テスト環境としてjsdomを指定
+    setupFiles: &quot;./vitest.setup.ts&quot;, // セットアップファイルへのパス
+  },
+});
+</code></pre>
+
+<p>さらに、<code>vitest.setup.ts</code> というファイルをプロジェクトルートに作成します。このファイルは、各テストファイルの実行前に一度だけ実行されるファイルで、<code>@testing-library/jest-dom</code>から提供されるカスタムマッチャーを<code>expect</code>に拡張するために使用します。</p>
+<pre class="codehilite"><code class="language-typescript">// vitest.setup.ts
+
+import &quot;@testing-library/jest-dom&quot;;
+</code></pre>
+
+<p><code>@testing-library/jest-dom</code>は、DOMの状態を検証するための便利なマッチャー（例: <code>.toBeInTheDocument()</code>）を提供します。これもインストールしておきましょう。</p>
+<pre class="codehilite"><code class="language-bash">npm install -D @testing-library/jest-dom
+</code></pre>
+
+<h2 id="usecounter">ハンズオン: <code>useCounter</code>フックのテスト</h2>
+<p>それでは、Tutorial 8で作成した<code>useCounter</code>カスタムフックのユニットテストを書いてみましょう。</p>
+<h3 id="1">ステップ1: テスト対象のフックの準備</h3>
+<p>まず、テスト対象となる<code>useCounter</code>フックを<code>src/hooks/useCounter.ts</code>に作成します。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.ts
+
+import { useState, useCallback } from &quot;react&quot;;
+
+export const useCounter = (initialValue = 0) =&gt; {
+  const [count, setCount] = useState(initialValue);
+
+  const increment = useCallback(() =&gt; setCount((c) =&gt; c + 1), []);
+  const decrement = useCallback(() =&gt; setCount((c) =&gt; c - 1), []);
+
+  return { count, increment, decrement };
+};
+</code></pre>
+
+<h3 id="2">ステップ2: テストファイルの作成</h3>
+<p><code>src/hooks/useCounter.test.ts</code>を作成し、テストコードを記述します。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.test.ts
+
+import { describe, it, expect } from &quot;vitest&quot;;
+import { renderHook, act } from &quot;@testing-library/react&quot;;
+import { useCounter } from &quot;./useCounter&quot;;
+
+describe(&quot;useCounter&quot;, () =&gt; {
+  it(&quot;初期値が正しく設定されること&quot;, () =&gt; {
+    // 1. フックをレンダリング
+    const { result } = renderHook(() =&gt; useCounter(10));
+
+    // 2. 初期状態を検証
+    expect(result.current.count).toBe(10);
+  });
+
+  it(&quot;incrementを呼び出すとcountが1増えること&quot;, () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter());
+
+    // 3. 状態を更新する処理を`act`で囲む
+    act(() =&gt; {
+      result.current.increment();
+    });
+
+    // 4. 更新後の状態を検証
+    expect(result.current.count).toBe(1);
+  });
+
+  it(&quot;decrementを呼び出すとcountが1減ること&quot;, () =&gt; {
+    const { result } = renderHook(() =&gt; useCounter());
+
+    act(() =&gt; {
+      result.current.decrement();
+    });
+
+    expect(result.current.count).toBe(-1);
+  });
+});
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ol>
+<li>
+<p><strong><code>renderHook(() =&gt; useCounter(10))</code></strong>: <code>@testing-library/react</code>が提供する<code>renderHook</code>関数は、テスト対象のフックを呼び出し、その結果を返すためのテスト用のコンポーネントを内部で作成・レンダリングします。戻り値の<code>result</code>オブジェクトから、フックの現在の戻り値に<code>result.current</code>でアクセスできます。</p>
+</li>
+<li>
+<p><strong><code>expect(result.current.count).toBe(10)</code></strong>: <code>result.current</code>は<code>useCounter</code>フックの戻り値（<code>{ count, increment, decrement }</code>）そのものです。そのため、<code>result.current.count</code>で現在のカウント値にアクセスし、初期値が正しく設定されているかを検証しています。</p>
+</li>
+<li>
+<p><strong><code>act(() =&gt; { ... })</code></strong>: <code>act</code>は、Reactの状態更新がすべて完了し、DOMに反映されるのを待つためのユーティリティです。Reactの状態を更新する可能性のある処理（この例では<code>increment</code>や<code>decrement</code>の呼び出し）は、必ず<code>act</code>で囲む必要があります。これを怠ると、「<code>act</code>でラップされていない更新があります」という警告が表示され、テストが意図通りに動作しない可能性があります。</p>
+</li>
+<li>
+<p><strong><code>expect(result.current.count).toBe(1)</code></strong>: <code>act</code>による状態更新が完了した後、<code>result.current</code>は最新のフックの戻り値に更新されています。ここで、カウントが期待通りに変化したかを検証します。</p>
+</li>
+</ol>
+<h3 id="3">ステップ3: テストの実行</h3>
+<p>ターミナルで<code>npm test</code>を実行し、テストがすべてパスすることを確認しましょう。</p>
+<pre class="codehilite"><code> ✓ src/hooks/useCounter.test.ts (3)
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  10:05:00
+   Duration  256ms ...
+</code></pre>
+
+<p><code>PASS</code>と表示されれば成功です！</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>Reactのフックをテストするには、<code>@testing-library/react</code>ライブラリを使用する。</li>
+<li><code>renderHook</code>関数を使って、テスト対象のフックをテスト用のコンポーネント内でレンダリングする。</li>
+<li>フックの戻り値には<code>result.current</code>でアクセスできる。</li>
+<li>状態を更新する処理は、必ず<code>act</code>ユーティリティでラップする。</li>
+</ul>
+<p>これで、カスタムフックのロジックを分離し、その振る舞いを保証するユニットテストが書けるようになりました。次のチャプターでは、ユーザー視点でアプリケーション全体をテストする「E2Eテスト」について学びます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial11_テスト_chapter01_ユニットテスト_Vitest_11-1-3: Vitestの基本.html" class="prev">Vitestの基本</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

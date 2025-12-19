@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>divとspanの違いと使い分け | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎.html">Chapter 1: HTMLの基礎</a><span>></span>divとspanの違いと使い分け</div>
+                    <div class="section-content">
+<h1 id="2-1-3-divspan">2-1-3: divとspanの違いと使い分け</h1>
+<h2 id="chapter-1-html">Chapter 1: HTMLの基礎</h2>
+<h3 id="section-3-divspan">Section 3: divとspanの違いと使い分け</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、<code>&lt;div&gt;</code>と<code>&lt;span&gt;</code>の役割を学び、以下のようにページのセクションをグループ化したり、文中の特定の部分だけスタイルを変えたりする方法を理解します。</p>
+<p><em>ここにスクリーンショットを挿入: <code>div</code>で囲まれたセクションが背景色で区切られ、<code>span</code>で囲まれたテキストの色が変わっている様子がわかる</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、CSSやJavaScriptで要素を扱うための「グループ化」に使う、<code>&lt;div&gt;</code>と<code>&lt;span&gt;</code>タグについて学びます。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>ブロックレベル要素とインライン要素の振る舞いの違いを説明できるようになる。</li>
+<li><code>&lt;div&gt;</code>と<code>&lt;span&gt;</code>を、それぞれの特性に合わせて適切に使い分けられるようになる。</li>
+<li>CSSでスタイルを適用するために、HTML要素をグループ化する必要性を理解する。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>HTMLには、<code>&lt;h1&gt;</code> や <code>&lt;p&gt;</code> のようにそれ自体が明確な意味を持つタグの他に、特に意味を持たない汎用的なタグが存在します。それが <code>&lt;div&gt;</code> と <code>&lt;span&gt;</code> です。これらは、CSSでスタイルを適用するためや、JavaScriptで特定の範囲を操作するために、要素をグループ化する目的で使われます。一見地味ですが、実務では最も頻繁に使うタグと言っても過言ではありません。この二つの違いを正確に理解することは、レイアウトを組む上で非常に重要です。</p>
+<h3 id="_2">概念の説明</h3>
+<p><code>&lt;div&gt;</code> と <code>&lt;span&gt;</code> の最大の違いは、<strong>ブロックレベル要素</strong>であるか、<strong>インライン要素</strong>であるか、という点にあります。</p>
+<h4 id="block-level-element">ブロックレベル要素 (Block-level Element)</h4>
+<ul>
+<li><strong>特徴:</strong> 一つの「塊（ブロック）」として扱われ、前後に改行が入ります。横幅は、特に指定しなければ親要素の幅いっぱいに広がります。高さは、中のコンテンツの量によって決まります。</li>
+<li><strong>代表例:</strong> <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code>〜<code>&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code> など。</li>
+<li><strong>イメージ:</strong> 書類棚の「引き出し」のようなものです。一つの引き出しが一行を占有し、その中に書類（コンテンツ）を入れます。</li>
+</ul>
+<h4 id="inline-element">インライン要素 (Inline Element)</h4>
+<ul>
+<li><strong>特徴:</strong> 文章の一部として扱われ、前後に改行が入りません。横幅と高さは、中のコンテンツの量によって決まります。幅や高さをCSSで指定しても、基本的には無視されます。</li>
+<li><strong>代表例:</strong> <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;strong&gt;</code> (太字), <code>&lt;em&gt;</code> (斜体) など。</li>
+<li><strong>イメージ:</strong> 文章中の「マーカー」のようなものです。文の流れを断ち切ることなく、特定の部分だけをマークします。</li>
+</ul>
+<h3 id="_3">詳細解説</h3>
+<p>この違いを理解するために、具体的なコードを見てみましょう。</p>
+<h4 id="div"><code>&lt;div&gt;</code> の振る舞い</h4>
+<p><code>&lt;div&gt;</code> はブロックレベル要素です。複数の要素をまとめて一つのグループとして扱いたい場合によく使われます。例えば、ユーザーのプロフィール情報をまとめるカードのようなUIを作る場合などです。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;div style="background-color: lightgray;"&gt;
+      &lt;h2&gt;ユーザー名&lt;/h2&gt;
+      &lt;p&gt;自己紹介文です。&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div style="background-color: lightblue;"&gt;
+      &lt;p&gt;これは次のブロックです。&lt;/p&gt;
+    &lt;/div&gt;</code></li>
+<li><strong>表示結果:</strong><ul>
+<li>背景色がライトグレーの <code>&lt;div&gt;</code> と、ライトブルーの <code>&lt;div&gt;</code> は、それぞれが独立した行に表示されます（前後に改行が入る）。</li>
+<li>各 <code>&lt;div&gt;</code> は、横幅いっぱいに広がります。</li>
+</ul>
+</li>
+</ul>
+<h4 id="span"><code>&lt;span&gt;</code> の振る舞い</h4>
+<p><code>&lt;span&gt;</code> はインライン要素です。文章中の一部分だけ色を変えたり、太字にしたりと、特定のテキストにだけスタイルを適用したい場合に使われます。</p>
+<ul>
+<li><strong>コード例:</strong><br />
+<code>html
+    &lt;p&gt;
+      この文章の &lt;span style="color: red; font-weight: bold;"&gt;この部分だけ&lt;/span&gt; スタイルを変えたい。
+    &lt;/p&gt;</code></li>
+<li><strong>表示結果:</strong><ul>
+<li><code>&lt;span&gt;</code> で囲まれた「この部分だけ」というテキストは、前後の文章と同じ行の中に表示されます（改行が入らない）。</li>
+<li>文字が赤くなり、太字になりますが、文全体の流れは維持されます。</li>
+</ul>
+</li>
+</ul>
+<h4 id="_4">使い分けのまとめ</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">タグ</th>
+<th style="text-align: left;">要素の種類</th>
+<th style="text-align: left;">特徴</th>
+<th style="text-align: left;">主な用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>&lt;div&gt;</code></td>
+<td style="text-align: left;">ブロックレベル</td>
+<td style="text-align: left;">・前後に改行が入る<br>・横幅は親要素いっぱい</td>
+<td style="text-align: left;">・複数の要素をまとめるグループ化<br>・ページの大きなレイアウト構成</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>&lt;span&gt;</code></td>
+<td style="text-align: left;">インライン</td>
+<td style="text-align: left;">・前後に改行が入らない<br>・幅と高さはコンテンツ次第</td>
+<td style="text-align: left;">・文章中の一部分にスタイルを適用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>入れ子のルール:</strong> ブロックレベル要素の中に、他のブロックレベル要素やインライン要素を入れることはできます。しかし、原則として<strong>インライン要素の中にブロックレベル要素を入れることはできません</strong>。（例: <code>&lt;span&gt;</code> の中に <code>&lt;div&gt;</code> を入れるのはNG）</li>
+<li><strong>CSSでの変更:</strong> CSSの <code>display</code> プロパティを使えば、ブロックレベル要素をインラインのように振る舞わせたり、その逆にしたりすることも可能です。これは後のCSSのチュートリアルで詳しく学びます。</li>
+</ul>
+<h3 id="_5">✨ まとめ</h3>
+<ul>
+<li><code>&lt;div&gt;</code> と <code>&lt;span&gt;</code> は、それ自体に意味を持たない汎用的なタグである。</li>
+<li><code>&lt;div&gt;</code> は<strong>ブロックレベル要素</strong>で、改行を伴う「塊」を作る。</li>
+<li><code>&lt;span&gt;</code> は<strong>インライン要素</strong>で、文章の流れを壊さない「部分」を作る。</li>
+<li>大きなレイアウトやグループ化には <code>&lt;div&gt;</code> を、文中の特定の部分には <code>&lt;span&gt;</code> を使うのが基本的な使い分けである。</li>
+</ul>
+<h3 id="_6">📝 学習のポイント</h3>
+<ul>
+<li>[ ] ブロックレベル要素とインライン要素の主な違いを2つ以上説明できるか？</li>
+<li>[ ] <code>&lt;div&gt;</code> と <code>&lt;span&gt;</code> がそれぞれどちらの要素に分類されるか答えられるか？</li>
+<li>[ ] 「複数の項目をまとめたカードUI」と「文章中の一単語の色変更」、それぞれに <code>&lt;div&gt;</code> と <code>&lt;span&gt;</code> のどちらを使うべきか判断できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-2: HTMLの基本構造と主要タグ.html" class="prev">HTMLの基本構造と主要タグ</a>
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-4: Chapter 1 ハンズオン: 自己紹介ページを作成する.html" class="next">Chapter 1 ハンズオン: 自己紹介ページを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

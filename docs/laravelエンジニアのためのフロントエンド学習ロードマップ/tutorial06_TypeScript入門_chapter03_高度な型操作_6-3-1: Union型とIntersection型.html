@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union型とIntersection型 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter03_高度な型操作.html">Chapter 3: 高度な型操作</a><span>></span>Union型とIntersection型</div>
+                    <div class="section-content">
+<h1 id="6-3-1-unionintersection">6-3-1: Union型とIntersection型</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>複数の型を許容する<strong>Union型（合併型）</strong>の概念と使い方を理解する</li>
+<li>複数の型を結合する<strong>Intersection型（交差型）</strong>の概念と使い方を理解する</li>
+<li>これら2つの型をどのような場面で使い分けるべきかの判断基準を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>TypeScriptの基本的な型（<code>string</code>, <code>number</code>など）を学びましたが、実際のアプリケーションでは、より柔軟な型定義が必要になる場面が頻繁にあります。例えば、「ユーザーIDは、数値の場合もあれば、UUIDのような文字列の場合もある」「あるオブジェクトは、基本的なユーザー情報と投稿情報の両方を持っている必要がある」といったケースです。</p>
+<p>このような要求に応えるための強力な武器が、<strong>Union型 (<code>|</code>)</strong> と <strong>Intersection型 (<code>&amp;</code>)</strong> です。これらは、既存の型を組み合わせて新しい、より表現力豊かな型を作り出すための基本的なツールです。このセクションでは、これらの高度な型操作をマスターし、TypeScriptの型システムをさらに活用する方法を学びます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="union-union-types">🔑 Union型 (Union Types): 「または」の型</h3>
+<p>Union型は、その名の通り「合併」を意味し、「<strong>A または B</strong>」のように、ある変数が複数の型のうちのいずれか一つであることを表現します。型名の間にパイプ <code>|</code> を挟んで定義します。</p>
+<h4 id="_4">基本的な使い方</h4>
+<pre class="codehilite"><code class="language-typescript">// `userId` は string または number のどちらかの型を持つことができる
+let userId: string | number;
+
+userId = 101;       // OK
+userId = &quot;user-abc&quot;; // OK
+
+// userId = true; // エラー: Type 'boolean' is not assignable to type 'string | number'.
+</code></pre>
+
+<p>この <code>userId</code> は、数値でも文字列でも受け入れることができる、より柔軟な変数になりました。</p>
+<h4 id="union">Union型の注意点</h4>
+<p>Union型を持つ変数のプロパティやメソッドにアクセスしようとする場合、その操作は<strong>すべての構成要素の型に共通して存在するものでなければなりません</strong>。</p>
+<pre class="codehilite"><code class="language-typescript">function printId(id: string | number) {
+  console.log(id.toUpperCase()); // エラー: Property 'toUpperCase' does not exist on type 'string | number'.
+                                 // Property 'toUpperCase' does not exist on type 'number'.
+}
+</code></pre>
+
+<p>この例では、<code>id</code> が <code>number</code> である可能性もあるため、<code>string</code> 型にしか存在しない <code>toUpperCase</code> メソッドを直接呼び出すことはできません。このような場合、次のセクションで学ぶ<strong>型の絞り込み（Type Guards）</strong>が必要になります。</p>
+<h3 id="intersection-intersection-types">🔑 Intersection型 (Intersection Types): 「かつ」の型</h3>
+<p>Intersection型は、「交差」を意味し、「<strong>A かつ B</strong>」のように、複数の型が持つすべてのプロパティを<strong>結合</strong>した新しい型を作ります。型名の間にアンパサンド <code>&amp;</code> を挟んで定義します。</p>
+<h4 id="_5">基本的な使い方</h4>
+<p>オブジェクトの型を結合する際によく使われます。</p>
+<pre class="codehilite"><code class="language-typescript">// 基本的なユーザー情報を持つ型
+interface User {
+  id: number;
+  name: string;
+}
+
+// 連絡先情報を持つ型
+interface Contact {
+  email: string;
+  phone: string;
+}
+
+// User型とContact型の両方のプロパティを持つ新しい型を定義
+type UserProfile = User &amp; Contact;
+
+const userProfile: UserProfile = {
+  id: 1,
+  name: &quot;Taro Yamada&quot;,
+  email: &quot;taro@example.com&quot;,
+  phone: &quot;090-1234-5678&quot;
+};
+</code></pre>
+
+<p><code>UserProfile</code> 型は、<code>User</code> 型と <code>Contact</code> 型の両方のプロパティをすべて持っている必要があります。一つでも欠けているとエラーになります。</p>
+<h3 id="unionintersection">Union型とIntersection型の比較</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">型</th>
+<th style="text-align: center;">記号</th>
+<th style="text-align: left;">意味</th>
+<th style="text-align: left;">ユースケース例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Union型</strong></td>
+<td style="text-align: center;"><code>|</code></td>
+<td style="text-align: left;"><strong>または (OR)</strong><br>複数の型のうち、いずれか1つ。</td>
+<td style="text-align: left;">- 関数の引数が複数の型を受け入れる場合<br>- APIのレスポンスが成功時と失敗時で異なる構造を持つ場合</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Intersection型</strong></td>
+<td style="text-align: center;"><code>&amp;</code></td>
+<td style="text-align: left;"><strong>かつ (AND)</strong><br>複数の型の特徴をすべて併せ持つ。</td>
+<td style="text-align: left;">- 既存の複数の型を組み合わせて、新しい複合的な型を作りたい場合<br>- Mixin（複数の小さなオブジェクトを合成するパターン）を型で表現する場合</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tip-type">💡 TIP: Typeエイリアスとの組み合わせ</h2>
+<p>Union型やIntersection型は、<code>type</code> キーワードを使って<strong>Typeエイリアス（型エイリアス）</strong>として定義することで、再利用性が格段に向上します。</p>
+<pre class="codehilite"><code class="language-typescript">// Union型のエイリアス
+type StringOrNumber = string | number;
+
+// Intersection型のエイリアス
+type AdminUser = User &amp; { isAdmin: boolean };
+
+function processId(id: StringOrNumber) { /* ... */ }
+
+const admin: AdminUser = {
+  id: 1,
+  name: &quot;Admin&quot;,
+  isAdmin: true
+};
+</code></pre>
+
+<p>複雑な型を何度も書く必要がなくなり、コードの可読性が向上します。</p>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li><strong>Union型 (<code>|</code>)</strong> は、「AまたはB」を表現し、変数が複数の型のうちのいずれかであることを許容する。</li>
+<li><strong>Intersection型 (<code>&amp;</code>)</strong> は、「AかつB」を表現し、複数の型のプロパティをすべて併せ持つ新しい型を作成する。</li>
+<li>Union型は型の<strong>選択肢を広げ</strong>、Intersection型は型の<strong>特徴を合成する</strong>と覚えると良い。</li>
+<li>これらの型は、<code>type</code> エイリアスと組み合わせることで、よりクリーンで再利用可能なコードを書く助けとなる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial06_TypeScript入門_chapter03_高度な型操作_6-3-2: 型の絞り込み（Type Guards）.html" class="next">型の絞り込み（Type Guards）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

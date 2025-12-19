@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: TypeScriptで関数を書く | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a><span>></span><a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎.html">Chapter 1: TypeScriptの基礎</a><span>></span>Chapter 1 ハンズオン: TypeScriptで関数を書く</div>
+                    <div class="section-content">
+<h1 id="6-1-5-chapter-1-typescript">6-1-5: Chapter 1 ハンズオン: TypeScriptで関数を書く</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このハンズオンでは、TypeScriptの基本的な型を使って、型安全な関数を作成します。実際にコードを書きながら、型の恩恵を体験しましょう。</p>
+<h2 id="_2">準備</h2>
+<p>まず、TypeScriptを実行できる環境を準備します。</p>
+<pre class="codehilite"><code class="language-bash"># プロジェクトディレクトリを作成
+mkdir ts-practice &amp;&amp; cd ts-practice
+
+# package.jsonを初期化
+npm init -y
+
+# TypeScriptをインストール
+npm install typescript ts-node --save-dev
+
+# tsconfig.jsonを生成
+npx tsc --init
+</code></pre>
+
+<h2 id="1">課題1: ユーザー情報を表示する関数</h2>
+<p>ユーザー情報を受け取り、フォーマットされた文字列を返す関数を作成してください。</p>
+<h3 id="_3">要件</h3>
+<ol>
+<li><code>User</code>インターフェースを定義する（name: string, age: number, email?: string）</li>
+<li><code>formatUser</code>関数を作成し、ユーザー情報を整形して返す</li>
+<li>emailが存在する場合のみ、メールアドレスを含める</li>
+</ol>
+<h3 id="_4">解答例</h3>
+<p><code>src/user.ts</code>ファイルを作成し、以下のコードを記述します。</p>
+<pre class="codehilite"><code class="language-typescript">// User インターフェースの定義
+interface User {
+  name: string;
+  age: number;
+  email?: string; // オプショナル
+}
+
+// ユーザー情報をフォーマットする関数
+function formatUser(user: User): string {
+  let result = `名前: ${user.name}, 年齢: ${user.age}歳`;
+
+  if (user.email) {
+    result += `, メール: ${user.email}`;
+  }
+
+  return result;
+}
+
+// テスト
+const user1: User = { name: &quot;田中太郎&quot;, age: 25 };
+const user2: User = { name: &quot;鈴木花子&quot;, age: 30, email: &quot;hanako@example.com&quot; };
+
+console.log(formatUser(user1)); // 名前: 田中太郎, 年齢: 25歳
+console.log(formatUser(user2)); // 名前: 鈴木花子, 年齢: 30歳, メール: hanako@example.com
+</code></pre>
+
+<p>実行してみましょう。</p>
+<pre class="codehilite"><code class="language-bash">npx ts-node src/user.ts
+</code></pre>
+
+<h2 id="2">課題2: 配列を操作する関数</h2>
+<p>数値の配列を受け取り、様々な計算結果を返す関数を作成してください。</p>
+<h3 id="_5">要件</h3>
+<ol>
+<li><code>calculateStats</code>関数を作成する</li>
+<li>引数として数値の配列を受け取る</li>
+<li>戻り値として、合計、平均、最大値、最小値を含むオブジェクトを返す</li>
+</ol>
+<h3 id="_6">解答例</h3>
+<p><code>src/stats.ts</code>ファイルを作成します。</p>
+<pre class="codehilite"><code class="language-typescript">// 統計情報の型定義
+interface Stats {
+  sum: number;
+  average: number;
+  max: number;
+  min: number;
+}
+
+// 統計情報を計算する関数
+function calculateStats(numbers: number[]): Stats {
+  if (numbers.length === 0) {
+    return { sum: 0, average: 0, max: 0, min: 0 };
+  }
+
+  const sum = numbers.reduce((acc, num) =&gt; acc + num, 0);
+  const average = sum / numbers.length;
+  const max = Math.max(...numbers);
+  const min = Math.min(...numbers);
+
+  return { sum, average, max, min };
+}
+
+// テスト
+const scores: number[] = [85, 90, 78, 92, 88];
+const result = calculateStats(scores);
+
+console.log(`合計: ${result.sum}`);       // 合計: 433
+console.log(`平均: ${result.average}`);   // 平均: 86.6
+console.log(`最大: ${result.max}`);       // 最大: 92
+console.log(`最小: ${result.min}`);       // 最小: 78
+</code></pre>
+
+<h2 id="3">課題3: 商品の合計金額を計算する関数</h2>
+<p>商品リストを受け取り、合計金額を計算する関数を作成してください。</p>
+<h3 id="_7">要件</h3>
+<ol>
+<li><code>Product</code>インターフェースを定義する（name: string, price: number, quantity: number）</li>
+<li><code>calculateTotal</code>関数を作成し、商品リストの合計金額を返す</li>
+<li>税率（デフォルト10%）を引数で受け取れるようにする</li>
+</ol>
+<h3 id="_8">解答例</h3>
+<p><code>src/product.ts</code>ファイルを作成します。</p>
+<pre class="codehilite"><code class="language-typescript">// 商品の型定義
+interface Product {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+// 合計金額を計算する関数（税率はデフォルト10%）
+function calculateTotal(products: Product[], taxRate: number = 0.1): number {
+  const subtotal = products.reduce((acc, product) =&gt; {
+    return acc + product.price * product.quantity;
+  }, 0);
+
+  const total = subtotal * (1 + taxRate);
+  return Math.floor(total); // 小数点以下切り捨て
+}
+
+// テスト
+const cart: Product[] = [
+  { name: &quot;TypeScript入門書&quot;, price: 2980, quantity: 1 },
+  { name: &quot;プログラミングノート&quot;, price: 500, quantity: 3 },
+  { name: &quot;マウスパッド&quot;, price: 1200, quantity: 1 }
+];
+
+console.log(`合計金額（税込）: ${calculateTotal(cart)}円`); // 合計金額（税込）: 6578円
+console.log(`合計金額（税率8%）: ${calculateTotal(cart, 0.08)}円`); // 合計金額（税率8%）: 6458円
+</code></pre>
+
+<h2 id="_9">✨ まとめ</h2>
+<p>このハンズオンでは、以下のことを実践しました。</p>
+<ul>
+<li><code>interface</code>を使ったオブジェクトの型定義</li>
+<li>オプショナルプロパティ（<code>?</code>）の活用</li>
+<li>配列の型定義と操作</li>
+<li>関数の引数と戻り値の型指定</li>
+<li>デフォルト引数の使用</li>
+</ul>
+<p>TypeScriptの型システムにより、関数の使い方が明確になり、間違った使い方をするとコンパイル時にエラーが検出されることを体験できたと思います。</p>
+<p>次のチャプターでは、TypeScriptの開発環境設定について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial06_TypeScript入門_chapter01_TypeScriptの基礎_6-1-4: 型推論と型注釈.html" class="prev">型推論と型注釈</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

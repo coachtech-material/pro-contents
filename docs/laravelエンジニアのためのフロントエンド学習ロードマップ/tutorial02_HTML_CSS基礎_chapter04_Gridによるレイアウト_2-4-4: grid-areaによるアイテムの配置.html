@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>grid-areaによるアイテムの配置 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter04_Gridによるレイアウト.html">Chapter 4: Gridによるレイアウト</a><span>></span>grid-areaによるアイテムの配置</div>
+                    <div class="section-content">
+<h1 id="2-4-3-grid-area">2-4-3: grid-areaによるアイテムの配置</h1>
+<h2 id="chapter-4-grid">Chapter 4: Gridによるレイアウト</h2>
+<h3 id="section-3-grid-area">Section 3: grid-areaによるアイテムの配置</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このセクションでは、Gridレイアウトのもう一つの強力な機能である<code>grid-area</code>を学びます。<code>grid-template-areas</code>でコンテナに「名前付きエリア」を定義し、<code>grid-area</code>で各アイテムをその名の付いたエリアに配置することで、まるでパズルのように直感的なレイアウトを実現します。</p>
+<p><em>ここにスクリーンショットを挿入: ヘッダー、サイドバー、メインコンテンツ、フッターが、コードに書かれたASCIIアートの通りに配置されている様子</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このセクションでは、Gridのエリアベースの配置方法をマスターします。このセクションを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li><code>grid-template-areas</code>を使って、グリッドコンテナにASCIIアートのような形でレイアウトエリアを定義できるようになる。</li>
+<li><code>grid-area</code>を使って、特定のGridアイテムを、名前が付けられたエリアに割り当てることができるようになる。</li>
+<li>行番号や列番号を使わずに、より宣言的で視覚的に分かりやすい方法でページ全体のレイアウトを構築できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">導入</h3>
+<p>前のセクションでは、列と行のサイズを定義して格子を作りました。アイテムはその格子に従って自動的に配置されましたが、特定のアイテムを「2列目から3列目にまたがって配置したい」といった、より複雑な配置も可能です。その方法の一つが、グリッドのライン番号を指定する方法ですが、より直感的で管理しやすいのが、これから学ぶ<code>grid-area</code>を使ったエリアベースの配置です。これは、レイアウト構造をCSSで視覚的に表現できるため、特にページ全体の骨格を作る際に絶大な威力を発揮します。</p>
+<h3 id="_2">概念の説明</h3>
+<p><code>grid-area</code>を使ったレイアウトは、2つのプロパティの連携によって成り立ちます。</p>
+<ol>
+<li>
+<p><strong><code>grid-template-areas</code> (親要素に指定):</strong></p>
+<ul>
+<li>Gridコンテナに、どのような名前のエリアが、どのように配置されるかの「地図」を定義します。</li>
+<li>文字列をクォーテーションで囲み、スペース区切りでエリア名を並べることで、行と列のレイアウトをASCIIアートのように記述します。</li>
+<li>同じ名前を隣接させると、そのエリアが結合（スパン）されます。</li>
+<li>エリアを配置しない場所は、ピリオド (<code>.</code>) で表現します。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>grid-area</code> (子要素に指定):</strong></p>
+<ul>
+<li>Gridアイテムに、<code>grid-template-areas</code>で定義されたどの「エリア名」に対応するかを教えます。</li>
+</ul>
+</li>
+</ol>
+<p><strong>図解：エリアベースの配置</strong></p>
+<pre class="codehilite"><code class="language-css">/* 親要素 (Gridコンテナ) のCSS */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr; /* 2列 */
+  grid-template-rows: auto 1fr auto; /* 3行 */
+  grid-template-areas:
+    &quot;header header&quot;
+    &quot;sidebar main&quot;
+    &quot;footer footer&quot;;
+}
+
+/* 子要素 (Gridアイテム) のCSS */
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+</code></pre>
+
+<p>このCSSは、以下のようなレイアウトを視覚的に表現しています。</p>
+<ul>
+<li>全体は2列3行のグリッドである。</li>
+<li>1行目はすべて<code>header</code>エリアが占める。</li>
+<li>2行目は、1列目が<code>sidebar</code>エリア、2列目が<code>main</code>エリアになる。</li>
+<li>3行目はすべて<code>footer</code>エリアが占める。</li>
+</ul>
+<p>そして、HTML側で<code>.header</code>クラスを持つ要素が<code>header</code>エリアに、<code>.sidebar</code>クラスを持つ要素が<code>sidebar</code>エリアに…というように、自動的に配置されていきます。</p>
+<h3 id="_3">詳細解説</h3>
+<p>実際に聖杯レイアウト（Holy Grail Layout）と呼ばれる典型的なWebページレイアウトを<code>grid-area</code>で作ってみましょう。</p>
+<ul>
+<li><strong>HTML:</strong><br />
+  ```html<br />
+<br />
+<div class="holy-grail-container">
+    <header>ヘッダー</header>
+    <nav>ナビゲーション</nav>
+    <main>メインコンテンツ</main>
+    <aside>サイドバー</aside>
+    <footer>フッター</footer>
+  </div></li>
+</ul>
+<p>```</p>
+<ul>
+<li><strong>CSS:</strong><br />
+  ```css<br />
+  .holy-grail-container {<br />
+    display: grid;<br />
+    height: 100vh; /<em> 画面の高さいっぱいに広げる </em>/<br />
+    grid-template-columns: 150px 1fr 150px; /<em> 3列 </em>/<br />
+    grid-template-rows: auto 1fr auto; /<em> 3行 </em>/<br />
+    grid-template-areas:<br />
+      "header header header"<br />
+      "nav    main   sidebar"<br />
+      "footer footer footer";<br />
+  }</li>
+</ul>
+<p>/<em> 各アイテムを対応するエリアに割り当て </em>/<br />
+  header { grid-area: header; }<br />
+  nav { grid-area: nav; }<br />
+  main { grid-area: main; }<br />
+  aside { grid-area: sidebar; }<br />
+  footer { grid-area: footer; }</p>
+<p>/<em> 以下、見た目のための装飾 </em>/<br />
+  .holy-grail-container &gt; * {<br />
+    border: 1px solid #333;<br />
+    padding: 10px;<br />
+  }<br />
+<code>``
+- **コードリーディング:**
+    -</code>grid-template-areas<code>のASCIIアートのような記述が、そのままレイアウトに反映されているのが分かります。
+    -</code>header<code>と</code>footer<code>は3つのセルを結合して1行全体を占めています。
+    - 2行目は</code>nav<code>,</code>main<code>,</code>sidebar<code>がそれぞれ1セルずつを占めています。
+    - HTMLの要素の順番に関係なく、CSSで指定したエリアに配置されるのが大きな特徴です。（例えば、HTMLで</code><footer>`を一番上に書いても、表示は一番下にきます）</p>
+<h3 id="tip">💡 TIP</h3>
+<ul>
+<li><strong>レスポンシブデザインとの相性:</strong> <code>grid-template-areas</code>は、メディアクエリと組み合わせることで真価を発揮します。例えば、スマートフォンなどの狭い画面では、<code>grid-template-areas</code>を書き換えて、サイドバーをメインコンテンツの下に移動させる、といったレイアウトの組み替えが非常に簡単に行えます。</li>
+<li><strong>命名規則:</strong> エリア名はCSSの識別子として有効なものであれば何でも構いませんが、そのエリアの役割が分かるような直感的な名前（<code>header</code>, <code>main</code>, <code>sidebar</code>など）を付けるのが一般的です。</li>
+</ul>
+<h3 id="_4">✨ まとめ</h3>
+<ul>
+<li><code>grid-template-areas</code>を使うと、Gridコンテナに名前付きのエリアを定義できる。</li>
+<li><code>grid-area</code>を使うと、Gridアイテムをその名前付きエリアに配置できる。</li>
+<li>この2つを組み合わせることで、HTMLの構造に依存しない、視覚的でメンテナンス性の高いレイアウト定義が可能になる。</li>
+<li>特にページ全体の骨格を作るようなマクロなレイアウトで非常に強力。</li>
+</ul>
+<h3 id="_5">📝 学習のポイント</h3>
+<ul>
+<li>[ ] <code>grid-template-areas</code>と<code>grid-area</code>は、それぞれ親要素と子要素のどちらに指定するか説明できるか？</li>
+<li>[ ] <code>grid-template-areas</code>で、隣接するセルを結合するにはどうすればよいか？</li>
+<li>[ ] 2列2行のグリッドで、1行目をすべてヘッダー、2行目の左側をメイン、右側をサイドバーとするレイアウトを<code>grid-template-areas</code>で定義できるか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter04_Gridによるレイアウト_2-4-3: 実務でよく使うGridパターン.html" class="prev">実務でよく使うGridパターン</a>
+<a href="tutorial02_HTML_CSS基礎_chapter04_Gridによるレイアウト_2-4-5: Chapter 4 ハンズオン: ギャラリーレイアウトを作成する.html" class="next">Chapter 4 ハンズオン: ギャラリーレイアウトを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

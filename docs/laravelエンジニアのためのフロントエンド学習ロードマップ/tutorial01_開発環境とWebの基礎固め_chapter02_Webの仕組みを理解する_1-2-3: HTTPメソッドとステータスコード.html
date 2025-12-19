@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTPメソッドとステータスコード | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html" class="current">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め_chapter02_Webの仕組みを理解する.html">Chapter 2: Webの仕組みを理解する</a><span>></span>HTTPメソッドとステータスコード</div>
+                    <div class="section-content">
+<h1 id="1-2-3-http">1-2-3: HTTPメソッドとステータスコード</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>HTTPリクエストで使われる主要な「HTTPメソッド」（GET, POST, PUT, DELETEなど）が、それぞれどのような「動詞」の役割を持つのかを理解します。</li>
+<li>サーバーからのレスポンスに含まれる「HTTPステータスコード」（200, 404, 500など）が、処理結果を伝えるための「伝言メモ」であることを学びます。</li>
+<li>Laravelのルーティング（<code>Route::get</code>, <code>Route::post</code>など）やコントローラーからのレスポンス（<code>response()-&gt;json()</code>, <code>abort()</code>）が、これらのHTTPの仕組みと直接対応していることを実感します。</li>
+</ul>
+<h3 id="_2">🧠 先輩エンジニアの思考プロセス</h3>
+<p>Laravelエンジニアとして、あなたは既に無意識のうちにHTTPメソッドとステータスコードを扱ってきました。<code>Route::get</code>はGETメソッドを、<code>Route::post</code>はPOSTメソッドを処理するためのものです。このセクションの目的は、その「無意識の知識」を「意識的な、体系化された知識」に昇華させることです。なぜなら、フロントエンドとバックエンドが分離されたモダンな開発（API開発）では、このHTTPという共通言語を正確に使いこなすことが、両者の円滑なコミュニケーションに不可欠だからです。</p>
+<p><strong>なぜこの順番で学ぶのか？</strong></p>
+<ol>
+<li><strong>「やりたいこと」を伝える言葉 (HTTPメソッド):</strong> まず、クライアントがサーバーに「何をしてほしいのか」を伝えるための動詞であるHTTPメソッドを学びます。これにより、リクエストの「意図」が明確になります。</li>
+<li><strong>「結果」を伝える言葉 (ステータスコード):</strong> 次に、サーバーがクライアントに「処理の結果どうだったか」を簡潔に伝えるための数字のコード、ステータスコードを学びます。これにより、レスポンスの「状態」がすぐにわかります。</li>
+<li><strong>Laravelとの関連付け:</strong> 最後に、これらの概念がLaravelのどの機能と対応しているかを具体的に示すことで、既存の知識と新しい知識を結びつけ、理解を確実なものにします。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">このセクションでやること</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1. 主要なHTTPメソッドの役割と使い分けを理解する</td>
+</tr>
+<tr>
+<td style="text-align: left;">2. 代表的なHTTPステータスコードの意味を覚える</td>
+</tr>
+<tr>
+<td style="text-align: left;">3. HTTPの概念とLaravelの機能との対応関係を整理する</td>
+</tr>
+</tbody>
+</table>
+<p>💡 <strong>ポイント:</strong> HTTPメソッドは「リクエストの動詞」、ステータスコードは「レスポンスの成績表」。この2つを正しく使うことが、綺麗なAPI設計の第一歩です。</p>
+<h3 id="_3">導入: クライアントとサーバーの「共通言語」</h3>
+<p>前セクションまでで、クライアント（ブラウザ）がサーバーに「リクエスト」を送り、サーバーが「レスポンス」を返すという対話の流れを学びました。この対話で使われるのが、<strong>HTTP（HyperText Transfer Protocol）</strong>という共通言語（プロトコル）です。</p>
+<p>HTTPは、ただ情報を送受信するだけでなく、そのリクエストが「何をしてほしいのか」、そしてレスポンスが「どういう結果だったのか」という、より豊かな情報を含んでいます。</p>
+<ul>
+<li><strong>HTTPメソッド:</strong> クライアントがサーバーに「してほしいこと」を伝えるための<strong>動詞</strong>です。「このページを<strong>取得したい (GET)</strong>」「このデータを<strong>登録したい (POST)</strong>」といった意図を伝えます。</li>
+<li><strong>HTTPステータスコード:</strong> サーバーがクライアントに「処理結果」を伝えるための3桁の<strong>数字コード</strong>です。「<strong>成功したよ (200)</strong>」「<strong>探したけど見つからなかったよ (404)</strong>」といった結果を簡潔に伝えます。</li>
+</ul>
+<p>これらを正しく使い分けることで、クライアントとサーバーは、お互いの意図と結果を正確に、そして効率的に理解し合うことができるのです。</p>
+<h3 id="crudhttp">詳細解説: CRUDとHTTPメソッド</h3>
+<p>Webアプリケーションの基本的な機能は、データの<strong>C</strong>reate（作成）、<strong>R</strong>ead（読み取り）、<strong>U</strong>pdate（更新）、<strong>D</strong>elete（削除）の4つに集約されることが多く、これを<strong>CRUD（クラッド）</strong>と呼びます。HTTPメソッドは、このCRUD操作と非常によく対応しています。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">CRUD操作</th>
+<th style="text-align: left;">HTTPメソッド</th>
+<th style="text-align: left;">役割</th>
+<th style="text-align: left;">Laravelのルート定義の例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Create</strong></td>
+<td style="text-align: left;"><strong>POST</strong></td>
+<td style="text-align: left;">新しいリソース（データ）を作成する。リクエストのボディ（本体）に作成したいデータを含めて送信する。</td>
+<td style="text-align: left;"><code>Route::post('/users', ...);</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Read</strong></td>
+<td style="text-align: left;"><strong>GET</strong></td>
+<td style="text-align: left;">既存のリソースを読み取る（取得する）。URLやクエリパラメータで取得したいリソースを指定する。</td>
+<td style="text-align: left;"><code>Route::get('/users/{id}', ...);</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Update</strong></td>
+<td style="text-align: left;"><strong>PUT / PATCH</strong></td>
+<td style="text-align: left;">既存のリソースを更新する。<code>PUT</code>はリソース全体を置き換える、<code>PATCH</code>はリソースの一部を修正するという意味合いの違いがある。リクエストのボディに更新内容を含める。</td>
+<td style="text-align: left;"><code>Route::put('/users/{id}', ...);</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Delete</strong></td>
+<td style="text-align: left;"><strong>DELETE</strong></td>
+<td style="text-align: left;">既存のリソースを削除する。URLで削除したいリソースを指定する。</td>
+<td style="text-align: left;"><code>Route::delete('/users/{id}', ...);</code></td>
+</tr>
+</tbody>
+</table>
+<p>💡 <strong>GETとPOSTの重要な違い</strong></p>
+<ul>
+<li><strong>GET:</strong> サーバーから情報を取得するだけで、サーバーの状態を変更すべきではありません（<strong>べき等性</strong>）。リクエストの情報はURLに含まれるため、ブックマークや共有が可能です。しかし、パスワードのような機密情報を送るのには適していません。</li>
+<li><strong>POST:</strong> サーバーに新しいデータを作成するなど、サーバーの状態を変更します。リクエストの情報はURLには現れず、リクエストのボディに含まれるため、機密情報を安全に送信できます。</li>
+</ul>
+<p>Laravelで<code>php artisan route:list</code>を実行した時に表示される<code>GET|HEAD</code>, <code>POST</code>, <code>PUT|PATCH</code>, <code>DELETE</code>が、まさにこれらのHTTPメソッドに対応しているのです。</p>
+<h3 id="_4">詳細解説: レスポンス結果を伝えるステータスコード</h3>
+<p>HTTPステータスコードは、サーバーからのレスポンスがどのような状態であるかを示す3桁の数字です。最初の1桁で、レスポンスのカテゴリーが分かります。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">1桁目</th>
+<th style="text-align: left;">カテゴリー</th>
+<th style="text-align: left;">意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1xx</strong></td>
+<td style="text-align: left;"><strong>Informational</strong></td>
+<td style="text-align: left;">（あまり使われない）処理が継続していることを示す。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2xx</strong></td>
+<td style="text-align: left;"><strong>Success</strong></td>
+<td style="text-align: left;"><strong>成功。</strong>リクエストが成功裏に受理され、処理されたことを示す。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3xx</strong></td>
+<td style="text-align: left;"><strong>Redirection</strong></td>
+<td style="text-align: left;"><strong>リダイレクト。</strong>リクエストを完了するために追加のアクションが必要。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4xx</strong></td>
+<td style="text-align: left;"><strong>Client Error</strong></td>
+<td style="text-align: left;"><strong>クライアントエラー。</strong>クライアント側のリクエストに問題がある。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5xx</strong></td>
+<td style="text-align: left;"><strong>Server Error</strong></td>
+<td style="text-align: left;"><strong>サーバーエラー。</strong>サーバー側でリクエストの処理中にエラーが発生。</td>
+</tr>
+</tbody>
+</table>
+<p>以下は、実務で特によく遭遇する代表的なステータスコードです。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">コード</th>
+<th style="text-align: left;">意味</th>
+<th style="text-align: left;">具体的な状況例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>200</strong></td>
+<td style="text-align: left;"><strong>OK</strong></td>
+<td style="text-align: left;">リクエストは成功。GETリクエストでリソースが返された場合など、最も一般的な成功コード。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>201</strong></td>
+<td style="text-align: left;"><strong>Created</strong></td>
+<td style="text-align: left;">リソースの作成に成功。POSTリクエストで新しいユーザーが作成された場合など。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>301</strong></td>
+<td style="text-align: left;"><strong>Moved Permanently</strong></td>
+<td style="text-align: left;">リソースのURLが恒久的に変更された。SEO（検索エンジン最適化）で重要。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>302</strong></td>
+<td style="text-align: left;"><strong>Found</strong></td>
+<td style="text-align: left;">リソースのURLが一時的に変更された。Laravelの<code>redirect()</code>ヘルパーのデフォルト。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>400</strong></td>
+<td style="text-align: left;"><strong>Bad Request</strong></td>
+<td style="text-align: left;">リクエストの構文がおかしい。送信されたJSONの形式が不正な場合など。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>401</strong></td>
+<td style="text-align: left;"><strong>Unauthorized</strong></td>
+<td style="text-align: left;"><strong>認証エラー。</strong>ログインしていないなど、リクエストを行う権限がない。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>403</strong></td>
+<td style="text-align: left;"><strong>Forbidden</strong></td>
+<td style="text-align: left;"><strong>認可エラー。</strong>ログインはしているが、そのリソースにアクセスする権限がない（例: 他人の投稿を編集しようとした）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>404</strong></td>
+<td style="text-align: left;"><strong>Not Found</strong></td>
+<td style="text-align: left;">リクエストされたリソースが見つからない。存在しないURLにアクセスした場合。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>500</strong></td>
+<td style="text-align: left;"><strong>Internal Server Error</strong></td>
+<td style="text-align: left;">サーバー内部で予期せぬエラーが発生。Laravelアプリケーションでコードのバグなどがあった場合。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>503</strong></td>
+<td style="text-align: left;"><strong>Service Unavailable</strong></td>
+<td style="text-align: left;">サービスが利用不可。サーバーがメンテナンス中や過負荷の場合。</td>
+</tr>
+</tbody>
+</table>
+<p>フロントエンド開発では、このステータスコードに応じて処理を分岐させることが非常に重要です。例えば、<code>200</code>なら成功画面を表示し、<code>401</code>ならログインページにリダイレクトし、<code>500</code>なら「サーバーでエラーが発生しました」というメッセージを表示する、といった具合です。</p>
+<h3 id="_5">✨ まとめ</h3>
+<ul>
+<li><strong>HTTPメソッドはリクエストの動詞:</strong> <code>GET</code>（取得）、<code>POST</code>（作成）、<code>PUT/PATCH</code>（更新）、<code>DELETE</code>（削除）といったメソッドで、リクエストの意図を明確に伝えます。</li>
+<li><strong>CRUD操作との対応:</strong> これらのメソッドは、アプリケーションの基本機能であるCRUDと密接に関連しています。</li>
+<li><strong>ステータスコードはレスポンスの成績表:</strong> <code>2xx</code>（成功）、<code>3xx</code>（リダイレクト）、<code>4xx</code>（クライアントエラー）、<code>5xx</code>（サーバーエラー）といったコードで、処理結果を簡潔に伝えます。</li>
+<li><strong>フロントエンドの役割:</strong> フロントエンドは、レスポンスのステータスコードを解釈し、その結果に応じて画面表示やユーザーへの通知を適切に行う責任があります。</li>
+</ul>
+<h3 id="_6">📝 学習のポイント</h3>
+<p>このセクションを終えた今、あなたは以下のことができるようになっているはずです。</p>
+<ul>
+<li>[ ] GETとPOSTメソッドの主な違いと、それぞれの使い分けの場面を説明できる。</li>
+<li>[ ] ユーザー登録フォームを送信する際にはPOSTメソッドが、記事を閲覧する際にはGETメソッドが適切である理由を説明できる。</li>
+<li>[ ] ステータスコード「404」と「500」の違いを、クライアントとサーバーのどちらに原因があるかという観点から説明できる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial01_開発環境とWebの基礎固め_chapter02_Webの仕組みを理解する_1-2-2: URLとDNSの仕組み.html" class="prev">URLとDNSの仕組み</a>
+<a href="tutorial01_開発環境とWebの基礎固め_chapter02_Webの仕組みを理解する_1-2-4: Chapter 2 ハンズオン: HTTPリクエストを観察する.html" class="next">Chapter 2 ハンズオン: HTTPリクエストを観察する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

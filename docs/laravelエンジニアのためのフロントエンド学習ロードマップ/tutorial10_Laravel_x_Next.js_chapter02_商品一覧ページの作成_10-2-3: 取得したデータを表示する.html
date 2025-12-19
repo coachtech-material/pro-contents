@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取得したデータを表示する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成.html">Chapter 2: 商品一覧ページの作成</a><span>></span>取得したデータを表示する</div>
+                    <div class="section-content">
+<h1 id="10-2-3">10-2-3: 取得したデータを表示する</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Laravel側でCORS設定を行い、クロスオリジンリクエストを許可する方法を学ぶ</li>
+<li>APIから取得したデータの配列を、Reactコンポーネントで<code>map</code>メソッドを使ってリスト表示する方法を習得する</li>
+<li>Tailwind CSSを使って、取得したデータをカード形式のUIで整形する方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションで、Next.jsからLaravel APIを呼び出した際にCORSエラーが発生しました。このエラーは、サーバー（Laravel）がクライアント（Next.js）からのリクエストを許可していないために起こります。</p>
+<p>このセクションでは、まずLaravel側でCORSの設定を行い、この問題を解決します。その後、無事に取得できた商品データを、JSONの文字列ではなく、見やすいカード形式のUIで画面に表示します。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="1-laravelcors">ステップ1: LaravelでのCORS設定</h3>
+<p>Laravelには、CORS関連の設定を簡単に行うための仕組みが標準で用意されています。</p>
+<ol>
+<li>
+<p><strong><code>config/cors.php</code>の確認</strong><br />
+    Laravelプロジェクトの<code>config/cors.php</code>ファイルを開いてください。このファイルで、CORSに関する詳細な設定ができます。</p>
+</li>
+<li>
+<p><strong><code>.env</code>ファイルの設定</strong><br />
+<code>config/cors.php</code>を見ると、許可するオリジン（<code>allowed_origins</code>）の設定が、環境変数<code>CORS_ALLOWED_ORIGINS</code>から読み込まれるようになっていることがわかります。</p>
+<p>```php<br />
+// config/cors.php</p>
+<p>// ...<br />
+'allowed_origins' =&gt; explode(</p>
+<pre class="codehilite"><code>-   `allowed_origins` =&gt; env(
+-       'CORS_ALLOWED_ORIGINS',
+-       'http://localhost:3000,http://127.0.0.1:3000'
+-   ),
++   `allowed_origins` =&gt; [
++       env(
++           'FRONTEND_URL',
++           'http://localhost:3000'
++       )
++   ],
+</code></pre>
+
+<p>// ...<br />
+```</p>
+<p>Laravelプロジェクトのルートにある<code>.env</code>ファイルに、Next.jsアプリケーションのURLを追記します。</p>
+<p>```.env</p>
+<h1 id="env-laravel">.env (Laravelプロジェクトのルート)</h1>
+<h1 id="_4">... 他の設定</h1>
+<p>CORS_ALLOWED_ORIGINS=http://localhost:3000<br />
+```</p>
+<p>この設定により、Laravelは<code>http://localhost:3000</code>からのAPIリクエストを許可するようになります。</p>
+<p><strong>注意</strong>: <code>.env</code>ファイルを変更した後は、設定を反映させるためにSailを再起動する必要があります。</p>
+<p>```bash</p>
+<h1 id="laravel">Laravelプロジェクトのディレクトリで実行</h1>
+<p>sail down<br />
+sail up -d<br />
+```</p>
+</li>
+<li>
+<p><strong>動作確認</strong><br />
+    Sailを再起動したら、再度ブラウザで<code>http://localhost:3000/products</code>にアクセスしてください。今度はCORSエラーが消え、前のセクションで<code>pre</code>タグで表示したJSONデータが画面に表示されるはずです。</p>
+</li>
+</ol>
+<h3 id="2-ui">ステップ2: 取得したデータをUIに反映する</h3>
+<p>APIからデータを無事に取得できるようになったので、次はこのデータをユーザーに見やすいように表示します。</p>
+<p><code>src/app/products/page.tsx</code>（Next.jsプロジェクト）を以下のように編集してください。</p>
+<pre class="codehilite"><code class="language-tsx">// src/app/products/page.tsx
+
+// Productインターフェースは変更なし
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  created_at: string;
+  updated_at: string;
+}
+
+async function getProducts(): Promise&lt;Product[]&gt; {
+  // getProducts関数は変更なし
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/products`;
+  const res = await fetch(url, { cache: &quot;no-store&quot; });
+  if (!res.ok) {
+    throw new Error(&quot;Failed to fetch products&quot;);
+  }
+  return res.json();
+}
+
+// 商品カードコンポーネント
+function ProductCard({ product }: { product: Product }) {
+  return (
+    &lt;div className=&quot;border rounded-lg p-6 shadow-md bg-white&quot;&gt;
+      &lt;h2 className=&quot;text-2xl font-semibold mb-2&quot;&gt;{product.name}&lt;/h2&gt;
+      &lt;p className=&quot;text-gray-600 mb-4&quot;&gt;{product.description}&lt;/p&gt;
+      &lt;p className=&quot;text-xl font-bold text-right text-gray-800&quot;&gt;
+        &amp;yen;{product.price.toLocaleString()}
+      &lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// 商品一覧ページのコンポーネント
+export default async function ProductsPage() {
+  const products = await getProducts();
+
+  return (
+    &lt;main className=&quot;container mx-auto p-8 bg-gray-50 min-h-screen&quot;&gt;
+      &lt;h1 className=&quot;text-4xl font-bold mb-10 text-center text-gray-800&quot;&gt;
+        商品一覧
+      &lt;/h1&gt;
+      &lt;div className=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8&quot;&gt;
+        {products.map((product) =&gt; (
+          &lt;ProductCard key={product.id} product={product} /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/main&gt;
+  );
+}
+</code></pre>
+
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>ProductCard</code>コンポーネント</strong>: 一つの商品情報を表示するための、再利用可能なコンポーネントを新たに作成しました。<code>product</code>オブジェクトを<code>props</code>として受け取ります。</li>
+<li><strong><code>map</code>メソッドによる繰り返し</strong>: <code>products</code>配列（APIから取得した商品データの配列）に対して<code>map</code>メソッドを使い、配列の各要素（各<code>product</code>オブジェクト）に対して<code>ProductCard</code>コンポーネントを生成しています。これはReactでリスト表示を行う際の基本的なパターンです。</li>
+<li><strong><code>key</code>プロパティ</strong>: <code>map</code>でリストを生成する際には、各要素に一意の<code>key</code>プロパティを指定する必要があります。Reactは、この<code>key</code>を使ってどの要素が変更、追加、削除されたのかを効率的に判断します。通常は、データに存在するユニークなID（今回は<code>product.id</code>）を使用します。</li>
+<li><strong>Tailwind CSSによるスタイリング</strong>: <code>grid</code>, <code>gap</code>, <code>p-6</code>, <code>shadow-md</code>など、Tailwind CSSのユーティリティクラスを使って、レスポンシブ対応のカード型レイアウトを簡単に実現しています。</li>
+</ul>
+<p>ファイルを保存して<code>http://localhost:3000/products</code>を再度見てみましょう。以下のように、商品データがカード形式で綺麗に表示されているはずです。</p>
+<p><img alt="商品一覧ページ" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-10/product-list.png" /></p>
+<h2 id="_5">✨ まとめ</h2>
+<ul>
+<li>LaravelのCORS設定は、<code>config/cors.php</code>と<code>.env</code>ファイルを編集することで、特定のオリジンからのリクエストを許可できる。</li>
+<li>Reactでは、データの配列を<code>map</code>メソッドで展開し、各要素に対応するコンポーネントを生成するのがリスト表示の基本パターンである。</li>
+<li><code>map</code>を使う際には、各要素にユニークな<code>key</code>プロパティを必ず指定する。</li>
+<li>Tailwind CSSを使えば、コンポーネントに直接クラスを記述するだけで、迅速にUIを構築できる。</li>
+</ul>
+<p>これで、LaravelバックエンドとNext.jsフロントエンドが連携する、ヘッドレスアプリケーションの基本的な形が完成しました。次のチャプターでは、このアプリケーションに認証機能を追加していきます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-2: Next.jsからAPIを呼び出す.html" class="prev">Next.jsからAPIを呼び出す</a>
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-4: Chapter 2 ハンズオン: 商品一覧ページを作成する.html" class="next">Chapter 2 ハンズオン: 商品一覧ページを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

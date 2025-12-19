@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実務でよく使うカスタムフックの例 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter02_カスタムフック.html">Chapter 2: カスタムフック</a><span>></span>実務でよく使うカスタムフックの例</div>
+                    <div class="section-content">
+<h1 id="8-2-3">8-2-3: 実務でよく使うカスタムフックの例</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>実務の現場で頻繁に作成・利用される、汎用的なカスタムフックのパターンを学ぶ</li>
+<li>API通信をカプセル化する <code>useFetch</code> フックの実装例を理解する</li>
+<li>ブラウザのLocalStorageとStateを同期させる <code>useLocalStorage</code> フックの仕組みを学ぶ</li>
+<li>頻繁なイベント発火を制御する <code>useDebounce</code> フックの有用性を知る</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>カスタムフックは、特定のアプリケーションのドメインロジック（例: <code>useUsers</code>, <code>useProducts</code>）を分離するためだけでなく、より汎用的で、様々なプロジェクトで再利用可能なロジックをカプセル化するためにも非常に強力です。</p>
+<p>コミュニティには <code>react-use</code> や <code>ahooks</code> といった、便利なカスタムフックを集めたライブラリも存在し、多くの開発者がその恩恵を受けています。これらのライブラリが提供するフックは、実務で頻出する課題を解決するために作られたものばかりです。</p>
+<p>このセクションでは、そのような「車輪の再発明」を避けつつも、カスタムフックの設計思想を深く理解するために、実務でよく使われる代表的なカスタムフックの例をいくつか見ていきましょう。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="1-usefetch-api">1. <code>useFetch</code>: APIデータ取得の汎用フック</h3>
+<p>前のセクションで作成した <code>useUsers</code> はユーザー取得に特化していましたが、これをより汎用的にし、任意のURLからデータを取得できるようにしたのが <code>useFetch</code> です。ジェネリクスを使うことで、取得するデータの型を柔軟に指定できるのがポイントです。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useFetch.ts
+import { useState, useEffect } from 'react';
+
+interface FetchState&lt;T&gt; {
+  data: T | null;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export const useFetch = &lt;T,&gt;(url: string): FetchState&lt;T&gt; =&gt; {
+  const [state, setState] = useState&lt;FetchState&lt;T&gt;&gt;({
+    data: null,
+    isLoading: true,
+    error: null,
+  });
+
+  useEffect(() =&gt; {
+    if (!url) return;
+
+    const fetchData = async () =&gt; {
+      setState(prevState =&gt; ({ ...prevState, isLoading: true }));
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: T = await response.json();
+        setState({ data, isLoading: false, error: null });
+      } catch (e) {
+        setState({ data: null, isLoading: false, error: e as Error });
+      }
+    };
+
+    fetchData();
+  }, [url]); // URLが変更されたら再フェッチする
+
+  return state;
+};
+</code></pre>
+
+<p><strong>使い方:</strong></p>
+<pre class="codehilite"><code class="language-tsx">interface Post { id: number; title: string; }
+
+function PostDetails({ postId }: { postId: number }) {
+  const { data: post, isLoading, error } = useFetch&lt;Post&gt;(
+    `https://api.example.com/posts/${postId}`
+  );
+
+  if (isLoading) return &lt;p&gt;Loading post...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error: {error.message}&lt;/p&gt;;
+  if (!post) return null;
+
+  return &lt;h1&gt;{post.title}&lt;/h1&gt;;
+}
+</code></pre>
+
+<h3 id="2-uselocalstorage-localstorage">2. <code>useLocalStorage</code>: LocalStorageとの同期</h3>
+<p>ユーザーの設定（例: ダークモードのON/OFF）などをブラウザのLocalStorageに保存し、ページをリロードしてもその状態が維持されるようにしたいケースはよくあります。<code>useLocalStorage</code> は、<code>useState</code> と同じインターフェースを提供しつつ、値の読み書きを自動的にLocalStorageと同期してくれます。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useLocalStorage.ts
+import { useState, useEffect } from 'react';
+
+export const useLocalStorage = &lt;T,&gt;(key: string, initialValue: T): [T, (value: T) =&gt; void] =&gt; {
+  // 1. 初期値はLocalStorageから取得するか、なければ引数の初期値を使う
+  const [storedValue, setStoredValue] = useState&lt;T&gt;(() =&gt; {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
+
+  // 2. storedValueが変更されるたびにLocalStorageを更新する
+  useEffect(() =&gt; {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(storedValue));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [key, storedValue]);
+
+  return [storedValue, setStoredValue];
+};
+</code></pre>
+
+<p><strong>使い方:</strong></p>
+<pre class="codehilite"><code class="language-tsx">function ThemeSwitcher() {
+  // useStateと同じように使える！
+  const [theme, setTheme] = useLocalStorage&lt;
+'light' | 'dark'&gt;(
+'theme', 'light');
+
+  const toggleTheme = () =&gt; {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    &lt;div className={theme}&gt;
+      &lt;p&gt;Current theme: {theme}&lt;/p&gt;
+      &lt;button onClick={toggleTheme}&gt;Toggle Theme&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<h3 id="3-usedebounce">3. <code>useDebounce</code>: 入力イベントの間引き</h3>
+<p>検索ボックスなどで、ユーザーがキーを入力するたびにAPIリクエストを送ると、サーバーに過剰な負荷がかかります。<code>useDebounce</code> は、値の変更を一定時間（例: 500ms）遅延させ、その間に新しい値が来なければ、最後の値だけを返すフックです。これにより、ユーザーが入力を終えたタイミングで一度だけAPIを叩く、といった最適化が可能になります。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useDebounce.ts
+import { useState, useEffect } from 'react';
+
+export const useDebounce = &lt;T,&gt;(value: T, delay: number): T =&gt; {
+  const [debouncedValue, setDebouncedValue] = useState&lt;T&gt;(value);
+
+  useEffect(() =&gt; {
+    // valueが変更された後、delayミリ秒後に実行されるタイマーをセット
+    const handler = setTimeout(() =&gt; {
+      setDebouncedValue(value);
+    }, delay);
+
+    // 次のeffectが実行される前（またはアンマウント時）にタイマーをクリア
+    // これにより、delayの間にvalueが変更されたらタイマーはリセットされる
+    return () =&gt; {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+</code></pre>
+
+<p><strong>使い方:</strong></p>
+<pre class="codehilite"><code class="language-tsx">function SearchInput() {
+  const [searchTerm, setSearchTerm] = useState('');
+  // 500ms遅延させた値を取得
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  // このeffectは、ユーザーの入力が500ms止まった時だけ実行される
+  useEffect(() =&gt; {
+    if (debouncedSearchTerm) {
+      // ここでAPIを叩く
+      console.log(`Searching for ${debouncedSearchTerm}...`);
+    }
+  }, [debouncedSearchTerm]);
+
+  return (
+    &lt;input
+      type=&quot;text&quot;
+      placeholder=&quot;Search...&quot;
+      value={searchTerm}
+      onChange={(e) =&gt; setSearchTerm(e.target.value)}
+    /&gt;
+  );
+}
+</code></pre>
+
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>カスタムフックは、アプリケーション固有のロジックだけでなく、<strong>汎用的なロジック</strong>をカプセル化するためにも非常に有効である。</li>
+<li><code>useFetch</code> は、API通信の状態（データ、ローディング、エラー）を管理するロジックを共通化する。</li>
+<li><code>useLocalStorage</code> は、<code>useState</code>ライクなインターフェースで、状態をブラウザのLocalStorageと同期させる。</li>
+<li><code>useDebounce</code> は、頻繁に更新される値を「間引く」ことで、不要な処理（特にAPIリクエスト）の実行を防ぎ、パフォーマンスを向上させる。</li>
+<li>これらのパターンを理解することで、より複雑な課題に対応できるカスタムフックを設計・実装する力が身に実装する応用力が身につく。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial08_React応用_chapter02_カスタムフック_8-2-2: ビジネスロジックの分離.html" class="prev">ビジネスロジックの分離</a>
+<a href="tutorial08_React応用_chapter02_カスタムフック_8-2-4: Chapter 2 ハンズオン: useFetchフックを作成する.html" class="next">Chapter 2 ハンズオン: useFetchフックを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel Sanctumのセットアップ | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter03_認証機能の実装.html">Chapter 3: 認証機能の実装</a><span>></span>Laravel Sanctumのセットアップ</div>
+                    <div class="section-content">
+<h1 id="10-3-1-laravel-sanctum">10-3-1: Laravel Sanctumのセットアップ</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Laravel Sanctumとは何か、SPA認証におけるその役割を理解する</li>
+<li>Sanctumをインストールし、基本的な設定を行う方法を学ぶ</li>
+<li>認証関連の環境変数を設定し、フロントエンドとの連携準備を整える</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>商品一覧ページが完成しましたが、現状では誰でもAPIにアクセスできてしまいます。実用的なアプリケーションでは、「ログインしているユーザーにだけ特定の操作を許可する」といった認証機能が不可欠です。</p>
+<p>LaravelでSPA（Single Page Application）向けの認証を実装する際のデファクトスタンダードとなっているのが、<strong>Laravel Sanctum</strong>です。Sanctumは、Laravelが公式に提供するパッケージで、SPA認証やAPIトークン認証を簡単かつ安全に実装する仕組みを提供します。</p>
+<p>このチュートリアルでは、Sanctumの<strong>SPA認証</strong>機能を利用します。これは、従来のWebアプリケーションで使われてきたCookieとセッションを利用した、ステートフルな認証方法です。Next.jsのようなフロントエンドとLaravelバックエンドが異なるドメイン（またはポート）で動作していても、安全に認証状態を維持することができます。</p>
+<h2 id="_3">詳細解説</h2>
+<p><strong>注意</strong>: これ以降のコマンドは、すべてLaravelプロジェクトのディレクトリ（<code>laravel-next-app</code>）で、Sailを使って実行します。</p>
+<h3 id="1-sanctum">ステップ1: Sanctumのインストール</h3>
+<p>まず、Composerを使ってSanctumパッケージをインストールします。</p>
+<pre class="codehilite"><code class="language-bash">sail composer require laravel/sanctum
+</code></pre>
+
+<h3 id="2">ステップ2: 設定ファイルとマイグレーションの発行</h3>
+<p>次に、<code>vendor:publish</code>コマンドを使って、Sanctumの設定ファイル（<code>config/sanctum.php</code>）とマイグレーションファイルをプロジェクトにコピーします。</p>
+<pre class="codehilite"><code class="language-bash">sail artisan vendor:publish --provider=&quot;Laravel\Sanctum\SanctumServiceProvider&quot;
+</code></pre>
+
+<h3 id="3">ステップ3: データベースのマイグレーション</h3>
+<p>Sanctumは、APIトークンを保存するための<code>personal_access_tokens</code>テーブルを使用します。ステップ2で発行されたマイグレーションファイルを実行して、このテーブルをデータベースに作成します。</p>
+<pre class="codehilite"><code class="language-bash">sail artisan migrate
+</code></pre>
+
+<blockquote>
+<p><strong>補足</strong>: <code>migrate:fresh</code>ではなく<code>migrate</code>を使っているのは、既存の<code>products</code>テーブルのデータを消さずに、新しいマイグレーションだけを適用するためです。</p>
+</blockquote>
+<h3 id="4-api">ステップ4: APIカーネルの設定</h3>
+<p>次に、フロントエンドからのリクエストに対して、SanctumのSPA認証ミドルウェアが適用されるように設定します。</p>
+<p><code>app/Http/Kernel.php</code>を開き、<code>api</code>ミドルウェアグループに<code>EnsureFrontendRequestsAreStateful</code>クラスを追加します。</p>
+<pre class="codehilite"><code class="language-php">// app/Http/Kernel.php
+
+protected $middlewareGroups = [
+    // ...
+    &quot;api&quot; =&gt; [
+        \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, // この行を追加
+        &quot;throttle:api&quot;,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    ],
+];
+</code></pre>
+
+<p>このミドルウェアが、フロントエンドからのリクエストをステートフルなものとして扱い、Cookieベースの認証を機能させるための重要な役割を担います。</p>
+<h3 id="5">ステップ5: 環境変数の設定</h3>
+<p>最後に、Sanctumとセッションの設定を環境変数で行います。Laravelプロジェクトの<code>.env</code>ファイルを開き、以下の点を修正・確認してください。</p>
+<ol>
+<li><strong><code>SANCTUM_STATEFUL_DOMAINS</code></strong>: どのフロントエンドドメインからのリクエストをステートフルとして扱うかを指定します。今回は<code>localhost:3000</code>で動作するNext.jsアプリケーションを対象とします。</li>
+<li><strong><code>SESSION_DOMAIN</code></strong>: セッションCookieが有効になるドメインを指定します。サブドメインが異なるSPA認証では、これをルートドメイン（今回は<code>localhost</code>）に設定することが重要です。</li>
+<li><strong><code>SESSION_DRIVER</code></strong>: セッションの保存方法。デフォルトの<code>file</code>でも動作しますが、<code>cookie</code>に設定することで、Laravel側でセッションファイルを管理する必要がなくなり、構成がシンプルになります。</li>
+</ol>
+<pre class="codehilite"><code class="language-env"># .env (Laravelプロジェクトのルート)
+
+# ...
+
+# フロントエンドのURLを指定
+SANCTUM_STATEFUL_DOMAINS=localhost:3000
+
+# セッションの設定
+SESSION_DRIVER=cookie
+SESSION_LIFETIME=120
+SESSION_DOMAIN=localhost
+
+# CORSの設定（変更なし）
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+CORS_SUPPORTS_CREDENTIALS=true # 認証情報（Cookie）の送受信を許可
+</code></pre>
+
+<p><strong><code>CORS_SUPPORTS_CREDENTIALS=true</code></strong> を追記するのを忘れないでください。これは、オリジン間でCookieなどの認証情報を含むリクエスト（Credentialed Request）を許可するために不可欠な設定です。</p>
+<p>また、対応する<code>config/cors.php</code>の設定も確認しておきましょう。</p>
+<pre class="codehilite"><code class="language-php">// config/cors.php
+
+// ...
+    &quot;supports_credentials&quot; =&gt; env(&quot;CORS_SUPPORTS_CREDENTIALS&quot;, false),
+// ...
+</code></pre>
+
+<p><code>.env</code>で<code>CORS_SUPPORTS_CREDENTIALS</code>が<code>true</code>に設定されることで、この値が<code>true</code>になり、<code>Access-Control-Allow-Credentials</code>ヘッダーがレスポンスに含まれるようになります。</p>
+<p>設定を変更したので、Sailを再起動して反映させます。</p>
+<pre class="codehilite"><code class="language-bash">sail down
+sail up -d
+</code></pre>
+
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>Laravel Sanctumは、SPA認証を簡単かつ安全に実装するための公式パッケージである。</li>
+<li><code>composer require</code>でインストールし、<code>vendor:publish</code>と<code>migrate</code>で基本的なセットアップを行う。</li>
+<li><code>app/Http/Kernel.php</code>の<code>api</code>ミドルウェアグループに<code>EnsureFrontendRequestsAreStateful</code>を追加する。</li>
+<li><code>.env</code>ファイルで<code>SANCTUM_STATEFUL_DOMAINS</code>と<code>SESSION_DOMAIN</code>を正しく設定し、フロントエンドからのステートフルなリクエストを受け入れる準備をする。</li>
+<li>認証情報（Cookie）を伴うリクエストのために、CORSの設定で<code>supports_credentials</code>を<code>true</code>にする必要がある。</li>
+</ul>
+<p>これで、Laravelバックエンド側で認証リクエストを受け入れる準備が整いました。次のセクションでは、フロントエンドに<strong>NextAuth.js</strong>というライブラリを導入し、このSanctumバックエンドと連携してログイン・ログアウト機能を実装していきます。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial10_Laravel_x_Next.js_chapter03_認証機能の実装_10-3-2: NextAuth.jsのセットアップ.html" class="next">NextAuth.jsのセットアップ</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

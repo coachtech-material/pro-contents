@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propsのデフォルト値と分割代入 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html" class="current">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial07_React入門.html">Tutorial 7: React入門</a><span>></span><a href="tutorial07_React入門_chapter02_Propsによるデータ受け渡し.html">Chapter 2: Propsによるデータ受け渡し</a><span>></span>Propsのデフォルト値と分割代入</div>
+                    <div class="section-content">
+<h1 id="7-2-3-props">7-2-3: Propsのデフォルト値と分割代入</h1>
+<h2 id="chapter-2-props">Chapter 2: Propsによるデータ受け渡し</h2>
+<h3 id="section-3-props">Section 3: Propsのデフォルト値と分割代入の応用</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li>Propsが渡されなかった場合に備えて、<strong>デフォルト値</strong>を設定する方法を習得する。</li>
+<li>Propsの型定義で、特定のPropsを<strong>任意（オプショナル）</strong>にする方法を習得する。</li>
+<li>分割代入を使い、残りのPropsをまとめてオブジェクトとして受け取る<strong>Restパラメータ</strong> (<code>...rest</code>) の使い方を学ぶ。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：より堅牢なコンポーネントへ</h3>
+<p>Propsを使うことで、コンポーネントは非常に柔軟になりました。しかし、コンポーネントを多くの場所で再利用していると、「うっかりPropsを渡し忘れる」というミスが起こりがちです。</p>
+<p>また、<code>button</code>タグのように、<code>onClick</code>や<code>disabled</code>など、たくさんの属性を受け取れるコンポーネントを作りたい場合、すべてのPropsを一つ一つ定義するのは大変です。</p>
+<p>このセクションでは、Propsのデフォルト値を設定する方法や、分割代入の応用テクニックを使って、より堅牢で柔軟なコンポーネントを作成する方法を学びます。</p>
+<hr />
+<h3 id="props">⚙️ Propsのデフォルト値</h3>
+<p>Propsが親コンポーネントから渡されなかった場合に、代わりに使われる値を設定しておくことができます。これにより、Propsの渡し忘れによるエラーを防いだり、基本的なスタイルを保証したりできます。</p>
+<p>デフォルト値の設定は、関数の引数のデフォルト値と同じ構文を、分割代入と組み合わせて使います。</p>
+<p><strong>例：<code>Button</code>コンポーネントにデフォルト値を設定する</strong></p>
+<pre class="codehilite"><code class="language-tsx">// Button.tsx
+
+// 1. Propsの型を定義する
+type ButtonProps = {
+  label: string;
+  // themeは任意（渡されなくても良い）なので、プロパティ名の後ろに ? を付ける
+  theme?: 'primary' | 'secondary';
+};
+
+// 2. 分割代入でデフォルト値を設定する
+function Button({ label, theme = 'secondary' }: ButtonProps) {
+  // themeの値に応じてCSSクラスを切り替える
+  const buttonClass = theme === 'primary' ? 'button-primary' : 'button-secondary';
+
+  return &lt;button className={buttonClass}&gt;{label}&lt;/button&gt;;
+}
+</code></pre>
+
+<p><strong>解説:</strong><br />
+1.  <strong><code>theme?: 'primary' | 'secondary'</code></strong>: <code>theme</code> Propsの型定義です。<br />
+    -   <code>?</code> をプロパティ名の後ろに付けることで、このPropsが<strong>任意（オプショナル）</strong>であることを示します。これにより、<code>Button</code>コンポーネントを呼び出す際に<code>theme</code>を渡さなくても、TypeScriptのエラーが発生しなくなります。<br />
+    -   <code>'primary' | 'secondary'</code> は<strong>ユニオン型</strong>といい、<code>theme</code>が取りうる値をこの2つの文字列に限定します。これにより、<code>'danger'</code>のような意図しない値が渡されるのを防ぎます。<br />
+2.  <strong><code>theme = 'secondary'</code></strong>: 分割代入の部分で、<code>theme</code>にデフォルト値を設定しています。もし親から<code>theme</code> Propsが渡されなかった場合、<code>theme</code>変数の値は自動的に<code>'secondary'</code>になります。</p>
+<p><strong>呼び出し側の例 (<code>App.tsx</code>)</strong></p>
+<pre class="codehilite"><code class="language-tsx">// App.tsx
+
+&lt;Button label=&quot;OK&quot; theme=&quot;primary&quot; /&gt; // primaryテーマのボタンが表示される
+&lt;Button label=&quot;Cancel&quot; /&gt;            // themeを渡していないので、デフォルト値のsecondaryテーマのボタンが表示される
+</code></pre>
+
+<hr />
+<h3 id="restprops">🚀 RestパラメータによるPropsの集約</h3>
+<p>標準のHTMLタグが持つ属性（<code>onClick</code>, <code>disabled</code>, <code>id</code>, <code>aria-label</code>など）を、すべてカスタムコンポーネントでも受け取れるようにしたい場合があります。しかし、これらすべてをPropsの型定義に一つ一つ書くのは現実的ではありません。</p>
+<p>このような場合に便利なのが、分割代入の<strong>Restパラメータ (<code>...rest</code>)</strong> です。</p>
+<p><strong>例：<code>button</code>のネイティブな属性をすべて受け取る<code>Button</code>コンポーネント</strong></p>
+<pre class="codehilite"><code class="language-tsx">// Button.tsx
+
+import React from &quot;react&quot;;
+
+// 1. Propsの型を拡張する
+type ButtonProps = {
+  label: string;
+  theme?: 'primary' | 'secondary';
+} &amp; React.ComponentPropsWithoutRef&lt;'button'&gt;; // buttonタグの全属性を継承
+
+// 2. 分割代入で残りのPropsをrestに集約
+function Button({ label, theme = 'secondary', ...rest }: ButtonProps) {
+  const buttonClass = theme === 'primary' ? 'button-primary' : 'button-secondary';
+
+  // 3. 集約したpropsをbutton要素に展開する
+  return (
+    &lt;button className={buttonClass} {...rest}&gt;
+      {label}
+    &lt;/button&gt;
+  );
+}
+</code></pre>
+
+<p><strong>解説:</strong><br />
+1.  <strong><code>&amp; React.ComponentPropsWithoutRef&lt;'button'&gt;</code></strong>: ここがTypeScriptのテクニックです。<br />
+    -   <code>React.ComponentPropsWithoutRef&lt;'button'&gt;</code>は、Reactが提供する型で、<code>button</code>タグが受け取れるすべての属性（<code>onClick</code>, <code>disabled</code>, <code>type</code>など）の型情報を持っています。<br />
+    -   <code>&amp;</code>（インターセクション型）を使って、自前で定義した<code>{ label, theme }</code>という型と結合することで、<code>ButtonProps</code>は「<code>label</code>と<code>theme</code>、<strong>かつ</strong>、<code>button</code>タグの全属性」を持つ型になります。<br />
+2.  <strong><code>...rest</code></strong>: 分割代入の最後に<code>...</code>を付けた変数を置くと、まだ分割代入されていない<strong>残りのプロパティがすべて</strong>、その変数にオブジェクトとして集約されます。ここでは、<code>label</code>と<code>theme</code>以外のすべてのProps（<code>onClick</code>, <code>disabled</code>など）が<code>rest</code>オブジェクトに格納されます。<br />
+3.  <strong><code>{...rest}</code></strong>: <code>button</code>要素の属性として<code>{...rest}</code>と記述すると、<code>rest</code>オブジェクトが持つすべてのプロパティが、<code>button</code>タグの属性として展開されます。これを<strong>スプレッド構文</strong>と呼びます。<br />
+    -   例えば、<code>rest</code>が<code>{ onClick: handleClick, disabled: true }</code>というオブジェクトだった場合、これは<code>onClick={handleClick} disabled={true}</code>と書いたのと同じ意味になります。</p>
+<p><strong>呼び出し側の例 (<code>App.tsx</code>)</strong></p>
+<pre class="codehilite"><code class="language-tsx">// App.tsx
+
+const handleClick = () =&gt; alert('Clicked!');
+
+&lt;Button label=&quot;Click me&quot; onClick={handleClick} /&gt;
+&lt;Button label=&quot;Submitting...&quot; disabled={true} /&gt;
+</code></pre>
+
+<p>このテクニックを使うことで、コンポーネントのProps定義をシンプルに保ちつつ、HTML要素が持つすべての機能（アクセシビリティ属性を含む）を損なうことなく、ラップしたコンポーネントを作成できます。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>Propsの型定義でプロパティ名の後ろに<code>?</code>を付けると、そのPropsは<strong>任意（オプショナル）</strong>になる。</li>
+<li>分割代入の中で<code>propName = 'defaultValue'</code>と記述することで、Propsが渡されなかった場合の<strong>デフォルト値</strong>を設定できる。</li>
+<li>分割代入の最後に<code>...rest</code>と記述すると、残りのPropsを<strong><code>rest</code>オブジェクトに集約</strong>できる（Restパラメータ）。</li>
+<li>JSX内で<code>{...rest}</code>と記述すると、<code>rest</code>オブジェクトのプロパティを<strong>属性として展開</strong>できる（スプレッド構文）。</li>
+<li><code>React.ComponentPropsWithoutRef&lt;'tag'&gt;</code>とインターセクション型<code>&amp;</code>を組み合わせることで、既存のHTMLタグの属性をすべて受け継ぐ、柔軟なコンポーネントを型安全に作成できる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] なぜPropsにデフォルト値を設定することが、コンポーネントの堅牢性を高めるのでしょうか？</li>
+<li>[ ] <code>...rest</code> パラメータを使わずに、<code>Button</code>コンポーネントで<code>onClick</code>と<code>disabled</code>の両方を受け取れるようにするには、<code>ButtonProps</code>の型定義とコンポーネントの実装をどのように変更する必要がありますか？</li>
+<li>[ ] <code>input</code>タグをラップした<code>TextInput</code>コンポーネントを作成する場合、<code>React.ComponentPropsWithoutRef</code>はどのように使えばよいでしょうか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial07_React入門_chapter02_Propsによるデータ受け渡し_7-2-2: childrenプロップスの使い方.html" class="prev">childrenプロップスの使い方</a>
+<a href="tutorial07_React入門_chapter02_Propsによるデータ受け渡し_7-2-4: Chapter 2 ハンズオン: プロフィールカードコンポーネントを作成する.html" class="next">Chapter 2 ハンズオン: プロフィールカードコンポーネントを作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

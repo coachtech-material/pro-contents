@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>要素の取得と変更（querySelector, innerHTML） | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作.html">Chapter 3: DOM操作</a><span>></span>要素の取得と変更（querySelector, innerHTML）</div>
+                    <div class="section-content">
+<h1 id="4-3-2-queryselector-innerhtml">4-3-2: 要素の取得と変更（querySelector, innerHTML）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>querySelector</code> を使ってDOMから特定の要素を取得できるようになる</li>
+<li><code>innerHTML</code> プロパティを使って要素の内容を書き換えられるようになる</li>
+<li><code>textContent</code> と <code>innerHTML</code> の違いを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>DOMを操作する第一歩は、操作したいHTML要素をJavaScriptで取得することです。<code>querySelector</code> メソッドを使うと、CSSセレクタと同じ記法で簡単に要素を取得できます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="queryselector-queryselectorall"><code>querySelector</code> と <code>querySelectorAll</code></h3>
+<ul>
+<li><strong><code>document.querySelector()</code></strong>: CSSセレクタに一致する<strong>最初の要素</strong>を1つだけ返します。</li>
+<li><strong><code>document.querySelectorAll()</code></strong>: CSSセレクタに一致する<strong>すべての要素</strong>を <code>NodeList</code>（配列のようなオブジェクト）として返します。</li>
+</ul>
+<pre class="codehilite"><code class="language-javascript">// IDで要素を取得
+const mainTitle = document.querySelector(&quot;#main-title&quot;);
+
+// クラスで最初の要素を取得
+const firstItem = document.querySelector(&quot;.list-item&quot;);
+
+// クラスで全ての要素を取得
+const allItems = document.querySelectorAll(&quot;.list-item&quot;);
+
+// allItemsはNodeListなので、forEachでループ処理できる
+allItems.forEach(item =&gt; {
+  console.log(item.textContent);
+});
+</code></pre>
+
+<h3 id="innerhtml-textcontent"><code>innerHTML</code> と <code>textContent</code></h3>
+<p>要素を取得したら、その内容を読み取ったり書き換えたりできます。</p>
+<ul>
+<li><strong><code>innerHTML</code></strong>: 要素内のHTMLタグを含めた内容を取得・設定します。</li>
+<li><strong><code>textContent</code></strong>: 要素内のテキストコンテンツだけを取得・設定します。</li>
+</ul>
+<pre class="codehilite"><code class="language-javascript">const content = document.querySelector(&quot;#content&quot;);
+
+// 内容を書き換える
+content.innerHTML = &quot;&lt;h2&gt;新しいタイトル&lt;/h2&gt;&lt;p&gt;これは新しい段落です。&lt;/p&gt;&quot;;
+
+// テキストだけを取得
+console.log(content.textContent);
+// &quot;新しいタイトルこれは新しい段落です。&quot;
+</code></pre>
+
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li>ユーザーからの入力を <code>innerHTML</code> で設定すると、悪意のあるスクリプトが埋め込まれる<strong>クロスサイトスクリプティング（XSS）</strong>の脆弱性につながる可能性があります。安全のため、テキストを扱う場合は <code>textContent</code> を使うのが基本です。</li>
+</ul>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li><code>querySelector</code> はCSSセレクタで要素を取得する</li>
+<li><code>innerHTML</code> はHTMLタグを含めて内容を操作する</li>
+<li><code>textContent</code> はテキストだけを安全に操作する</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作_4-3-1: DOMとは何か.html" class="prev">DOMとは何か</a>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作_4-3-3: イベントリスナーの追加（addEventListener）.html" class="next">イベントリスナーの追加（addEventListener）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

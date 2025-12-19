@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E2Eテストとは何か | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html" class="current">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial11_テスト.html">Tutorial 11: テスト</a><span>></span><a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright.html">Chapter 2: E2Eテスト Playwright</a><span>></span>E2Eテストとは何か</div>
+                    <div class="section-content">
+<h1 id="11-2-1-e2e">11-2-1: E2Eテストとは何か</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>E2E（End-to-End）テストの定義と目的を理解する</li>
+<li>E2Eテストがなぜ重要なのか、ユニットテストとの違いは何かを学ぶ</li>
+<li>E2Eテストで検証するべき代表的なユーザーシナリオの例を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>テストピラミッドの頂点に位置するのが<strong>E2E（End-to-End）テスト</strong>です。E2Eテストは、アプリケーション全体を、実際のユーザーと同じように操作して、一連の機能が正しく連携して動作するかを検証するテストです。「エンドツーエンド」とは、文字通り「端から端まで」を意味し、ユーザーインターフェース（フロントエンド）からデータベース（バックエンド）まで、システム全体を貫通するテストを指します。</p>
+<p>ユニットテストが個々の部品（関数やコンポーネント）の動作を保証するのに対し、E2Eテストはそれらの部品がすべて組み合わさった状態で、<strong>ユーザーの視点から</strong>期待通りに機能するかを検証します。</p>
+<h2 id="e2e">なぜE2Eテストが必要なのか？</h2>
+<p>「すべてのユニットテストが成功しているのに、実際にアプリを動かすと機能しない」という経験はありませんか？これは、各部品は正しくても、部品間の連携（データの受け渡し、APIの呼び出し、画面遷移など）に問題がある場合に発生します。</p>
+<p>E2Eテストは、このような「統合」に関する問題を発見するための最も効果的な手法です。</p>
+<h3 id="e2e_1">E2Eテストの主な目的</h3>
+<ul>
+<li><strong>主要なユーザーフローの保証</strong>: ログイン、商品購入、記事投稿など、ビジネスにとって重要度の高い一連のユーザー操作（クリティカルパス）が正常に完了することを保証します。</li>
+<li><strong>デプロイ前の最終確認</strong>: 本番環境にリリースする前の「最後の砦」として、アプリケーション全体が健全な状態であることを確認します。</li>
+<li><strong>リグレッションの広範囲な検出</strong>: フロントエンドの変更がバックエンドに、あるいはその逆の変更がフロントエンドに予期せぬ影響を与えていないかを検出します。</li>
+</ul>
+<h2 id="e2e-vs">E2Eテスト vs ユニットテスト</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">観点</th>
+<th style="text-align: left;">E2Eテスト</th>
+<th style="text-align: left;">ユニットテスト</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>スコープ</strong></td>
+<td style="text-align: left;">アプリケーション全体</td>
+<td style="text-align: left;">関数やコンポーネント単体</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>視点</strong></td>
+<td style="text-align: left;">ユーザー視点（ブラックボックステスト）</td>
+<td style="text-align: left;">開発者視点（ホワイトボックステスト）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>実行環境</strong></td>
+<td style="text-align: left;">実際のブラウザ</td>
+<td style="text-align: left;">Node.js上の仮想DOM（jsdomなど）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>実行速度</strong></td>
+<td style="text-align: left;">遅い</td>
+<td style="text-align: left;">速い</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>問題の特定</strong></td>
+<td style="text-align: left;">難しい（どこが原因か分かりにくい）</td>
+<td style="text-align: left;">容易（テスト対象が明確）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>信頼性</strong></td>
+<td style="text-align: left;">高い（実際に近い環境でテストする）</td>
+<td style="text-align: left;">低い（モックに依存することがある）</td>
+</tr>
+</tbody>
+</table>
+<p>E2Eテストは、実行に時間がかかり、失敗した際の原因特定も難しいという欠点があります。そのため、テストピラミッドが示すように、数は絞り、アプリケーションの最も重要な機能（コアなユーザーストーリー）に焦点を当てて作成するのが一般的です。</p>
+<h2 id="e2e_2">E2Eテストのシナリオ例</h2>
+<p>E2Eテストでは、以下のような具体的なユーザーシナリオをテストコードとして記述します。</p>
+<ul>
+<li>
+<p><strong>認証フロー</strong></p>
+<ol>
+<li>トップページにアクセスする</li>
+<li>ログインボタンをクリックする</li>
+<li>ログインページで、有効なユーザー名とパスワードを入力して送信する</li>
+<li>ダッシュボードページにリダイレクトされ、「ようこそ、〇〇さん」と表示されることを確認する</li>
+<li>ログアウトボタンをクリックする</li>
+<li>トップページに戻り、ログインボタンが表示されていることを確認する</li>
+</ol>
+</li>
+<li>
+<p><strong>ECサイトの商品購入フロー</strong></p>
+<ol>
+<li>商品一覧ページにアクセスする</li>
+<li>特定の商品をクリックして詳細ページに移動する</li>
+<li>「カートに入れる」ボタンをクリックする</li>
+<li>カートページに移動し、商品が追加されていることを確認する</li>
+<li>「購入手続きへ」ボタンをクリックし、決済を完了させる</li>
+</ol>
+</li>
+</ul>
+<p>このように、E2Eテストは「ユーザーが何を達成したいのか」というストーリーに基づいています。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>E2Eテストは、ユーザー視点でアプリケーション全体の動作を端から端まで検証するテストである。</li>
+<li>ユニットテストでは発見できない、コンポーネント間やフロントエンド・バックエンド間の連携の問題を発見するのに役立つ。</li>
+<li>実行コストが高いため、ログインや商品購入など、ビジネス上重要なユーザーストーリーに絞って作成するのが効果的である。</li>
+</ul>
+<p>次のセクションでは、このE2Eテストを実装するための強力なツール「Playwright」の基本的な使い方を学びます。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial11_テスト_chapter02_E2Eテスト_Playwright_11-2-2: Playwrightの基本.html" class="next">Playwrightの基本</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

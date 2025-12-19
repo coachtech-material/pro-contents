@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: 開発環境のセットアップ | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html" class="current">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a><span>></span><a href="tutorial01_開発環境とWebの基礎固め_chapter01_開発環境のセットアップ.html">Chapter 1: 開発環境のセットアップ</a><span>></span>Chapter 1 ハンズオン: 開発環境のセットアップ</div>
+                    <div class="section-content">
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>これまでのChapterで学んだ知識（VS Code、ターミナル）を組み合わせ、実際のプロジェクトを始めるための「最初のステップ」を体験します。</li>
+<li>ターミナルを使ってプロジェクト用のディレクトリを作成し、VS Codeでそのディレクトリを開くという、プロの開発者が毎日行う一連の流れを実践します。</li>
+<li>簡単なHTMLファイルを作成し、VS Codeの拡張機能「Live Server」を使ってブラウザに表示させることで、開発環境が正しくセットアップされたことを確認します。</li>
+</ul>
+<h3 id="_2">🏃 実践: 一緒に作ってみましょう！</h3>
+<p>このチャプターで学んだことを総動員して、記念すべき最初のフロントエンドプロジェクトの雛形を作成し、ブラウザに「Hello, Frontend!」と表示させてみましょう。ここで行う一連の操作は、今後のすべてのチュートリアルで繰り返し行う、基本中の基本となります。</p>
+<h4 id="_3">💭 実装の思考プロセス</h4>
+<p>プロジェクトを始める時、プロのエンジニアはまず「作業場所」を整えます。いきなりファイルを一つ作るのではなく、プロジェクト全体を格納するための専用の「箱」（ディレクトリ）を用意し、そこを拠点として作業を開始します。なぜなら、プロジェクトは通常、多数のファイルやディレクトリで構成されるため、最初にきちんと場所を決めておかないと、後でファイルが散らかってしまい、管理が非常に困難になるからです。</p>
+<p><strong>このハンズオンのゴール:</strong></p>
+<ol>
+<li><strong>作業場所の確保:</strong> ターミナルを使って、今後の学習で作成するプロジェクトをまとめておくための、大元のディレクトリを作成します。</li>
+<li><strong>プロジェクトの開始:</strong> 作成したディレクトリの中に、今回のハンズオン用の新しいプロジェクトディレクトリを作成し、そこに移動します。</li>
+<li><strong>開発ツールの起動:</strong> VS Codeでプロジェクトディレクトリを開き、開発準備を整えます。</li>
+<li><strong>動作確認:</strong> 簡単なHTMLファイルを作成し、Live Serverでブラウザに表示させることで、環境構築が成功したことを確認します。</li>
+</ol>
+<p>💡 <strong>ポイント:</strong> 「場所を決め、拠点を作り、道具を準備し、動作を確認する」という流れは、プログラミングにおけるあらゆる作業の基本です。</p>
+<h4 id="_4">📝 ステップバイステップで実装</h4>
+<h5 id="step-1">Step 1: プロジェクト用ディレクトリの作成と移動</h5>
+<p>まずは、今後の学習で作成するすべてのプロジェクトをまとめておくための、大きな箱（ディレクトリ）を用意しましょう。ここでは <code>projects</code> という名前にします。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「これからたくさんのプロジェクトを作ることになるから、それらをまとめておく『projects』という名前の引き出しを、自分の部屋（ホームディレクトリ）に作っておこう。そうすれば、後で探すのが楽になる。」</li>
+</ul>
+<p>1-1. ターミナルを起動し、<code>cd</code> コマンド（引数なし）でホームディレクトリにいることを確認します。</p>
+<pre class="codehilite"><code class="language-bash">$ cd
+$ pwd
+/home/ubuntu
+</code></pre>
+
+<p>1-2. <code>mkdir</code> コマンドで <code>projects</code> ディレクトリを作成します。</p>
+<pre class="codehilite"><code class="language-bash">$ mkdir projects
+</code></pre>
+
+<p>1-3. <code>ls</code> コマンドで <code>projects</code> ディレクトリが作成されたことを確認します。</p>
+<pre class="codehilite"><code class="language-bash">$ ls
+Desktop  Documents  Downloads  Music  Pictures  Videos  projects
+</code></pre>
+
+<p>1-4. <code>cd</code> コマンドで <code>projects</code> ディレクトリに移動します。</p>
+<pre class="codehilite"><code class="language-bash">$ cd projects
+</code></pre>
+
+<h5 id="step-2">Step 2: 今回のハンズオン用プロジェクトの作成</h5>
+<p>次に、<code>projects</code> ディレクトリの中に、今回のハンズオン専用の <code>hello-frontend</code> というプロジェクトディレクトリを作成します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「<code>projects</code> の引き出しの中に、最初の練習用の『hello-frontend』という名前の小箱を作ろう。そして、これからの作業はその小箱の中で行うことにしよう。」</li>
+</ul>
+<p>2-1. <code>mkdir</code> コマンドで <code>hello-frontend</code> ディレクトリを作成します。</p>
+<pre class="codehilite"><code class="language-bash">$ mkdir hello-frontend
+</code></pre>
+
+<p>2-2. <code>cd</code> コマンドで <code>hello-frontend</code> ディレクトリに移動します。</p>
+<pre class="codehilite"><code class="language-bash">$ cd hello-frontend
+</code></pre>
+
+<p>2-3. <code>pwd</code> コマンドで、現在地が <code>/home/ubuntu/projects/hello-frontend</code> になっていることを確認します。</p>
+<pre class="codehilite"><code class="language-bash">$ pwd
+/home/ubuntu/projects/hello-frontend
+</code></pre>
+
+<h5 id="step-3-vs-code">Step 3: VS Codeでプロジェクトを開く</h5>
+<p>いよいよ、この <code>hello-frontend</code> ディレクトリをVS Codeで開きます。ターミナルから直接VS Codeを起動する、プロっぽいやり方を試してみましょう。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「作業場所の準備ができたから、いよいよ僕の相棒、VS Codeの出番だ。今いるこの場所（カレントディレクトリ）を、VS Codeで開いて開発を始めよう。」</li>
+</ul>
+<p>3-1. ターミナルで、以下のコマンドを入力します。<code>.</code> は「カレントディレクトリ（今いるこの場所）」を意味します。</p>
+<pre class="codehilite"><code class="language-bash">$ code .
+</code></pre>
+
+<h5 id="_5">コマンド解説</h5>
+<ul>
+<li><code>code</code><ul>
+<li>→ VS Codeを起動するためのコマンドです。（Windowsでインストール時にPATHを通す設定をしたのは、このためです）</li>
+</ul>
+</li>
+<li><code>.</code><ul>
+<li>→ 「カレントディレクトリ」を指す特殊な記号です。つまり、「VS Codeで、今いるこのディレクトリを開いてください」という命令になります。</li>
+</ul>
+</li>
+</ul>
+<p>このコマンドを実行すると、新しいVS Codeのウィンドウが開き、左側のエクスプローラーに <code>HELLO-FRONTEND</code> という名前で、空のプロジェクトが開かれているはずです。</p>
+<h5 id="step-4-html">Step 4: 動作確認用のHTMLファイルを作成</h5>
+<p>最後に、開発環境が正しく動作するかを確認するために、簡単なHTMLファイルを作成してブラウザに表示させてみましょう。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「環境は整ったけど、本当にちゃんと動くかな？試しに簡単なページを作って、ブラウザで表示できるかテストしてみよう。これが成功すれば、環境構築は完了だ。」</li>
+</ul>
+<p>4-1. VS Codeのエクスプローラーで、<code>HELLO-FRONTEND</code> の領域にマウスカーソルを合わせ、表示される「新しいファイル」アイコンをクリックします。</p>
+<p>4-2. ファイル名を <code>index.html</code> として、Enterキーを押します。</p>
+<p>4-3. 開かれた <code>index.html</code> ファイルに、以下のコードを貼り付けます。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;My First Frontend App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello, Frontend!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h5 id="step-5-live-server">Step 5: Live Serverでブラウザ表示</h5>
+<p>前のセクションでインストールした拡張機能「Live Server」を使って、このHTMLファイルをブラウザで開きます。</p>
+<p>5-1. VS Codeのウィンドウ右下にある「Go Live」というボタンをクリックします。</p>
+<p>5-2. 自動的にブラウザが起動し、「Hello, Frontend!」と表示されたページが開けば、大成功です！</p>
+<ul>
+<li><strong>試してみよう:</strong> VS Codeに戻り、<code>&lt;h1&gt;</code> タグの中身を「Hello, Laravel Engineer!」などに書き換えて、ファイルを保存（<code>[Ctrl] + [S]</code> または <code>[⌘] + [S]</code>）してみてください。ブラウザを手動でリロードしなくても、自動で表示が切り替わるはずです。これがLive Serverの力です！</li>
+</ul>
+<h4 id="_6">✨ 完成！</h4>
+<p>おめでとうございます！あなたは今、プロのエンジニアと同じ手順で開発環境を整え、最初のフロントエンドページを表示させることができました。ターミナルでディレクトリを作り、VS Codeでプロジェクトを開き、Live Serverで動作を確認する。この一連の流れは、あなたのこれからの長い冒険の、記念すべき第一歩です。</p>
+<h3 id="_7">💡 ヒント</h3>
+<ul>
+<li>ターミナルで <code>code .</code> を実行した際に「command not found」と表示される場合、VS Codeのインストール時にPATHが正しく設定されていない可能性があります。その場合は、VS Codeを一度アンインストールし、再度インストール（Windowsの場合は「PATHへの追加」を必ずチェック）し直してみてください。</li>
+<li>または、VS Codeのコマンドパレット（<code>[Ctrl] + [Shift] + [P]</code> または <code>[⌘] + [Shift] + [P]</code>）を開き、「<code>Shell Command: Install 'code' command in PATH</code>」を実行することでも解決できます。</li>
+</ul>
+<h3 id="_8">📖 模範解答</h3>
+<p>このハンズオンを終えた時点で、あなたのPCには以下の構造ができているはずです。</p>
+<pre class="codehilite"><code>/home/ubuntu/  (あなたのホームディレクトリ)
+└── projects/
+    └── hello-frontend/
+        └── index.html
+</code></pre>
+
+<p>そして、ブラウザには <code>index.html</code> の内容が表示されています。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial01_開発環境とWebの基礎固め_chapter01_開発環境のセットアップ_1-1-3: ターミナルの基本操作.html" class="prev">ターミナルの基本操作</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

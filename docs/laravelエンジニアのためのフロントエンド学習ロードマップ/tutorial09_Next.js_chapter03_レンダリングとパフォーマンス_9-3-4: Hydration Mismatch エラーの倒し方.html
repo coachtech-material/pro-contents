@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydration Mismatch エラーの倒し方 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter03_レンダリングとパフォーマンス.html">Chapter 3: レンダリングとパフォーマンス</a><span>></span>Hydration Mismatch エラーの倒し方</div>
+                    <div class="section-content">
+<h1 id="9-3-4-hydration-mismatch">9-3-4: Hydration Mismatch エラーの倒し方</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Reactの<strong>Hydration</strong>（ハイドレーション）とは何かを理解する</li>
+<li>Hydration Mismatchエラーがなぜ発生するのか、その根本原因を学ぶ</li>
+<li>エラーを引き起こす一般的なパターン（タイムスタンプ、<code>window</code>オブジェクトへのアクセスなど）を特定できるようになる</li>
+<li><code>useEffect</code>を使って、クライアントサイドでのみレンダリングを行うことでエラーを回避する方法を習得する</li>
+<li><code>suppressHydrationWarning</code> propを使った一時的なエラー抑制方法とその注意点を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Next.jsやReactのサーバーサイドレンダリング（SSR）を扱っていると、開発者コンソールで一度は目にするであろうエラー、それが<strong>Hydration Mismatch</strong>です。「Text content does not match server-rendered HTML.」や「Warning: Expected server HTML to contain a matching ...」といったメッセージで表示されます。</p>
+<p>このエラーは、サーバーが生成したHTMLと、ブラウザ（クライアント）でReactが最初にレンダリングした結果が一致しない場合に発生します。これは、アプリケーションの動作が不安定になったり、予期せぬUIの不整合を引き起こしたりする可能性があるため、無視すべきではありません。</p>
+<p>このセクションでは、Hydrationの概念から説き起こし、なぜこのミスマッチが発生するのか、そしてそれを解決するための実践的なテクニックを詳しく解説します。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="hydration">🔑 Hydrationとは？</h3>
+<p>Hydration（日本語で「水分補給」や「水和」）とは、サーバーから送られてきた静的なHTMLに対して、クライアントサイドでJavaScript（React）がイベントハンドラなどをアタッチ（関連付け）し、ページをインタラクティブ（操作可能）にするプロセスのことです。</p>
+<ol>
+<li><strong>サーバー</strong>: Reactコンポーネントをレンダリングし、静的なHTMLを生成してブラウザに送信する。</li>
+<li><strong>クライアント</strong>: ブラウザはまずこの静的なHTMLを表示する。ユーザーはコンテンツを読むことができるが、まだボタンをクリックするなどの操作はできない。</li>
+<li><strong>クライアント (Hydration)</strong>: バックグラウンドでダウンロードされたJavaScript（React）が実行される。Reactはサーバーが生成したHTML構造を元に、仮想DOMを構築し、イベントハンドラ（<code>onClick</code>など）を対応するDOM要素に「アタッチ」していく。このプロセスが完了すると、ページは完全にインタラクティブになる。</li>
+</ol>
+<p>ReactがHydrationを正しく行うためには、<strong>サーバーが生成したHTMLの構造と、クライアントで最初にレンダリングされるコンポーネントの構造が完全に一致している</strong>必要があります。もしここに不一致があると、ReactはどのDOM要素にどのイベントハンドラをアタッチすればよいか分からなくなり、Hydration Mismatchエラーを発生させるのです。</p>
+<h3 id="_4">なぜミスマッチが起こるのか？</h3>
+<p>サーバーとクライアントでレンダリング結果が異なる主な原因は、<strong>サーバーとクライアントで利用できる情報が異なる</strong>コンポーネントをレンダリングしようとすることです。</p>
+<p><strong>典型的な原因:</strong></p>
+<ol>
+<li>
+<p><strong>タイムスタンプやランダムな値の表示</strong>: <code>new Date()</code> や <code>Math.random()</code> は、サーバーとクライアントで実行されるタイミングが異なるため、違う値を生成します。</p>
+<p><code>tsx
+function MyComponent() {
+  // サーバーとクライアントで値が異なるため、ミスマッチが発生
+  return &lt;div&gt;Timestamp: {new Date().toLocaleTimeString()}&lt;/div&gt;;
+}</code></p>
+</li>
+<li>
+<p><strong><code>window</code>や<code>localStorage</code>など、ブラウザ固有のAPIへのアクセス</strong>: <code>window</code>オブジェクトはサーバーサイドには存在しません。そのため、サーバーレンダリング中（SSR）に直接アクセスしようとするとエラーになるか、クライアントでのみ値が設定されミスマッチを引き起こします。</p>
+<p><code>tsx
+function MyComponent() {
+  // サーバーでは`window.innerWidth`は未定義。クライアントでは定義されている。
+  const width = typeof window !== "undefined" ? window.innerWidth : 0;
+  return &lt;div&gt;Window width: {width}&lt;/div&gt;;
+}</code></p>
+</li>
+<li>
+<p><strong>CSS-in-JSライブラリによるランダムなクラス名</strong>: 一部の古いCSS-in-JSライブラリは、サーバーとクライアントで異なるクラス名を生成することがありました（最近のライブラリでは対策済みが多い）。</p>
+</li>
+<li>
+<p><strong>不正なHTML構造</strong>: 例えば、<code>&lt;table&gt;</code>の中に<code>&lt;div&gt;</code>を置いたり、<code>&lt;p&gt;</code>の中に<code>&lt;div&gt;</code>をネストしたりすると、ブラウザがHTMLをパースする段階で構造を自動的に修正し、サーバーが意図した構造と異なるDOMツリーを生成してしまうことがあります。</p>
+</li>
+</ol>
+<h3 id="_5">解決策</h3>
+<p>Hydration Mismatchを解決する基本的なアプローチは、「<strong>サーバーとクライアントで結果が異なる可能性のある部分は、クライアントサイドでのみレンダリングする</strong>」ということです。</p>
+<h4 id="1-useeffect">解決策1: <code>useEffect</code> を使う（推奨）</h4>
+<p>最もクリーンで一般的な解決策は、<code>useEffect</code>フックを使うことです。<code>useEffect</code>の中身はクライアントサイドでのみ、かつコンポーネントがマウントされた後に実行されます。これにより、サーバーレンダリングの結果には影響を与えずに、クライアントでのみ値を設定・表示することができます。</p>
+<pre class="codehilite"><code class="language-tsx">import { useState, useEffect } from &quot;react&quot;;
+
+function MyComponent() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() =&gt; {
+    // コンポーネントがマウントされたら、isClientをtrueに設定
+    // これにより、クライアントでのみ再レンダリングがトリガーされる
+    setIsClient(true);
+  }, []);
+
+  return (
+    &lt;div&gt;
+      {/* isClientがtrueのとき（=クライアント）のみ、動的な値を表示 */}
+      Window width: {isClient ? window.innerWidth : &quot;calculating...&quot;}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p>このパターンは少し冗長に見えますが、何が起きているかが明確で、Reactのライフサイクルに沿った正しい方法です。カスタムフックとして抽出すると再利用しやすくなります。</p>
+<pre class="codehilite"><code class="language-tsx">function useIsClient() {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() =&gt; { setIsClient(true) }, []);
+  return isClient;
+}
+
+function MyComponent() {
+  const isClient = useIsClient();
+  return &lt;div&gt;{isClient ? &quot;Client&quot; : &quot;Server&quot;}&lt;/div&gt;;
+}
+</code></pre>
+
+<h4 id="2-suppresshydrationwarning">解決策2: <code>suppressHydrationWarning</code>（一時的な回避策）</h4>
+<p>Reactは、どうしてもミスマッチが避けられないケース（例: タイムスタンプの表示など）のために、エラーを意図的に抑制するための<code>suppressHydrationWarning</code>というpropを提供しています。</p>
+<pre class="codehilite"><code class="language-tsx">function MyComponent() {
+  // このdiv要素でHydration Mismatchが発生しても、コンソールに警告は出ない
+  return (
+    &lt;div suppressHydrationWarning={true}&gt;
+      Timestamp: {new Date().toLocaleTimeString()}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><strong>注意点:</strong><br />
+-   これはあくまで<strong>警告を非表示にするだけ</strong>であり、根本的な問題を解決するものではありません。<br />
+-   ミスマッチは依然として発生しており、パフォーマンスにわずかな影響を与える可能性があります。<br />
+-   属性（例: <code>className</code>）のミスマッチには機能しません。テキストコンテンツのミスマッチにのみ有効です。<br />
+-   多用は禁物です。本当に意図したミスマッチであり、他にクリーンな解決策がない場合にのみ、最後の手段として使用してください。</p>
+<h2 id="_6">✨ まとめ</h2>
+<ul>
+<li><strong>Hydration</strong>は、サーバーから送られた静的HTMLにReactがインタラクティブ性を持たせるプロセスである。</li>
+<li><strong>Hydration Mismatch</strong>は、サーバーのHTMLとクライアントの初期レンダリング結果が一致しない場合に発生する。</li>
+<li>主な原因は、<code>new Date()</code>や<code>window</code>オブジェクトなど、サーバーとクライアントで結果が異なる値やAPIを、最初のレンダリングで使ってしまうこと。</li>
+<li>最も確実な解決策は、<code>useEffect</code>と<code>useState</code>を使い、<strong>クライアントサイドでのみ動的なコンテンツをレンダリングする</strong>こと。</li>
+<li><code>suppressHydrationWarning</code>は、警告を抑制するだけで問題を解決するものではないため、使用は慎重に行うべきである。</li>
+<li>Hydration Mismatchを正しく理解し、適切に対処することは、安定した堅牢なNext.jsアプリケーションを構築するために不可欠なスキルである。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter03_レンダリングとパフォーマンス_9-3-3: パフォーマンス最適化.html" class="prev">パフォーマンス最適化</a>
+<a href="tutorial09_Next.js_chapter03_レンダリングとパフォーマンス_9-3-5: Chapter 3 ハンズオン: ブログのパフォーマンスを改善する.html" class="next">Chapter 3 ハンズオン: ブログのパフォーマンスを改善する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

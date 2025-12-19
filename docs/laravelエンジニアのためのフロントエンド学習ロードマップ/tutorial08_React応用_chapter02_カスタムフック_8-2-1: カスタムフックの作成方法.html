@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カスタムフックの作成方法 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter02_カスタムフック.html">Chapter 2: カスタムフック</a><span>></span>カスタムフックの作成方法</div>
+                    <div class="section-content">
+<h1 id="8-2-1">8-2-1: カスタムフックの作成方法</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Reactのカスタムフックが何であるかを理解する</li>
+<li>コンポーネント間でロジックを再利用するためにカスタムフックを作成する必要性を学ぶ</li>
+<li>カスタムフックを作成するための2つの主要なルールを習得する</li>
+<li>簡単な <code>useCounter</code> カスタムフックを実際に作成し、コンポーネントで使用する方法を学ぶ</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>React Hooks（<code>useState</code>, <code>useEffect</code>など）は、関数コンポーネントに状態管理や副作用の機能をもたらす強力なツールです。しかし、アプリケーションが複雑になるにつれて、複数のコンポーネントで同じような状態ロジック（例: データのフェッチ、フォームの入力管理、タイマーなど）を繰り返し記述することが増えてきます。</p>
+<p>このようなロジックの重複を避け、再利用可能な形でカプセル化するための仕組みが<strong>カスタムフック</strong>です。カスタムフックは、Reactに組み込まれている機能ではなく、開発者が自分で作成する「<code>use</code>で始まる名前のJavaScript関数」です。この関数の中に、<code>useState</code>や<code>useEffect</code>などの基本的なフックを組み合わせることで、特定の機能に特化した独自のフックを作ることができます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="_4">🔑 カスタムフックとは？</h3>
+<p>カスタムフックとは、一言で言えば<strong>「状態を持つロジックをコンポーネントから抽出し、再利用可能にするための関数」</strong>です。これはReactの機能というよりは、フックの設計思想に基づいた一つの規約（Convention）です。</p>
+<p>例えば、「カウンター機能」を考えたとき、それには以下の要素が含まれます。</p>
+<ul>
+<li>現在のカウント数を保持する<code>state</code></li>
+<li>カウントを1増やす関数</li>
+<li>カウントを1減らす関数</li>
+<li>カウントをリセットする関数</li>
+</ul>
+<p>これらのロジックをコンポーネント内に直接書くのではなく、<code>useCounter</code>という一つの関数にまとめることで、どのコンポーネントからでも簡単にカウンター機能を呼び出して使えるようになります。</p>
+<h3 id="_5">なぜカスタムフックが必要か？</h3>
+<p>カスタムフックの主な目的は、<strong>ロジックの再利用</strong>と<strong>関心の分離</strong>です。</p>
+<ol>
+<li><strong>ロジックの再利用</strong>: 同じようなコードをコピペすることなく、複数のコンポーネントで同じ状態管理ロジックを共有できます。これにより、コードの重複が減り、メンテナンス性が向上します。</li>
+<li><strong>関心の分離</strong>: コンポーネントはUIの表示という「関心」に集中し、複雑な状態管理ロジックはカスタムフックに分離できます。これにより、コンポーネントのコードがクリーンで読みやすくなります。</li>
+</ol>
+<h3 id="_6">カスタムフックのルール</h3>
+<p>カスタムフックを作成するには、2つの重要なルールを守る必要があります。</p>
+<ol>
+<li><strong>名前は必ず <code>use</code> で始める</strong>: <code>useCounter</code>, <code>useFetch</code>, <code>useForm</code> のように、関数名を <code>use</code> で始める必要があります。これにより、ReactとESLintプラグインが、その関数がフックのルール（例: トップレベルでのみ呼び出す）に従うべきものだと認識できます。</li>
+<li><strong>カスタムフック内では他のフックを呼び出せる</strong>: カスタムフックの内部では、<code>useState</code>, <code>useEffect</code> などの基本的なフックや、他のカスタムフックを呼び出すことができます。これがカスタムフックが「状態を持つ」ロジックをカプセル化できる理由です。</li>
+</ol>
+<h3 id="usecounter">実装例: <code>useCounter</code>フックの作成</h3>
+<p>それでは、シンプルなカウンター機能を持つ <code>useCounter</code> カスタムフックを作成してみましょう。</p>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.ts
+import { useState } from 'react';
+
+// カスタムフックの戻り値の型を定義
+interface UseCounterReturn {
+  count: number;
+  increment: () =&gt; void;
+  decrement: () =&gt; void;
+  reset: () =&gt; void;
+}
+
+// カスタムフックを定義。初期値を受け取れるようにする
+const useCounter = (initialValue: number = 0): UseCounterReturn =&gt; {
+  // ① useStateを使って状態を管理
+  const [count, setCount] = useState(initialValue);
+
+  // ② ロジック（関数）を定義
+  const increment = () =&gt; setCount(prevCount =&gt; prevCount + 1);
+  const decrement = () =&gt; setCount(prevCount =&gt; prevCount - 1);
+  const reset = () =&gt; setCount(initialValue);
+
+  // ③ 必要な値と関数をオブジェクトとして返す
+  return { count, increment, decrement, reset };
+};
+
+export default useCounter;
+</code></pre>
+
+<h4 id="_7">コードのポイント</h4>
+<ul>
+<li><code>useCounter.ts</code> というように、フックは専用のファイルに切り出すのが一般的です。</li>
+<li><code>useState</code> を使って、カウンターの状態 <code>count</code> を管理しています。</li>
+<li><code>increment</code>, <code>decrement</code>, <code>reset</code> という、<code>count</code> を更新するための関数を定義しています。</li>
+<li>最後に、コンポーネント側で使いたい値（<code>count</code>）と関数をオブジェクトにまとめて返却しています。配列で返すパターン（<code>useState</code>のように）も可能です。</li>
+</ul>
+<h3 id="_8">カスタムフックの利用</h3>
+<p>作成した <code>useCounter</code> フックをコンポーネントで使ってみましょう。使い方は <code>useState</code> などの組み込みフックと全く同じです。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/CounterComponent.tsx
+import React from 'react';
+import useCounter from '../hooks/useCounter';
+
+function CounterComponent() {
+  // カスタムフックを呼び出し、必要な値と関数を取り出す
+  const { count, increment, decrement, reset } = useCounter(10); // 初期値を10に設定
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Counter&lt;/h2&gt;
+      &lt;p&gt;Current Count: {count}&lt;/p&gt;
+      &lt;button onClick={increment}&gt;Increment&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;Decrement&lt;/button&gt;
+      &lt;button onClick={reset}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default CounterComponent;
+</code></pre>
+
+<p>コンポーネントのコードが非常にシンプルになったことに注目してください。カウンターに関する複雑なロジックはすべて <code>useCounter</code> フックに隠蔽され、コンポーネントはそれを呼び出してUIを構築することに専念できています。これがカスタムフックの力です。</p>
+<h2 id="_9">✨ まとめ</h2>
+<ul>
+<li>カスタムフックは、状態を持つロジックをコンポーネントから抽出し、再利用するためのJavaScript関数である。</li>
+<li>カスタムフックの作成には2つのルールがある：<strong>名前を<code>use</code>で始める</strong>ことと、<strong>内部で他のフックを呼び出せる</strong>こと。</li>
+<li>カスタムフックを使うことで、ロジックの再利用性が高まり、コンポーネントのコードがクリーンになる。</li>
+<li>カスタムフックは、<code>useState</code>や<code>useEffect</code>などを組み合わせて、特定の機能（データ取得、フォーム管理など）に特化したフックを作成するために作を作成するために作した独自のフックを作成する強力なパターンである。</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial08_React応用_chapter02_カスタムフック_8-2-2: ビジネスロジックの分離.html" class="next">ビジネスロジックの分離</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

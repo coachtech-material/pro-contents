@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server ComponentsとClient Components | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html" class="current">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a><span>></span><a href="tutorial09_Next.js_chapter01_Next.jsの基本.html">Chapter 1: Next.jsの基本</a><span>></span>Server ComponentsとClient Components</div>
+                    <div class="section-content">
+<h1 id="9-1-4-server-componentsclient-components">9-1-4: Server ComponentsとClient Components</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Next.js (App Router) の中核的な概念である、Server ComponentsとClient Componentsの違いを理解する</li>
+<li>Server Componentsの役割と利点（データフェッチ、セキュリティ、パフォーマンス）を学ぶ</li>
+<li>Client Componentsの役割と、インタラクティブなUIを構築するためにいつ必要になるかを学ぶ</li>
+<li>両者の制約と、どのように連携して動作するのかを理解する</li>
+<li>どちらのコンポーネントを選択すべきかの判断基準を習得する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Next.js 13で導入されたApp Routerは、Reactのアーキテクチャに大きなパラダイムシフトをもたらしました。その中心にあるのが、<strong>Server Components</strong>と<strong>Client Components</strong>という2種類のコンポーネントモデルです。</p>
+<p>これまでのReact開発（およびNext.jsのPages Router）では、基本的にすべてのコンポーネントはクライアントサイドでレンダリングされ、インタラクティブになるのが当たり前でした。しかしApp Routerでは、<strong>デフォルトですべてのコンポーネントがServer Components</strong>として扱われます。これは、パフォーマンス、データフェッチ、セキュリティを向上させるための重要な変更点です。</p>
+<p>このセクションでは、これら2つのコンポーネントモデルが何であり、どのように機能し、どのように使い分けるべきかを詳しく見ていきましょう。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="server-components">🔑 Server Components</h3>
+<p>Server Componentsは、その名の通り、<strong>サーバーサイドでのみレンダリングされる</strong>コンポーネントです。レンダリング結果のHTMLがクライアントに送信され、クライアントサイドのJavaScriptバンドルには一切含まれません。これにより、クライアントに送信するJavaScriptの量を大幅に削減でき、初期表示パフォーマンスが向上します。</p>
+<p><strong>App Routerでは、すべてのコンポーネントがデフォルトでServer Componentsです。</strong></p>
+<h4 id="server-components_1">Server Componentsの主な特徴と利点</h4>
+<ol>
+<li>
+<p><strong>データフェッチ</strong>: サーバー上で直接データを取得できます。<code>async/await</code>をコンポーネントで直接使えるため、<code>useEffect</code>やデータフェッチライブラリなしで、シンプルにデータを取得できます。</p>
+<p>```tsx<br />
+// app/page.tsx (Server Component)<br />
+async function HomePage() {<br />
+  const res = await fetch("https://api.example.com/posts");<br />
+  const posts = await res.json();</p>
+<p>return (<br />
+    <ul><br />
+      {posts.map(post =&gt; <li key={post.id}>{post.title}</li>)}<br />
+    </ul><br />
+  );<br />
+}<br />
+```</p>
+</li>
+<li>
+<p><strong>セキュリティ</strong>: APIキーやデータベース接続情報などの機密情報を、クライアントに漏洩することなく安全にサーバーサイドで利用できます。</p>
+</li>
+<li>
+<p><strong>パフォーマンス</strong>: クライアントに送信されるJavaScriptがゼロであるため、初期ロードが高速です。また、サーバーに近い場所でデータを取得するため、データフェッチのレイテンシも削減できます。</p>
+</li>
+<li>
+<p><strong>バックエンドリソースへの直接アクセス</strong>: データベース、ファイルシステム、外部APIなどに直接アクセスできます。</p>
+</li>
+</ol>
+<h4 id="server-components_2">Server Componentsの制約</h4>
+<p>Server Componentsはサーバーで一度レンダリングされるだけなので、クライアントサイドでのインタラクティブな機能を持つことはできません。</p>
+<ul>
+<li><strong>Hooksが使えない</strong>: <code>useState</code>, <code>useEffect</code>, <code>useContext</code> などのクライアントサイドで状態を管理するためのフックは使用できません。</li>
+<li><strong>イベントハンドラが使えない</strong>: <code>onClick</code>, <code>onChange</code> などのブラウザイベントを処理する関数は使用できません。</li>
+</ul>
+<h3 id="client-components">🧩 Client Components</h3>
+<p>Client Componentsは、従来のReactコンポーネントと同じように、クライアントサイドでレンダリングされ、インタラクティブな機能を持つことができるコンポーネントです。<code>useState</code>や<code>useEffect</code>といったフックや、イベントハンドラを使いたい場合は、Client Componentsを選択する必要があります。</p>
+<p>コンポーネントをClient Componentにするには、ファイルの先頭に <strong><code>"use client";</code></strong> というディレクティブを記述します。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/Counter.tsx
+&quot;use client&quot;; // このディレクティブでClient Componentになる
+
+import { useState } from &quot;react&quot;;
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Increment&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<h4 id="client-components_1">Client Componentsの主な特徴</h4>
+<ol>
+<li><strong>インタラクティビティ</strong>: <code>useState</code>, <code>useEffect</code>などのフックや、<code>onClick</code>などのイベントハンドラを使って、ユーザー操作に応じた動的なUIを構築できます。</li>
+<li><strong>ブラウザAPIへのアクセス</strong>: <code>window</code>, <code>localStorage</code>などのブラウザ固有のAPIにアクセスできます。</li>
+<li><strong>状態管理ライブラリの利用</strong>: <code>Zustand</code>, <code>Redux</code>などのクライアントサイドの状態管理ライブラリを利用できます。</li>
+</ol>
+<h4 id="client-components_2">Client Componentsの制約</h4>
+<ul>
+<li><code>async/await</code>を直接コンポーネントで使ってデータをフェッチすることはできません（<code>useEffect</code>内やイベントハンドラ内でのフェッチは可能）。</li>
+<li>サーバーサイドの機密情報やリソースに直接アクセスすることはできません。</li>
+</ul>
+<h3 id="server-componentsclient-components">Server ComponentsとClient Componentsの連携</h3>
+<p>Next.jsの強力な点は、これら2つのコンポーネントをシームレスに組み合わせられることです。</p>
+<ul>
+<li>Server ComponentsはClient Componentsをインポートして利用できます。</li>
+<li><strong>ただし、Client Componentsの中にServer Componentsを<code>children</code>や<code>props</code>として渡すことはできますが、直接インポートすることはできません。</strong> これは、Client Componentsが一度クライアントサイドのコードになってしまうと、サーバーサイドの機能は呼び出せないためです。</li>
+</ul>
+<pre class="codehilite"><code class="language-tsx">// app/page.tsx (Server Component)
+import { Counter } from &quot;../components/Counter&quot;; // Client Componentをインポート
+
+async function ServerSideData() {
+  const res = await fetch(&quot;https://...&quot;, { cache: &quot;no-store&quot; });
+  const data = await res.json();
+  return &lt;p&gt;Server Data: {data.someValue}&lt;/p&gt;;
+}
+
+export default function Page() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Server and Client Components&lt;/h1&gt;
+
+      {/* Server ComponentがClient Componentをレンダリング */}
+      &lt;Counter /&gt;
+
+      {/* Client ComponentにServer Componentをchildrenとして渡す */}
+      &lt;SomeClientComponent&gt;
+        &lt;ServerSideData /&gt;
+      &lt;/SomeClientComponent&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<h3 id="_4">どちらを使うべきか？</h3>
+<p>Next.jsの公式ドキュメントでは、以下の考え方を推奨しています。</p>
+<blockquote>
+<p><strong>可能な限りServer Componentsを使い、インタラクティビティが必要な部分だけをClient Componentsにする。</strong></p>
+</blockquote>
+<p>つまり、まずはすべてをServer Componentsとして構築し始め、<code>useState</code>や<code>onClick</code>が必要になったコンポーネント（およびその子コンポーネント）を<code>"use client";</code>で切り出していく、というアプローチです。インタラクティブな機能をできるだけ末端の小さなコンポーネント（葉っぱのコンポーネント）に押し込めることで、クライアントに送るJavaScriptの量を最小限に抑えることができます。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">機能</th>
+<th style="text-align: center;">Server Components</th>
+<th style="text-align: center;">Client Components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">データフェッチ (<code>async/await</code>)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">バックエンドリソースへの直接アクセス</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;">機密情報の保持</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>useState</code>, <code>useEffect</code>などのフック</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;">イベントハンドラ (<code>onClick</code>など)</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;">ブラウザ専用APIの利用</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>デフォルト</strong></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">✨ まとめ</h2>
+<ul>
+<li>Next.js App Routerでは、コンポーネントは<strong>Server Components</strong>と<strong>Client Components</strong>の2種類に大別される。</li>
+<li><strong>デフォルトはServer Components</strong>であり、サーバーでのみレンダリングされ、JavaScriptバンドルに含まれないため高速。</li>
+<li>Server Componentsは、<code>async/await</code>によるデータフェッチや、バックエンドリソースへの安全なアクセスに最適である。</li>
+<li>インタラクティブな機能（フックやイベントハンドラ）が必要な場合は、ファイルの先頭に<code>"use client";</code>を記述して<strong>Client Components</strong>にする。</li>
+<li>基本戦略は「<strong>できるだけServer Componentsを使い、インタラクティビティが必要な最小限の単位をClient Componentsとして切り出す</strong>」こと。</li>
+<li>この新しいモデルを理解し、適切に使い分けることが、モダンなNext.jsアプリケーションのパフォーマンスと開発体験を最大化する鍵となる。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial09_Next.js_chapter01_Next.jsの基本_9-1-3: プロジェクトのセットアップ.html" class="prev">プロジェクトのセットアップ</a>
+<a href="tutorial09_Next.js_chapter01_Next.jsの基本_9-1-5: Metadata_API（SEO対応）.html" class="next">Metadata_API（SEO対応）</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 ハンズオン: 商品一覧ページを作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成.html">Chapter 2: 商品一覧ページの作成</a><span>></span>Chapter 2 ハンズオン: 商品一覧ページを作成する</div>
+                    <div class="section-content">
+<h1 id="10-2-4-chapter-2">10-2-4: 実践 🚀 Chapter 2 ハンズオン: 商品一覧ページを作成する</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このチャプターで学んだ内容を総動員して、LaravelバックエンドでAPIを作成し、Next.jsフロントエンドからそのAPIを呼び出して商品一覧ページを完成させます。CORSエラーの解決から、取得したデータのUIへの反映まで、一連の流れを自分の手で体験します。</p>
+<h2 id="_2">ハンズオン</h2>
+<h3 id="1-laravel">ステップ1: バックエンド（Laravel）の準備</h3>
+<p><strong>注意</strong>: コマンドはすべてLaravelプロジェクト（<code>laravel-next-app</code>）のルートで、<code>sail</code>を使って実行します。</p>
+<ol>
+<li>
+<p><strong>モデルとマイグレーションの作成</strong><br />
+<code>bash
+    sail artisan make:model Product -m</code></p>
+</li>
+<li>
+<p><strong>マイグレーションファイルの編集</strong></p>
+<ul>
+<li><code>database/migrations/..._create_products_table.php</code>を開き、<code>up</code>メソッドを以下のように編集します。<br />
+<code>php
+    public function up(): void
+    {
+        Schema::create("products", function (Blueprint $table) {
+            $table-&gt;id();
+            $table-&gt;string("name");
+            $table-&gt;text("description");
+            $table-&gt;integer("price");
+            $table-&gt;timestamps();
+        });
+    }</code></li>
+</ul>
+</li>
+<li>
+<p><strong>シーダーの作成と編集</strong></p>
+<ul>
+<li>シーダーを作成します。<br />
+<code>bash
+    sail artisan make:seeder ProductSeeder</code></li>
+<li>
+<p><code>database/seeders/ProductSeeder.php</code>の<code>run</code>メソッドを編集します。<br />
+    ```php<br />
+    use App\Models\Product;</p>
+<p>public function run(): void<br />
+{<br />
+    Product::factory()-&gt;count(10)-&gt;create();<br />
+}<br />
+<code>-   `database/seeders/DatabaseSeeder.php`で`ProductSeeder`を呼び出します。</code>php<br />
+public function run(): void<br />
+{<br />
+    $this-&gt;call([ProductSeeder::class]);<br />
+}<br />
+```</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>データベースのマイグレーションとシーディング</strong><br />
+<code>bash
+    sail artisan migrate:fresh --seed</code></p>
+</li>
+<li>
+<p><strong>コントローラーとルートの作成</strong></p>
+<ul>
+<li>APIコントローラーを作成します。<br />
+<code>bash
+    sail artisan make:controller ProductController --api</code></li>
+<li>
+<p><code>app/Http/Controllers/ProductController.php</code>の<code>index</code>メソッドを編集します。<br />
+    ```php<br />
+    use App\Models\Product;</p>
+<p>public function index()<br />
+{<br />
+    return response()-&gt;json(Product::all());<br />
+}<br />
+<code>-   `routes/api.php`にルートを追加します。</code>php<br />
+use App\Http\Controllers\ProductController;</p>
+<p>Route::get("/products", [ProductController::class, "index"]);<br />
+```</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>CORS設定</strong></p>
+<ul>
+<li>Laravelプロジェクトの<code>.env</code>ファイルに、Next.jsのURLを追記します。<br />
+<code>.env
+    # .env
+    CORS_ALLOWED_ORIGINS=http://localhost:3000</code></li>
+<li>設定を反映させるためにSailを再起動します。<br />
+<code>bash
+    sail down
+    sail up -d</code></li>
+</ul>
+</li>
+<li>
+<p><strong>API動作確認</strong></p>
+<ul>
+<li>ブラウザで<code>http://localhost/api/products</code>にアクセスし、JSONデータが表示されることを確認します。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-nextjs">ステップ2: フロントエンド（Next.js）の実装</h3>
+<p><strong>注意</strong>: 作業はNext.jsプロジェクト（<code>next-frontend-app</code>）で行います。</p>
+<ol>
+<li>
+<p><strong>環境変数の設定</strong></p>
+<ul>
+<li>Next.jsプロジェクトのルートに<code>.env.local</code>ファイルを作成し、以下を記述します。<br />
+<code>.env
+    # .env.local
+    NEXT_PUBLIC_API_BASE_URL=http://localhost/api</code></li>
+<li>Next.jsの開発サーバーを再起動します（<code>Ctrl+C</code>で停止後、<code>npm run dev</code>）。</li>
+</ul>
+</li>
+<li>
+<p><strong>商品一覧ページの作成</strong></p>
+<ul>
+<li>
+<p><code>src/app/products/page.tsx</code>を作成し、以下のコードを貼り付けます。</p>
+<p>```tsx<br />
+// src/app/products/page.tsx</p>
+<p>interface Product {<br />
+  id: number;<br />
+  name: string;<br />
+  description: string;<br />
+  price: number;<br />
+  created_at: string;<br />
+  updated_at: string;<br />
+}</p>
+<p>async function getProducts(): Promise<Product[]> {<br />
+  const url = <code>${process.env.NEXT_PUBLIC_API_BASE_URL}/products</code>;<br />
+  const res = await fetch(url, { cache: "no-store" });<br />
+  if (!res.ok) {<br />
+    throw new Error("Failed to fetch products");<br />
+  }<br />
+  return res.json();<br />
+}</p>
+<p>function ProductCard({ product }: { product: Product }) {<br />
+  return (<br />
+    <div className="border rounded-lg p-6 shadow-md bg-white"><br />
+      <h2 className="text-2xl font-semibold mb-2">{product.name}</h2><br />
+      <p className="text-gray-600 mb-4">{product.description}</p><br />
+      <p className="text-xl font-bold text-right text-gray-800"><br />
+        &yen;{product.price.toLocaleString()}<br />
+      </p><br />
+    </div><br />
+  );<br />
+}</p>
+<p>export default async function ProductsPage() {<br />
+  const products = await getProducts();</p>
+<p>return (<br />
+    <main className="container mx-auto p-8 bg-gray-50 min-h-screen"><br />
+      <h1 className="text-4xl font-bold mb-10 text-center text-gray-800"><br />
+        商品一覧<br />
+      </h1><br />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"><br />
+        {products.map((product) =&gt; (<br />
+          <ProductCard key={product.id} product={product} /><br />
+        ))}<br />
+      </div><br />
+    </main><br />
+  );<br />
+}<br />
+```</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>最終確認</strong></p>
+<ul>
+<li>ブラウザで<code>http://localhost:3000/products</code>にアクセスします。</li>
+<li>Laravelのデータベースから取得した商品データが、カード形式で綺麗に表示されていれば、このハンズオンは成功です！</li>
+</ul>
+</li>
+</ol>
+<h2 id="_3">✨ まとめ</h2>
+<p>お疲れ様でした！このハンズオンを通して、以下のことができるようになりました。</p>
+<ul>
+<li>Laravelで基本的なJSON APIを構築する</li>
+<li>Next.jsのServer ComponentからAPIを呼び出す</li>
+<li>CORSエラーを解決する</li>
+<li>取得したデータをReactコンポーネントとして画面に表示する</li>
+</ul>
+<p>これは、Laravel + Next.jsによるヘッドレスアプリケーション開発の最も基本的な、しかし最も重要な流れです。この流れをマスターすれば、あとはAPIの機能を拡張したり、フロントエンドのUIをリッチにしたりと、様々な応用が可能になります。</p>
+<p>次のチャプターでは、このアプリケーションにログイン・ログアウトといった「認証機能」を実装していきます。</p>
+</div>
+<div class="section-nav">
+<a href="tutorial10_Laravel_x_Next.js_chapter02_商品一覧ページの作成_10-2-3: 取得したデータを表示する.html" class="prev">取得したデータを表示する</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

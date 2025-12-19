@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tailwind.config.jsのカスタマイズ | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html" class="current">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a><span>></span><a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス.html">Chapter 3: カスタムテーマとベストプラクティス</a><span>></span>tailwind.config.jsのカスタマイズ</div>
+                    <div class="section-content">
+<h1 id="3-3-1-tailwindconfigjs">3-3-1: tailwind.config.jsのカスタマイズ</h1>
+<h2 id="chapter-3">Chapter 3: カスタムテーマとベストプラクティス</h2>
+<h3 id="section-1-tailwindconfigjs">Section 1: tailwind.config.jsのカスタマイズ</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li><code>tailwind.config.js</code>の<code>theme</code>オブジェクトの役割を理解する。</li>
+<li>デフォルトのカラーパレットやフォント、スペーシングを拡張（extend）または上書き（override）できるようになる。</li>
+<li>独自のユーティリティクラスを追加できるようになる。</li>
+</ul>
+<hr />
+<h3 id="tailwind">イントロダクション：Tailwindを「自分色」に染める</h3>
+<p>Tailwind CSSには、非常に優れたデフォルトのデザインシステム（カラースキーム、スペーシング、フォントサイズなど）が用意されています。しかし、実際のプロジェクトでは、ブランドカラーを使ったり、特定のフォントサイズや余白のルールを追加したりと、デザインシステム自体をカスタマイズしたい場面が必ず出てきます。</p>
+<p><code>tailwind.config.js</code>ファイルは、そのための「カスタマイズ拠点」です。このファイルを編集することで、Tailwindのデフォルト設定を拡張したり、完全に置き換えたりして、プロジェクト独自の設計思想をTailwindに組み込むことができます。</p>
+<hr />
+<h3 id="theme">🔑 <code>theme</code>オブジェクトの構造</h3>
+<p>カスタマイズの中心となるのが、<code>tailwind.config.js</code>内の<code>theme</code>オブジェクトです。このオブジェクトの中に、色（<code>colors</code>）、余白（<code>spacing</code>）、フォントサイズ（<code>fontSize</code>）など、Tailwindのすべてのデザイン定義が含まれています。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+module.exports = {
+  content: [/* ... */],
+  theme: {
+    // ここにデフォルトテーマの上書き設定を記述
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+    },
+    colors: {
+      'blue': '#1fb6ff',
+      'pink': '#ff49db',
+    },
+    // ...
+    extend: {
+      // ここにデフォルトテーマの拡張設定を記述
+      colors: {
+        'brand-blue': '#1DA1F2',
+      },
+      spacing: {
+        '128': '32rem',
+      }
+    }
+  },
+  plugins: [],
+}
+</code></pre>
+
+<h3 id="extend-vs-override">⚙️ <code>extend</code> vs 上書き（Override）</h3>
+<p>カスタマイズには2つの方法があります。<code>theme</code>直下に設定を書く<strong>「上書き」</strong>と、<code>theme.extend</code>の中に書く<strong>「拡張」</strong>です。この違いを理解することが非常に重要です。</p>
+<ul>
+<li>
+<p><strong>上書き (Override)</strong></p>
+<ul>
+<li><strong>場所:</strong> <code>theme</code>オブジェクトの直下</li>
+<li><strong>動作:</strong> デフォルトのテーマ設定を<strong>完全に置き換え</strong>ます。</li>
+<li><strong>例:</strong> <code>theme: { colors: { 'red': '#ff0000' } }</code>と書くと、Tailwindのデフォルトカラーパレット（<code>blue-500</code>や<code>green-300</code>など）は<strong>すべてなくなり</strong>、<code>bg-red</code>や<code>text-red</code>しか使えなくなります。</li>
+<li><strong>用途:</strong> プロジェクト独自の厳格なデザインシステムをゼロから構築する場合。</li>
+</ul>
+</li>
+<li>
+<p><strong>拡張 (Extend)</strong></p>
+<ul>
+<li><strong>場所:</strong> <code>theme.extend</code>オブジェクトの中</li>
+<li><strong>動作:</strong> デフォルトのテーマ設定を<strong>維持したまま、新しい値を追加</strong>します。</li>
+<li><strong>例:</strong> <code>theme: { extend: { colors: { 'brand-primary': '#007bff' } } }</code>と書くと、既存の<code>bg-blue-500</code>などに加えて、<code>bg-brand-primary</code>という新しいクラスが使えるようになります。</li>
+<li><strong>用途:</strong> ほとんどのケースでこちらを使います。デフォルトの便利な設定を活かしつつ、プロジェクト固有の値を追加する場合。</li>
+</ul>
+</li>
+</ul>
+<p><strong>結論：特別な理由がない限り、常に<code>theme.extend</code>を使ってカスタマイズするのが安全で推奨される方法です。</strong></p>
+<hr />
+<h3 id="step-by-step">🏃 実践: Step by Stepでテーマをカスタマイズしよう</h3>
+<h4 id="1">1. ブランドカラーの追加</h4>
+<p>プロジェクトのブランドカラーを追加してみましょう。<code>tailwind.config.js</code>を以下のように編集します。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+module.exports = {
+  // ...
+  theme: {
+    extend: {
+      colors: {
+        'laravel-red': '#F05340',
+        'vue-green': '#42b883',
+      },
+    },
+  },
+  // ...
+}
+</code></pre>
+
+<p>これで、<code>bg-laravel-red</code>や<code>text-vue-green</code>といったクラスが使えるようになります。</p>
+<h4 id="2">2. フォントの追加</h4>
+<p>Google Fontsなどから読み込んだWebフォントを、Tailwindの<code>fontFamily</code>に追加してみましょう。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  // ...
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Noto Sans JP', ...defaultTheme.fontFamily.sans],
+      },
+    },
+  },
+  // ...
+}
+</code></pre>
+
+<ul>
+<li><strong>コードリーディング</strong><ul>
+<li><code>const defaultTheme = require('tailwindcss/defaultTheme')</code>: Tailwindのデフォルトテーマ設定をインポートします。</li>
+<li><code>sans: ['Noto Sans JP', ...defaultTheme.fontFamily.sans]</code>: デフォルトのサンセリフフォント（<code>font-sans</code>）の配列の<strong>先頭に</strong><code>'Noto Sans JP'</code>を追加しています。これにより、<code>Noto Sans JP</code>が利用可能であればそれが使われ、利用できなければデフォルトのフォントが順番に適用される（フォールバック）ようになります。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3">3. 独自のユーティリティクラスの追加（上級）</h4>
+<p><code>plugins</code>機能を使うと、より複雑な独自のユーティリティクラスを追加できます。例えば、テキストを縦書きにする<code>writing-vertical-rl</code>というクラスを追加したい場合、以下のように記述します。</p>
+<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  // ...
+  plugins: [
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.writing-vertical-rl': {
+          'writing-mode': 'vertical-rl',
+        },
+      })
+    })
+  ],
+}
+</code></pre>
+
+<p>これで、HTML内で<code>class="writing-vertical-rl"</code>と書くだけで、テキストが縦書きになります。</p>
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li>Tailwind CSSのカスタマイズは<code>tailwind.config.js</code>の<code>theme</code>オブジェクトで行う。</li>
+<li>デフォルト設定を活かしつつ値を追加する「拡張（<code>extend</code>）」と、完全に置き換える「上書き」がある。</li>
+<li>特別な理由がない限り、常に<code>theme.extend</code>を使用することが推奨される。</li>
+<li><code>colors</code>, <code>fontFamily</code>, <code>spacing</code>などを拡張することで、プロジェクト独自のデザインシステムを構築できる。</li>
+<li><code>plugins</code>機能を使えば、JavaScriptでより動的かつ複雑なカスタムユーティリティを定義できる。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] <code>theme.extend.colors</code>と<code>theme.colors</code>の違いを説明できますか？</li>
+<li>[ ] あなたの会社のブランドカラーを<code>brand-main</code>という名前でTailwindに追加するには、<code>tailwind.config.js</code>をどのように編集しますか？</li>
+<li>[ ] デフォルトの<code>spacing</code>（余白）に、<code>13</code>というキーで<code>3.25rem</code>の値を追加するにはどうすればよいですか？</li>
+</ul>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial03_Tailwind_CSS徹底習得_chapter03_カスタムテーマとベストプラクティス_3-3-2: カスタムカラーとフォントの追加.html" class="next">カスタムカラーとフォントの追加</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

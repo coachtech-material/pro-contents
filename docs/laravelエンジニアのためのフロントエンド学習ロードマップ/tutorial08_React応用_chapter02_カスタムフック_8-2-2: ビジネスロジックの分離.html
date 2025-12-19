@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ビジネスロジックの分離 | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html" class="current">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial08_React応用.html">Tutorial 8: React応用</a><span>></span><a href="tutorial08_React応用_chapter02_カスタムフック.html">Chapter 2: カスタムフック</a><span>></span>ビジネスロジックの分離</div>
+                    <div class="section-content">
+<h1 id="8-2-2">8-2-2: ビジネスロジックの分離</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>UIロジックとビジネスロジックの違いを理解する</li>
+<li>コンポーネントが肥大化する問題（Fat Component）とそのデメリットを認識する</li>
+<li>カスタムフックを使って、コンポーネントからビジネスロジックを効果的に分離する方法を学ぶ</li>
+<li>ビジネスロジックを分離することによる、テスト容易性やメンテナンス性向上のメリットを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションでカスタムフックの基本的な作成方法を学びました。カスタムフックは単にコードの重複を減らすだけでなく、Reactアプリケーションの設計をクリーンにし、メンテナンス性を劇的に向上させるための強力な設計パターンです。</p>
+<p>その最も重要な役割の一つが、<strong>ビジネスロジックの分離</strong>です。コンポーネントが成長するにつれて、UIを描画するためのロジックと、アプリケーションの核となるビジネスロジックが混在し、コンポーネントが肥大化しがちです。このような「Fat Component」は、可読性が低く、テストが困難で、バグの温床となります。</p>
+<p>このセクションでは、UIロジックとビジネスロジックを明確に区別し、カスタムフックを使って後者をコンポーネントから綺麗に分離する方法を学びます。</p>
+<h2 id="_3">詳細解説</h2>
+<h3 id="ui-vs">UIロジック vs ビジネスロジック</h3>
+<p>まず、2つのロジックの違いを明確にしましょう。</p>
+<ul>
+<li>
+<p><strong>UIロジック (Presentation Logic)</strong></p>
+<ul>
+<li>UIがどのように見えるか、どのように動作するかに関するロジックです。</li>
+<li>例: ローディングスピナーの表示/非表示、モーダルウィンドウの開閉、入力値に応じたエラーメッセージの表示、アニメーションなど。</li>
+<li>これらは<strong>コンポーネントが責任を持つべき</strong>ロジックです。</li>
+</ul>
+</li>
+<li>
+<p><strong>ビジネスロジック (Business Logic / Domain Logic)</strong></p>
+<ul>
+<li>アプリケーションが「何をするか」という本質的なルールやデータ処理に関するロジックです。</li>
+<li>例: APIサーバーとのデータ通信、取得したデータの加工・フィルタリング・ソート、複雑な計算、状態管理のルールなど。</li>
+<li>これらは<strong>コンポーネントから分離すべき</strong>ロジックです。</li>
+</ul>
+</li>
+</ul>
+<h3 id="_4">悪い例: ロジックが混在したコンポーネント</h3>
+<p>ユーザーリストを取得して表示するコンポーネントを例に考えてみましょう。すべてのロジックがコンポーネント内に存在すると、以下のようになります。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/UserList.tsx (悪い例)
+import React, { useState, useEffect } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+}
+
+function UserList() {
+  // --- ビジネスロジック --- 
+  const [users, setUsers] = useState&lt;User[]&gt;([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState&lt;Error | null&gt;(null);
+
+  useEffect(() =&gt; {
+    const fetchUsers = async () =&gt; {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('https://api.example.com/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await response.json();
+        setUsers(data);
+      } catch (e) {
+        setError(e as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+  // --- ビジネスロジックここまで ---
+
+  // --- UIロジック --- 
+  if (isLoading) {
+    return &lt;div&gt;Loading...&lt;/div&gt;;
+  }
+
+  if (error) {
+    return &lt;div&gt;Error: {error.message}&lt;/div&gt;;
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;User List&lt;/h2&gt;
+      &lt;ul&gt;
+        {users.map(user =&gt; (
+          &lt;li key={user.id}&gt;{user.name}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p>このコンポーネントは、データの取得方法、ローディング状態の管理、エラー処理といった<strong>ビジネスロジック</strong>と、それらの状態に基づいて何を表示するかという<strong>UIロジック</strong>が密結合しています。これでは、コンポーネントの責務が多すぎます。</p>
+<h3 id="_5">良い例: カスタムフックでビジネスロジックを分離</h3>
+<p>次に、ビジネスロジックを<code>useUsers</code>というカスタムフックに分離してみましょう。</p>
+<h4 id="1">1. カスタムフックの作成</h4>
+<pre class="codehilite"><code class="language-typescript">// src/hooks/useUsers.ts
+import { useState, useEffect } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+}
+
+export const useUsers = () =&gt; {
+  // ビジネスロジックをすべてここに集約
+  const [users, setUsers] = useState&lt;User[]&gt;([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState&lt;Error | null&gt;(null);
+
+  useEffect(() =&gt; {
+    const fetchUsers = async () =&gt; {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('https://api.example.com/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await response.json();
+        setUsers(data);
+      } catch (e) {
+        setError(e as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // コンポーネントが必要とするものだけを返す
+  return { users, isLoading, error };
+};
+</code></pre>
+
+<h4 id="2">2. クリーンになったコンポーネント</h4>
+<p>カスタムフックを利用する側のコンポーネントは、ビジネスロジックの詳細を知る必要がなくなり、UIの描画に専念できます。</p>
+<pre class="codehilite"><code class="language-tsx">// src/components/UserList.tsx (良い例)
+import React from 'react';
+import { useUsers } from '../hooks/useUsers';
+
+function UserList() {
+  // ビジネスロジックはカスタムフックから取得
+  const { users, isLoading, error } = useUsers();
+
+  // UIロジックに専念
+  if (isLoading) {
+    return &lt;div&gt;Loading...&lt;/div&gt;;
+  }
+
+  if (error) {
+    return &lt;div&gt;Error: {error.message}&lt;/div&gt;;
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;User List&lt;/h2&gt;
+      &lt;ul&gt;
+        {users.map(user =&gt; (
+          &lt;li key={user.id}&gt;{user.name}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p><code>UserList</code>コンポーネントは、もはやデータがどこから、どのようにして来るのかを知りません。ただ <code>useUsers</code> フックを呼び出し、返された <code>isLoading</code>, <code>error</code>, <code>users</code> の状態に基づいて適切なUIを描画するだけです。責務が明確に分離され、非常に見通しが良くなりました。</p>
+<h3 id="_6">分離によるメリット</h3>
+<ul>
+<li><strong>テスト容易性</strong>: <code>useUsers</code>フックはUIから独立した純粋なロジックの塊です。React Testing Libraryなどを使って、コンポーネントをレンダリングすることなく、フック単体でテストすることが容易になります。</li>
+<li><strong>可読性・メンテナンス性</strong>: コンポーネントはUIの構造に、フックはビジネスロジックにそれぞれ集中しているため、コードを読むべき場所が明確になります。仕様変更時も、修正箇所を特定しやすくなります。</li>
+<li><strong>再利用性</strong>: もし別のページで同じユーザーリストが必要になった場合、<code>useUsers</code>フックを再度呼び出すだけで済みます。ロジックをコピペする必要はありません。</li>
+</ul>
+<h2 id="_7">✨ まとめ</h2>
+<ul>
+<li>コンポーネントの責務は<strong>UIの表示</strong>に限定し、API通信などの<strong>ビジネスロジック</strong>はカスタムフックに分離することが、クリーンなReactアプリケーションを設計する鍵である。</li>
+<li>カスタムフックは、状態（State）とそれに付随するロジック（Effectや関数）をカプセル化し、コンポーネントから隠蔽するための最適な場所を提供する。</li>
+<li>ビジネスロジックを分離することで、コンポーネントは「Fat Component」になるのを防ぎ、<strong>テスト容易性、可読性、再利用性</strong>が大幅に向上する。</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial08_React応用_chapter02_カスタムフック_8-2-1: カスタムフックの作成方法.html" class="prev">カスタムフックの作成方法</a>
+<a href="tutorial08_React応用_chapter02_カスタムフック_8-2-3: 実務でよく使うカスタムフックの例.html" class="next">実務でよく使うカスタムフックの例</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

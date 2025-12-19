@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 ハンズオン: 自己紹介ページを作成する | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html" class="current">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a><span>></span><a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎.html">Chapter 1: HTMLの基礎</a><span>></span>Chapter 1 ハンズオン: 自己紹介ページを作成する</div>
+                    <div class="section-content">
+<h1 id="tutorial-2-htmlcss">Tutorial 2: HTML/CSS基礎</h1>
+<h2 id="chapter-1-html">Chapter 1: HTMLの基礎</h2>
+<h3 id="chapter-1">Chapter 1 ハンズオン: 簡単な自己紹介ページを作成する</h3>
+<p>🖼️ <strong>完成形のイメージ</strong></p>
+<p>このハンズオンでは、このチャプターで学んだHTMLタグを総動員して、以下のようなシンプルな自己紹介ページをゼロから作成します。この経験を通じて、HTMLがWebページの「骨格」をどのように作っているのかを体感的に理解します。</p>
+<p><em>ここに完成した自己紹介ページのスクリーンショットを挿入: 見出し、画像、自己紹介文、SNSリンクのリストが構造的に配置されている様子</em></p>
+<hr />
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<p>このハンズオンを終えると、あなたは以下のことができるようになります。</p>
+<ul>
+<li>このチャプターで学んだ主要なHTMLタグ（<code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;div&gt;</code>）を組み合わせて、簡単なWebページをゼロから作成できるようになる。</li>
+<li>HTMLファイルの基本的な構造を、何も見ずに記述できるようになる。</li>
+<li><code>&lt;div&gt;</code> を使って関連するコンテンツをグループ化する、という実践的な使い方を体験する。</li>
+</ul>
+<hr />
+<h3 id="_1">🏃 実践: 一緒に作ってみましょう！</h3>
+<p>理論を学んだら、次は手を動かして形にする番です。このチャプターで学んだ知識を総動員して、あなたの分身となる簡単な「自己紹介ページ」をHTMLだけで作成してみましょう。CSSを使わないため、見た目は非常にシンプルですが、Webページの「骨格」をしっかりと組み立てる練習になります。</p>
+<h4 id="_2">💭 実装の思考プロセス</h4>
+<p>Webページ作成の第一歩は、まず「どんな情報を載せたいか」を考え、それをHTMLの構造に落とし込むことです。いきなりコードを書き始めるのではなく、頭の中で簡単な設計図を描きます。</p>
+<p><strong>このハンズオンのゴール:</strong></p>
+<ol>
+<li><strong>情報の整理:</strong> 自己紹介に必要な情報（名前、自己紹介文、プロフィール画像、SNSリンクなど）を洗い出す。</li>
+<li><strong>構造化:</strong> 洗い出した情報を、見出し、段落、画像、リストといった適切なHTMLタグに割り当てる。</li>
+<li><strong>グループ化:</strong> 関連性の高い情報（例えば、プロフィール全体）を <code>&lt;div&gt;</code> で一つのかたまりとしてまとめる。</li>
+<li><strong>コーディング:</strong> 設計図に基づいて、実際にHTMLファイルを記述していく。</li>
+</ol>
+<p>💡 <strong>ポイント:</strong> HTMLは「情報の設計図」。どの情報が一番重要で（<code>&lt;h1&gt;</code>）、どの情報が補足で（<code>&lt;p&gt;</code>）、どの情報がリストなのか（<code>&lt;ul&gt;</code>）を意味づけしていく作業がHTMLコーディングの本質です。</p>
+<h4 id="_3">📝 ステップバイステップで実装</h4>
+<h5 id="step-1-html">Step 1: HTMLファイルの基本構造を作成する</h5>
+<p>まずは、すべてのHTMLの土台となる基本構造を記述したファイルを作成します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「何はともあれ、まずはHTMLのお作法である <code>&lt;!DOCTYPE&gt;</code> から始まる基本のテンプレートを書かないと始まらない。ファイル名は <code>index.html</code> にしておこう。これがWebサイトの玄関になるファイル名の慣習だからだ。」</li>
+</ul>
+<p>1-1. VSCodeなどのエディタで、新しいファイル <code>index.html</code> を作成します。</p>
+<p>1-2. 以下の基本構造を記述します。<code>lang</code>属性を <code>ja</code> に、<code>&lt;title&gt;</code> を「自己紹介」に変更しておきましょう。</p>
+<ul>
+<li><strong>コマンド/コード:</strong><br />
+<code>html
+    &lt;!DOCTYPE html&gt;
+    &lt;html lang="ja"&gt;
+    &lt;head&gt;
+      &lt;meta charset="UTF-8"&gt;
+      &lt;title&gt;自己紹介&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;!-- ここにコンテンツを追加していく --&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;</code></li>
+<li><strong>コマンド解説/コードリーディング:</strong><ul>
+<li><code>&lt;!DOCTYPE html&gt;</code> → このファイルがHTML5であることを宣言しています。</li>
+<li><code>&lt;html lang="ja"&gt;</code> → ページの言語が日本語であることを示します。</li>
+<li><code>&lt;meta charset="UTF-8"&gt;</code> → 文字コードをUTF-8に指定し、文字化けを防ぎます。</li>
+<li><code>&lt;title&gt;自己紹介&lt;/title&gt;</code> → ブラウザのタブに「自己紹介」と表示されます。</li>
+<li><code>&lt;body&gt;</code> → これから記述する、ページに表示されるすべての内容がこの中に入ります。</li>
+</ul>
+</li>
+</ul>
+<h5 id="step-2-div">Step 2: プロフィール全体を囲む<code>div</code>と見出しを追加する</h5>
+<p>次に、自己紹介コンテンツ全体を一つの大きな箱としてまとめるために <code>&lt;div&gt;</code> を配置し、その中に最も重要な見出しとして自分の名前を <code>&lt;h1&gt;</code> で記述します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「自己紹介の情報を全部まとめて一つの『カード』みたいにしたいな。後でCSSでスタイルを当てることを見越して、全体を <code>&lt;div&gt;</code> で囲っておこう。そして、このページの主役である自分の名前を <code>&lt;h1&gt;</code> で一番目立たせるぞ。」</li>
+</ul>
+<p>2-1. <code>&lt;body&gt;</code> タグの中に、<code>&lt;div&gt;</code> タグを追加します。</p>
+<p>2-2. <code>&lt;div&gt;</code> の中に、<code>&lt;h1&gt;</code> タグを使って自分の名前を記述します。</p>
+<ul>
+<li><strong>コマンド/コード:</strong><br />
+<code>html
+    &lt;body&gt;
+      &lt;div&gt;
+        &lt;h1&gt;山田 太郎&lt;/h1&gt;
+      &lt;/div&gt;
+    &lt;/body&gt;</code></li>
+</ul>
+<h5 id="step-3">Step 3: プロフィール画像と自己紹介文を追加する</h5>
+<p>見出しの下に、プロフィール画像と簡単な自己紹介文を追加します。画像は <code>&lt;img&gt;</code> タグ、自己紹介文は <code>&lt;p&gt;</code> タグを使います。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「名前の次には顔写真と自己紹介文を置くのが自然だろう。画像は <code>&lt;img&gt;</code> タグ、文章は <code>&lt;p&gt;</code> タグ。これが基本だ。画像ファイルは <code>images</code> フォルダを作ってそこに入れておこう。<code>alt</code>属性も忘れずに書かないと。」</li>
+</ul>
+<p>3-1. <code>index.html</code> と同じ階層に <code>images</code> というフォルダを作成し、その中に表示したい画像ファイル（例: <code>profile.png</code>）を保存します。</p>
+<p>3-2. <code>&lt;h1&gt;</code> タグの下に、<code>&lt;img&gt;</code> タグと <code>&lt;p&gt;</code> タグを追加します。</p>
+<ul>
+<li><strong>コマンド/コード:</strong><br />
+<code>html
+    &lt;body&gt;
+      &lt;div&gt;
+        &lt;h1&gt;山田 太郎&lt;/h1&gt;
+        &lt;img src="images/profile.png" alt="山田太郎のプロフィール画像" width="150"&gt;
+        &lt;p&gt;こんにちは！LaravelとVue.jsを使った開発が得意なWebエンジニアです。最近はフロントエンドのモダンな技術、特にReactとNext.jsを学習しています。&lt;/p&gt;
+        &lt;p&gt;趣味は週末のキャンプとコーヒーを淹れることです。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/body&gt;</code></li>
+<li><strong>コマンド解説/コードリーディング:</strong><ul>
+<li><code>&lt;img src="images/profile.png" ...&gt;</code> → <code>images</code> フォルダの中にある <code>profile.png</code> を表示します。</li>
+<li><code>alt="..."</code> → 画像が表示できない場合に、このテキストが表示されます。</li>
+<li><code>width="150"</code> → 画像の表示幅を150ピクセルに指定しています。（CSSで指定するのが一般的ですが、HTMLでも指定可能です）</li>
+</ul>
+</li>
+</ul>
+<h5 id="step-4-sns">Step 4: SNSリンクのリストを追加する</h5>
+<p>最後に、自分のSNSアカウントなどへのリンクをリスト形式で追加します。見出しとして <code>&lt;h2&gt;</code> を使い、リンクのリストは <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;a&gt;</code> を組み合わせて作成します。</p>
+<ul>
+<li><strong>何を考えているか:</strong> 「SNSリンクはいくつかあるから、リスト形式が見やすいな。順序は関係ないから <code>&lt;ul&gt;</code> を使おう。各項目は <code>&lt;li&gt;</code> で、その中に <code>&lt;a&gt;</code> タグでリンクを設置する。セクションの見出しとして <code>&lt;h2&gt;</code> を使うのが構造的にも正しいだろう。」</li>
+</ul>
+<p>4-1. 自己紹介文の <code>&lt;p&gt;</code> タグの下に、<code>&lt;h2&gt;</code> タグと <code>&lt;ul&gt;</code> タグを追加します。</p>
+<ul>
+<li><strong>コマンド/コード:</strong><br />
+    ```html<br />
+    <body><br />
+      <div><br />
+        <h1>山田 太郎</h1><br />
+        <img src="images/profile.png" alt="山田太郎のプロフィール画像" width="150"><br />
+        <p>こんにちは！...</p><br />
+        <p>趣味は...</p><pre class="codehilite"><code>&lt;h2&gt;SNS &amp; Links&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/your-account&quot; target=&quot;_blank&quot;&gt;GitHub&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://twitter.com/your-account&quot; target=&quot;_blank&quot;&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://your-blog.com&quot; target=&quot;_blank&quot;&gt;ブログ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p></div><br />
+</body><br />
+<code>``
+-   **コマンド解説/コードリーディング:**
+-</code><h2>SNS &amp; Links</h2><code>→ このセクションが見出しレベル2であることを示します。
+-</code><ul><code>→ 順序のないリストを開始します。
+-</code><li><a href="...">...</a></li><code>→ 各リスト項目の中に、リンクを配置しています。
+-</code>target="_blank"` → リンクをクリックしたときに、新しいタブでページが開くようにする属性です。</p>
+</li>
+</ul>
+<h4 id="_4">✨ 完成！</h4>
+<p>お疲れ様でした！<code>index.html</code> をブラウザで開いてみてください。CSSが適用されていないため非常に質素ですが、見出し、画像、文章、リンクのリストが構造的に配置された、立派なWebページが完成しました。あなたは今、HTMLだけでWebページの骨格をゼロから組み立てるスキルを身につけたのです。</p>
+<h3 id="_5">💡 ヒント</h3>
+<ul>
+<li><strong>Live Server (VSCode拡張機能):</strong> VSCodeの拡張機能「Live Server」をインストールすると、HTMLファイルを保存するたびにブラウザが自動でリロードされるようになり、開発効率が劇的に向上します。</li>
+<li><strong>ダミー画像:</strong> ちょうど良い画像がない場合は、「placeholder image」などで検索すると、ダミー画像を生成してくれるサービスが見つかります。例えば <code>https://via.placeholder.com/150</code> のようなURLを <code>&lt;img&gt;</code> の <code>src</code> に指定するだけで、150x150のダミー画像を表示できます。</li>
+</ul>
+<h3 id="_6">📖 模範解答</h3>
+<p>完成した <code>index.html</code> の全体像は以下のようになります。</p>
+<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;自己紹介&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;h1&gt;山田 太郎&lt;/h1&gt;
+    &lt;img src=&quot;https://via.placeholder.com/150&quot; alt=&quot;山田太郎のプロフィール画像&quot; width=&quot;150&quot;&gt;
+    &lt;p&gt;こんにちは！LaravelとVue.jsを使った開発が得意なWebエンジニアです。最近はフロントエンドのモダンな技術、特にReactとNext.jsを学習しています。&lt;/p&gt;
+    &lt;p&gt;趣味は週末のキャンプとコーヒーを淹れることです。&lt;/p&gt;
+
+    &lt;h2&gt;SNS &amp; Links&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot; target=&quot;_blank&quot;&gt;GitHub&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot; target=&quot;_blank&quot;&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot; target=&quot;_blank&quot;&gt;ブログ&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>（<code>img</code>の<code>src</code>と<code>a</code>の<code>href</code>はダミーのものに置き換えています）</p>
+</div>
+<div class="section-nav">
+<a href="tutorial02_HTML_CSS基礎_chapter01_HTMLの基礎_2-1-3: divとspanの違いと使い分け.html" class="prev">divとspanの違いと使い分け</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

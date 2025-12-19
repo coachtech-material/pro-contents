@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繰り返し処理（for, for...of） | pro-contents</title>
+    <meta name="description" content="プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎.html">Chapter 1: JavaScriptの基礎</a><span>></span>繰り返し処理（for, for...of）</div>
+                    <div class="section-content">
+<h1 id="4-1-5-for-forof">4-1-5: 繰り返し処理（for, for...of）</h1>
+<h2 id="chapter-1-javascript">Chapter 1: JavaScriptの基礎</h2>
+<h3 id="section-5-for-forof">Section 5: 繰り返し処理（for, for...of）</h3>
+<p>🎯 <strong>このセクションで学ぶこと</strong></p>
+<ul>
+<li><code>for</code>ループを使い、指定した回数だけ処理を繰り返せるようになる。</li>
+<li><code>for...of</code>ループを使い、配列などのコレクションの各要素に対して処理を行えるようになる。</li>
+<li><code>break</code>と<code>continue</code>を使い、ループの挙動を制御できるようになる。</li>
+</ul>
+<hr />
+<h3 id="_1">イントロダクション：退屈な作業はコンピュータに任せよう</h3>
+<p>プログラミングの大きな強みの一つは、人間がやると退屈で時間のかかる反復作業を、一瞬で正確に実行できることです。例えば、「1から100までの数字をコンソールに表示する」という作業を、<code>console.log(1)</code>, <code>console.log(2)</code>...と100行書くのは非現実的です。</p>
+<p>このような繰り返し処理を実現するのが<strong>ループ（繰り返し）構文</strong>です。このセクションでは、JavaScriptで最もよく使われる2つのループ構文、伝統的な<code>for</code>ループと、よりモダンで便利な<code>for...of</code>ループを学びます。これらもPHPの<code>for</code>や<code>foreach</code>と非常によく似ているため、概念はすぐに掴めるはずです。</p>
+<hr />
+<h3 id="1-for">⚙️ 1. <code>for</code>ループ：指定回数繰り返す</h3>
+<p><code>for</code>ループは、特定の回数だけ処理を繰り返したい場合に最もよく使われる、古典的なループ構文です。PHPの<code>for</code>ループと構文は全く同じです。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">for (初期化式; 条件式; 増減式) {
+  // 繰り返したい処理
+}
+</code></pre>
+
+<ul>
+<li><strong>初期化式:</strong> ループが始まる前に一度だけ実行されます。通常、カウンター変数を初期化します（例: <code>let i = 0</code>）。</li>
+<li><strong>条件式:</strong> 各ループの反復が始まる前に評価されます。この式が<code>true</code>である限り、ループは続行されます。</li>
+<li><strong>増減式:</strong> 各ループの反復が終わるたびに実行されます。通常、カウンター変数をインクリメント（<code>i++</code>）またはデクリメント（<code>i--</code>）します。</li>
+</ul>
+<p><strong>例：1から5までの数字を表示する</strong></p>
+<pre class="codehilite"><code class="language-javascript">for (let i = 1; i &lt;= 5; i++) {
+  console.log(i);
+}
+// 出力:
+// 1
+// 2
+// 3
+// 4
+// 5
+</code></pre>
+
+<p><strong>例：配列の要素を順番に表示する</strong></p>
+<pre class="codehilite"><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
+
+for (let i = 0; i &lt; fruits.length; i++) {
+  console.log(fruits[i]);
+}
+// 出力:
+// &quot;りんご&quot;
+// &quot;バナナ&quot;
+// &quot;みかん&quot;
+</code></pre>
+
+<hr />
+<h3 id="2-forof">⚙️ 2. <code>for...of</code>ループ：配列の要素を一つずつ取り出す</h3>
+<p><code>for</code>ループでも配列を扱うことはできますが、カウンター変数<code>i</code>を管理する必要があり、少し冗長です。よりモダンで直感的に配列の要素をループ処理できるのが<code>for...of</code>ループです。これはPHPの<code>foreach</code>ループに非常に似ています。</p>
+<p><strong>基本構文:</strong></p>
+<pre class="codehilite"><code class="language-javascript">for (const 要素 of イテラブルオブジェクト) {
+  // 各要素に対して行いたい処理
+}
+</code></pre>
+
+<ul>
+<li><strong>イテラブルオブジェクト:</strong> 配列や文字列など、反復可能なオブジェクト。</li>
+<li><strong>要素:</strong> ループの各反復で、オブジェクトから取り出された要素が格納される変数。</li>
+</ul>
+<p><strong>例：配列の要素を順番に表示する</strong></p>
+<pre class="codehilite"><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
+
+for (const fruit of fruits) {
+  console.log(fruit);
+}
+// 出力:
+// &quot;りんご&quot;
+// &quot;バナナ&quot;
+// &quot;みかん&quot;
+</code></pre>
+
+<p><code>for</code>ループの例と比べて、はるかにシンプルで読みやすいことがわかります。カウンター変数<code>i</code>や配列の長さを気にする必要がありません。</p>
+<p><strong>配列の要素を扱う場合は、原則として<code>for...of</code>ループを使うのが良いプラクティスです。</strong></p>
+<blockquote>
+<p><strong>補足: <code>for...in</code>ループとの違い</strong><br />
+JavaScriptには<code>for...in</code>という別のループ構文もありますが、これは主にオブジェクトのプロパティキーを列挙するためのもので、配列に対して使うと予期せぬ挙動をすることがあります。配列のループには<code>for...of</code>を使う、と覚えておきましょう。</p>
+</blockquote>
+<hr />
+<h3 id="3-breakcontinue">⚙️ 3. ループの制御：<code>break</code>と<code>continue</code></h3>
+<p>ループの途中で処理を中断したり、次の反復にスキップしたりしたい場合があります。そのために<code>break</code>と<code>continue</code>を使います。</p>
+<ul>
+<li><strong><code>break</code></strong>: ループを完全に<strong>中断</strong>し、ループ構文の直後の処理に進みます。</li>
+</ul>
+<p><strong>例：配列から特定の値を見つけたらループを終了する</strong></p>
+<pre class="codehilite"><code class="language-javascript">const numbers = [1, 5, 10, 15, 20];
+
+for (const num of numbers) {
+  if (num === 10) {
+    console.log(&quot;10を見つけました！&quot;);
+    break; // ループを終了
+  }
+  console.log(num); // 10に到達するまで実行される
+}
+// 出力:
+// 1
+// 5
+// &quot;10を見つけました！&quot;
+</code></pre>
+
+<ul>
+<li><strong><code>continue</code></strong>: 現在の反復処理を<strong>中断</strong>し、ループの<strong>次の反復</strong>に進みます。</li>
+</ul>
+<p><strong>例：偶数だけをスキップして表示する</strong></p>
+<pre class="codehilite"><code class="language-javascript">for (let i = 1; i &lt;= 10; i++) {
+  if (i % 2 === 0) {
+    continue; // 偶数の場合は、この後のconsole.logをスキップして次のループへ
+  }
+  console.log(i);
+}
+// 出力:
+// 1
+// 3
+// 5
+// 7
+// 9
+</code></pre>
+
+<hr />
+<p>✨ <strong>まとめ</strong></p>
+<ul>
+<li><code>for</code>ループは、カウンター変数を使って指定した回数だけ処理を繰り返す伝統的な方法である。</li>
+<li><code>for...of</code>ループは、配列などの要素を一つずつ取り出して処理するための、よりモダンで推奨される方法である。</li>
+<li><code>break</code>はループを完全に終了させ、<code>continue</code>は現在の反復をスキップして次に進む。</li>
+</ul>
+<p>📝 <strong>学習のポイント</strong></p>
+<ul>
+<li>[ ] 配列<code>const colors = ["red", "green", "blue"]</code>の各要素を、<code>for</code>ループと<code>for...of</code>ループの両方を使ってコンソールに出力するコードを書いてみてください。</li>
+<li>[ ] 1から20までの数字をループで処理し、3の倍数のときだけ<code>"Fizz"</code>と表示する（それ以外の数字は表示しない）コードを<code>continue</code>を使って書いてみてください。</li>
+<li>[ ] PHPの<code>foreach ($array as $key =&gt; $value)</code>のように、<code>for...of</code>ループで配列のインデックス番号も同時に取得するにはどうすればよいか、調べてみましょう。（ヒント: <code>Array.prototype.entries()</code>）</li>
+</ul>
+</div>
+<div class="section-nav">
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-5: 条件分岐（if, else if, else）.html" class="prev">条件分岐（if, else if, else）</a>
+<a href="tutorial04_JavaScript_基礎とDOM操作_chapter01_JavaScriptの基礎_4-1-7: Chapter 1 ハンズオン: 簡単な計算機を作成する.html" class="next">Chapter 1 ハンズオン: 簡単な計算機を作成する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>
