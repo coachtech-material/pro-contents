@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partial Prerendering (PPR) の概念 | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略.html">Column 3: React Server Componentsと新しいレンダリング戦略</a><span>></span>Partial Prerendering (PPR) の概念</div>
+                    <div class="section-content">
+<h1 id="col-3-3-partial-prerendering-ppr">Col-3-3: Partial Prerendering (PPR) の概念</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Partial Prerendering (PPR) が解決しようとする、静的と動的のトレードオフを理解する。</li>
+<li>PPRの基本的な仕組みと、「静的なシェル」の概念を学ぶ。</li>
+<li><code>Suspense</code> がPPRでどのように活用されるかを理解する。</li>
+<li>PPRがもたらす開発者体験とユーザー体験の向上について学ぶ。</li>
+</ul>
+<h2 id="_2">導入: 静的と動的の究極のジレンマ</h2>
+<p>これまで見てきたように、Webレンダリングには大きなトレードオフが存在しました。</p>
+<ul>
+<li><strong>静的レンダリング (SSG)</strong>: パフォーマンスは最高だが、動的なコンテンツに対応しづらい。</li>
+<li><strong>動的レンダリング (SSR)</strong>: パーソナライズされた動的なコンテンツに対応できるが、パフォーマンスは静的に劣る（特にTTFB）。</li>
+</ul>
+<p>多くのWebページは、この両方の性質を併せ持っています。例えば、ECサイトの商品ページを考えてみましょう。</p>
+<ul>
+<li><strong>静的な部分</strong>: ヘッダー、フッター、商品の説明、レビュー欄のレイアウトなど、ほとんどのユーザーで共通の部分。</li>
+<li><strong>動的な部分</strong>: ログインしているユーザー名、カートに入っている商品の数、パーソナライズされたおすすめ商品など、ユーザーごとに異なる部分。</li>
+</ul>
+<p>従来のアプローチでは、ページ内に一つでも動的な要素があれば、ページ全体を動的レンダリング（SSR）するしかありませんでした。これにより、高速に表示できるはずの静的な部分まで、動的レンダリングのパフォーマンスに引きずられていました。</p>
+<p><strong>Partial Prerendering (PPR)</strong> は、この長年のジレンマを解決するためにNext.js 14で導入された、新しいレンダリングモデルです。[1]</p>
+<h2 id="ppr">PPRとは？</h2>
+<p>PPRは、<strong>「ページの大部分を静的に事前レンダリングしつつ、一部の動的な部分だけをリクエスト時にレンダリングする」</strong> という、静的と動的のハイブリッドアプローチです。</p>
+<p>これにより、静的サイトの高速なロードパフォーマンスと、動的アプリケーションのインタラクティブ性を、一つのページで両立させることができます。</p>
+<h2 id="ppr_1">PPRの仕組み: 静的なシェルと動的なホール</h2>
+<p>PPRは、Reactの<code>&lt;Suspense&gt;</code>を基盤として動作します。</p>
+<ol>
+<li>
+<p><strong>ビルド時</strong>: ビルド時に、ページは<strong>「静的なシェル (Static Shell)」</strong>として事前レンダリング（Prerender）されます。このシェルには、ページのすべての静的な部分（レイアウト、テキストなど）が含まれます。</p>
+</li>
+<li>
+<p><strong>動的なホールの定義</strong>: <code>&lt;Suspense&gt;</code>でラップされた部分が、<strong>「動的なホール (Dynamic Hole)」</strong>として扱われます。ビルド時には、このホールのフォールバックUIが静的シェルに埋め込まれます。</p>
+</li>
+<li>
+<p><strong>リクエスト時</strong>: ユーザーからリクエストが来ると、<br />
+    a.  まず、CDNから<strong>静的なシェルが即座に</strong>クライアントに返されます。ユーザーはページの骨格を瞬時に見ることができます（TTFBが非常に速い）。<br />
+    b.  同時に、Next.jsサーバーは動的なホールの中身（<code>&lt;Suspense&gt;</code>の子コンポーネント）をレンダリングします。<br />
+    c.  動的なホールのレンダリングが完了すると、その結果が静的なシェルを配信したのと同じHTTPストリームを使ってクライアントに送信されます。<br />
+    d.  クライアントのReactが、静的シェルに埋め込まれているフォールバックUIを、ストリーミングされてきた動的なコンテンツに置き換えます。</p>
+</li>
+</ol>
+<p><img alt="PPRの概念図" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/ppr-flow.png" /></p>
+<p><strong>重要なのは、開発者はPPRを意識して特別なコードを書く必要がないということです。</strong> <code>Suspense</code>を使ってローディングUIを適切に設定するだけで、Next.jsが自動的にPPRを適用してくれます。</p>
+<pre class="codehilite"><code class="language-jsx">// app/products/[id]/page.tsx
+
+import { Suspense } from 'react';
+import { ProductDescription, Reviews, AddToCartButton } from './components';
+
+export default function ProductPage({ params }) {
+  return (
+    &lt;div&gt;
+      {/* この部分は静的シェルの一部として事前レンダリングされる */}
+      &lt;ProductDescription productId={params.id} /&gt;
+      &lt;hr /&gt;
+
+      {/* Suspenseで囲まれた部分が動的なホールになる */}
+      &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+        &lt;Reviews productId={params.id} /&gt;
+      &lt;/Suspense&gt;
+
+      &lt;Suspense fallback={&lt;button disabled&gt;Loading...&lt;/button&gt;}&gt;
+        &lt;AddToCartButton productId={params.id} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+
+<p>この例では、商品の説明(<code>ProductDescription</code>)は静的なシェルとしてビルド時にレンダリングされます。一方、レビュー(<code>Reviews</code>)やカート追加ボタン(<code>AddToCartButton</code>)は、リクエスト時にユーザー情報などに基づいて動的にレンダリングされ、ストリーミングで配信されます。</p>
+<h2 id="ppr_2">PPRのメリット</h2>
+<h3 id="1">1. パフォーマンスの向上</h3>
+<p>ページの大部分が静的に配信されるため、TTFBが劇的に改善されます。ユーザーはすぐに意味のあるコンテンツを見ることができ、体感速度が大幅に向上します。</p>
+<h3 id="2">2. 開発者体験のシンプルさ</h3>
+<p>開発者は「このページはSSGにすべきか、SSRにすべきか」と悩む必要がなくなります。コンポーネントごとに静的か動的かを考えるだけでよく、Next.jsが最適なレンダリング方法を自動で判断してくれます。</p>
+<blockquote>
+<p>PPR を使用すると、静的ページと動的ページという 2 つの概念は必要ありません。動的な部分を持つ静的ページだけが存在します。<br />
+--- Vercel, "What is Partial Prerendering (PPR)?" [2]</p>
+</blockquote>
+<h3 id="3">3. 動的コンテンツと静的コンテンツの共存</h3>
+<p>これまで難しかった、一つのページ内での静的コンテンツの高速配信と、パーソナライズされた動的コンテンツのスムーズな統合を、最適な形で実現します。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li><strong>PPR</strong>は、静的レンダリングのパフォーマンスと動的レンダリングの柔軟性を両立させる、Next.js 14の新しいレンダリングモデル。</li>
+<li>ページの大部分を<strong>「静的なシェル」</strong>としてビルド時に事前レンダリングし、<code>&lt;Suspense&gt;</code>で囲まれた部分を<strong>「動的なホール」</strong>としてリクエスト時にレンダリングする。</li>
+<li>これにより、TTFBを最小限に抑えつつ、パーソナライズされたコンテンツをページに含めることが可能になる。</li>
+<li>開発者はレンダリング戦略全体を考えるのではなく、コンポーネント単位での静的/動的の区別に集中できる。</li>
+<li>PPRは、RSC、Streaming、Suspenseといった技術の集大成であり、モダンなWebアプリケーションの新しいスタンダードとなる可能性を秘めている。</li>
+</ul>
+<p>このカラムで学んだレンダリング戦略の知識は、あなたが今後フロントエンドエンジニアとしてパフォーマンスとユーザー体験を追求していく上で、非常に強力な武器となるでしょう。</p>
+<hr />
+<h2 id="_4">参考文献</h2>
+<p>[1] Next.js. (2023, October 26). <em>Next.js 14</em>. Retrieved from https://nextjs.org/blog/next-14</p>
+<p>[2] Vercel. (n.d.). <em>What is Partial Prerendering (PPR)?</em>. Retrieved from https://vercel.com/docs/getting-started-with-vercel/concepts/rendering#partial-prerendering-ppr-alpha</p>
+</div>
+<div class="section-nav">
+<a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略_Col-3-2: Streaming と Suspense.html" class="prev">Streaming と Suspense</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

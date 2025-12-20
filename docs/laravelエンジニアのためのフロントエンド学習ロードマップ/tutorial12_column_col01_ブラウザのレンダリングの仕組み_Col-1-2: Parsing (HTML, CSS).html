@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsing (HTML, CSS) | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み.html">Column 1: ブラウザのレンダリングの仕組み</a><span>></span>Parsing (HTML, CSS)</div>
+                    <div class="section-content">
+<h1 id="col-1-2-parsing-html-css">Col-1-2: Parsing (HTML, CSS)</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>ブラウザがHTMLを解析してDOMツリーを構築するプロセスを理解する。</li>
+<li>ブラウザがCSSを解析してCSSOMツリーを構築するプロセスを理解する。</li>
+<li>レンダリングブロッキングリソース（特にCSSとJavaScript）がCRPに与える影響を学ぶ。</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>前のセクションで、クリティカルレンダリングパス（CRP）の概要を学びました。CRPの最初の重要なステップは、HTMLとCSSの<strong>解析（Parsing）</strong>です。ブラウザは、サーバーから受け取ったテキストベースのHTMLとCSSのファイルを、自身が理解できるデータ構造、すなわち<strong>DOMツリー</strong>と<strong>CSSOMツリー</strong>に変換します。このプロセスが、最終的なページの見た目を構築するための基礎となります。</p>
+<h2 id="htmldom">HTMLの解析とDOMの構築</h2>
+<p>ブラウザがサーバーからHTMLドキュメントを受け取ると、DOM（Document Object Model）ツリーの構築プロセスが始まります。これは、以下の4つのステップで行われます。[1]</p>
+<ol>
+<li>
+<p><strong>バイト → 文字</strong>: サーバーから受け取ったHTMLファイルは、まず生のバイトデータとして読み込まれます。ブラウザはファイルのエンコーディング（例: <code>UTF-8</code>）に基づいて、これらのバイトを文字に変換します。</p>
+</li>
+<li>
+<p><strong>文字 → トークン</strong>: 次に、変換された文字のストリームをW3CのHTML5標準に基づいて<strong>トークン化</strong>します。例えば、<code>&lt;html&gt;</code>は「開始タグトークン」、<code>&lt;body&gt;</code>は「開始タグトークン」、テキストは「文字トークン」、<code>&lt;/body&gt;</code>は「終了タグトークン」といった具合に、意味のある単位に分割されます。</p>
+</li>
+<li>
+<p><strong>トークン → ノード</strong>: 生成されたトークンは、それぞれが特定のプロパティやルールを持つ「オブジェクト（ノード）」に変換されます。</p>
+</li>
+<li>
+<p><strong>ノード → DOMツリー</strong>: HTMLタグの親子関係（入れ子構造）に基づいて、作成されたノードがツリー状のデータ構造にリンクされます。これが<strong>DOMツリー</strong>です。例えば、<code>&lt;html&gt;</code>オブジェクトは<code>&lt;body&gt;</code>オブジェクトの親であり、<code>&lt;body&gt;</code>は<code>&lt;p&gt;</code>オブジェクトの親、といった関係が構築されます。</p>
+</li>
+</ol>
+<p><img alt="DOMツリー構築のプロセス" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/dom-construction.png" /></p>
+<p>この全プロセスは、非常に効率的に行われるように最適化されており、ブラウザはHTMLを<strong>ストリーミング</strong>しながら、つまりドキュメント全体がダウンロードされるのを待たずに、部分的に解析してDOMツリーを構築していくことができます。</p>
+<h2 id="csscssom">CSSの解析とCSSOMの構築</h2>
+<p>HTMLの解析中に、ブラウザが<code>&lt;link rel="stylesheet"&gt;</code>や<code>&lt;style&gt;</code>タグに遭遇すると、CSSの解析と<strong>CSSOM（CSS Object Model）</strong>ツリーの構築を開始します。このプロセスもHTMLの解析と似ていますが、重要な違いがあります。</p>
+<p>CSSの「C」はCascading（カスケード、滝のように流れる）の略で、スタイルルールが親から子へと継承される性質を持っています。そのため、あるノードの最終的なスタイルを決定するには、そのノード自身に適用されるルールだけでなく、親要素から継承されるスタイルや、より具体的なセレクタによる上書きなど、複数のルールを考慮する必要があります。</p>
+<blockquote>
+<p>そのため、ブラウザはドキュメント内の他のスタイルルールをブロックして CSS を処理することはできません。つまり、CSSOM を構築する間、他のすべての CSS をダウンロードして処理する必要があるのです。<br />
+--- Google Developers, "Render-Blocking CSS" [2]</p>
+</blockquote>
+<p>この性質のため、CSSは<strong>レンダリングブロッキングリソース</strong>と見なされます。ブラウザは、すべてのCSSを解析し、CSSOMツリー全体を構築し終わるまで、ページのレンダリングを開始できません。もしCSSOMの構築が遅れると、Render Treeの構築も遅れ、結果としてユーザーは何も表示されない白い画面を長く見ることになります。</p>
+<h2 id="javascript">JavaScriptと解析のブロッキング</h2>
+<p>JavaScriptもまた、CRPに大きな影響を与える要因です。</p>
+<p>HTMLの解析中に<code>&lt;script&gt;</code>タグが見つかると、ブラウザは<strong>DOMの構築を一時停止</strong>し、JavaScriptエンジンに制御を渡してスクリプトをダウンロード・解析・実行します。なぜなら、JavaScriptは<code>document.write()</code>のような命令でDOMの構造自体を変更する可能性があるため、ブラウザは安全のためにHTMLの解析を続けられないのです。</p>
+<pre class="codehilite"><code class="language-html">&lt;html&gt;
+  &lt;head&gt;
+    &lt;link href=&quot;style.css&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;Hello, &lt;span&gt;world!&lt;/span&gt;&lt;/p&gt;
+    &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt; &lt;!-- DOM構築がここでブロックされる --&gt;
+    &lt;div&gt;...&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>さらに、JavaScriptはCSSOMにアクセスしてスタイル情報を問い合わせることもできます（例: <code>element.style.width</code>）。もしブラウザがCSSOMの構築が終わっていない状態でJavaScriptを実行しようとすると、スクリプトは不正確な情報を得てしまうかもしれません。このため、ブラウザは先行するCSSのダウンロードとCSSOMの構築が完了するまで、JavaScriptの実行を待機します。</p>
+<p>結果として、<strong>CSSはJavaScriptの実行をブロックし、JavaScriptはDOMの構築をブロックする</strong>という依存関係が生まれます。これが、<code>&lt;link&gt;</code>タグを<code>&lt;head&gt;</code>内に、<code>&lt;script&gt;</code>タグを<code>&lt;body&gt;</code>の最後に置くことが推奨される主な理由です。</p>
+<h3 id="_3">ブロッキングを回避する方法</h3>
+<p>幸い、JavaScriptによるDOM構築のブロッキングは、<code>async</code>属性や<code>defer</code>属性を使うことで制御できます。</p>
+<ul>
+<li><strong><code>async</code></strong>: HTMLの解析をブロックせず、スクリプトを非同期にダウンロードします。ダウンロードが完了次第、DOM構築を一時停止してスクリプトを実行します。</li>
+<li><strong><code>defer</code></strong>: HTMLの解析をブロックせず、スクリプトを非同期にダウンロードします。スクリプトの実行は、DOM構築が完了した後、<code>DOMContentLoaded</code>イベントの前に実行されます。</li>
+</ul>
+<pre class="codehilite"><code class="language-html">&lt;script src=&quot;app.js&quot; async&gt;&lt;/script&gt;
+&lt;script src=&quot;app.js&quot; defer&gt;&lt;/script&gt;
+</code></pre>
+
+<p>これらの属性を適切に使うことで、JavaScriptによるブロッキングの影響を最小限に抑え、CRPを高速化できます。</p>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>ブラウザはHTMLを解析してDOMツリーを、CSSを解析してCSSOMツリーを構築する。</li>
+<li>CSSはレンダリングブロッキングリソースであり、CSSOMの構築が完了するまでページの描画は始まらない。</li>
+<li>JavaScriptはDOMの構築をブロックする可能性があり、またCSSOMの完成を待ってから実行される。</li>
+<li><code>&lt;script&gt;</code>タグに<code>async</code>や<code>defer</code>属性を使用することで、JavaScriptによるブロッキングを制御し、パフォーマンスを改善できる。</li>
+</ul>
+<hr />
+<h2 id="_5">参考文献</h2>
+<p>[1] Google Developers. (n.d.). <em>Constructing the Object Model</em>. Retrieved from https://developers.google.com/web/fundamentals/performance/critical-rendering-path/constructing-the-object-model</p>
+<p>[2] Google Developers. (n.d.). <em>Render-Blocking CSS</em>. Retrieved from https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css</p>
+</div>
+<div class="section-nav">
+<a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み_Col-1-1: Critical Rendering Path.html" class="prev">Critical Rendering Path</a>
+<a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み_Col-1-3: Layout, Paint, Composite.html" class="next">Layout, Paint, Composite</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Rendering Path | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み.html">Column 1: ブラウザのレンダリングの仕組み</a><span>></span>Critical Rendering Path</div>
+                    <div class="section-content">
+<h1 id="col-1-1-critical-rendering-path">Col-1-1: Critical Rendering Path（クリティカルレンダリングパス）</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>クリティカルレンダリングパス（CRP）の定義と、なぜそれがWebパフォーマンスにとって重要なのかを理解する。</li>
+<li>CRPを構成する主要なステップ（DOM構築、CSSOM構築、Render Tree構築、Layout、Paint）の概要を学ぶ。</li>
+<li>CRPの最適化が、体感的なページの読み込み速度にどのように影響するかを理解する。</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Webサイトのパフォーマンスを語る上で、<strong>クリティカルレンダリングパス（Critical Rendering Path, CRP）</strong>の理解は不可欠です。CRPとは、ブラウザがHTML、CSS、JavaScriptのコードを受け取ってから、それを画面上のピクセルとして描画するまでの一連のステップを指します。[1]</p>
+<p>このパスを最適化することは、ページの表示速度を向上させ、ユーザー体験（UX）を改善するために極めて重要です。ユーザーは、ページの読み込みが遅いとすぐに離脱してしまう傾向があります。CRPを理解し、ボトルネックを特定して解消することで、より高速で快適なWebサイトを構築できます。</p>
+<h2 id="crp">CRPの主要なステップ</h2>
+<p>CRPは、大きく分けて以下のステップで構成されています。</p>
+<ol>
+<li><strong>DOM (Document Object Model) の構築</strong>: ブラウザがHTMLを解析し、DOMツリーを作成する。</li>
+<li><strong>CSSOM (CSS Object Model) の構築</strong>: ブラウザがCSSを解析し、CSSOMツリーを作成する。</li>
+<li><strong>Render Tree の構築</strong>: DOMツリーとCSSOMツリーを組み合わせて、描画に必要な情報だけを持つRender Treeを作成する。</li>
+<li><strong>Layout（または Reflow）</strong>: Render Tree内の各ノードの画面上での正確な位置とサイズを計算する。</li>
+<li><strong>Paint（または Repaint）</strong>: Layoutステップで計算された情報をもとに、各ノードを画面上の実際のピクセルに描画する。</li>
+<li><strong>Composite</strong>: 必要に応じて、複数のレイヤーを正しい順序で画面に合成する。</li>
+</ol>
+<p><img alt="クリティカルレンダリングパスの図解" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/crp.png" /></p>
+<blockquote>
+<p>DOM ツリーと CSSOM ツリーは、レンダリング ツリーに結合されます。レンダリング ツリーでは、表示される各要素のレイアウトが計算され、ペイント処理で画面にピクセルがレンダリングされます。これらのステップをすべて最適化することが、最適なレンダリング パフォーマンスを実現するために重要です。<br />
+--- Google Developers, "Critical Rendering Path" [1]</p>
+</blockquote>
+<h3 id="1-dom">1. DOMの構築</h3>
+<p>ブラウザはサーバーから受け取ったHTMLを上から下に1行ずつ解析（Parse）し、タグを「ノード」として認識し、それらの親子関係を元に木構造のデータモデルである<strong>DOMツリー</strong>を構築します。このプロセスは、HTMLのバイトデータを文字に変換し、トークンを生成し、ノードに変換し、最終的にツリーを構築するという流れで行われます。[2]</p>
+<h3 id="2-cssom">2. CSSOMの構築</h3>
+<p>HTMLの解析中に<code>&lt;link rel="stylesheet"&gt;</code>タグや<code>&lt;style&gt;</code>タグが見つかると、ブラウザはCSSの解析を開始します。HTMLと同様に、CSSのルールを解析し、<strong>CSSOMツリー</strong>を構築します。CSSOMは、どの要素にどのスタイルが適用されるかの情報を持っています。CSSは子要素が親要素のスタイルを継承する（cascading）性質があるため、CSSOMの構築はDOMよりも複雑で、ツリーの末端から再帰的に計算される必要があります。</p>
+<h3 id="3-render-tree">3. Render Treeの構築</h3>
+<p>DOMツリーとCSSOMツリーが完成すると、ブラウザはこれら2つを組み合わせて<strong>Render Tree</strong>を構築します。Render Treeは、<strong>実際に画面に表示されるノードだけ</strong>で構成されます。例えば、<code>display: none;</code>が適用されたノードや、<code>&lt;head&gt;</code>タグのような非表示要素はRender Treeに含まれません。</p>
+<h3 id="4-layout">4. Layout</h3>
+<p>Render Treeが構築されると、次に行われるのが<strong>Layout</strong>（レイアウト）ステップです。このステップでは、ビューポート（ブラウザの表示領域）のサイズを基準として、Render Treeの各ノードが画面上のどこに、どのくらいの大きさで配置されるかを計算します。<code>width: 50%</code>のような相対的な単位は、この段階で具体的なピクセル値に変換されます。</p>
+<h3 id="5-paint">5. Paint</h3>
+<p>Layoutステップで各ノードの幾何学的な情報（位置、サイズ）が確定すると、<strong>Paint</strong>（ペイント）ステップに移ります。ここでは、計算された情報をもとに、各ノードの見た目（色、境界線、影など）を画面上のピクセルに実際に描画していきます。このプロセスは、複数のレイヤーに分けて行われることがあります。</p>
+<h2 id="crp_1">なぜCRPの最適化が重要なのか？</h2>
+<p>CRPの各ステップは、完了するまでに時間がかかります。特に、CSSやJavaScriptのファイルがレンダリングを「ブロック」することが、パフォーマンスの低下に繋がる大きな原因です。</p>
+<ul>
+<li><strong>CSSはレンダリングをブロックする</strong>: ブラウザは、CSSOMツリーが完成するまでRender Treeを構築できず、したがってページの描画を開始できません。そのため、CSSファイルの読み込みや解析が遅れると、ユーザーは白い画面を長く見ることになります。</li>
+<li><strong>JavaScriptはDOMの構築をブロックする</strong>: HTMLの解析中に<code>&lt;script&gt;</code>タグが見つかると、ブラウザはDOMの構築を一時停止し、JavaScriptの実行を優先します。もしそのJavaScriptがDOMを操作する（例: <code>document.write</code>）可能性がある場合、ブラウザは安全のために解析を待機せざるを得ません。これにより、DOMの完成が遅れ、結果的に最初の描画も遅れます。</li>
+</ul>
+<p>これらのブロッキングを最小限に抑え、CRPをできるだけ速く完了させることが、Webパフォーマンス最適化の鍵となります。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>クリティカルレンダリングパス（CRP）は、ブラウザがコードを画面のピクセルに変換するまでの一連の処理のこと。</li>
+<li>CRPは、DOM構築 → CSSOM構築 → Render Tree構築 → Layout → Paintという主要なステップで構成される。</li>
+<li>CSSはCSSOMの構築を、JavaScriptはDOMの構築をブロックする可能性があり、これらがパフォーマンスのボトルネックになりやすい。</li>
+<li>CRPを最適化することは、ページの表示速度を改善し、ユーザー体験を向上させるために不可欠である。</li>
+</ul>
+<p>次のセクションでは、CRPの最初のステップであるDOMとCSSOMの構築について、さらに詳しく見ていきます。</p>
+<hr />
+<h2 id="_4">参考文献</h2>
+<p>[1] Google Developers. (n.d.). <em>Critical Rendering Path</em>. Retrieved from https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction</p>
+<p>[2] Google Developers. (n.d.). <em>Constructing the Object Model</em>. Retrieved from https://developers.google.com/web/fundamentals/performance/critical-rendering-path/constructing-the-object-model</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み_Col-1-2: Parsing (HTML, CSS).html" class="next">Parsing (HTML, CSS)</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

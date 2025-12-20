@@ -100,7 +100,8 @@ TUTORIAL_INFO = {
         "order": 12,
         "title": "上級コラム: Webレンダリングの深層理解",
         "time": "60時間（任意）",
-        "description": "ブラウザのレンダリングプロセス、各種レンダリング戦略、RSCを学びます。"
+        "description": "ブラウザのレンダリングプロセス、各種レンダリング戦略、RSCを学びます。",
+        "is_column": True  # コラム形式のフラグ
     }
 }
 
@@ -189,6 +190,16 @@ def get_chapters(tutorial_path):
     return chapters
 
 
+def get_column_chapters(tutorial_path):
+    """コラム形式のチュートリアル内のチャプター（col形式）を取得"""
+    chapters = []
+    if tutorial_path.exists():
+        for item in sorted(tutorial_path.iterdir()):
+            if item.is_dir() and item.name.startswith("col"):
+                chapters.append(item)
+    return chapters
+
+
 def get_sections(chapter_path):
     """チャプター内のセクションを取得"""
     sections = []
@@ -201,7 +212,12 @@ def get_sections(chapter_path):
 
 def extract_section_number(filename):
     """ファイル名からセクション番号を抽出"""
+    # 通常形式: 1-1-1
     match = re.match(r'^(\d+-\d+-\d+)', filename)
+    if match:
+        return match.group(1)
+    # コラム形式: Col-1-1
+    match = re.match(r'^(Col-\d+-\d+)', filename)
     if match:
         return match.group(1)
     return ""
@@ -211,8 +227,10 @@ def clean_title(filename):
     """ファイル名からタイトルを抽出"""
     # 拡張子を除去
     name = filename.replace(".md", "")
-    # セクション番号を除去
+    # セクション番号を除去（通常形式）
     name = re.sub(r'^\d+-\d+-\d+[:\s]*', '', name)
+    # セクション番号を除去（コラム形式）
+    name = re.sub(r'^Col-\d+-\d+[:\s]*', '', name)
     return name
 
 
@@ -224,6 +242,17 @@ def format_chapter_title(chapter_name):
         num = int(match.group(1))
         title = match.group(2).replace("_", " ")
         return f"Chapter {num}: {title}"
+    return chapter_name
+
+
+def format_column_chapter_title(chapter_name):
+    """コラムチャプター名を整形"""
+    # col01_xxx -> Column 1: xxx
+    match = re.match(r'col(\d+)_(.+)', chapter_name)
+    if match:
+        num = int(match.group(1))
+        title = match.group(2).replace("_", " ")
+        return f"Column {num}: {title}"
     return chapter_name
 
 
@@ -279,7 +308,12 @@ def generate_content_index_page(content_dir, content_info, tutorials):
     
     for tutorial_dir, info in sorted(tutorials.items(), key=lambda x: x[1]["order"]):
         tutorial_path = content_path / tutorial_dir
-        chapters = get_chapters(tutorial_path)
+        
+        # コラム形式かどうかで取得方法を変える
+        if info.get("is_column"):
+            chapters = get_column_chapters(tutorial_path)
+        else:
+            chapters = get_chapters(tutorial_path)
         chapter_count = len(chapters)
         
         content += f'''<div class="tutorial-card">
@@ -309,7 +343,13 @@ def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_inf
     """チュートリアルページ（チャプター一覧）を生成"""
     content_path = BASE_DIR / content_dir
     tutorial_path = content_path / tutorial_dir
-    chapters = get_chapters(tutorial_path)
+    
+    # コラム形式かどうかで取得方法を変える
+    is_column = tutorial_info.get("is_column", False)
+    if is_column:
+        chapters = get_column_chapters(tutorial_path)
+    else:
+        chapters = get_chapters(tutorial_path)
     
     content = f'<h2>{tutorial_info["title"]}</h2>\n'
     content += f'<p>学習時間: {tutorial_info["time"]}</p>\n'
@@ -317,7 +357,10 @@ def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_inf
     content += '<div class="chapter-list">\n'
     
     for chapter in chapters:
-        chapter_title = format_chapter_title(chapter.name)
+        if is_column:
+            chapter_title = format_column_chapter_title(chapter.name)
+        else:
+            chapter_title = format_chapter_title(chapter.name)
         sections = get_sections(chapter)
         section_count = len(sections)
         
@@ -342,9 +385,12 @@ def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_inf
     print(f"Generated: {output_path}")
 
 
-def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials):
+def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials, is_column=False):
     """チャプターページ（セクション一覧）を生成"""
-    chapter_title = format_chapter_title(chapter.name)
+    if is_column:
+        chapter_title = format_column_chapter_title(chapter.name)
+    else:
+        chapter_title = format_chapter_title(chapter.name)
     sections = get_sections(chapter)
     
     content = f'<h2>{chapter_title}</h2>\n'
@@ -375,9 +421,12 @@ def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tuto
     print(f"Generated: {output_path}")
 
 
-def generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, section_index):
+def generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, section_index, is_column=False):
     """セクションページを生成"""
-    chapter_title = format_chapter_title(chapter.name)
+    if is_column:
+        chapter_title = format_column_chapter_title(chapter.name)
+    else:
+        chapter_title = format_chapter_title(chapter.name)
     section_title = clean_title(section.name)
     
     # Markdownを読み込んでHTMLに変換
@@ -449,19 +498,26 @@ def main():
         for tutorial_dir, tutorial_info in tutorials.items():
             tutorial_path = content_path / tutorial_dir
             
+            # コラム形式かどうかを判定
+            is_column = tutorial_info.get("is_column", False)
+            
             # チュートリアルページ（チャプター一覧）
             generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_info, tutorials)
             
             # 各チャプターのページ
-            chapters = get_chapters(tutorial_path)
+            if is_column:
+                chapters = get_column_chapters(tutorial_path)
+            else:
+                chapters = get_chapters(tutorial_path)
+            
             for chapter in chapters:
                 # チャプターページ（セクション一覧）
-                generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials)
+                generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials, is_column)
                 
                 # 各セクションのページ
                 sections = get_sections(chapter)
                 for i, section in enumerate(sections):
-                    generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, i)
+                    generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, i, is_column)
     
     print(f"\n生成完了！出力先: {OUTPUT_DIR}")
     print(f"生成されたHTMLファイル数: {len(list(OUTPUT_DIR.rglob('*.html')))}")

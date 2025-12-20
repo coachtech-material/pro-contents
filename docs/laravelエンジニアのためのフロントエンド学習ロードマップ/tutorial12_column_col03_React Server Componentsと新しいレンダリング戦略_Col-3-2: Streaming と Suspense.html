@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming と Suspense | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略.html">Column 3: React Server Componentsと新しいレンダリング戦略</a><span>></span>Streaming と Suspense</div>
+                    <div class="section-content">
+<h1 id="col-3-2-streaming-suspense">Col-3-2: Streaming と Suspense</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>従来のレンダリングにおける「ウォーターフォール」問題とその影響を理解する。</li>
+<li>Streaming と Suspense がどのようにしてこの問題を解決し、UXを向上させるかを学ぶ。</li>
+<li>Next.js App Router での Streaming の実装方法を理解する。</li>
+<li><code>loading.tsx</code> ファイルの役割と Suspense の関係を学ぶ。</li>
+</ul>
+<h2 id="_2">導入: データフェッチのウォーターフォール問題</h2>
+<p>従来のSSRでは、ページ全体のデータがすべて揃うまで、サーバーはHTMLのレンダリングを開始できませんでした。例えば、ダッシュボードページに「ユーザー情報」「最新ニュース」「友達リスト」の3つのコンポーネントがあり、それぞれが異なるAPIからデータを取得するとします。</p>
+<p>この場合、最も遅いAPIリクエストが完了するまで、サーバーは何もクライアントに送信できません。これが「ウォーターフォール」問題です。たった一つの遅いデータソースが、ページ全体の表示をブロックしてしまうのです。これにより、TTFB（Time to First Byte）が悪化し、ユーザーは白い画面を長く見ることになります。[1]</p>
+<p><strong>React Server Components (RSC) と Streaming</strong> は、この問題を解決するための強力な組み合わせです。</p>
+<h2 id="streaming">Streaming とは？</h2>
+<p>Streaming（ストリーミング）とは、サーバーがレンダリングしたUIを、準備ができた部分から順次クライアントに送信する技術です。これにより、ページ全体が完成するのを待つことなく、ユーザーはすぐにUIの一部を見ることができます。</p>
+<p>Next.js App Routerでは、RSCと組み合わせることで、サーバーコンポーネントのレンダリング結果をチャンク（断片）に分割し、ストリーミングで配信します。これにより、以下のような体験が実現します。</p>
+<ol>
+<li>まず、静的なUI（ヘッダー、フッター、レイアウトなど）を含んだ初期HTMLが即座にクライアントに送信され、描画される。</li>
+<li>次に、データ取得を必要としないサーバーコンポーネントのレンダリング結果が送られてきて、対応する部分が描画される。</li>
+<li>最後に、時間のかかるデータ取得が完了したサーバーコンポーネントのレンダリング結果が送られてきて、ページの最後のピースが埋まる。</li>
+</ol>
+<p>この仕組みにより、TTFBが劇的に改善され、ユーザーの体感速度が向上します。</p>
+<p><img alt="Streamingの概念図" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/streaming-flow.png" /></p>
+<h2 id="suspense">Suspense: ローディング状態を宣言的に管理する</h2>
+<p>Streamingを実現するための重要なピースが、Reactに組み込まれた<strong><code>&lt;Suspense&gt;</code></strong>コンポーネントです。</p>
+<p><code>&lt;Suspense&gt;</code>は、子コンポーネントのレンダリング（特にデータ取得などの非同期処理）が完了するまで、代わりに<strong>フォールバックUI（例: ローディングスピナー）</strong>を表示することができます。[2]</p>
+<pre class="codehilite"><code class="language-jsx">import { Suspense } from 'react';
+import { PostFeed, Weather } from './Components';
+
+export default function Page() {
+  return (
+    &lt;section&gt;
+      &lt;h1&gt;Dashboard&lt;/h1&gt;
+      &lt;Suspense fallback={&lt;p&gt;Loading feed...&lt;/p&gt;}&gt;
+        &lt;PostFeed /&gt;
+      &lt;/Suspense&gt;
+      &lt;Suspense fallback={&lt;p&gt;Loading weather...&lt;/p&gt;}&gt;
+        &lt;Weather /&gt;
+      &lt;/Suspense&gt;
+    &lt;/section&gt;
+  );
+}
+</code></pre>
+
+<p>上記の例では、<code>&lt;PostFeed /&gt;</code>と<code>&lt;Weather /&gt;</code>はそれぞれ非同期でデータを取得するサーバーコンポーネントです。<code>Suspense</code>でラップすることにより、Next.jsはこれらのコンポーネントを独立してストリーミングできるようになります。</p>
+<ul>
+<li><code>&lt;PostFeed /&gt;</code>のデータ取得が遅くても、<code>&lt;Weather /&gt;</code>の準備が先にできれば、そちらが先に表示される。</li>
+<li>それぞれのコンポーネントがロード中の間は、<code>fallback</code>で指定されたUIが表示される。</li>
+</ul>
+<p>これにより、開発者は「どの部分が遅延する可能性があるか」を宣言的に指定し、UIの各パーツが独立してロードされることを可能にします。ウォーターフォール問題が解消され、UIの表示がブロックされなくなります。</p>
+<h2 id="nextjs-app-router-loadingtsx">Next.js App Routerでの実践: <code>loading.tsx</code></h2>
+<p>Next.jsのApp Routerでは、この<code>Suspense</code>の仕組みをさらに簡単に利用できるように、規約に基づいた特別なファイル<strong><code>loading.tsx</code></strong>が用意されています。</p>
+<p><code>app</code>ディレクトリ内の特定のルートセグメント（例: <code>app/dashboard/loading.tsx</code>）に<code>loading.tsx</code>というファイルを作成すると、Next.jsは自動的にそのコンポーネントを<code>Suspense</code>の<code>fallback</code>として設定します。そして、同じ階層にある<code>page.tsx</code>とその子コンポーネント全体を<code>Suspense</code>の<code>children</code>としてラップします。</p>
+<p><strong>例:</strong></p>
+<p><code>app/dashboard/layout.tsx</code>:</p>
+<pre class="codehilite"><code class="language-jsx">export default function DashboardLayout({ children }) {
+  return (
+    &lt;section&gt;
+      &lt;h1&gt;Dashboard&lt;/h1&gt;
+      {children}
+    &lt;/section&gt;
+  );
+}
+</code></pre>
+
+<p><code>app/dashboard/loading.tsx</code>:</p>
+<pre class="codehilite"><code class="language-jsx">export default function Loading() {
+  // ローディングスケルトンやスピナーを返す
+  return &lt;p&gt;Loading dashboard data...&lt;/p&gt;;
+}
+</code></pre>
+
+<p><code>app/dashboard/page.tsx</code>:</p>
+<pre class="codehilite"><code class="language-jsx">async function getData() {
+  await new Promise(resolve =&gt; setTimeout(resolve, 3000)); // 3秒待つ
+  return { message: 'Hello, Dashboard!' };
+}
+
+export default async function DashboardPage() {
+  const data = await getData();
+  return &lt;p&gt;{data.message}&lt;/p&gt;;
+}
+</code></pre>
+
+<p>この場合、ユーザーが<code>/dashboard</code>にアクセスすると、</p>
+<ol>
+<li>まず<code>DashboardLayout</code>が表示される。</li>
+<li><code>DashboardPage</code>のデータ取得が完了するまでの3秒間、<code>loading.tsx</code>の内容（<code>Loading dashboard data...</code>）が表示される。</li>
+<li>3秒後、データ取得が完了すると、<code>loading.tsx</code>の内容が<code>DashboardPage</code>のレンダリング結果に置き換わる。</li>
+</ol>
+<p>このように、<code>loading.tsx</code>を使うことで、ファイル規約に基づいて簡単にページ単位でのストリーミングとローディングUIを実装できます。</p>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li><strong>Streaming</strong>は、UIを準備ができた部分から順次クライアントに送信する技術で、TTFBを改善し、体感速度を向上させる。</li>
+<li><strong>Suspense</strong>は、コンポーネントの非同期処理が終わるまでフォールバックUIを表示するためのReactの機能。</li>
+<li>StreamingとSuspenseを組み合わせることで、データ取得のウォーターフォール問題を解決し、UIの表示がブロックされるのを防ぐ。</li>
+<li>Next.jsのApp Routerでは、<strong><code>loading.tsx</code></strong>という規約ファイルを使うことで、ページ単位のストリーミングを簡単に実装できる。</li>
+<li>これにより、遅いデータソースがあっても、ページの他の部分は素早く表示され、ユーザー体験が大幅に向上する。</li>
+</ul>
+<p>次のセクションでは、これらの技術の集大成ともいえる、Next.js 14で導入された新しいレンダリングモデル「Partial Prerendering (PPR)」について学びます。</p>
+<hr />
+<h2 id="_4">参考文献</h2>
+<p>[1] Next.js. (n.d.). <em>Streaming</em>. Retrieved from https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming#streaming-with-suspense</p>
+<p>[2] React. (n.d.). <em>Suspense</em>. Retrieved from https://react.dev/reference/react/Suspense</p>
+</div>
+<div class="section-nav">
+<a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略_Col-3-1: React Server Components (RSC) のアーキテクチャ.html" class="prev">React Server Components (RSC) のアーキテクチャ</a>
+<a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略_Col-3-3: Partial Prerendering (PPR) の概念.html" class="next">Partial Prerendering (PPR) の概念</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

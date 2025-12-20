@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout, Paint, Composite | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み.html">Column 1: ブラウザのレンダリングの仕組み</a><span>></span>Layout, Paint, Composite</div>
+                    <div class="section-content">
+<h1 id="col-1-3-layout-paint-composite">Col-1-3: Layout, Paint, Composite</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Render Treeが構築された後の、Layout、Paint、Compositeの各ステップの役割を理解する。</li>
+<li>どのようなCSSプロパティの変更が、どのレンダリングステップを引き起こすかを学ぶ。</li>
+<li>レンダリングパフォーマンスを最適化するための基本的な考え方（Layout/Reflowの最小化）を理解する。</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>DOMツリーとCSSOMツリーが構築され、それらを元にRender Treeが作成されると、クリティカルレンダリングパス（CRP）は最終段階に入ります。ブラウザは、このRender Treeの情報を使って、実際に画面にピクセルを描画していきます。このプロセスは、主に<strong>Layout</strong>、<strong>Paint</strong>、そして<strong>Composite</strong>という3つのステップに分かれています。[1]</p>
+<p>これらのステップを理解することは、スムーズなアニメーションやインタラクションを実現し、パフォーマンスの高いWebサイトを構築するために不可欠です。</p>
+<h2 id="1-layout">1. Layout（レイアウト）</h2>
+<p><strong>Layout</strong>ステップ（Firefoxでは<strong>Reflow</strong>とも呼ばれます）の役割は、Render Treeの各ノードの<strong>幾何学的な情報</strong>、つまり画面上での正確な位置とサイズを計算することです。</p>
+<p>Render Treeは、どのノードが表示されるかと、それらにどんなスタイルが適用されるかという情報しか持っていません。<code>width: 50%</code>や<code>font-size: 2em</code>といった相対的な値が、このLayoutステップで初めて、ビューポートのサイズや親要素のサイズに基づいて具体的なピクセル値に変換されます。</p>
+<p>ブラウザは、Render Treeのルートから始まり、各ノードを順番に処理して、ページ全体のレイアウトを決定します。ある要素の位置やサイズが変わると、その後続の要素の位置も再計算する必要があるかもしれません。例えば、<code>&lt;body&gt;</code>の幅が変われば、その中のすべての子孫要素のレイアウトに影響が及びます。このように、Layoutはコストの高い処理になる可能性があります。</p>
+<h3 id="layout">Layoutを引き起こす操作</h3>
+<p>以下のような操作は、Layout（またはReflow）をトリガーします。</p>
+<ul>
+<li>DOM要素の追加、削除、または変更</li>
+<li><code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code>, <code>border</code>, <code>top</code>, <code>left</code>など、要素のジオメトリ（形状や位置）に影響を与えるCSSプロパティの変更</li>
+<li>ブラウザウィンドウのリサイズ</li>
+<li><code>offsetHeight</code>や<code>scrollTop</code>のような、要素のレイアウト情報を問い合わせるJavaScriptのプロパティの読み取り（ブラウザは正確な値を返すために、保留中のレイアウト計算を強制的に実行する必要があります）</li>
+</ul>
+<h2 id="2-paint">2. Paint（ペイント）</h2>
+<p><strong>Paint</strong>ステップ（<strong>Repaint</strong>とも呼ばれます）では、Layoutステップで計算された各ノードのジオメトリ情報をもとに、テキスト、色、画像、境界線、影といった<strong>見た目の部分</strong>をピクセルに変換していきます。</p>
+<p>この描画処理は、パフォーマンスを最適化するために、複数の<strong>レイヤー（Layers）</strong>に分けて行われることがあります。例えば、<code>transform</code>や<code>opacity</code>、<code>will-change</code>といった特定のCSSプロパティを持つ要素は、他の要素とは別のレイヤーに描画されることがあります。これにより、その要素が変化しても、他のレイヤーを再描画する必要がなくなります。</p>
+<h3 id="paint">Paintを引き起こす操作</h3>
+<p>Layoutに影響を与えないが、見た目には影響を与えるCSSプロパティの変更は、Paintのみを引き起こします。</p>
+<ul>
+<li><code>background-color</code>, <code>color</code>, <code>visibility</code>, <code>box-shadow</code>など。</li>
+</ul>
+<h2 id="3-composite">3. Composite（コンポジット）</h2>
+<p><strong>Composite</strong>（合成）ステップは、Paintステップで描画された複数のレイヤーを、正しい順序で重ね合わせて、最終的な1枚の画面イメージを生成するプロセスです。</p>
+<p>ページがスクロールされたり、特定のレイヤーがアニメーションで動いたりする場合を考えてみましょう。もしページ全体が1枚のレイヤーで描画されていたら、スクロールするたびにページ全体を再Paintする必要があります。しかし、ページが複数のレイヤーに分かれていれば、ブラウザは既存のレイヤーを再利用し、それらを正しい位置に動かして再合成（Re-Composite）するだけで済みます。Paint処理は不要です。</p>
+<p>このComposite処理は、CPUではなく<strong>GPU（Graphics Processing Unit）</strong>によって高速に実行されます。そのため、LayoutやPaintをスキップしてCompositeのみをトリガーするような変更は、非常に高速に処理できます。</p>
+<h3 id="composite">Compositeのみを引き起こす操作</h3>
+<p>LayoutもPaintも引き起こさず、Compositeのみをトリガーするプロパティは、アニメーションのパフォーマンスを最適化する上で最も効率的です。</p>
+<ul>
+<li><code>transform</code>（<code>translate</code>, <code>scale</code>, <code>rotate</code>など）</li>
+<li><code>opacity</code></li>
+</ul>
+<p>これらのプロパティを変更しても、要素のレイアウト上の位置や他の要素への影響は変わらないため、ブラウザは再Layoutや再Paintを省略し、GPU上でレイヤーを動かしたり透明度を変えたりするだけで済みます。</p>
+<h2 id="_3">パフォーマンス最適化の観点から</h2>
+<p>レンダリングのパフォーマンスを最適化するということは、これらのLayout、Paint、Compositeの処理、特にコストの高いLayoutとPaintをできるだけ避けることを意味します。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">変更するプロパティ</th>
+<th style="text-align: center;">Layout</th>
+<th style="text-align: center;">Paint</th>
+<th style="text-align: center;">Composite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>width</code>, <code>height</code>, <code>top</code>, <code>left</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>background-color</code>, <code>color</code></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>transform</code>, <code>opacity</code></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+</tbody>
+</table>
+<p>アニメーションやインタラクションを実装する際は、<code>top</code>や<code>left</code>で位置を動かすのではなく、<code>transform: translate()</code>を使うように心がけるだけで、パフォーマンスは劇的に向上します。[2]</p>
+<blockquote>
+<p>アニメーションの場合、<code>transform</code> と <code>opacity</code> プロパティを変更するのが最適です。どちらのプロパティもブラウザのレンダリング パイプラインの合成ステップで処理されるため、最もコストが低くなります。<br />
+--- Google Developers, "Rendering Performance" [1]</p>
+</blockquote>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>CRPの最終段階は、Layout、Paint、Compositeの3ステップで構成される。</li>
+<li><strong>Layout</strong>: 要素のサイズと位置を計算する。コストが高い処理。</li>
+<li><strong>Paint</strong>: 要素の見た目をピクセルに描画する。複数のレイヤーに分けて行われることがある。</li>
+<li><strong>Composite</strong>: 複数のレイヤーをGPU上で合成し、最終的な画面を生成する。</li>
+<li>パフォーマンスを最適化するには、LayoutとPaintを避け、Compositeのみをトリガーする<code>transform</code>や<code>opacity</code>プロパティを積極的に利用することが重要である。</li>
+</ul>
+<hr />
+<h2 id="_5">参考文献</h2>
+<p>[1] Google Developers. (n.d.). <em>Rendering Performance</em>. Retrieved from https://developers.google.com/web/fundamentals/performance/rendering</p>
+<p>[2] Paul, Lewis., &amp; Smashing Magazine. (2012, June 6). <em>Why Moving Elements With Translate() Is Better For Performance Than Pos:abs Top/left</em>. Retrieved from https://www.paulirish.com/2012/why-moving-elements-with-translate-is-better-for-performance-than-posabs-topleft/</p>
+</div>
+<div class="section-nav">
+<a href="tutorial12_column_col01_ブラウザのレンダリングの仕組み_Col-1-2: Parsing (HTML, CSS).html" class="prev">Parsing (HTML, CSS)</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

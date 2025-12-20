@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Server Components (RSC) のアーキテクチャ | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略.html">Column 3: React Server Componentsと新しいレンダリング戦略</a><span>></span>React Server Components (RSC) のアーキテクチャ</div>
+                    <div class="section-content">
+<h1 id="col-3-1-react-server-components-rsc">Col-3-1: React Server Components (RSC) のアーキテクチャ</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>React Server Components (RSC) が解決する課題を理解する。</li>
+<li>Server Components と Client Components の役割と違いを明確に区別する。</li>
+<li>RSCのアーキテクチャと、SSRとの違いを理解する。</li>
+<li>Next.js App Router における RSC の基本ルールを学ぶ。</li>
+</ul>
+<h2 id="rsc">導入: なぜRSCが生まれたのか？</h2>
+<p>これまでのレンダリング戦略（CSR, SSR, SSG）は、<strong>「どこで（クライアント or サーバー）HTMLを生成するか」</strong> という問いに対する答えでした。しかし、これらのアプローチには共通の課題がありました。</p>
+<ol>
+<li><strong>JavaScriptバンドルサイズの肥大化</strong>: アプリケーションがリッチになるほど、クライアントに送信するJavaScriptの量が増え、初期ロードとインタラクティブになるまでの時間（TTI）が長くなる。</li>
+<li><strong>サーバーとクライアントの断絶</strong>: クライアントでデータを表示するためには、必ずAPIエンドポイントを作成し、<code>fetch</code>でデータを取得する必要がある。これにより、開発者は常にクライアントとサーバーの両方を意識する必要があった。</li>
+</ol>
+<p><strong>React Server Components (RSC)</strong> は、これらの課題を解決するためにReactチームが提案した新しいアーキテクチャです。これは単なるレンダリング戦略ではなく、Reactアプリケーションの作り方を根本から変えるパラダイムシフトです。[1]</p>
+<h2 id="server-components-vs-client-components">Server Components vs Client Components</h2>
+<p>RSCのアーキテクチャでは、コンポーネントは2種類に大別されます。</p>
+<ol>
+<li><strong>Server Components (サーバーコンポーネント)</strong></li>
+<li><strong>Client Components (クライアントコンポーネント)</strong></li>
+</ol>
+<p>Next.jsのApp Routerでは、<strong>デフォルトですべてのコンポーネントがServer Components</strong>として扱われます。</p>
+<h3 id="server-components">Server Components</h3>
+<p>サーバーコンポーネントは、その名の通り<strong>サーバーでのみ</strong>実行されるコンポーネントです。そのコードはクライアントに送信されません。</p>
+<p><strong>特徴:</strong></p>
+<ul>
+<li><strong>サーバーサイドの資源に直接アクセス可能</strong>: データベース、ファイルシステム、社内APIなど、サーバー側のリソースに直接アクセスできます。<code>fetch</code>を介さずに、直接DBクライアントを叩くようなコードが書けます。</li>
+<li><strong>ゼロバンドルサイズ</strong>: コンポーネント自体のコードや、そこで使われているライブラリ（例: DBクライアント、Markdownパーサー）はクライアントに送られないため、JavaScriptバンドルサイズを削減できます。</li>
+<li><strong>状態（State）やライフサイクルが使えない</strong>: <code>useState</code>や<code>useEffect</code>、<code>onClick</code>のようなインタラクティブな機能は使えません。これらはクライアントサイドで実行される必要があるためです。</li>
+<li><strong>レンダリングはビルド時またはリクエスト時</strong>: サーバー上でレンダリングされ、その結果（HTMLではない、特別なフォーマット）がクライアントに送られます。</li>
+</ul>
+<pre class="codehilite"><code class="language-jsx">// app/page.tsx (これはサーバーコンポーネント)
+import db from './lib/db'; // サーバーサイドのDBクライアント
+
+// async/await がコンポーネントで直接使える！
+async function Page() {
+  const posts = await db.post.findMany(); // 直接DBにクエリ
+
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Posts&lt;/h1&gt;
+      &lt;ul&gt;
+        {posts.map(post =&gt; (
+          &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  );
+}
+
+export default Page;
+</code></pre>
+
+<h3 id="client-components">Client Components</h3>
+<p>クライアントコンポーネントは、従来のReactコンポーネントと同じように、クライアントサイドでレンダリングされ、インタラクティブ性を持つコンポーネントです。</p>
+<p><strong>特徴:</strong></p>
+<ul>
+<li><strong>インタラクティブな機能が使える</strong>: <code>useState</code>, <code>useEffect</code>, <code>onClick</code>などのフックやイベントハンドラが使えます。</li>
+<li><strong>ブラウザAPIにアクセス可能</strong>: <code>window</code>や<code>localStorage</code>など、ブラウザ環境に依存するAPIが使えます。</li>
+<li><strong><code>"use client"</code> ディレクティブ</strong>: ファイルの先頭に<code>"use client";</code>と記述することで、そのファイル内のすべてのコンポーネントがクライアントコンポーネントとして扱われます。</li>
+</ul>
+<pre class="codehilite"><code class="language-jsx">// components/Counter.tsx
+&quot;use client&quot;; // この宣言が重要
+
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+      Count: {count}
+    &lt;/button&gt;
+  );
+}
+</code></pre>
+
+<h2 id="rscssr">RSCとSSRの違い</h2>
+<p>この2つは混同されがちですが、根本的に異なります。</p>
+<ul>
+<li><strong>SSR (Server-Side Rendering)</strong>: サーバーでReactコンポーネントを実行し、<strong>HTMLを生成</strong>してクライアントに送る技術。クライアントでは、そのHTMLに対してハイドレーションが行われる。</li>
+<li><strong>RSC (React Server Components)</strong>: サーバーでServer Componentsを実行し、<strong>UIを記述した特別なデータ形式（RSC Payload）を生成</strong>してクライアントに送る技術。クライアントのReactがこのペイロードを解釈し、DOMを更新する。ハイドレーションは発生しない。</li>
+</ul>
+<p><img alt="RSC vs SSR" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/rsc-vs-ssr.png" /></p>
+<p>Next.jsのApp Routerでは、RSCとSSRが組み合わさって動作します。まずサーバーでRSCが実行されてUIの骨格が作られ、次にその結果がサーバー上でHTMLにレンダリング（SSR）されて、クライアントに初期表示用のHTMLとして送られます。[2]</p>
+<h2 id="_2">コンポーネントの組み合わせルール</h2>
+<p>Server ComponentsとClient Componentsには、いくつかの組み合わせルールがあります。</p>
+<ol>
+<li><strong>Server ComponentsはClient Componentsをインポートして利用できる。</strong><ul>
+<li>ただし、Server ComponentからClient Componentに渡せるpropsは、シリアライズ可能（文字列、数値、プレーンなオブジェクトなど）でなければならない。関数などを渡すことはできない。</li>
+</ul>
+</li>
+<li><strong>Client ComponentsはServer Componentsをインポートして利用できない。</strong><ul>
+<li>これは、Server Componentがサーバーでしか実行できないコード（例: DBアクセス）を含んでいる可能性があるためです。</li>
+<li>しかし、<strong>Server Componentを<code>children</code>や<code>props</code>としてClient Componentに渡す</strong>ことは可能です。このテクニックを「Server Component Interleaving」と呼び、レイアウトコンポーネントなどで活用されます。</li>
+</ul>
+</li>
+</ol>
+<pre class="codehilite"><code class="language-jsx">// Client Component (e.g., Layout.tsx)
+&quot;use client&quot;;
+
+export function Layout({ children }) {
+  return (
+    &lt;div&gt;
+      &lt;nav&gt;...&lt;/nav&gt;
+      &lt;main&gt;{children}&lt;/main&gt; {/* ここにServer Componentが入る */}
+    &lt;/div&gt;
+  );
+}
+
+// Server Component (e.g., app/page.tsx)
+import { Layout } from '../components/Layout';
+import { MyServerComponent } from '../components/MyServerComponent';
+
+export default function Page() {
+  return (
+    &lt;Layout&gt;
+      {/* Client Component に Server Component を渡している */}
+      &lt;MyServerComponent /&gt;
+    &lt;/Layout&gt;
+  );
+}
+</code></pre>
+
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>RSCは、JSバンドルサイズの削減と、サーバー/クライアント間のシームレスな連携を目的とした新しいアーキテクチャ。</li>
+<li>コンポーネントは、デフォルトで<strong>Server Components</strong>となり、サーバーでのみ実行される。</li>
+<li>インタラクティブ性が必要な場合は、<code>"use client";</code>を付けて<strong>Client Components</strong>にする。</li>
+<li>Server ComponentsはDBアクセスなどが直接可能で、Client Componentsは<code>useState</code>などが利用可能。</li>
+<li>RSCはSSRとは異なり、HTMLではなく特別なUI記述形式を生成する。</li>
+<li>「可能な限りServer Componentsを使い、インタラクティブ性が必要な部分だけをClient Componentsとして切り出す」のが基本戦略となる。</li>
+</ul>
+<p>この新しいアーキテクチャを使いこなす鍵は、次に学ぶ<code>Streaming</code>と<code>Suspense</code>にあります。</p>
+<hr />
+<h2 id="_4">参考文献</h2>
+<p>[1] React. (2020, December 21). <em>Introducing Zero-Bundle-Size React Server Components</em>. Retrieved from https://react.dev/blog/2020/12/21/data-fetching-with-react-server-components</p>
+<p>[2] Next.js. (n.d.). <em>Server Components</em>. Retrieved from https://nextjs.org/docs/app/building-your-application/rendering/server-components</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="tutorial12_column_col03_React Server Componentsと新しいレンダリング戦略_Col-3-2: Streaming と Suspense.html" class="next">Streaming と Suspense</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>

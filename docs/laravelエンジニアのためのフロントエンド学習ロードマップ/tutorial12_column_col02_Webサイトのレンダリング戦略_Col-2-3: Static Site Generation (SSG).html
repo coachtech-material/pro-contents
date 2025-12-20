@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Site Generation (SSG) | pro-contents</title>
+    <meta name="description" content="Pro生用プログラミング教材コンテンツ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">pro-contents</a></h1>
+            <p class="description">Pro生用プログラミング教材コンテンツ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
+<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
+<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
+<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
+<li><a href="tutorial12_column.html" class="current">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a><span>></span><a href="tutorial12_column_col02_Webサイトのレンダリング戦略.html">Column 2: Webサイトのレンダリング戦略</a><span>></span>Static Site Generation (SSG)</div>
+                    <div class="section-content">
+<h1 id="col-2-3-static-site-generation-ssg">Col-2-3: Static Site Generation (SSG)</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>静的サイト生成（SSG）の基本的な仕組みを理解する。</li>
+<li>SSGのメリット（最高のパフォーマンス、セキュリティ、低コスト）とデメリット（ビルド時間、動的コンテンツへの対応）を学ぶ。</li>
+<li>SSGがどのようなサイトに適しているかを理解する。</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>サーバーサイドレンダリング（SSR）はリクエストごとにHTMLを生成しますが、もしページの内容が全ユーザー共通で、頻繁に更新されないのであれば、毎回レンダリングするのは非効率です。この課題を解決するのが、<strong>静的サイト生成（Static Site Generation, SSG）</strong>です。</p>
+<p>SSGは、<strong>ビルド時</strong>（サイトをデプロイする前）にすべてのページのHTMLをあらかじめ生成しておくアプローチです。Next.js、Gatsby、Astroといったモダンなフレームワークで広くサポートされており、「Jamstack」アーキテクチャの中核をなす技術です。[1]</p>
+<h2 id="ssg">SSGの仕組み</h2>
+<p>SSGでは、開発者がコードをプッシュしたり、デプロイコマンドを実行したりするタイミングで、サイト内のすべてのページがレンダリングされ、静的なHTMLファイルとして出力されます。これらのファイルは、CDN（Content Delivery Network）に配置されるのが一般的です。</p>
+<p>SSGの処理フローは以下のようになります。</p>
+<ol>
+<li><strong>Build Time</strong>: 開発者がサイトをビルドします。</li>
+<li><strong>Fetch Data &amp; Render HTML</strong>: ビルドプロセスの中で、フレームワーク（Next.jsなど）は必要なデータを外部APIやローカルのMarkdownファイルから取得し、サイト内のすべてのページ（例: <code>/</code>, <code>/about</code>, <code>/posts/1</code>, <code>/posts/2</code>...）のHTMLを生成します。</li>
+<li><strong>Deploy to CDN</strong>: 生成された静的ファイル（HTML, CSS, JS, 画像）一式が、CDNなどの静的ホスティングサービスにデプロイされます。</li>
+<li><strong>User Request</strong>: ユーザーがURLにアクセスすると、リクエストは最も近いCDNのエッジサーバーに送られます。</li>
+<li><strong>Instant HTML Response</strong>: CDNは、すでに生成済みのHTMLファイルを即座にユーザーに返します。サーバーサイドでの計算は一切不要です。</li>
+<li><strong>Hydration</strong>: SSRと同様に、ブラウザはJavaScriptをダウンロード・実行し、静的なページにインタラクティブ性を付与します（ハイドレーション）。</li>
+</ol>
+<p><img alt="SSGの処理フロー" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/ssg-flow.png" /></p>
+<h2 id="ssg_1">SSGのメリット</h2>
+<h3 id="1">1. 最高のパフォーマンス</h3>
+<p>SSGは、考えられる中で<strong>最も高速なレンダリング手法</strong>です。リクエスト時にサーバーでの処理が一切なく、完成品のHTMLがCDNから直接配信されるため、TTFB（Time to First Byte）は極めて短くなります。これにより、FCPも非常に高速になります。</p>
+<blockquote>
+<p>静的サイト生成（SSG）は、リクエスト時にサーバーがページを生成する必要がないため、最速のレンダリング方法です。代わりに、コンテンツはビルド時に生成され、CDN にキャッシュされて、最高のパフォーマンスを実現します。<br />
+--- Vercel, "What is Static Site Generation?" [2]</p>
+</blockquote>
+<h3 id="2">2. 高いセキュリティと信頼性</h3>
+<p>配信されるのは静的なファイルだけなので、サーバーサイドの脆弱性を突くような攻撃（データベースインジェクションなど）のリスクが大幅に低減します。また、サーバーサイドのランタイムやデータベースに依存しないため、システムが非常に安定しており、ダウンタイムのリスクも低いです。</p>
+<h3 id="3">3. 低コストでスケーラブル</h3>
+<p>静的ファイルのホスティングは、動的なサーバーを運用するよりもはるかに安価です。VercelやNetlify、Cloudflare Pagesなどのプラットフォームでは、無料または非常に低コストでサイトを公開できます。また、CDNを利用することで、世界中からの大量のアクセスにも容易にスケールさせることができます。</p>
+<h2 id="ssg_2">SSGのデメリット</h2>
+<h3 id="1_1">1. ビルド時間</h3>
+<p>SSGの最大の課題は、サイトの規模が大きくなるにつれて<strong>ビルド時間が長くなる</strong>ことです。数万ページもあるような大規模なサイトでは、少しの修正をデプロイするだけでも、すべてのページを再生成するために数分から数十分かかることがあります。これは、開発のイテレーション速度を低下させる要因となります。</p>
+<h3 id="2_1">2. 動的コンテンツへの対応</h3>
+<p>SSGは、ビルド時に内容が確定している静的なコンテンツには最適ですが、ユーザーごとにパーソナライズされた情報や、頻繁に更新されるリアルタイムのデータを表示するのは苦手です。これらの動的な要素を表示するには、ページが読み込まれた後にクライアントサイドのJavaScriptでAPIを叩くなど、CSR的なアプローチを組み合わせる必要があります。</p>
+<h2 id="ssg_3">SSGが適しているサイト</h2>
+<p>上記のメリット・デメリットを考慮すると、SSGは以下のようなサイトに適しています。</p>
+<ul>
+<li><strong>ブログやドキュメンテーションサイト</strong>: コンテンツの更新頻度がそれほど高くなく、パフォーマンスとSEOが重要なサイト。</li>
+<li><strong>マーケティングサイトやポートフォリオ</strong>: 内容が比較的静的で、高速な表示が求められるサイト。</li>
+<li><strong>小〜中規模のECサイトの商品一覧ページ</strong>: 商品情報が頻繁に変わらない場合。</li>
+</ul>
+<h2 id="_3">✨ まとめ</h2>
+<ul>
+<li>SSGは、ビルド時にすべてのページのHTMLをあらかじめ生成しておく方式。</li>
+<li><strong>メリット</strong>: 最高のパフォーマンス、高いセキュリティ、低コストでスケーラブル。</li>
+<li><strong>デメリット</strong>: サイト規模に応じたビルド時間の増大、動的コンテンツへの対応が別途必要。</li>
+<li>ブログやドキュメンテーションなど、コンテンツが比較的静的で、パフォーマンスが最優先されるサイトに適している。</li>
+</ul>
+<p>SSGのビルド時間の問題を解決しつつ、静的サイトのメリットを享受するためのハイブリッドなアプローチが、次に紹介する<strong>ISR（Incremental Static Regeneration）</strong>です。</p>
+<hr />
+<h2 id="_4">参考文献</h2>
+<p>[1] Smashing Magazine. (2020, May 26). <em>A Complete Introduction To Jamstack</em>. Retrieved from https://www.smashingmagazine.com/2020/05/jamstack-introduction/</p>
+<p>[2] Vercel. (n.d.). <em>What is Static Site Generation?</em>. Retrieved from https://vercel.com/docs/getting-started-with-vercel/concepts/rendering#static-site-generation-ssg</p>
+</div>
+<div class="section-nav">
+<a href="tutorial12_column_col02_Webサイトのレンダリング戦略_Col-2-2: Server-Side Rendering (SSR).html" class="prev">Server-Side Rendering (SSR)</a>
+<a href="tutorial12_column_col02_Webサイトのレンダリング戦略_Col-2-4: Incremental Static Regeneration (ISR).html" class="next">Incremental Static Regeneration (ISR)</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 pro-contents
+        </footer>
+    </div>
+</body>
+</html>
