@@ -56,7 +56,7 @@
 <h2 id="e2e">ハンズオン: ログイン機能のE2Eテスト</h2>
 <h3 id="1">ステップ1: テストファイルの作成</h3>
 <p>Playwrightのセットアップ時に作成された<code>tests</code>ディレクトリ内に、<code>login.spec.ts</code>という新しいテストファイルを作成します。</p>
-<pre class="codehilite"><code class="language-typescript">// tests/login.spec.ts
+<pre><code class="language-typescript">// tests/login.spec.ts
 
 import { test, expect } from &quot;@playwright/test&quot;;
 
@@ -102,7 +102,6 @@ test.describe(&quot;ログイン機能&quot;, () =&gt; {
   });
 });
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>test.beforeEach(async ({ page }) =&gt; { ... })</code></strong>: <code>describe</code>ブロック内の各テストケースが実行される<strong>前</strong>に、必ず実行される処理を定義します。ここでは、各テストの開始時にログインページにアクセスするという共通の準備作業を行っています。</li>
@@ -118,11 +117,10 @@ test.describe(&quot;ログイン機能&quot;, () =&gt; {
 <li>Next.js: <code>npm run dev</code></li>
 </ul>
 <p>両方のサーバーが起動したら、新しいターミナルを開いてE2Eテストを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:e2e
+<pre><code class="language-bash">npm run test:e2e
 </code></pre>
-
 <p>テストが実行され、すべてのテストがパスすることを確認します。</p>
-<pre class="codehilite"><code>Running 2 tests using 1 worker
+<pre><code>Running 2 tests using 1 worker
 
   ✓  tests/login.spec.ts:9:7 › ログイン機能 › 正しい認証情報でログインできること (2s)
   ✓  tests/login.spec.ts:25:7 › ログイン機能 › 間違った認証情報ではログインできないこと (1s)
@@ -130,15 +128,12 @@ test.describe(&quot;ログイン機能&quot;, () =&gt; {
 
   2 tests passed (4s)
 </code></pre>
-
 <p>もし特定のテストだけを実行したい場合は、ファイル名を指定します。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:e2e tests/login.spec.ts
+<pre><code class="language-bash">npm run test:e2e tests/login.spec.ts
 </code></pre>
-
 <p>また、<code>--headed</code>フラグをつけると、ブラウザが実際に立ち上がり、テストが実行される様子を視覚的に確認できます。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:e2e -- --headed
+<pre><code class="language-bash">npm run test:e2e -- --headed
 </code></pre>
-
 <h3 id="3">ステップ3: レポートの確認</h3>
 <p>テスト実行後、<code>npx playwright show-report</code>を実行して、HTMLレポートを確認してみましょう。各ステップでの動作や、成功・失敗の詳細を見ることができます。</p>
 <h2 id="_4">✨ まとめ</h2>

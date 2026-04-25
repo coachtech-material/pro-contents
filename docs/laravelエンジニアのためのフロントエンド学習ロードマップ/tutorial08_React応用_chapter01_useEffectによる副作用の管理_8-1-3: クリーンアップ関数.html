@@ -58,7 +58,7 @@
 <hr />
 <h3 id="_2">⚙️ クリーンアップ関数の構文</h3>
 <p>クリーンアップ処理を登録するには、<code>useEffect</code>の第一引数である副作用関数から、<strong>関数を返します</strong>。この返された関数がクリーンアップ関数となります。</p>
-<pre class="codehilite"><code class="language-tsx">useEffect(() =&gt; {
+<pre><code class="language-tsx">useEffect(() =&gt; {
   // 1. 副作用の処理（例：イベントリスナーの登録）
   console.log(&quot;副作用が開始されました&quot;);
   window.addEventListener(&quot;scroll&quot;, handleScroll);
@@ -71,14 +71,13 @@
   };
 }, []); // 依存配列
 </code></pre>
-
 <hr />
 <h3 id="_3">🚀 クリーンアップ関数が実行されるタイミング</h3>
 <p>クリーンアップ関数は、主に2つのタイミングで実行されます。</p>
 <h4 id="1">タイミング1：コンポーネントがアンマウントされるとき</h4>
 <p>コンポーネントが画面から消える（アンマウントされる）直前に、最後の後片付けとして実行されます。</p>
 <p><strong>例：タイマーのクリーンアップ</strong></p>
-<pre class="codehilite"><code class="language-tsx">function Timer() {
+<pre><code class="language-tsx">function Timer() {
   const [time, setTime] = useState(0);
 
   useEffect(() =&gt; {
@@ -96,13 +95,12 @@
   return &lt;div&gt;Time: {time}&lt;/div&gt;;
 }
 </code></pre>
-
 <p>もしクリーンアップがないと、この<code>Timer</code>コンポーネントが画面から消えても、<code>setInterval</code>はバックグラウンドで動き続け、メモリを消費し続けます。</p>
 <h4 id="2">タイミング2：次の副作用が実行される直前</h4>
 <p>依存配列に値が指定されている場合、その値が変更されて<strong>次の副作用が実行される直前</strong>に、前回の副作用に対するクリーンアップが実行されます。</p>
 <p><strong>「次の副作用の前に、前回の副作用を片付ける」</strong>というイメージです。</p>
 <p><strong>例：特定のユーザーIDを購読する</strong></p>
-<pre class="codehilite"><code class="language-tsx">function UserProfile({ userId }) {
+<pre><code class="language-tsx">function UserProfile({ userId }) {
   useEffect(() =&gt; {
     // 1. 新しいuserIdでチャットサーバーに接続
     const connection = connectToChat(userId);
@@ -116,7 +114,6 @@
   return &lt;h1&gt;Welcome, User {userId}!&lt;/h1&gt;;
 }
 </code></pre>
-
 <p>このコンポーネントの<code>userId</code>が<code>1</code>から<code>2</code>に変わったときの流れは以下のようになります。</p>
 <ol>
 <li><code>userId</code>が<code>2</code>に変わり、コンポーネントが再レンダリングされる。</li>
@@ -129,12 +126,11 @@
 <h3 id="_4">🔒 クリーンアップが必要ない場合</h3>
 <p>すべての副作用にクリーンアップが必要なわけではありません。</p>
 <p>例えば、一度きりのAPIリクエスト（<code>fetch</code>）のように、後片付けが不要な副作用もあります。その場合は、副作用関数から何も返す必要はありません。</p>
-<pre class="codehilite"><code class="language-tsx">useEffect(() =&gt; {
+<pre><code class="language-tsx">useEffect(() =&gt; {
   // fetchは完了したら自動的に終了するので、クリーンアップは不要
   fetch(&quot;/api/data&quot;).then(...);
 }, []);
 </code></pre>
-
 <p>ただし、この場合でも、レスポンスが返る前にコンポーネントがアンマウントされる可能性を考慮した、より高度なクリーンアップ（リクエストのキャンセル）が存在します。これは次のセクションで学びます。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

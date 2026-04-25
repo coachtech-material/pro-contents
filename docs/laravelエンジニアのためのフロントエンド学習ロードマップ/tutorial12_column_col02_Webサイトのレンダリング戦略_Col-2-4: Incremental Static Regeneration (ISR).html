@@ -69,7 +69,7 @@
 <p>この「古いコンテンツを返しながら裏で更新する」挙動は、<code>stale-while-revalidate</code>というキャッシュ戦略として知られています。</p>
 <p><img alt="ISRの処理フロー" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/isr-flow.png" /></p>
 <p>Next.jsでは、<code>getStaticProps</code>から返すオブジェクトに<code>revalidate</code>プロパティを追加するだけでISRを有効にできます。</p>
-<pre class="codehilite"><code class="language-javascript">export async function getStaticProps() {
+<pre><code class="language-javascript">export async function getStaticProps() {
   const res = await fetch('https://...');
   const posts = await res.json();
 
@@ -82,7 +82,6 @@
   };
 }
 </code></pre>
-
 <h2 id="isr_1">ISRのメリット</h2>
 <h3 id="1">1. ビルド時間の劇的な短縮</h3>
 <p>ISRを使えば、ビルド時にすべてのページを生成する必要がなくなります。例えば、10万件の商品ページがあるECサイトでも、ビルド時には0件のページを生成し、アクセスがあったページから順次生成していくことができます。これにより、ビルド時間は数秒から数分に抑えられます。</p>

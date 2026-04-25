@@ -52,7 +52,7 @@
 <h2 id="_4">詳細解説</h2>
 <h3 id="1-holy-grail-layout">1. 聖杯レイアウト（Holy Grail Layout）</h3>
 <p>ヘッダー、フッター、メインコンテンツ、左右のサイドバーで構成されるレイアウトです。<code>grid-template-areas</code> を使うと、アスキーアートのように直感的にレイアウトを定義できます。</p>
-<pre class="codehilite"><code class="language-css">.container {
+<pre><code class="language-css">.container {
   display: grid;
   grid-template-areas:
     &quot;header header header&quot;
@@ -69,13 +69,12 @@
 .aside  { grid-area: aside; }
 .footer { grid-area: footer; }
 </code></pre>
-
 <h3 id="2-fr-repeat">2. <code>fr</code> 単位と <code>repeat()</code> 関数</h3>
 <ul>
 <li><strong><code>fr</code> 単位</strong>: 利用可能なスペースを分割してカラムに割り当てます。レスポンシブデザインに非常に便利です。</li>
 <li><strong><code>repeat()</code> 関数</strong>: 同じ定義を繰り返す場合にコードを簡潔にできます。</li>
 </ul>
-<pre class="codehilite"><code class="language-css">.grid-container {
+<pre><code class="language-css">.grid-container {
   display: grid;
   /* 12カラムのグリッドシステム */
   grid-template-columns: repeat(12, 1fr);
@@ -87,16 +86,14 @@
   grid-column: span 4;
 }
 </code></pre>
-
 <h3 id="3-minmax">3. <code>minmax()</code> 関数</h3>
 <p>カラムや行の最小値と最大値を指定できます。レスポンシブなカードレイアウトなどで威力を発揮します。</p>
-<pre class="codehilite"><code class="language-css">.card-container {
+<pre><code class="language-css">.card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
 }
 </code></pre>
-
 <p><code>auto-fit</code> と <code>minmax()</code> を組み合わせることで、コンテナの幅に応じてカードの列数が自動的に調整されます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

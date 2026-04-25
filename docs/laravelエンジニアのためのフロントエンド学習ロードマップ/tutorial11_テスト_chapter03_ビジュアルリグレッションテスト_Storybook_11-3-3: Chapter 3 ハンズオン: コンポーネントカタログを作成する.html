@@ -62,12 +62,11 @@
 <h2 id="_3">セットアップ</h2>
 <h3 id="1">ステップ1: 必要なライブラリのインストール</h3>
 <p>まず、<code>@storybook/test-runner</code>と、PlaywrightをStorybookから利用するための<code>@storybook/test-playwright</code>をインストールします。</p>
-<pre class="codehilite"><code class="language-bash">npm install -D @storybook/test-runner @storybook/test-playwright
+<pre><code class="language-bash">npm install -D @storybook/test-runner @storybook/test-playwright
 </code></pre>
-
 <h3 id="2">ステップ2: テストスクリプトの追加</h3>
 <p><code>package.json</code>の<code>scripts</code>に、VRTを実行するためのコマンドを追加します。</p>
-<pre class="codehilite"><code class="language-json">// package.json
+<pre><code class="language-json">// package.json
 {
   ...
   &quot;scripts&quot;: {
@@ -77,11 +76,10 @@
   ...
 }
 </code></pre>
-
 <h3 id="3-playwright">ステップ3: Playwrightテストファイルの作成</h3>
 <p><code>@storybook/test-runner</code>が各Storyに対して実行するテストの内容を記述するファイルを作成します。プロジェクトのルートに<code>test-runner-jest.config.js</code>（Jestの設定ファイル）と、テストロジックを記述する<code>vrt.test.js</code>を作成します。</p>
 <p>まず、<code>test-runner-jest.config.js</code>を作成します。</p>
-<pre class="codehilite"><code class="language-javascript">// test-runner-jest.config.js
+<pre><code class="language-javascript">// test-runner-jest.config.js
 const { getJestConfig } = require('@storybook/test-runner');
 
 module.exports = {
@@ -91,9 +89,8 @@ module.exports = {
   testMatch: ['**/vrt.test.js'],
 };
 </code></pre>
-
 <p>次に、VRTの本体となる<code>vrt.test.js</code>を作成します。</p>
-<pre class="codehilite"><code class="language-javascript">// vrt.test.js
+<pre><code class="language-javascript">// vrt.test.js
 const { test, expect } = require('@playwright/test');
 const { createTestServer } = require('@storybook/test-server');
 const { injectAxe, checkA11y } = require('axe-playwright');
@@ -131,7 +128,6 @@ describe('VRT', () =&gt; {
   });
 });
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><code>createTestServer</code>: Storybookをビルドし、テスト用のサーバーを起動します。</li>
@@ -143,14 +139,13 @@ describe('VRT', () =&gt; {
 <h2 id="vrt_1">VRTの実行</h2>
 <p>準備が整ったので、VRTを実行してみましょう。</p>
 <h3 id="_4">初回実行（基準画像の作成）</h3>
-<pre class="codehilite"><code class="language-bash">npm run test:vrt
+<pre><code class="language-bash">npm run test:vrt
 </code></pre>
-
 <p>初回実行時は、比較対象の基準画像が存在しないため、すべてのテストが失敗します。しかし、これにより<code>__screenshots__</code>ディレクトリ以下に、現在のコンポーネントの見た目を「正解」とする基準画像が生成されます。</p>
 <p>生成された画像を確認し、これが期待通りの見た目であれば、これらの画像をGitにコミットします。</p>
 <h3 id="2_1">2回目以降の実行（差分比較）</h3>
 <p>では、意図的にコンポーネントの見た目を変更してみましょう。<code>src/components/ui/Button.tsx</code>の<code>primary</code>バリアントの背景色を<code>bg-blue-500</code>から<code>bg-green-500</code>に変更します。</p>
-<pre class="codehilite"><code class="language-tsx">// ...
+<pre><code class="language-tsx">// ...
 variants: {
   variant: {
     primary: &quot;bg-green-500 text-white hover:bg-green-600&quot;, // 変更
@@ -158,18 +153,15 @@ variants: {
   },
 // ...
 </code></pre>
-
 <p>この状態で、再度VRTを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:vrt
+<pre><code class="language-bash">npm run test:vrt
 </code></pre>
-
 <p>今度は、<code>Button--primary</code>のStoryに対応するテストが失敗するはずです。Playwrightは、<code>test-results</code>ディレクトリに差分画像（<code>diff</code>）を生成します。これを見ると、どこがどのように変わったのかが一目瞭然です。</p>
 <p><img alt="VRTの差分画像" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-11/vrt-diff.png" /></p>
 <h3 id="_5">基準画像の更新</h3>
 <p>もしこの変更が意図したものであれば（例: デザイン仕様の変更）、基準画像を更新する必要があります。<code>--update-snapshots</code>フラグをつけてテストを実行すると、既存の基準画像が新しいスクリーンショットで上書きされます。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:vrt -- --update-snapshots
+<pre><code class="language-bash">npm run test:vrt -- --update-snapshots
 </code></pre>
-
 <p>更新された基準画像をGitにコミットすれば、次回のテストからは新しい見た目が「正解」となります。</p>
 <h2 id="_6">✨ まとめ</h2>
 <ul>

@@ -61,7 +61,7 @@
 <li><code>app</code>ディレクトリ内に<code>blog</code>という名前のフォルダを作成します。</li>
 <li><code>app/blog/</code>内に<code>page.tsx</code>ファイルを作成し、以下のコードを記述します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/page.tsx
+<pre><code class="language-tsx">// app/blog/page.tsx
 import Link from &quot;next/link&quot;;
 
 interface Post {
@@ -99,7 +99,6 @@ export default async function BlogPage() {
   );
 }
 </code></pre>
-
 <p><strong>ポイント</strong>:<br />
 -   ページコンポーネントを<code>async</code>関数にし、直接データを<code>fetch</code>しています。<br />
 -   取得した記事一覧を<code>map</code>でループし、各記事へのリンクを<code>next/link</code>で作成しています。リンク先は<code>/blog/記事のID</code>という動的なパスになっています。<br />
@@ -109,16 +108,15 @@ export default async function BlogPage() {
 <ol>
 <li><code>app/blog/</code>内に<code>loading.tsx</code>を作成します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/loading.tsx
+<pre><code class="language-tsx">// app/blog/loading.tsx
 export default function Loading() {
   return &lt;div&gt;Loading posts...&lt;/div&gt;;
 }
 </code></pre>
-
 <ol>
 <li><code>app/blog/</code>内に<code>error.tsx</code>を作成します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/error.tsx
+<pre><code class="language-tsx">// app/blog/error.tsx
 &quot;use client&quot;;
 
 export default function Error({ error, reset }: { error: Error; reset: () =&gt; void }) {
@@ -130,7 +128,6 @@ export default function Error({ error, reset }: { error: Error; reset: () =&gt; 
   );
 }
 </code></pre>
-
 <p>これで、<code>/blog</code>にアクセスした際に、データ取得中は「Loading posts...」と表示され、APIリクエストが失敗した場合はエラーメッセージと再試行ボタンが表示されるようになります。</p>
 <h3 id="3">ステップ3: ブログ記事詳細ページの作成</h3>
 <p>次に、動的ルーティングを使って、個別のブログ記事を表示するページ <code>/blog/[id]</code> を作成します。</p>
@@ -138,7 +135,7 @@ export default function Error({ error, reset }: { error: Error; reset: () =&gt; 
 <li><code>app/blog/</code>内に<code>[id]</code>という名前のフォルダを作成します。（<code>[slug]</code>でも良いですが、今回はIDを使うので<code>[id]</code>とします）</li>
 <li><code>app/blog/[id]/</code>内に<code>page.tsx</code>ファイルを作成し、以下のコードを記述します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/[id]/page.tsx
+<pre><code class="language-tsx">// app/blog/[id]/page.tsx
 
 interface Post {
   id: number;
@@ -169,7 +166,6 @@ export default async function PostDetailPage({ params }: { params: { id: string 
   );
 }
 </code></pre>
-
 <p><strong>ポイント</strong>:<br />
 -   フォルダ名を<code>[id]</code>とすることで、URLの<code>/blog/</code>に続く部分が<code>id</code>というパラメータとしてコンポーネントに渡されます。<br />
 -   <code>params.id</code>を使って、特定のIDの記事データを取得するAPIを叩いています。</p>
@@ -178,16 +174,15 @@ export default async function PostDetailPage({ params }: { params: { id: string 
 <ol>
 <li><code>app/blog/[id]/</code>内に<code>loading.tsx</code>を作成します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/[id]/loading.tsx
+<pre><code class="language-tsx">// app/blog/[id]/loading.tsx
 export default function Loading() {
   return &lt;div&gt;Loading single post...&lt;/div&gt;;
 }
 </code></pre>
-
 <ol>
 <li><code>app/blog/[id]/</code>内に<code>error.tsx</code>を作成します。</li>
 </ol>
-<pre class="codehilite"><code class="language-tsx">// app/blog/[id]/error.tsx
+<pre><code class="language-tsx">// app/blog/[id]/error.tsx
 &quot;use client&quot;;
 
 export default function Error({ error, reset }: { error: Error; reset: () =&gt; void }) {
@@ -199,7 +194,6 @@ export default function Error({ error, reset }: { error: Error; reset: () =&gt; 
   );
 }
 </code></pre>
-
 <h3 id="5">ステップ5: 動作確認</h3>
 <p>アプリケーションを起動し、以下のパスにアクセスして動作を確認してみましょう。</p>
 <ol>

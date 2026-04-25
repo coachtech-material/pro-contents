@@ -84,14 +84,13 @@
 <p>そして、ブレークポイントプレフィックス（<code>md:</code>など）を使って、より大きな画面向けのスタイルを<strong>追加</strong>していきます。</p>
 <p><strong>例：モバイルファーストなグリッドレイアウト</strong></p>
 <p>スマートフォンでは1列、タブレット（<code>md</code>）では2列、ノートPC（<code>lg</code>）では4列のグリッドレイアウトを作成したい場合を考えてみましょう。</p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4&quot;&gt;
   &lt;div&gt;要素1&lt;/div&gt;
   &lt;div&gt;要素2&lt;/div&gt;
   &lt;div&gt;要素3&lt;/div&gt;
   &lt;div&gt;要素4&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>grid grid-cols-1 gap-4</code>: これが<strong>モバイル（基本）のスタイル</strong>です。デフォルトで1列のグリッドレイアウトになり、アイテム間の隙間は<code>gap-4</code>になります。</li>
@@ -103,12 +102,11 @@
 <p>これをもし「デスクトップファースト」で書こうとすると、非常に複雑になります。</p>
 <p><strong>比較：もしデスクトップファーストだったら…（非推奨な例）</strong></p>
 <p>Tailwindはモバイルファーストを前提としているため、デスクトップファーストは直感的に書けません。もし無理に書くとすれば、<code>max-width</code>を使う必要があり、以下のようになります。（Tailwindのデフォルト設定では<code>max-width</code>のブレークポイントは有効になっていません）</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- この書き方は一般的ではありません --&gt;
+<pre><code class="language-html">&lt;!-- この書き方は一般的ではありません --&gt;
 &lt;div class=&quot;grid grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1 gap-4&quot;&gt;
   &lt;!-- ... --&gt;
 &lt;/div&gt;
 </code></pre>
-
 <p><code>max-lg:</code>（lg未満）や<code>max-md:</code>（md未満）といったクラスを使い、スタイルを「上書き」していく形になります。どちらが直感的でシンプルかは一目瞭然でしょう。モバイルファーストは、スタイルが<strong>加算的</strong>に適用されていくため、非常に理解しやすいのです。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

@@ -75,20 +75,18 @@
 </li>
 </ol>
 <p><strong>図解：Gridの親子関係</strong></p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;grid-container&quot;&gt; &lt;!-- 親要素 --&gt;
+<pre><code class="language-html">&lt;div class=&quot;grid-container&quot;&gt; &lt;!-- 親要素 --&gt;
   &lt;div class=&quot;grid-item&quot;&gt;アイテム1&lt;/div&gt; &lt;!-- 子要素 --&gt;
   &lt;div class=&quot;grid-item&quot;&gt;アイテム2&lt;/div&gt; &lt;!-- 子要素 --&gt;
   &lt;div class=&quot;grid-item&quot;&gt;アイテム3&lt;/div&gt; &lt;!-- 子要素 --&gt;
   ...
 &lt;/div&gt;
 </code></pre>
-
-<pre class="codehilite"><code class="language-css">.grid-container {
+<pre><code class="language-css">.grid-container {
   display: grid; /* これでGridレイアウトが有効になる */
   /* ここに「どんな格子を作るか」を定義していく */
 }
 </code></pre>
-
 <p><code>display: grid;</code> を指定しただけでは、見た目はブロック要素が縦に並んでいるだけと変わりません。Gridレイアウトの本質は、ここから<strong>「どのような行と列（トラック）を作るか」</strong>を定義していく点にあります。この行と列によって作られる一つ一つのマス目を<strong>「セル」</strong>と呼びます。</p>
 <h4 id="flexboxgrid">FlexboxとGridの使い分け</h4>
 <p>どちらも強力なレイアウトツールですが、得意なことが異なります。</p>

@@ -50,38 +50,34 @@
 <h2 id="1">1. プリミティブ型</h2>
 <h3 id="string">string型</h3>
 <p>文字列を表す型です。シングルクォート、ダブルクォート、バッククォートのいずれでも定義できます。</p>
-<pre class="codehilite"><code class="language-typescript">const name: string = &quot;Taro&quot;;
+<pre><code class="language-typescript">const name: string = &quot;Taro&quot;;
 const greeting: string = `Hello, ${name}!`;
 </code></pre>
-
 <h3 id="number">number型</h3>
 <p>数値を表す型です。整数も小数も同じ<code>number</code>型で扱います。</p>
-<pre class="codehilite"><code class="language-typescript">const age: number = 25;
+<pre><code class="language-typescript">const age: number = 25;
 const price: number = 1980.5;
 const hex: number = 0xff; // 16進数
 </code></pre>
-
 <h3 id="boolean">boolean型</h3>
 <p>真偽値（<code>true</code>または<code>false</code>）を表す型です。</p>
-<pre class="codehilite"><code class="language-typescript">const isActive: boolean = true;
+<pre><code class="language-typescript">const isActive: boolean = true;
 const hasPermission: boolean = false;
 </code></pre>
-
 <h2 id="2">2. 配列の型</h2>
 <p>配列の型を定義するには、2つの書き方があります。</p>
-<pre class="codehilite"><code class="language-typescript">// 書き方1: 型名[]
+<pre><code class="language-typescript">// 書き方1: 型名[]
 const numbers: number[] = [1, 2, 3, 4, 5];
 const names: string[] = [&quot;Taro&quot;, &quot;Hanako&quot;, &quot;Jiro&quot;];
 
 // 書き方2: Array&lt;型名&gt;（ジェネリクス構文）
 const scores: Array&lt;number&gt; = [80, 90, 75];
 </code></pre>
-
 <p>どちらの書き方も同じ意味ですが、<code>型名[]</code>の方がよく使われます。</p>
 <h2 id="3">3. オブジェクトの型</h2>
 <p>オブジェクトの型を定義するには、<code>interface</code>または<code>type</code>を使います。</p>
 <h3 id="interface">interfaceを使う方法</h3>
-<pre class="codehilite"><code class="language-typescript">interface User {
+<pre><code class="language-typescript">interface User {
   name: string;
   age: number;
   email: string;
@@ -93,9 +89,8 @@ const user: User = {
   email: &quot;taro@example.com&quot;
 };
 </code></pre>
-
 <h3 id="type">typeを使う方法</h3>
-<pre class="codehilite"><code class="language-typescript">type Product = {
+<pre><code class="language-typescript">type Product = {
   id: number;
   name: string;
   price: number;
@@ -107,7 +102,6 @@ const product: Product = {
   price: 2980
 };
 </code></pre>
-
 <h3 id="interfacetype">interfaceとtypeの違い</h3>
 <p><code>interface</code>と<code>type</code>は似ていますが、いくつかの違いがあります。</p>
 <table>
@@ -144,7 +138,7 @@ const product: Product = {
 <p>一般的には、オブジェクトの形状を定義する場合は<code>interface</code>を、それ以外の型定義には<code>type</code>を使うことが多いです。</p>
 <h2 id="4">4. オプショナルプロパティ</h2>
 <p>プロパティ名の後ろに<code>?</code>を付けると、そのプロパティは省略可能になります。</p>
-<pre class="codehilite"><code class="language-typescript">interface User {
+<pre><code class="language-typescript">interface User {
   name: string;
   age?: number; // 省略可能
   email?: string; // 省略可能
@@ -154,10 +148,9 @@ const user1: User = { name: &quot;Taro&quot; }; // OK
 const user2: User = { name: &quot;Hanako&quot;, age: 30 }; // OK
 const user3: User = { name: &quot;Jiro&quot;, age: 28, email: &quot;jiro@example.com&quot; }; // OK
 </code></pre>
-
 <h2 id="5">5. 読み取り専用プロパティ</h2>
 <p><code>readonly</code>キーワードを付けると、そのプロパティは変更できなくなります。</p>
-<pre class="codehilite"><code class="language-typescript">interface Config {
+<pre><code class="language-typescript">interface Config {
   readonly apiUrl: string;
   readonly timeout: number;
 }
@@ -169,10 +162,9 @@ const config: Config = {
 
 // config.apiUrl = &quot;https://other.com&quot;; // エラー！読み取り専用
 </code></pre>
-
 <h2 id="6-anyunknown">6. any型とunknown型</h2>
 <p>型が不明な場合に使う型として、<code>any</code>と<code>unknown</code>があります。</p>
-<pre class="codehilite"><code class="language-typescript">// any型: 何でも代入でき、何にでも代入できる（型チェックを無効化）
+<pre><code class="language-typescript">// any型: 何でも代入でき、何にでも代入できる（型チェックを無効化）
 let anyValue: any = &quot;hello&quot;;
 anyValue = 123; // OK
 anyValue = true; // OK
@@ -184,7 +176,6 @@ if (typeof unknownValue === &quot;string&quot;) {
   console.log(unknownValue.length); // OK（型が絞り込まれた）
 }
 </code></pre>
-
 <p><code>any</code>型は型チェックを完全に無効化するため、使用は避けるべきです。型が不明な場合は<code>unknown</code>を使い、適切に型を絞り込むことが推奨されます。</p>
 <h2 id="_3">✨ まとめ</h2>
 <p>TypeScriptの基本的な型として、<code>string</code>、<code>number</code>、<code>boolean</code>、配列、オブジェクトの型定義方法を学びました。オブジェクトの型は<code>interface</code>または<code>type</code>で定義でき、オプショナルプロパティや読み取り専用プロパティも指定できます。<code>any</code>型は型チェックを無効化するため、代わりに<code>unknown</code>型を使うことが推奨されます。</p>

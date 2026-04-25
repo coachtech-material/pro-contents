@@ -77,7 +77,7 @@
 <li><strong>コンポーネントはJSXを<code>return</code>する。</strong></li>
 </ol>
 <p><strong>例：単純なボタンコンポーネント</strong></p>
-<pre class="codehilite"><code class="language-jsx">// Button.js
+<pre><code class="language-jsx">// Button.js
 
 // &quot;Button&quot; という名前の関数コンポーネントを定義
 function Button() {
@@ -86,7 +86,6 @@ function Button() {
   );
 }
 </code></pre>
-
 <p>これだけで、<code>Button</code>という名前のReactコンポーネントが完成です。</p>
 <hr />
 <h3 id="_2">🚀 コンポーネントの呼び出しと再利用</h3>
@@ -94,7 +93,7 @@ function Button() {
 <p>まず、アプリケーションのルートとなる<code>App</code>コンポーネントを作成し、その中で先ほどの<code>Button</code>コンポーネントを呼び出してみましょう。</p>
 <p>コンポーネントを別のファイルから利用するには、<code>export</code>と<code>import</code>を使います。</p>
 <p><strong>1. コンポーネントをエクスポートする</strong></p>
-<pre class="codehilite"><code class="language-jsx">// Button.js
+<pre><code class="language-jsx">// Button.js
 
 function Button() {
   return (
@@ -105,9 +104,8 @@ function Button() {
 // 他のファイルで使えるようにエクスポート
 export default Button;
 </code></pre>
-
 <p><strong>2. コンポーネントをインポートして利用する</strong></p>
-<pre class="codehilite"><code class="language-jsx">// App.js
+<pre><code class="language-jsx">// App.js
 
 import Button from './Button'; // Buttonコンポーネントをインポート
 
@@ -122,11 +120,10 @@ function App() {
 
 export default App;
 </code></pre>
-
 <p><code>App</code>コンポーネントの中で<code>&lt;Button /&gt;</code>と記述するだけで、<code>Button.js</code>で定義したボタンがその場所にレンダリング（描画）されます。</p>
 <h4 id="_3">コンポーネントの再利用</h4>
 <p>コンポーネントの真価は、その<strong>再利用性</strong>にあります。一度定義したコンポーネントは、何度でも好きなだけ呼び出すことができます。</p>
-<pre class="codehilite"><code class="language-jsx">// App.js
+<pre><code class="language-jsx">// App.js
 
 import Button from './Button';
 
@@ -141,13 +138,12 @@ function App() {
   );
 }
 </code></pre>
-
 <p>もしボタンのデザインを変更したくなった場合、<code>Button.js</code>ファイルを修正するだけで、アプリケーション内のすべての<code>&lt;Button /&gt;</code>コンポーネントに一括で変更が反映されます。これにより、コードの重複が避けられ、保守性が劇的に向上します。</p>
 <hr />
 <h3 id="_4">⚙️ コンポーネントの親子関係（ネスト）</h3>
 <p>コンポーネントは、他のコンポーネントを内包することもできます。これにより、UIの階層構造を直感的に表現できます。</p>
 <p><strong>例：プロフィールカード</strong></p>
-<pre class="codehilite"><code class="language-jsx">// Avatar.js
+<pre><code class="language-jsx">// Avatar.js
 export default function Avatar() {
   return &lt;img src=&quot;/avatar.png&quot; alt=&quot;アバター&quot; /&gt;;
 }
@@ -175,7 +171,6 @@ export default function ProfileCard() {
   );
 }
 </code></pre>
-
 <p><code>ProfileCard</code>コンポーネントは、<code>Avatar</code>と<code>UserInfo</code>という2つの子コンポーネントから構成されています。このように、小さな部品を組み合わせて、より大きな部品を作っていくのがReactの基本的な開発スタイルです。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

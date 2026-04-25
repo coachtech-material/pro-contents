@@ -55,7 +55,7 @@
 <h3 id="1">⚙️ パターン1: レスポンシブ・ナビゲーション（ハンバーガーメニュー）</h3>
 <p>PCではヘッダーにメニュー項目が横並びになっていますが、スマートフォンではスペースが足りないため、ハンバーガーアイコン（≡）をタップするとメニューが開く、というUIは非常によく見られます。</p>
 <p>Tailwind CSSだけでこの開閉機能を実装するには少しJavaScriptが必要になりますが、ここではそのレイアウトの切り替え部分に焦点を当てます。</p>
-<pre class="codehilite"><code class="language-html">&lt;nav class=&quot;bg-gray-800 p-4&quot;&gt;
+<pre><code class="language-html">&lt;nav class=&quot;bg-gray-800 p-4&quot;&gt;
   &lt;div class=&quot;container mx-auto flex justify-between items-center&quot;&gt;
     &lt;!-- ロゴ --&gt;
     &lt;div class=&quot;text-white font-bold text-xl&quot;&gt;MySite&lt;/div&gt;
@@ -76,7 +76,6 @@
   &lt;/div&gt;
 &lt;/nav&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><strong>PC用メニュー:</strong><ul>
@@ -95,7 +94,7 @@
 <p>このように、<code>hidden</code>と<code>md:flex</code>（または<code>md:block</code>など）を組み合わせることで、特定のブレークポイントを境に要素の表示/非表示を切り替えることができます。</p>
 <h3 id="2">⚙️ パターン2: レスポンシブ・グリッド</h3>
 <p>商品一覧ページやブログ記事一覧などでよく使われる、画面サイズに応じてカラム数を変更するグリッドレイアウトです。これは前のセクションでも少し触れましたが、非常に重要なパターンです。</p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;container mx-auto p-4&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;container mx-auto p-4&quot;&gt;
   &lt;div class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4&quot;&gt;
     &lt;!-- カード1 --&gt;
     &lt;div class=&quot;bg-white p-4 rounded-lg shadow&quot;&gt;カードコンテンツ&lt;/div&gt;
@@ -109,7 +108,6 @@
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>grid-cols-1</code>: モバイル（デフォルト）では1列。</li>
@@ -122,7 +120,7 @@
 <p>モバイルファーストの考え方に基づき、小さい画面から大きい画面へと、カラム数を<strong>追加</strong>していくように定義しているのがポイントです。</p>
 <h3 id="3">⚙️ パターン3: レスポンシブな余白とフォントサイズ</h3>
 <p>画面が大きくなるにつれて、セクション間の余白（マージン）や、見出しのフォントサイズを大きくして、全体のバランスを取りたい場合があります。</p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;py-8 md:py-12 lg:py-16&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;py-8 md:py-12 lg:py-16&quot;&gt;
   &lt;h1 class=&quot;text-3xl md:text-4xl lg:text-5xl font-bold&quot;&gt;
     レスポンシブな見出し
   &lt;/h1&gt;
@@ -131,7 +129,6 @@
   &lt;/p&gt;
 &lt;/div&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>py-8 md:py-12 lg:py-16</code>: 親<code>div</code>の垂直方向（上下）のパディングを、モバイルでは<code>py-8</code>、<code>md</code>以上で<code>py-12</code>、<code>lg</code>以上で<code>py-16</code>と、段階的に大きくしています。</li>

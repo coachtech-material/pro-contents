@@ -63,51 +63,43 @@
 <li><strong>何を考えているか:</strong> 「これからたくさんのプロジェクトを作ることになるから、それらをまとめておく『projects』という名前の引き出しを、自分の部屋（ホームディレクトリ）に作っておこう。そうすれば、後で探すのが楽になる。」</li>
 </ul>
 <p>1-1. ターミナルを起動し、<code>cd</code> コマンド（引数なし）でホームディレクトリにいることを確認します。</p>
-<pre class="codehilite"><code class="language-bash">$ cd
+<pre><code class="language-bash">$ cd
 $ pwd
 /home/ubuntu
 </code></pre>
-
 <p>1-2. <code>mkdir</code> コマンドで <code>projects</code> ディレクトリを作成します。</p>
-<pre class="codehilite"><code class="language-bash">$ mkdir projects
+<pre><code class="language-bash">$ mkdir projects
 </code></pre>
-
 <p>1-3. <code>ls</code> コマンドで <code>projects</code> ディレクトリが作成されたことを確認します。</p>
-<pre class="codehilite"><code class="language-bash">$ ls
+<pre><code class="language-bash">$ ls
 Desktop  Documents  Downloads  Music  Pictures  Videos  projects
 </code></pre>
-
 <p>1-4. <code>cd</code> コマンドで <code>projects</code> ディレクトリに移動します。</p>
-<pre class="codehilite"><code class="language-bash">$ cd projects
+<pre><code class="language-bash">$ cd projects
 </code></pre>
-
 <h5 id="step-2">Step 2: 今回のハンズオン用プロジェクトの作成</h5>
 <p>次に、<code>projects</code> ディレクトリの中に、今回のハンズオン専用の <code>hello-frontend</code> というプロジェクトディレクトリを作成します。</p>
 <ul>
 <li><strong>何を考えているか:</strong> 「<code>projects</code> の引き出しの中に、最初の練習用の『hello-frontend』という名前の小箱を作ろう。そして、これからの作業はその小箱の中で行うことにしよう。」</li>
 </ul>
 <p>2-1. <code>mkdir</code> コマンドで <code>hello-frontend</code> ディレクトリを作成します。</p>
-<pre class="codehilite"><code class="language-bash">$ mkdir hello-frontend
+<pre><code class="language-bash">$ mkdir hello-frontend
 </code></pre>
-
 <p>2-2. <code>cd</code> コマンドで <code>hello-frontend</code> ディレクトリに移動します。</p>
-<pre class="codehilite"><code class="language-bash">$ cd hello-frontend
+<pre><code class="language-bash">$ cd hello-frontend
 </code></pre>
-
 <p>2-3. <code>pwd</code> コマンドで、現在地が <code>/home/ubuntu/projects/hello-frontend</code> になっていることを確認します。</p>
-<pre class="codehilite"><code class="language-bash">$ pwd
+<pre><code class="language-bash">$ pwd
 /home/ubuntu/projects/hello-frontend
 </code></pre>
-
 <h5 id="step-3-vs-code">Step 3: VS Codeでプロジェクトを開く</h5>
 <p>いよいよ、この <code>hello-frontend</code> ディレクトリをVS Codeで開きます。ターミナルから直接VS Codeを起動する、プロっぽいやり方を試してみましょう。</p>
 <ul>
 <li><strong>何を考えているか:</strong> 「作業場所の準備ができたから、いよいよ僕の相棒、VS Codeの出番だ。今いるこの場所（カレントディレクトリ）を、VS Codeで開いて開発を始めよう。」</li>
 </ul>
 <p>3-1. ターミナルで、以下のコマンドを入力します。<code>.</code> は「カレントディレクトリ（今いるこの場所）」を意味します。</p>
-<pre class="codehilite"><code class="language-bash">$ code .
+<pre><code class="language-bash">$ code .
 </code></pre>
-
 <h5 id="_5">コマンド解説</h5>
 <ul>
 <li><code>code</code><ul>
@@ -128,7 +120,7 @@ Desktop  Documents  Downloads  Music  Pictures  Videos  projects
 <p>4-1. VS Codeのエクスプローラーで、<code>HELLO-FRONTEND</code> の領域にマウスカーソルを合わせ、表示される「新しいファイル」アイコンをクリックします。</p>
 <p>4-2. ファイル名を <code>index.html</code> として、Enterキーを押します。</p>
 <p>4-3. 開かれた <code>index.html</code> ファイルに、以下のコードを貼り付けます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -140,7 +132,6 @@ Desktop  Documents  Downloads  Music  Pictures  Videos  projects
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <h5 id="step-5-live-server">Step 5: Live Serverでブラウザ表示</h5>
 <p>前のセクションでインストールした拡張機能「Live Server」を使って、このHTMLファイルをブラウザで開きます。</p>
 <p>5-1. VS Codeのウィンドウ右下にある「Go Live」というボタンをクリックします。</p>
@@ -157,12 +148,11 @@ Desktop  Documents  Downloads  Music  Pictures  Videos  projects
 </ul>
 <h3 id="_8">📖 模範解答</h3>
 <p>このハンズオンを終えた時点で、あなたのPCには以下の構造ができているはずです。</p>
-<pre class="codehilite"><code>/home/ubuntu/  (あなたのホームディレクトリ)
+<pre><code>/home/ubuntu/  (あなたのホームディレクトリ)
 └── projects/
     └── hello-frontend/
         └── index.html
 </code></pre>
-
 <p>そして、ブラウザには <code>index.html</code> の内容が表示されています。</p>
 </div>
 <div class="section-nav">

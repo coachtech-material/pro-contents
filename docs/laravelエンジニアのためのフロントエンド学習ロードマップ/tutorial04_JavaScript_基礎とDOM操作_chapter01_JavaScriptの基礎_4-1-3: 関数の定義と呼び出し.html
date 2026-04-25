@@ -49,7 +49,7 @@
 <p>関数は、一連の処理をまとめて名前を付けたものです。同じ処理を何度も書く代わりに、関数として定義しておけば、必要なときに呼び出すだけで済みます。これにより、コードの再利用性が高まり、保守しやすくなります。</p>
 <h2 id="1">1. 関数の基本的な定義</h2>
 <p>JavaScriptで関数を定義するには、<code>function</code>キーワードを使います。</p>
-<pre class="codehilite"><code class="language-javascript">// 関数の定義
+<pre><code class="language-javascript">// 関数の定義
 function greet() {
   console.log(&quot;こんにちは！&quot;);
 }
@@ -58,10 +58,9 @@ function greet() {
 greet(); // &quot;こんにちは！&quot;
 greet(); // &quot;こんにちは！&quot;（何度でも呼び出せる）
 </code></pre>
-
 <h2 id="2">2. 引数（パラメータ）</h2>
 <p>関数に値を渡すには、引数を使います。引数は関数の括弧内に定義します。</p>
-<pre class="codehilite"><code class="language-javascript">// 引数を1つ受け取る関数
+<pre><code class="language-javascript">// 引数を1つ受け取る関数
 function greet(name) {
   console.log(`こんにちは、${name}さん！`);
 }
@@ -77,10 +76,9 @@ function add(a, b) {
 add(3, 5); // 8
 add(10, 20); // 30
 </code></pre>
-
 <h2 id="3-return">3. 戻り値（return）</h2>
 <p>関数から値を返すには、<code>return</code>文を使います。</p>
-<pre class="codehilite"><code class="language-javascript">// 戻り値を返す関数
+<pre><code class="language-javascript">// 戻り値を返す関数
 function add(a, b) {
   return a + b;
 }
@@ -95,9 +93,8 @@ console.log(add(10, 20)); // 30
 const total = add(100, 200) + add(50, 50);
 console.log(total); // 400
 </code></pre>
-
 <p><code>return</code>文が実行されると、関数の処理はそこで終了します。</p>
-<pre class="codehilite"><code class="language-javascript">function checkAge(age) {
+<pre><code class="language-javascript">function checkAge(age) {
   if (age &lt; 0) {
     return &quot;無効な年齢です&quot;;
   }
@@ -111,10 +108,9 @@ console.log(checkAge(25)); // &quot;成人です&quot;
 console.log(checkAge(15)); // &quot;未成年です&quot;
 console.log(checkAge(-5)); // &quot;無効な年齢です&quot;
 </code></pre>
-
 <h2 id="4">4. アロー関数</h2>
 <p>ES6から導入されたアロー関数は、より短い構文で関数を定義できます。</p>
-<pre class="codehilite"><code class="language-javascript">// 従来の関数
+<pre><code class="language-javascript">// 従来の関数
 function add(a, b) {
   return a + b;
 }
@@ -133,7 +129,6 @@ const double = x =&gt; x * 2;
 console.log(add(3, 5)); // 8
 console.log(double(4)); // 8
 </code></pre>
-
 <h3 id="_3">従来の関数とアロー関数の比較</h3>
 <table>
 <thead>
@@ -163,7 +158,7 @@ console.log(double(4)); // 8
 </table>
 <h2 id="5">5. デフォルト引数</h2>
 <p>引数にデフォルト値を設定できます。引数が渡されなかった場合、デフォルト値が使われます。</p>
-<pre class="codehilite"><code class="language-javascript">function greet(name = &quot;ゲスト&quot;) {
+<pre><code class="language-javascript">function greet(name = &quot;ゲスト&quot;) {
   console.log(`こんにちは、${name}さん！`);
 }
 
@@ -176,10 +171,9 @@ const multiply = (a, b = 1) =&gt; a * b;
 console.log(multiply(5, 3)); // 15
 console.log(multiply(5));    // 5
 </code></pre>
-
 <h2 id="6">6. スコープの基本</h2>
 <p>関数内で定義した変数は、関数の外からはアクセスできません。これを「スコープ」と呼びます。</p>
-<pre class="codehilite"><code class="language-javascript">function example() {
+<pre><code class="language-javascript">function example() {
   const message = &quot;関数内の変数&quot;;
   console.log(message); // OK
 }
@@ -196,7 +190,6 @@ function showMessage() {
 
 showMessage(); // &quot;グローバル変数&quot;
 </code></pre>
-
 <h2 id="_4">✨ まとめ</h2>
 <p>関数は、処理をまとめて再利用可能にする重要な機能です。<code>function</code>キーワードまたはアロー関数で定義し、引数で値を受け取り、<code>return</code>で値を返すことができます。アロー関数は短い構文で書けるため、コールバック関数などでよく使われます。</p>
 <p>次のセクションでは、演算子について学んでいきましょう。</p>

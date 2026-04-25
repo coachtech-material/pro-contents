@@ -93,7 +93,7 @@
 <h2 id="nextjs">Next.jsの主な特徴</h2>
 <h3 id="1-app-router">1. App Router（ファイルベースルーティング）</h3>
 <p>Next.jsでは、<code>app</code>ディレクトリ内のフォルダ構造がそのままURLのルートになります。</p>
-<pre class="codehilite"><code>app/
+<pre><code>app/
 ├── page.tsx          → /
 ├── about/
 │   └── page.tsx      → /about
@@ -102,16 +102,14 @@
     └── [slug]/
         └── page.tsx  → /blog/:slug
 </code></pre>
-
 <h3 id="2-server-components">2. Server Components</h3>
 <p>Next.js 13以降、React Server Components（RSC）がデフォルトで有効になっています。Server Componentsはサーバー上でのみ実行され、JavaScriptバンドルに含まれないため、パフォーマンスが向上します。</p>
-<pre class="codehilite"><code class="language-typescript">// Server Component（デフォルト）
+<pre><code class="language-typescript">// Server Component（デフォルト）
 async function BlogList() {
   const posts = await fetch('https://api.example.com/posts');
   return &lt;ul&gt;{/* ... */}&lt;/ul&gt;;
 }
 </code></pre>
-
 <h3 id="3">3. 複数のレンダリング戦略</h3>
 <p>Next.jsは、ページごとに最適なレンダリング戦略を選択できます。</p>
 <table>

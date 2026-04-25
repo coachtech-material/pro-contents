@@ -62,10 +62,9 @@
 <li><strong>制御方法</strong>: <code>fetch</code>のオプション（<code>cache: 'force-cache'</code>, <code>cache: 'no-store'</code>, <code>next: { revalidate: n }</code>）で制御します。</li>
 <li><strong>役割</strong>: 同じデータソースへの重複したリクエストを防ぎ、ビルド時間やレンダリング時間を短縮します。例えば、レイアウトとページの両方で同じ<code>fetch</code>リクエストを呼び出しても、実際のリクエストは一度しか実行されません。</li>
 </ul>
-<pre class="codehilite"><code class="language-tsx">// このfetchの結果はData Cacheに保存される
+<pre><code class="language-tsx">// このfetchの結果はData Cacheに保存される
 await fetch(&quot;https://...&quot;, { next: { revalidate: 60 } });
 </code></pre>
-
 <h3 id="2-full-route-cache">2. Full Route Cache (フルルートキャッシュ)</h3>
 <p>Full Route Cacheもサーバーサイドのキャッシュですが、こちらは<strong>ページのレンダリング結果そのもの</strong>をキャッシュします。静的にレンダリング可能なルート（<code>fetch</code>が<code>force-cache</code>を使用し、動的関数を含まないルート）が対象です。</p>
 <ul>

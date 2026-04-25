@@ -53,7 +53,7 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="1-usefetch-api">1. <code>useFetch</code>: APIデータ取得の汎用フック</h3>
 <p>前のセクションで作成した <code>useUsers</code> はユーザー取得に特化していましたが、これをより汎用的にし、任意のURLからデータを取得できるようにしたのが <code>useFetch</code> です。ジェネリクスを使うことで、取得するデータの型を柔軟に指定できるのがポイントです。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useFetch.ts
+<pre><code class="language-typescript">// src/hooks/useFetch.ts
 import { useState, useEffect } from 'react';
 
 interface FetchState&lt;T&gt; {
@@ -92,9 +92,8 @@ export const useFetch = &lt;T,&gt;(url: string): FetchState&lt;T&gt; =&gt; {
   return state;
 };
 </code></pre>
-
 <p><strong>使い方:</strong></p>
-<pre class="codehilite"><code class="language-tsx">interface Post { id: number; title: string; }
+<pre><code class="language-tsx">interface Post { id: number; title: string; }
 
 function PostDetails({ postId }: { postId: number }) {
   const { data: post, isLoading, error } = useFetch&lt;Post&gt;(
@@ -108,10 +107,9 @@ function PostDetails({ postId }: { postId: number }) {
   return &lt;h1&gt;{post.title}&lt;/h1&gt;;
 }
 </code></pre>
-
 <h3 id="2-uselocalstorage-localstorage">2. <code>useLocalStorage</code>: LocalStorageとの同期</h3>
 <p>ユーザーの設定（例: ダークモードのON/OFF）などをブラウザのLocalStorageに保存し、ページをリロードしてもその状態が維持されるようにしたいケースはよくあります。<code>useLocalStorage</code> は、<code>useState</code> と同じインターフェースを提供しつつ、値の読み書きを自動的にLocalStorageと同期してくれます。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useLocalStorage.ts
+<pre><code class="language-typescript">// src/hooks/useLocalStorage.ts
 import { useState, useEffect } from 'react';
 
 export const useLocalStorage = &lt;T,&gt;(key: string, initialValue: T): [T, (value: T) =&gt; void] =&gt; {
@@ -138,9 +136,8 @@ export const useLocalStorage = &lt;T,&gt;(key: string, initialValue: T): [T, (va
   return [storedValue, setStoredValue];
 };
 </code></pre>
-
 <p><strong>使い方:</strong></p>
-<pre class="codehilite"><code class="language-tsx">function ThemeSwitcher() {
+<pre><code class="language-tsx">function ThemeSwitcher() {
   // useStateと同じように使える！
   const [theme, setTheme] = useLocalStorage&lt;
 'light' | 'dark'&gt;(
@@ -158,10 +155,9 @@ export const useLocalStorage = &lt;T,&gt;(key: string, initialValue: T): [T, (va
   );
 }
 </code></pre>
-
 <h3 id="3-usedebounce">3. <code>useDebounce</code>: 入力イベントの間引き</h3>
 <p>検索ボックスなどで、ユーザーがキーを入力するたびにAPIリクエストを送ると、サーバーに過剰な負荷がかかります。<code>useDebounce</code> は、値の変更を一定時間（例: 500ms）遅延させ、その間に新しい値が来なければ、最後の値だけを返すフックです。これにより、ユーザーが入力を終えたタイミングで一度だけAPIを叩く、といった最適化が可能になります。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useDebounce.ts
+<pre><code class="language-typescript">// src/hooks/useDebounce.ts
 import { useState, useEffect } from 'react';
 
 export const useDebounce = &lt;T,&gt;(value: T, delay: number): T =&gt; {
@@ -183,9 +179,8 @@ export const useDebounce = &lt;T,&gt;(value: T, delay: number): T =&gt; {
   return debouncedValue;
 };
 </code></pre>
-
 <p><strong>使い方:</strong></p>
-<pre class="codehilite"><code class="language-tsx">function SearchInput() {
+<pre><code class="language-tsx">function SearchInput() {
   const [searchTerm, setSearchTerm] = useState('');
   // 500ms遅延させた値を取得
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
@@ -208,7 +203,6 @@ export const useDebounce = &lt;T,&gt;(value: T, delay: number): T =&gt; {
   );
 }
 </code></pre>
-
 <h2 id="_4">✨ まとめ</h2>
 <ul>
 <li>カスタムフックは、アプリケーション固有のロジックだけでなく、<strong>汎用的なロジック</strong>をカプセル化するためにも非常に有効である。</li>

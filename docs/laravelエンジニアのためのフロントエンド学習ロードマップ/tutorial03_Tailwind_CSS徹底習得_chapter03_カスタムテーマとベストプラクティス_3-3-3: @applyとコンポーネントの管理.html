@@ -50,7 +50,7 @@
 <hr />
 <h3 id="_1">イントロダクション：ユーティリティクラスを「部品化」する</h3>
 <p>Tailwind CSSを使っていると、何度も同じユーティリティクラスの組み合わせを記述する場面が出てきます。例えば、プロジェクトで使うボタンのスタイルは、基本的にすべて同じはずです。</p>
-<pre class="codehilite"><code class="language-html">&lt;button class=&quot;bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded&quot;&gt;
+<pre><code class="language-html">&lt;button class=&quot;bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded&quot;&gt;
   ボタンA
 &lt;/button&gt;
 
@@ -58,14 +58,13 @@
   ボタンB
 &lt;/button&gt;
 </code></pre>
-
 <p>このように、同じクラスの長い羅列が何度も登場すると、HTMLが読みにくくなったり、後からボタンのデザインをまとめて変更するのが大変になったりします。こうした課題を解決するための一つの方法が、<code>@apply</code>ディレクティブです。</p>
 <hr />
 <h3 id="apply">⚙️ <code>@apply</code>の使い方</h3>
 <p><code>@apply</code>は、CSSファイル内でTailwindのユーティリティクラスを抽出し、それらを単一のCSSクラスに「適用」するためのディレクティブです。</p>
 <p>先ほどのボタンの例を、<code>@apply</code>を使って書き換えてみましょう。</p>
 <p>まず、<code>src/input.css</code>に以下のように記述します。</p>
-<pre class="codehilite"><code class="language-css">/* src/input.css */
+<pre><code class="language-css">/* src/input.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -78,7 +77,6 @@
   @apply bg-blue-600;
 }
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>.btn-primary</code>というカスタムCSSクラスを作成します。</li>
@@ -88,7 +86,7 @@
 </li>
 </ul>
 <p>こうすることで、HTML側は非常にシンプルになります。</p>
-<pre class="codehilite"><code class="language-html">&lt;button class=&quot;btn-primary&quot;&gt;
+<pre><code class="language-html">&lt;button class=&quot;btn-primary&quot;&gt;
   ボタンA
 &lt;/button&gt;
 
@@ -96,7 +94,6 @@
   ボタンB
 &lt;/button&gt;
 </code></pre>
-
 <p>ビルドプロセスで、<code>.btn-primary</code>は<code>@apply</code>で指定されたすべてのCSSプロパティを持つ、通常のCSSクラスに変換されます。HTMLはクリーンに保たれ、ボタンのデザインを変更したい場合は、CSSファイル内の<code>.btn-primary</code>を修正するだけで、サイト内のすべてのボタンに一括で反映させることができます。</p>
 <hr />
 <h3 id="apply_1">🤔 <code>@apply</code>はいつ使うべきか？ 議論とベストプラクティス</h3>
@@ -130,7 +127,7 @@
 <p><strong><code>@apply</code>を使わないコンポーネント管理</strong></p>
 <p>ReactやVueのようなモダンなJavaScriptフレームワークを使っている場合、<code>@apply</code>に頼る必要性はさらに低くなります。なぜなら、フレームワーク自体がコンポーネントという単位でHTMLとロジックをカプセル化する機能を持っているからです。</p>
 <p>例えば、Reactでは以下のようにボタンコンポーネントを作成します。</p>
-<pre class="codehilite"><code class="language-jsx">// components/Button.jsx
+<pre><code class="language-jsx">// components/Button.jsx
 
 function Button({ children }) {
   return (
@@ -144,7 +141,6 @@ function Button({ children }) {
 &lt;Button&gt;ボタンA&lt;/Button&gt;
 &lt;Button&gt;ボタンB&lt;/Button&gt;
 </code></pre>
-
 <p>この場合、長いクラス名はコンポーネントファイル（<code>Button.jsx</code>）の中に隠蔽されており、使う側はシンプルな<code>&lt;Button&gt;</code>タグを記述するだけです。HTMLの可読性とスタイルの再利用性を両立できており、多くのモダンな開発現場ではこちらの方法が主流です。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

@@ -55,18 +55,17 @@
 <h3 id="1-for">⚙️ 1. <code>for</code>ループ：指定回数繰り返す</h3>
 <p><code>for</code>ループは、特定の回数だけ処理を繰り返したい場合に最もよく使われる、古典的なループ構文です。PHPの<code>for</code>ループと構文は全く同じです。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">for (初期化式; 条件式; 増減式) {
+<pre><code class="language-javascript">for (初期化式; 条件式; 増減式) {
   // 繰り返したい処理
 }
 </code></pre>
-
 <ul>
 <li><strong>初期化式:</strong> ループが始まる前に一度だけ実行されます。通常、カウンター変数を初期化します（例: <code>let i = 0</code>）。</li>
 <li><strong>条件式:</strong> 各ループの反復が始まる前に評価されます。この式が<code>true</code>である限り、ループは続行されます。</li>
 <li><strong>増減式:</strong> 各ループの反復が終わるたびに実行されます。通常、カウンター変数をインクリメント（<code>i++</code>）またはデクリメント（<code>i--</code>）します。</li>
 </ul>
 <p><strong>例：1から5までの数字を表示する</strong></p>
-<pre class="codehilite"><code class="language-javascript">for (let i = 1; i &lt;= 5; i++) {
+<pre><code class="language-javascript">for (let i = 1; i &lt;= 5; i++) {
   console.log(i);
 }
 // 出力:
@@ -76,9 +75,8 @@
 // 4
 // 5
 </code></pre>
-
 <p><strong>例：配列の要素を順番に表示する</strong></p>
-<pre class="codehilite"><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
+<pre><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
 
 for (let i = 0; i &lt; fruits.length; i++) {
   console.log(fruits[i]);
@@ -88,22 +86,20 @@ for (let i = 0; i &lt; fruits.length; i++) {
 // &quot;バナナ&quot;
 // &quot;みかん&quot;
 </code></pre>
-
 <hr />
 <h3 id="2-forof">⚙️ 2. <code>for...of</code>ループ：配列の要素を一つずつ取り出す</h3>
 <p><code>for</code>ループでも配列を扱うことはできますが、カウンター変数<code>i</code>を管理する必要があり、少し冗長です。よりモダンで直感的に配列の要素をループ処理できるのが<code>for...of</code>ループです。これはPHPの<code>foreach</code>ループに非常に似ています。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">for (const 要素 of イテラブルオブジェクト) {
+<pre><code class="language-javascript">for (const 要素 of イテラブルオブジェクト) {
   // 各要素に対して行いたい処理
 }
 </code></pre>
-
 <ul>
 <li><strong>イテラブルオブジェクト:</strong> 配列や文字列など、反復可能なオブジェクト。</li>
 <li><strong>要素:</strong> ループの各反復で、オブジェクトから取り出された要素が格納される変数。</li>
 </ul>
 <p><strong>例：配列の要素を順番に表示する</strong></p>
-<pre class="codehilite"><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
+<pre><code class="language-javascript">const fruits = [&quot;りんご&quot;, &quot;バナナ&quot;, &quot;みかん&quot;];
 
 for (const fruit of fruits) {
   console.log(fruit);
@@ -113,7 +109,6 @@ for (const fruit of fruits) {
 // &quot;バナナ&quot;
 // &quot;みかん&quot;
 </code></pre>
-
 <p><code>for</code>ループの例と比べて、はるかにシンプルで読みやすいことがわかります。カウンター変数<code>i</code>や配列の長さを気にする必要がありません。</p>
 <p><strong>配列の要素を扱う場合は、原則として<code>for...of</code>ループを使うのが良いプラクティスです。</strong></p>
 <blockquote>
@@ -127,7 +122,7 @@ JavaScriptには<code>for...in</code>という別のループ構文もありま�
 <li><strong><code>break</code></strong>: ループを完全に<strong>中断</strong>し、ループ構文の直後の処理に進みます。</li>
 </ul>
 <p><strong>例：配列から特定の値を見つけたらループを終了する</strong></p>
-<pre class="codehilite"><code class="language-javascript">const numbers = [1, 5, 10, 15, 20];
+<pre><code class="language-javascript">const numbers = [1, 5, 10, 15, 20];
 
 for (const num of numbers) {
   if (num === 10) {
@@ -141,12 +136,11 @@ for (const num of numbers) {
 // 5
 // &quot;10を見つけました！&quot;
 </code></pre>
-
 <ul>
 <li><strong><code>continue</code></strong>: 現在の反復処理を<strong>中断</strong>し、ループの<strong>次の反復</strong>に進みます。</li>
 </ul>
 <p><strong>例：偶数だけをスキップして表示する</strong></p>
-<pre class="codehilite"><code class="language-javascript">for (let i = 1; i &lt;= 10; i++) {
+<pre><code class="language-javascript">for (let i = 1; i &lt;= 10; i++) {
   if (i % 2 === 0) {
     continue; // 偶数の場合は、この後のconsole.logをスキップして次のループへ
   }
@@ -159,7 +153,6 @@ for (const num of numbers) {
 // 7
 // 9
 </code></pre>
-
 <hr />
 <p>✨ <strong>まとめ</strong></p>
 <ul>

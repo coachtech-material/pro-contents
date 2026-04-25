@@ -47,7 +47,7 @@
 </ul>
 <h2 id="_2">導入</h2>
 <p>前のセクションでセレクタの種類を学びました。しかし、同じ要素に複数のスタイルが適用された場合、どのスタイルが優先されるのでしょうか？</p>
-<pre class="codehilite"><code class="language-css">p {
+<pre><code class="language-css">p {
   color: blue;
 }
 
@@ -59,10 +59,8 @@
   color: green;
 }
 </code></pre>
-
-<pre class="codehilite"><code class="language-html">&lt;p class=&quot;text&quot; id=&quot;intro&quot;&gt;この文字は何色？&lt;/p&gt;
+<pre><code class="language-html">&lt;p class=&quot;text&quot; id=&quot;intro&quot;&gt;この文字は何色？&lt;/p&gt;
 </code></pre>
-
 <p>この場合、文字は<strong>緑色</strong>になります。なぜでしょうか？その答えが「<strong>詳細度（Specificity）</strong>」です。</p>
 <h2 id="_3">詳細度とは</h2>
 <p><strong>詳細度</strong>とは、CSSのセレクタがどれだけ「具体的」かを数値で表したものです。複数のスタイルが同じ要素に適用される場合、詳細度が高いセレクタのスタイルが優先されます。</p>
@@ -146,17 +144,16 @@
 </table>
 <h3 id="_6">詳細度の比較</h3>
 <p>詳細度は<strong>左から順に比較</strong>します。左の桁が大きい方が優先されます。</p>
-<pre class="codehilite"><code>0-1-0-0 &gt; 0-0-10-0  （IDセレクタ1つ &gt; クラスセレクタ10個）
+<pre><code>0-1-0-0 &gt; 0-0-10-0  （IDセレクタ1つ &gt; クラスセレクタ10個）
 0-0-1-0 &gt; 0-0-0-10  （クラスセレクタ1つ &gt; 要素セレクタ10個）
 </code></pre>
-
 <blockquote>
 <p><strong>⚠️ 注意:</strong> クラスセレクタをいくつ重ねても、IDセレクタ1つには勝てません。同様に、要素セレクタをいくつ重ねても、クラスセレクタ1つには勝てません。</p>
 </blockquote>
 <h2 id="_7">🏃 実践: 詳細度を確認する</h2>
 <p>実際にコードを書いて、詳細度の動作を確認しましょう。</p>
 <h3 id="step-1-html">Step 1: HTMLを作成</h3>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -168,9 +165,8 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <h3 id="step-2-css">Step 2: CSSを作成</h3>
-<pre class="codehilite"><code class="language-css">/* 詳細度: 0-0-0-1 */
+<pre><code class="language-css">/* 詳細度: 0-0-0-1 */
 p {
   color: blue;
 }
@@ -185,13 +181,12 @@ p {
   color: green;
 }
 </code></pre>
-
 <h3 id="step-3">Step 3: 結果を確認</h3>
 <p>ブラウザで確認すると、文字は<strong>緑色</strong>になります。</p>
 <p><strong>理由:</strong> <code>#intro</code>（0-1-0-0）が最も詳細度が高いため、緑色が適用されます。</p>
 <h3 id="step-4">Step 4: 詳細度を変えてみる</h3>
 <p>CSSを以下のように変更してみましょう。</p>
-<pre class="codehilite"><code class="language-css">/* 詳細度: 0-0-0-1 */
+<pre><code class="language-css">/* 詳細度: 0-0-0-1 */
 p {
   color: blue;
 }
@@ -206,11 +201,10 @@ p.text {
   color: orange;
 }
 </code></pre>
-
 <p>この場合、文字は<strong>赤色</strong>になります。<code>p.text</code>（0-0-1-1）が最も詳細度が高いためです。</p>
 <h2 id="_8">同じ詳細度の場合</h2>
 <p>詳細度が同じ場合は、<strong>後に書かれたスタイルが優先</strong>されます（カスケード）。</p>
-<pre class="codehilite"><code class="language-css">.text {
+<pre><code class="language-css">.text {
   color: blue;
 }
 
@@ -218,10 +212,9 @@ p.text {
   color: red;  /* こちらが適用される */
 }
 </code></pre>
-
 <h2 id="important"><code>!important</code> について</h2>
 <p><code>!important</code>を使うと、詳細度を無視してスタイルを強制適用できます。</p>
-<pre class="codehilite"><code class="language-css">p {
+<pre><code class="language-css">p {
   color: blue !important;  /* 最優先で適用される */
 }
 
@@ -229,14 +222,13 @@ p.text {
   color: green;  /* 無視される */
 }
 </code></pre>
-
 <blockquote>
 <p><strong>⚠️ 注意:</strong> <code>!important</code>は<strong>最後の手段</strong>です。多用すると、どのスタイルが適用されているか分からなくなり、保守が困難になります。実務では、詳細度を適切に管理することで<code>!important</code>を使わずに済むようにしましょう。</p>
 </blockquote>
 <h2 id="_9">詳細度のベストプラクティス</h2>
 <h3 id="1-id">1. IDセレクタは避ける</h3>
 <p>IDセレクタは詳細度が高すぎるため、後からスタイルを上書きしにくくなります。</p>
-<pre class="codehilite"><code class="language-css">/* ❌ 避ける */
+<pre><code class="language-css">/* ❌ 避ける */
 #header {
   background: blue;
 }
@@ -246,10 +238,9 @@ p.text {
   background: blue;
 }
 </code></pre>
-
 <h3 id="2">2. セレクタはシンプルに保つ</h3>
 <p>セレクタを深くネストすると、詳細度が上がりすぎて管理が困難になります。</p>
-<pre class="codehilite"><code class="language-css">/* ❌ 避ける（詳細度が高すぎる） */
+<pre><code class="language-css">/* ❌ 避ける（詳細度が高すぎる） */
 .header .nav .menu .item .link {
   color: blue;
 }
@@ -259,15 +250,13 @@ p.text {
   color: blue;
 }
 </code></pre>
-
 <h3 id="3-bem">3. BEM記法を活用する</h3>
 <p><strong>BEM（Block Element Modifier）</strong>記法を使うと、詳細度を低く保ちながら、意味のあるクラス名を付けられます。</p>
-<pre class="codehilite"><code class="language-css">/* BEM記法の例 */
+<pre><code class="language-css">/* BEM記法の例 */
 .card { }           /* Block */
 .card__title { }    /* Element */
 .card--featured { } /* Modifier */
 </code></pre>
-
 <blockquote>
 <p><strong>💡 TIP:</strong> Tailwind CSSを使う場合、詳細度の問題はほとんど発生しません。Tutorial 3で詳しく学びます。</p>
 </blockquote>
@@ -280,14 +269,12 @@ p.text {
 </ol>
 <h2 id="_11">よくある間違いと対処法</h2>
 <h3 id="_12">問題: スタイルが適用されない</h3>
-<pre class="codehilite"><code class="language-css">.card {
+<pre><code class="language-css">.card {
   color: blue;
 }
 </code></pre>
-
-<pre class="codehilite"><code class="language-html">&lt;div id=&quot;card&quot; class=&quot;card&quot;&gt;テキスト&lt;/div&gt;
+<pre><code class="language-html">&lt;div id=&quot;card&quot; class=&quot;card&quot;&gt;テキスト&lt;/div&gt;
 </code></pre>
-
 <p>別の場所で<code>#card</code>にスタイルが指定されている場合、クラスセレクタのスタイルは適用されません。</p>
 <p><strong>対処法:</strong><br />
 1. 開発者ツールで競合しているスタイルを確認<br />

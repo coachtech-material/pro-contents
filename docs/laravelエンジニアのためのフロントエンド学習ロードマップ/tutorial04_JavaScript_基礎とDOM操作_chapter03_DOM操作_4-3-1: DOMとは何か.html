@@ -52,7 +52,7 @@
 <p>DOMは、HTMLやXML文書をオブジェクトのツリー構造として表現したものです。ブラウザはHTMLファイルを読み込むと、それを解析してDOMツリーを構築します。このツリーの各要素（<code>&lt;html&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>など）は<strong>ノード</strong>と呼ばれ、JavaScriptからアクセスできるオブジェクトとして表現されます。</p>
 <h3 id="_4">ツリー構造</h3>
 <p>DOMは、<code>document</code> オブジェクトを頂点とする階層的なツリー構造になっています。各ノードは親子関係や兄弟関係を持ちます。</p>
-<pre class="codehilite"><code class="language-text">      document
+<pre><code class="language-text">      document
          |
       &lt;html&gt;
        /   \
@@ -60,7 +60,6 @@
      |       /   \
   &lt;title&gt;  &lt;h1&gt;   &lt;p&gt;
 </code></pre>
-
 <p>JavaScriptはこのツリー構造を辿って、特定のノード（HTML要素）にアクセスし、その内容やスタイルを変更したり、新しいノードを追加・削除したりできます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

@@ -43,15 +43,14 @@
 <p>このハンズオンでは、Next.jsプロジェクトを作成し、基本的なページとレイアウトを実装します。Server ComponentsとClient Componentsの使い分けを実践しながら、Next.jsの基本的な開発フローを体験しましょう。</p>
 <h2 id="step-1">Step 1: プロジェクトの作成</h2>
 <p>まず、新しいNext.jsプロジェクトを作成します。</p>
-<pre class="codehilite"><code class="language-bash">npx create-next-app@latest nextjs-practice --typescript --tailwind --eslint --app --turbopack
+<pre><code class="language-bash">npx create-next-app@latest nextjs-practice --typescript --tailwind --eslint --app --turbopack
 cd nextjs-practice
 npm run dev
 </code></pre>
-
 <p>ブラウザで <code>http://localhost:3000</code> にアクセスし、Next.jsのウェルカムページが表示されることを確認します。</p>
 <h2 id="step-2">Step 2: トップページの作成</h2>
 <p><code>app/page.tsx</code>を以下のように編集します。</p>
-<pre class="codehilite"><code class="language-typescript">import Link from 'next/link';
+<pre><code class="language-typescript">import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -82,10 +81,9 @@ export default function Home() {
   );
 }
 </code></pre>
-
 <h2 id="step-3">Step 3: レイアウトの設定</h2>
 <p><code>app/layout.tsx</code>を編集して、共通のヘッダーを追加します。</p>
-<pre class="codehilite"><code class="language-typescript">import type { Metadata } from 'next';
+<pre><code class="language-typescript">import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import './globals.css';
@@ -121,10 +119,9 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <h2 id="step-4-aboutserver-component">Step 4: Aboutページの作成（Server Component）</h2>
 <p><code>app/about/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-typescript">export default function AboutPage() {
+<pre><code class="language-typescript">export default function AboutPage() {
   // Server Componentなので、サーバー上で実行される
   console.log('This runs on the server');
 
@@ -142,10 +139,9 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <h2 id="step-5-counterclient-component">Step 5: Counterページの作成（Client Component）</h2>
 <p><code>app/counter/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-typescript">'use client';
+<pre><code class="language-typescript">'use client';
 
 import { useState } from 'react';
 
@@ -179,10 +175,9 @@ export default function CounterPage() {
   );
 }
 </code></pre>
-
 <h2 id="step-6-usersserver-component">Step 6: Usersページの作成（Server Componentでのデータ取得）</h2>
 <p><code>app/users/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-typescript">interface User {
+<pre><code class="language-typescript">interface User {
   id: number;
   name: string;
   email: string;
@@ -226,7 +221,6 @@ export default async function UsersPage() {
   );
 }
 </code></pre>
-
 <h2 id="step-7">Step 7: 動作確認</h2>
 <p>開発サーバーが起動していることを確認し、以下のページにアクセスしてみましょう。</p>
 <ul>

@@ -92,7 +92,7 @@ function MyComponent() {
 <p>Hydration Mismatchを解決する基本的なアプローチは、「<strong>サーバーとクライアントで結果が異なる可能性のある部分は、クライアントサイドでのみレンダリングする</strong>」ということです。</p>
 <h4 id="1-useeffect">解決策1: <code>useEffect</code> を使う（推奨）</h4>
 <p>最もクリーンで一般的な解決策は、<code>useEffect</code>フックを使うことです。<code>useEffect</code>の中身はクライアントサイドでのみ、かつコンポーネントがマウントされた後に実行されます。これにより、サーバーレンダリングの結果には影響を与えずに、クライアントでのみ値を設定・表示することができます。</p>
-<pre class="codehilite"><code class="language-tsx">import { useState, useEffect } from &quot;react&quot;;
+<pre><code class="language-tsx">import { useState, useEffect } from &quot;react&quot;;
 
 function MyComponent() {
   const [isClient, setIsClient] = useState(false);
@@ -111,9 +111,8 @@ function MyComponent() {
   );
 }
 </code></pre>
-
 <p>このパターンは少し冗長に見えますが、何が起きているかが明確で、Reactのライフサイクルに沿った正しい方法です。カスタムフックとして抽出すると再利用しやすくなります。</p>
-<pre class="codehilite"><code class="language-tsx">function useIsClient() {
+<pre><code class="language-tsx">function useIsClient() {
   const [isClient, setIsClient] = useState(false);
   useEffect(() =&gt; { setIsClient(true) }, []);
   return isClient;
@@ -124,10 +123,9 @@ function MyComponent() {
   return &lt;div&gt;{isClient ? &quot;Client&quot; : &quot;Server&quot;}&lt;/div&gt;;
 }
 </code></pre>
-
 <h4 id="2-suppresshydrationwarning">解決策2: <code>suppressHydrationWarning</code>（一時的な回避策）</h4>
 <p>Reactは、どうしてもミスマッチが避けられないケース（例: タイムスタンプの表示など）のために、エラーを意図的に抑制するための<code>suppressHydrationWarning</code>というpropを提供しています。</p>
-<pre class="codehilite"><code class="language-tsx">function MyComponent() {
+<pre><code class="language-tsx">function MyComponent() {
   // このdiv要素でHydration Mismatchが発生しても、コンソールに警告は出ない
   return (
     &lt;div suppressHydrationWarning={true}&gt;
@@ -136,7 +134,6 @@ function MyComponent() {
   );
 }
 </code></pre>
-
 <p><strong>注意点:</strong><br />
 -   これはあくまで<strong>警告を非表示にするだけ</strong>であり、根本的な問題を解決するものではありません。<br />
 -   ミスマッチは依然として発生しており、パフォーマンスにわずかな影響を与える可能性があります。<br />

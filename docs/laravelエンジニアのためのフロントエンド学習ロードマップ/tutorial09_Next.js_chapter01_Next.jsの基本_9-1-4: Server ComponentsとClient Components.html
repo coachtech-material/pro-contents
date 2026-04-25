@@ -91,7 +91,7 @@ async function HomePage() {<br />
 <h3 id="client-components">🧩 Client Components</h3>
 <p>Client Componentsは、従来のReactコンポーネントと同じように、クライアントサイドでレンダリングされ、インタラクティブな機能を持つことができるコンポーネントです。<code>useState</code>や<code>useEffect</code>といったフックや、イベントハンドラを使いたい場合は、Client Componentsを選択する必要があります。</p>
 <p>コンポーネントをClient Componentにするには、ファイルの先頭に <strong><code>"use client";</code></strong> というディレクティブを記述します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/Counter.tsx
+<pre><code class="language-tsx">// src/components/Counter.tsx
 &quot;use client&quot;; // このディレクティブでClient Componentになる
 
 import { useState } from &quot;react&quot;;
@@ -107,7 +107,6 @@ export function Counter() {
   );
 }
 </code></pre>
-
 <h4 id="client-components_1">Client Componentsの主な特徴</h4>
 <ol>
 <li><strong>インタラクティビティ</strong>: <code>useState</code>, <code>useEffect</code>などのフックや、<code>onClick</code>などのイベントハンドラを使って、ユーザー操作に応じた動的なUIを構築できます。</li>
@@ -125,7 +124,7 @@ export function Counter() {
 <li>Server ComponentsはClient Componentsをインポートして利用できます。</li>
 <li><strong>ただし、Client Componentsの中にServer Componentsを<code>children</code>や<code>props</code>として渡すことはできますが、直接インポートすることはできません。</strong> これは、Client Componentsが一度クライアントサイドのコードになってしまうと、サーバーサイドの機能は呼び出せないためです。</li>
 </ul>
-<pre class="codehilite"><code class="language-tsx">// app/page.tsx (Server Component)
+<pre><code class="language-tsx">// app/page.tsx (Server Component)
 import { Counter } from &quot;../components/Counter&quot;; // Client Componentをインポート
 
 async function ServerSideData() {
@@ -150,7 +149,6 @@ export default function Page() {
   );
 }
 </code></pre>
-
 <h3 id="_4">どちらを使うべきか？</h3>
 <p>Next.jsの公式ドキュメントでは、以下の考え方を推奨しています。</p>
 <blockquote>

@@ -63,7 +63,7 @@
 <h2 id="suspense">Suspense: ローディング状態を宣言的に管理する</h2>
 <p>Streamingを実現するための重要なピースが、Reactに組み込まれた<strong><code>&lt;Suspense&gt;</code></strong>コンポーネントです。</p>
 <p><code>&lt;Suspense&gt;</code>は、子コンポーネントのレンダリング（特にデータ取得などの非同期処理）が完了するまで、代わりに<strong>フォールバックUI（例: ローディングスピナー）</strong>を表示することができます。[2]</p>
-<pre class="codehilite"><code class="language-jsx">import { Suspense } from 'react';
+<pre><code class="language-jsx">import { Suspense } from 'react';
 import { PostFeed, Weather } from './Components';
 
 export default function Page() {
@@ -80,7 +80,6 @@ export default function Page() {
   );
 }
 </code></pre>
-
 <p>上記の例では、<code>&lt;PostFeed /&gt;</code>と<code>&lt;Weather /&gt;</code>はそれぞれ非同期でデータを取得するサーバーコンポーネントです。<code>Suspense</code>でラップすることにより、Next.jsはこれらのコンポーネントを独立してストリーミングできるようになります。</p>
 <ul>
 <li><code>&lt;PostFeed /&gt;</code>のデータ取得が遅くても、<code>&lt;Weather /&gt;</code>の準備が先にできれば、そちらが先に表示される。</li>
@@ -92,7 +91,7 @@ export default function Page() {
 <p><code>app</code>ディレクトリ内の特定のルートセグメント（例: <code>app/dashboard/loading.tsx</code>）に<code>loading.tsx</code>というファイルを作成すると、Next.jsは自動的にそのコンポーネントを<code>Suspense</code>の<code>fallback</code>として設定します。そして、同じ階層にある<code>page.tsx</code>とその子コンポーネント全体を<code>Suspense</code>の<code>children</code>としてラップします。</p>
 <p><strong>例:</strong></p>
 <p><code>app/dashboard/layout.tsx</code>:</p>
-<pre class="codehilite"><code class="language-jsx">export default function DashboardLayout({ children }) {
+<pre><code class="language-jsx">export default function DashboardLayout({ children }) {
   return (
     &lt;section&gt;
       &lt;h1&gt;Dashboard&lt;/h1&gt;
@@ -101,16 +100,14 @@ export default function Page() {
   );
 }
 </code></pre>
-
 <p><code>app/dashboard/loading.tsx</code>:</p>
-<pre class="codehilite"><code class="language-jsx">export default function Loading() {
+<pre><code class="language-jsx">export default function Loading() {
   // ローディングスケルトンやスピナーを返す
   return &lt;p&gt;Loading dashboard data...&lt;/p&gt;;
 }
 </code></pre>
-
 <p><code>app/dashboard/page.tsx</code>:</p>
-<pre class="codehilite"><code class="language-jsx">async function getData() {
+<pre><code class="language-jsx">async function getData() {
   await new Promise(resolve =&gt; setTimeout(resolve, 3000)); // 3秒待つ
   return { message: 'Hello, Dashboard!' };
 }
@@ -120,7 +117,6 @@ export default async function DashboardPage() {
   return &lt;p&gt;{data.message}&lt;/p&gt;;
 }
 </code></pre>
-
 <p>この場合、ユーザーが<code>/dashboard</code>にアクセスすると、</p>
 <ol>
 <li>まず<code>DashboardLayout</code>が表示される。</li>

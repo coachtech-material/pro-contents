@@ -60,10 +60,9 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="tanstack-query">🔑 TanStack Queryの基本</h3>
 <p><code>TanStack Query</code> を使うには、まずアプリケーションのルートを <code>QueryClientProvider</code> でラップし、<code>QueryClient</code> のインスタンスを渡します。</p>
-<pre class="codehilite"><code class="language-bash">npm install @tanstack/react-query
+<pre><code class="language-bash">npm install @tanstack/react-query
 </code></pre>
-
-<pre class="codehilite"><code class="language-tsx">// main.tsx or App.tsx
+<pre><code class="language-tsx">// main.tsx or App.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -80,10 +79,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   &lt;/React.StrictMode&gt;
 );
 </code></pre>
-
 <h3 id="usequery"><code>useQuery</code>: データの取得</h3>
 <p>サーバーからデータを取得（<code>GET</code>リクエスト）するには <code>useQuery</code> フックを使います。<code>useQuery</code> は、データフェッチに関するあらゆる状態（<code>data</code>, <code>isLoading</code>, <code>isError</code>など）を返してくれます。</p>
-<pre class="codehilite"><code class="language-tsx">import { useQuery } from '@tanstack/react-query';
+<pre><code class="language-tsx">import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 interface Todo {
@@ -116,7 +114,6 @@ function TodoList() {
   );
 }
 </code></pre>
-
 <h4 id="_4">コードのポイント</h4>
 <ol>
 <li><strong><code>queryKey</code></strong>: クエリ（APIリクエスト）を一意に識別するためのキーです。配列で指定し、このキーに基づいて<code>TanStack Query</code>はデータをキャッシュします。例えば、特定のTODOを取得する場合は <code>['todos', todoId]</code> のようにします。</li>
@@ -130,7 +127,7 @@ function TodoList() {
 </ul>
 <h3 id="usemutation"><code>useMutation</code>: データの更新</h3>
 <p>データの作成（<code>POST</code>）、更新（<code>PUT</code>/<code>PATCH</code>）、削除（<code>DELETE</code>）といった、サーバーの状態を変更する操作には <code>useMutation</code> フックを使います。</p>
-<pre class="codehilite"><code class="language-tsx">import { useMutation, useQueryClient } from '@tanstack/react-query';
+<pre><code class="language-tsx">import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 // 新しいTODOを作成する非同期関数
@@ -164,7 +161,6 @@ function AddTodoForm() {
   );
 }
 </code></pre>
-
 <h4 id="_5">コードのポイント</h4>
 <ol>
 <li><strong><code>mutationFn</code></strong>: サーバーの状態を変更する非同期関数を指定します。</li>

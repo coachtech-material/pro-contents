@@ -99,7 +99,7 @@
 <p><code>tailwind-handson</code>プロジェクトの<code>src/index.html</code>を編集していきます。</p>
 <h4 id="step-1-html">Step 1: HTMLの基本構造（モバイルファースト）</h4>
 <p>まず、<code>&lt;body&gt;</code>タグの中身をすべて削除し、カード1つ分のHTML構造を記述します。この時点ではまだレスポンシブ対応は考えず、モバイルでの表示だけを意識します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
 
@@ -120,7 +120,6 @@
 
 &lt;/body&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>max-w-sm mx-auto</code>: カードの最大幅を<code>sm</code>（Tailwindのサイズ単位）に制限し、中央に配置します。</li>
@@ -132,15 +131,14 @@
 <p>この時点でブラウザを見ると、モバイル表示を想定した縦積みのカードが1つ表示されます。</p>
 <h4 id="step-2">Step 2: カードレイアウトのレスポンシブ対応</h4>
 <p>次に、<code>md</code>ブレークポイント以上で、カード内のレイアウトが「画像が左、テキストが右」になるように変更します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- 変更前 --&gt;
+<pre><code class="language-html">&lt;!-- 変更前 --&gt;
 &lt;div class=&quot;max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden&quot;&gt;
 
 &lt;!-- 変更後 --&gt;
 &lt;div class=&quot;max-w-sm md:max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden md:flex&quot;&gt;
 </code></pre>
-
 <p>カードの親コンテナに<code>md:flex</code>を追加し、最大幅も<code>md:max-w-2xl</code>に広げます。さらに、画像と本文のコンテナの幅を調整します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
 
@@ -161,7 +159,6 @@
 
 &lt;/body&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>md:flex</code>: <code>md</code>以上でカードコンテナをFlexboxにします。</li>
@@ -175,7 +172,7 @@
 <h4 id="step-3">Step 3: グリッドレイアウトの作成とレスポンシブ対応</h4>
 <p>最後に、このカードを複数並べ、グリッドレイアウトをレスポンシブにします。</p>
 <p>まず、<code>&lt;body&gt;</code>タグの直下にグリッドコンテナを配置し、先ほど作ったカードのHTMLをその中にコピー＆ペーストして3つに増やします。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
 
@@ -206,14 +203,13 @@
 
 &lt;/body&gt;
 </code></pre>
-
 <p>おや？少しレイアウトが崩れてしまいました。グリッドの子要素になったことで、カードのレイアウトを少し調整する必要があります。カードコンテナのクラスを以下のように修正します。</p>
 <ul>
 <li><code>max-w-sm md:max-w-2xl</code> → <code>w-full</code> (グリッドセルいっぱいに広がるように)</li>
 <li><code>md:flex</code> → <code>md:block</code> (カードの中は常に縦積みでOK)</li>
 </ul>
 <p>最終的なコードは以下のようになります。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 &lt;body class=&quot;bg-gray-100 p-4 sm:p-6&quot;&gt;
   &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6&quot;&gt;
     &lt;!-- カード1 --&gt;
@@ -243,7 +239,6 @@
   &lt;/div&gt;
 &lt;/body&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6</code>: グリッドコンテナ。画面幅に応じてカラム数を変更し、アイテム間の隙間を<code>gap-6</code>に設定します。</li>

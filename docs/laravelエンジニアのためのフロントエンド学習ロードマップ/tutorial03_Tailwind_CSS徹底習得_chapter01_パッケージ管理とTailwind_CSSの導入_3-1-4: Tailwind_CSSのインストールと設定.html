@@ -90,14 +90,13 @@
 <p>それでは、実際にコマンドを打ちながらTailwind CSSをセットアップしていきましょう。</p>
 <h4 id="step-1">Step 1: プロジェクトの準備</h4>
 <p>まずは、作業用のディレクトリを作成し、その中で<code>npm</code>プロジェクトを初期化します。</p>
-<pre class="codehilite"><code class="language-bash"># プロジェクト用のディレクトリを作成して移動
+<pre><code class="language-bash"># プロジェクト用のディレクトリを作成して移動
 mkdir tailwind-handson
 cd tailwind-handson
 
 # npmプロジェクトを初期化し、package.jsonを生成
 npm init -y
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>mkdir tailwind-handson</code>: <code>tailwind-handson</code>という名前のディレクトリ（フォルダ）を作成します。</li>
@@ -108,9 +107,8 @@ npm init -y
 </ul>
 <h4 id="step-2-tailwind-css">Step 2: Tailwind CSS関連パッケージのインストール</h4>
 <p>次に、Tailwind CSSとその動作に必要なパッケージをインストールします。これらはすべて開発用のツールなので、<code>-D</code>（<code>--save-dev</code>のショートカット）オプションを付けて<code>devDependencies</code>に保存します。</p>
-<pre class="codehilite"><code class="language-bash">npm install -D tailwindcss postcss autoprefixer
+<pre><code class="language-bash">npm install -D tailwindcss postcss autoprefixer
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>npm install -D</code>: 開発用の依存関係としてパッケージをインストールします。</li>
@@ -123,9 +121,8 @@ npm init -y
 <p>インストール後、<code>package.json</code>を開いてみてください。<code>devDependencies</code>に今インストールした3つのパッケージが追加されているのが確認できます。</p>
 <h4 id="step-3">Step 3: 設定ファイルの生成</h4>
 <p>次に、Tailwind CSSとPostCSSのための設定ファイルを生成します。以下のコマンドを実行してください。</p>
-<pre class="codehilite"><code class="language-bash">npx tailwindcss init -p
+<pre><code class="language-bash">npx tailwindcss init -p
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>npx</code>: <code>node_modules</code>ディレクトリ内にインストールされたコマンドを実行するためのツールです。<code>npm</code> 5.2以降に同梱されています。</li>
@@ -142,7 +139,7 @@ npm init -y
 <h4 id="step-4">Step 4: テンプレートパスの設定</h4>
 <p>Tailwind CSSに、プロジェクト内のどのファイルにユーティリティクラスが書かれているかを教える必要があります。これにより、Tailwindはそれらのファイルを監視し、実際に使われているクラスだけを最終的なCSSファイルに含めることができます（これによりファイルサイズが劇的に小さくなります）。</p>
 <p><code>tailwind.config.js</code>を開き、<code>content</code>プロパティを以下のように修正してください。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -153,7 +150,6 @@ module.exports = {
   plugins: [],
 }
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>content: ["./src/**/*.{html,js}"]</code>: <code>src</code>ディレクトリ内にある、すべてのサブディレクトリ（<code>**</code>）の、拡張子が<code>.html</code>または<code>.js</code>であるすべてのファイル（<code>*</code>）を監視対象にすることを意味します。</li>
@@ -162,18 +158,16 @@ module.exports = {
 </ul>
 <h4 id="step-5-css">Step 5: CSSファイルの作成とディレクティブの記述</h4>
 <p>次に、Tailwind CSSのクラスが最終的に展開されるCSSファイルを作成します。<code>src</code>ディレクトリを作成し、その中に<code>input.css</code>というファイルを作成してください。</p>
-<pre class="codehilite"><code class="language-bash">mkdir src
+<pre><code class="language-bash">mkdir src
 touch src/input.css
 </code></pre>
-
 <p>そして、<code>src/input.css</code>に以下の3行を記述します。</p>
-<pre class="codehilite"><code class="language-css">/* src/input.css */
+<pre><code class="language-css">/* src/input.css */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>@tailwind base;</code>: ブラウザ間の表示差異をなくすための基本的なスタイル（リセットCSS）を展開します。</li>
@@ -185,14 +179,13 @@ touch src/input.css
 <p>ビルドプロセスでは、PostCSSがこれらの<code>@tailwind</code>ディレクティブを、実際のCSSコードに置き換えてくれます。</p>
 <h4 id="step-6-css">Step 6: CSSビルドスクリプトの追加</h4>
 <p><code>package.json</code>の<code>scripts</code>に、CSSをビルドするためのコマンドを追加します。</p>
-<pre class="codehilite"><code class="language-json">// package.json
+<pre><code class="language-json">// package.json
 
 &quot;scripts&quot;: {
   &quot;build&quot;: &quot;tailwindcss -i ./src/input.css -o ./dist/output.css&quot;,
   &quot;watch&quot;: &quot;tailwindcss -i ./src/input.css -o ./dist/output.css --watch&quot;
 },
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>build</code>: <code>src/input.css</code>を元に、<code>dist/output.css</code>というファイルにビルド結果を出力します。</li>
@@ -202,7 +195,7 @@ touch src/input.css
 </ul>
 <h4 id="step-7-htmlcss">Step 7: HTMLファイルの作成とCSSの読み込み</h4>
 <p>最後に、実際にTailwind CSSを使うHTMLファイルを作成します。<code>src</code>ディレクトリに<code>index.html</code>を作成し、以下のように記述してください。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
@@ -219,7 +212,6 @@ touch src/input.css
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>&lt;link href="/dist/output.css" rel="stylesheet"&gt;</code>: ビルドして生成されるCSSファイルを読み込んでいます。パスが<code>/dist/output.css</code>になっていることに注意してください。</li>
@@ -229,9 +221,8 @@ touch src/input.css
 </ul>
 <h4 id="step-8">Step 8: ビルドの実行と確認</h4>
 <p>準備はすべて整いました。ターミナルで以下のコマンドを実行し、CSSをビルドしてみましょう。</p>
-<pre class="codehilite"><code class="language-bash">npm run build
+<pre><code class="language-bash">npm run build
 </code></pre>
-
 <p>コマンドが成功すると、<code>dist</code>ディレクトリが作成され、その中に<code>output.css</code>が生成されているはずです。中身を見ると、<code>@tailwind</code>ディレクティブが大量のCSSコードに変換されているのがわかります。</p>
 <p><code>src/index.html</code>をブラウザで開いてみてください。「こんにちは、Tailwind CSS!」という文字にスタイルが適用されていれば、セットアップは成功です！</p>
 <p>開発中は、<code>npm run watch</code>コマンドを実行しておくと、HTMLやJSファイルを変更するたびに自動でCSSが再ビルドされるので非常に便利です。</p>

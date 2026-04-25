@@ -67,7 +67,7 @@
 <li><strong>レイアウトシフトの防止</strong>: 画像の<code>width</code>と<code>height</code>を必須とすることで、画像の読み込み中に発生するガタつき（Cumulative Layout Shift, CLS）を自動的に防ぎます。</li>
 </ul>
 <p><strong>使い方:</strong></p>
-<pre class="codehilite"><code class="language-tsx">import Image from &quot;next/image&quot;;
+<pre><code class="language-tsx">import Image from &quot;next/image&quot;;
 import profilePic from &quot;../public/me.png&quot;; // ローカル画像はimportする
 
 export default function MyPage() {
@@ -92,13 +92,12 @@ export default function MyPage() {
   );
 }
 </code></pre>
-
 <p><code>&lt;img&gt;</code>を<code>&lt;Image&gt;</code>に置き換えるだけで、これだけの最適化が自動的に行われるのは非常に強力です。</p>
 <h3 id="2-nextfont">2. フォント最適化: <code>next/font</code></h3>
 <p>Webフォント（特にGoogle Fonts）は手軽に使えますが、外部からフォントファイルをダウンロードするため、レンダリングをブロックしたり、フォントの読み込み前後でテキストのスタイルが一瞬変わる（FOUT）/非表示になる（FOIT）、レイアウトがずれる（CLS）といった問題を引き起こす可能性があります。</p>
 <p><code>next/font</code>は、この問題を解決します。フォントファイルをビルド時にダウンロードし、他の静的アセットと一緒にセルフホストすることで、プライバシーとパフォーマンスを向上させます。</p>
 <p><strong>使い方 (Google Fonts):</strong></p>
-<pre class="codehilite"><code class="language-tsx">// app/layout.tsx
+<pre><code class="language-tsx">// app/layout.tsx
 import { Inter, Noto_Sans_JP } from &quot;next/font/google&quot;;
 
 // フォント設定を定義
@@ -118,7 +117,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 </code></pre>
-
 <p>これだけで、Next.jsは以下の最適化を行います。</p>
 <ul>
 <li><strong>自動セルフホスティング</strong>: ビルド時にGoogle Fontsからフォントファイルをダウンロードし、アプリケーションと一緒に配信します。これにより、ブラウザがGoogleのサーバーにリクエストを送る必要がなくなり、プライバシーが保護され、パフォーマンスも安定します。</li>
@@ -129,7 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 <p><code>next/dynamic</code>を使うと、特定のコンポーネントを初期バンドルから除外し、必要になったタイミング（例: クリックされた時、ビューポートに入った時）で動的に（遅延して）読み込むことができます。</p>
 <p><strong>使い方:</strong></p>
 <p>例えば、クリックしないと表示されないモーダルコンポーネントや、ページのフッター近くにあるような重いコンポーネントが対象になります。</p>
-<pre class="codehilite"><code class="language-tsx">import { useState } from &quot;react&quot;;
+<pre><code class="language-tsx">import { useState } from &quot;react&quot;;
 import dynamic from &quot;next/dynamic&quot;;
 
 // HeavyComponentを動的にインポート
@@ -152,7 +150,6 @@ export default function MyPage() {
   );
 }
 </code></pre>
-
 <ul>
 <li><strong>コード分割</strong>: <code>HeavyComponent</code>とその依存関係は、別のJavaScriptファイル（チャンク）に分割され、初期読み込み時にはダウンロードされません。</li>
 <li><strong>遅延読み込み</strong>: <code>show</code>が<code>true</code>になるまで、このチャンクは読み込まれません。これにより、初期ページのJavaScriptサイズが削減され、インタラクティブになるまでの時間（TTI）が短縮されます。</li>

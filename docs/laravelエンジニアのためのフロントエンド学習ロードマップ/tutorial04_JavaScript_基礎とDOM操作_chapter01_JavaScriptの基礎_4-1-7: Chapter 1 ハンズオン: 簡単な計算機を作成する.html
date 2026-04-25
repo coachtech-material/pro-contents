@@ -43,7 +43,7 @@
 <p>このハンズオンでは、Chapter 1で学んだ変数、関数、演算子、条件分岐、繰り返し処理を使って、簡単な計算機プログラムを作成します。</p>
 <h2 id="_2">準備</h2>
 <p>作業用のHTMLファイルを作成します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -56,7 +56,6 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <h2 id="1">課題1: 基本的な計算関数を作成する</h2>
 <p><code>calculator.js</code>ファイルを作成し、四則演算を行う関数を作成してください。</p>
 <h3 id="_3">要件</h3>
@@ -67,7 +66,7 @@
 <li><code>divide(a, b)</code> - 割り算（0で割る場合はエラーメッセージを返す）</li>
 </ol>
 <h3 id="_4">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">// 足し算
+<pre><code class="language-javascript">// 足し算
 const add = (a, b) =&gt; a + b;
 
 // 引き算
@@ -91,7 +90,6 @@ console.log(&quot;掛け算: 10 * 5 =&quot;, multiply(10, 5)); // 50
 console.log(&quot;割り算: 10 / 5 =&quot;, divide(10, 5));   // 2
 console.log(&quot;割り算: 10 / 0 =&quot;, divide(10, 0));   // エラーメッセージ
 </code></pre>
-
 <h2 id="2">課題2: 計算機関数を作成する</h2>
 <p>演算子を文字列で受け取り、適切な計算を行う<code>calculate</code>関数を作成してください。</p>
 <h3 id="_5">要件</h3>
@@ -101,7 +99,7 @@ console.log(&quot;割り算: 10 / 0 =&quot;, divide(10, 0));   // エラーメ�
 <li>課題1で作成した関数を再利用する</li>
 </ol>
 <h3 id="_6">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">const calculate = (a, operator, b) =&gt; {
+<pre><code class="language-javascript">const calculate = (a, operator, b) =&gt; {
   if (operator === &quot;+&quot;) {
     return add(a, b);
   } else if (operator === &quot;-&quot;) {
@@ -122,7 +120,6 @@ console.log(&quot;10 * 5 =&quot;, calculate(10, &quot;*&quot;, 5));  // 50
 console.log(&quot;10 / 5 =&quot;, calculate(10, &quot;/&quot;, 5));  // 2
 console.log(&quot;10 % 5 =&quot;, calculate(10, &quot;%&quot;, 5));  // エラーメッセージ
 </code></pre>
-
 <h2 id="3">課題3: 複数の計算を連続で行う</h2>
 <p>配列に格納された複数の計算式を順番に処理し、結果を表示する機能を作成してください。</p>
 <h3 id="_7">要件</h3>
@@ -132,7 +129,7 @@ console.log(&quot;10 % 5 =&quot;, calculate(10, &quot;%&quot;, 5));  // エラ�
 <li>各計算結果をコンソールに表示</li>
 </ol>
 <h3 id="_8">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">const calculations = [
+<pre><code class="language-javascript">const calculations = [
   { a: 100, operator: &quot;+&quot;, b: 50 },
   { a: 100, operator: &quot;-&quot;, b: 30 },
   { a: 25, operator: &quot;*&quot;, b: 4 },
@@ -147,7 +144,6 @@ for (const calc of calculations) {
   console.log(`${calc.a} ${calc.operator} ${calc.b} = ${result}`);
 }
 </code></pre>
-
 <h2 id="4">課題4: 計算履歴を保存する</h2>
 <p>計算結果を履歴として保存し、後から確認できる機能を追加してください。</p>
 <h3 id="_9">要件</h3>
@@ -157,7 +153,7 @@ for (const calc of calculations) {
 <li>履歴を表示する関数を作成</li>
 </ol>
 <h3 id="_10">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">// 計算履歴を保存する配列
+<pre><code class="language-javascript">// 計算履歴を保存する配列
 const history = [];
 
 // 履歴付き計算関数
@@ -192,7 +188,6 @@ calculateWithHistory(100, &quot;/&quot;, 4);
 
 showHistory();
 </code></pre>
-
 <h2 id="_11">✨ まとめ</h2>
 <p>このハンズオンでは、以下のことを実践しました。</p>
 <ul>

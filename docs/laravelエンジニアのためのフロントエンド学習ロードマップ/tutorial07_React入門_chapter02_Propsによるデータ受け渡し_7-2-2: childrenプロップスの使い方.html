@@ -51,7 +51,7 @@
 <h3 id="_1">イントロダクション：コンポーネントの「中身」を渡したい</h3>
 <p>前のセクションでは、コンポーネントに属性のような形でデータを渡す方法を学びました。しかし、もし渡したいデータが、単純な文字列や数値ではなく、<strong>他のJSX要素やコンポーネント</strong>だったらどうでしょうか？</p>
 <p>例えば、様々なコンテンツを囲むことができる、汎用的な「カード」コンポーネントを作りたいとします。</p>
-<pre class="codehilite"><code class="language-jsx">&lt;Card&gt;
+<pre><code class="language-jsx">&lt;Card&gt;
   {/* ここにプロフィール情報を入れたい */}
 &lt;/Card&gt;
 
@@ -59,7 +59,6 @@
   {/* ここに記事の要約を入れたい */}
 &lt;/Card&gt;
 </code></pre>
-
 <p>このように、コンポーネントの開始タグと終了タグの間にコンテンツを「埋め込む」ことを可能にするのが、特別なPropsである <strong><code>children</code></strong> です。</p>
 <hr />
 <h3 id="children-props">⚙️ <code>children</code> Propsの使い方</h3>
@@ -67,7 +66,7 @@
 <p><strong>例：汎用的な<code>Card</code>コンポーネント</strong></p>
 <p><strong>1. 子コンポーネント (<code>Card.tsx</code>)</strong></p>
 <p><code>Card</code>コンポーネントは、渡された<code>children</code>を、自身の<code>div</code>要素の中に表示するだけです。</p>
-<pre class="codehilite"><code class="language-tsx">// Card.tsx
+<pre><code class="language-tsx">// Card.tsx
 
 import React from &quot;react&quot;; // ReactNode型のためにインポート
 
@@ -88,13 +87,12 @@ function Card({ children }: CardProps) {
 
 export default Card;
 </code></pre>
-
 <ul>
 <li><strong><code>React.ReactNode</code></strong>: <code>children</code> Propsの型注釈には、<code>React.ReactNode</code>を使うのが最も安全で一般的です。これは、JSX要素、文字列、数値、<code>null</code>、<code>undefined</code>など、Reactがレンダリングできるすべてのものを含む包括的な型です。</li>
 </ul>
 <p><strong>2. 親コンポーネント (<code>App.tsx</code>)</strong></p>
 <p>親コンポーネントは、<code>Card</code>コンポーネントの「中身」として、好きなJSXを渡すことができます。</p>
-<pre class="codehilite"><code class="language-tsx">// App.tsx
+<pre><code class="language-tsx">// App.tsx
 import Card from &quot;./components/Card&quot;;
 import UserProfile from &quot;./components/UserProfile&quot;;
 
@@ -115,7 +113,6 @@ function App() {
   );
 }
 </code></pre>
-
 <ul>
 <li><code>&lt;Card&gt;...&lt;/Card&gt;</code>で囲まれた部分（<code>UserProfile</code>コンポーネントや、<code>h2</code>と<code>p</code>タグ）が、<code>Card</code>コンポーネントの<code>children</code> Propsとして渡されます。</li>
 <li><code>Card</code>コンポーネントは、受け取った<code>children</code>をそのままレンダリングするため、結果として、<code>UserProfile</code>や「お知らせ」が、カードのスタイルが適用された<code>div</code>の中に表示されます。</li>
@@ -124,20 +121,18 @@ function App() {
 <h3 id="children-props_1">🚀 <code>children</code> Propsの活用例</h3>
 <p><code>children</code> Propsは、特定のレイアウトやスタイルを提供しつつ、その中身は自由に差し替え可能にしたい、という<strong>ラッパーコンポーネント</strong>を作成する際に非常に強力です。</p>
 <h4 id="1-modal">例1：モーダルダイアログ (<code>Modal</code>)</h4>
-<pre class="codehilite"><code class="language-jsx">&lt;Modal title=&quot;確認&quot;&gt;
+<pre><code class="language-jsx">&lt;Modal title=&quot;確認&quot;&gt;
   &lt;p&gt;本当に削除しますか？&lt;/p&gt;
   &lt;button&gt;はい&lt;/button&gt;
   &lt;button&gt;いいえ&lt;/button&gt;
 &lt;/Modal&gt;
 </code></pre>
-
 <p><code>Modal</code>コンポーネントは、モーダルの背景や閉じるボタンといった共通のUIを提供し、<code>title</code> Propsでタイトルを受け取り、<code>children</code> Propsでモーダルの本文を受け取ります。</p>
 <h4 id="2-authenticatedpage">例2：認証付きページ (<code>AuthenticatedPage</code>)</h4>
-<pre class="codehilite"><code class="language-jsx">&lt;AuthenticatedPage&gt;
+<pre><code class="language-jsx">&lt;AuthenticatedPage&gt;
   &lt;Dashboard /&gt;
 &lt;/AuthenticatedPage&gt;
 </code></pre>
-
 <p><code>AuthenticatedPage</code>コンポーネントは、まずユーザーがログインしているかどうかをチェックします。ログインしていれば、渡された<code>children</code>（この場合は<code>Dashboard</code>コンポーネント）を表示し、ログインしていなければログインページにリダイレクトする、といったロジックを共通化できます。</p>
 <p>このように、<code>children</code> Propsを使いこなすことで、コンポーネントの再利用性が格段に向上し、アプリケーションの構造をよりクリーンに保つことができます。</p>
 <hr />

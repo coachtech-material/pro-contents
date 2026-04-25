@@ -54,11 +54,10 @@
 <h3 id="1">ステップ1: 環境変数の設定</h3>
 <p>APIのエンドポイントURLをコード内に直接書き込む（ハードコーディングする）のは良い習慣ではありません。開発環境と本番環境でURLが異なる場合に対応しづらくなりますし、URLが変更された際の修正も大変です。</p>
 <p>そこで、環境変数を使ってAPIのベースURLを管理します。Next.jsプロジェクトのルートに<code>.env.local</code>というファイルを作成し、以下のように記述してください。</p>
-<pre class="codehilite"><code class="language-env"># .env.local
+<pre><code class="language-env"># .env.local
 
 NEXT_PUBLIC_API_BASE_URL=http://localhost/api
 </code></pre>
-
 <ul>
 <li><code>.env.local</code>: このファイルに定義された環境変数は、ローカル開発環境でのみ読み込まれます。Gitの管理対象から除外（<code>.gitignore</code>に記載済み）されているため、個人の環境設定や秘密情報を安全に管理できます。</li>
 <li><code>NEXT_PUBLIC_</code>: Next.jsでは、プレフィックスとして<code>NEXT_PUBLIC_</code>が付いた環境変数のみが、ブラウザ側（Client Component）でもアクセス可能な変数として扱われます。今回はServer Componentからのみアクセスしますが、今後の拡張性を考えて付けておくのが一般的です。</li>
@@ -71,7 +70,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost/api
 <li><code>src/app/products/</code>の中に<code>page.tsx</code>というファイルを作成します。</li>
 </ol>
 <p><code>src/app/products/page.tsx</code>に、APIを呼び出してデータを取得するコードを記述します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/products/page.tsx
+<pre><code class="language-tsx">// src/app/products/page.tsx
 
 // APIから返される商品データの型を定義
 interface Product {
@@ -116,7 +115,6 @@ export default async function ProductsPage() {
   );
 }
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong>型定義</strong>: <code>interface Product</code>で、APIから受け取るデータの構造を定義しています。これにより、<code>product.name</code>のようなプロパティアクセス時にエディタの補完が効き、タイプミスを防ぐことができます。</li>
@@ -127,14 +125,12 @@ export default async function ProductsPage() {
 <h3 id="3-cors">ステップ3: CORSエラーとの遭遇</h3>
 <p>開発サーバーを再起動し、ブラウザで<code>http://localhost:3000/products</code>にアクセスしてみてください。ページには何も表示されず、ブラウザのコンソールと、Next.jsの開発サーバーのターミナル（VSCodeのターミナルなど）の両方に、以下のような<strong>CORSエラー</strong>が表示されるはずです。</p>
 <p><strong>ブラウザのコンソール:</strong></p>
-<pre class="codehilite"><code>Access to fetch at 'http://localhost/api/products' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+<pre><code>Access to fetch at 'http://localhost/api/products' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 </code></pre>
-
 <p><strong>Next.jsサーバーのターミナル:</strong></p>
-<pre class="codehilite"><code>Error: Failed to fetch products
+<pre><code>Error: Failed to fetch products
 ... (エラー詳細)
 </code></pre>
-
 <p>これは正常な動作です。なぜこのエラーが起こるのでしょうか？</p>
 <h4 id="cors-cross-origin-resource-sharing">CORS (Cross-Origin Resource Sharing) とは？</h4>
 <p>CORSは、Webブラウザが持つセキュリティ機能の一つです。デフォルトでは、ブラウザは<strong>異なるオリジン</strong>からのリソース読み込みをブロックします。</p>

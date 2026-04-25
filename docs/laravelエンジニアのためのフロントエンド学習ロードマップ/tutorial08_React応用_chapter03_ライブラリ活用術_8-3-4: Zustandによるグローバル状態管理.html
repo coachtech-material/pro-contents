@@ -59,10 +59,9 @@
 <p>そして、作成されたストアは自動的にフックを返します。コンポーネントはそのフックを使うだけで、ストアの状態にアクセスしたり、アクションを呼び出したりできます。</p>
 <h3 id="create-api"><code>create</code> APIによるストアの作成</h3>
 <p>カウンターを管理するシンプルなストアを作成してみましょう。</p>
-<pre class="codehilite"><code class="language-bash">npm install zustand
+<pre><code class="language-bash">npm install zustand
 </code></pre>
-
-<pre class="codehilite"><code class="language-typescript">// src/store/counterStore.ts
+<pre><code class="language-typescript">// src/store/counterStore.ts
 import { create } from 'zustand';
 
 // ストアの型を定義
@@ -84,7 +83,6 @@ export const useCounterStore = create&lt;CounterState&gt;((set) =&gt; ({
   reset: () =&gt; set({ count: 0 }),
 }));
 </code></pre>
-
 <h4 id="_4">コードのポイント</h4>
 <ol>
 <li><strong>初期状態</strong>: <code>create</code>のコールバック関数は、ストアの初期状態をオブジェクトとして返します。<code>count: 0</code>が初期状態です。</li>
@@ -94,7 +92,7 @@ export const useCounterStore = create&lt;CounterState&gt;((set) =&gt; ({
 <p>これだけで、グローバルにアクセス可能な<code>useCounterStore</code>フックが完成しました。<code>Provider</code>でコンポーネントをラップする必要は一切ありません。</p>
 <h3 id="_5">ストアの利用</h3>
 <p>作成したストアをコンポーネントで使うのは非常に簡単です。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/Counter.tsx
+<pre><code class="language-tsx">// src/components/Counter.tsx
 import { useCounterStore } from '../store/counterStore';
 
 function Counter() {
@@ -110,11 +108,10 @@ function Counter() {
   );
 }
 </code></pre>
-
 <p><code>useCounterStore()</code>を呼び出すだけで、ストアのすべての状態とアクションにアクセスできます。</p>
 <h4 id="_6">パフォーマンスの最適化</h4>
 <p><code>Zustand</code>の真価は、状態の一部だけを購読できる点にあります。これにより、不要な再レンダリングを避けることができます。</p>
-<pre class="codehilite"><code class="language-tsx">// このコンポーネントは`count`が変更された時だけ再レンダリングされる
+<pre><code class="language-tsx">// このコンポーネントは`count`が変更された時だけ再レンダリングされる
 function CountDisplay() {
   const count = useCounterStore((state) =&gt; state.count);
   return &lt;p&gt;Count: {count}&lt;/p&gt;;
@@ -126,11 +123,10 @@ function ResetButton() {
   return &lt;button onClick={reset}&gt;Reset&lt;/button&gt;;
 }
 </code></pre>
-
 <p><code>useCounterStore</code>の引数にセレクター関数（<code>state =&gt; state.count</code>）を渡すことで、その値が変更されたときにのみコンポーネントが再レンダリングされるようになります。これは、Context APIにはない<code>Zustand</code>の大きな利点です。</p>
 <h3 id="_7">非同期アクション</h3>
 <p><code>Zustand</code>では、非同期処理も簡単に扱えます。アクション内で<code>async/await</code>を使うだけです。</p>
-<pre class="codehilite"><code class="language-typescript">// src/store/todoStore.ts
+<pre><code class="language-typescript">// src/store/todoStore.ts
 import { create } from 'zustand';
 
 interface Todo {
@@ -152,7 +148,6 @@ export const useTodoStore = create&lt;TodoState&gt;((set) =&gt; ({
   },
 }));
 </code></pre>
-
 <h2 id="_8">✨ まとめ</h2>
 <ul>
 <li><code>Zustand</code>は、Context APIの再レンダリング問題を解決し、ボイラープレートコードを最小限に抑えた、シンプルで強力なグローバル状態管理ライブラリである。</li>

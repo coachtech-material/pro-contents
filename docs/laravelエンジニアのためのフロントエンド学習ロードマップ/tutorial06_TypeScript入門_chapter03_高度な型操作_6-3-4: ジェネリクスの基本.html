@@ -47,18 +47,17 @@
 </ul>
 <h2 id="_2">導入</h2>
 <p>これまで、関数の引数や戻り値には <code>string</code> や <code>number</code> のような具体的な型を指定してきました。しかし、もし「受け取った値をそのまま返す」という、どんな型にも対応できる関数を作りたい場合、どうすればよいでしょうか？</p>
-<pre class="codehilite"><code class="language-typescript">function identity(arg: any): any {
+<pre><code class="language-typescript">function identity(arg: any): any {
   return arg;
 }
 </code></pre>
-
 <p><code>any</code> を使えば実現できますが、これではTypeScriptの最大の利点である<strong>型安全性</strong>が失われてしまいます。<code>identity("hello")</code> の戻り値が <code>string</code> であることをTypeScriptは知ることができず、<code>string</code> 型のメソッドを補完してくれません。</p>
 <p>この「<strong>型安全性を保ちつつ、様々な型に対応できる再利用可能なコンポーネント（関数やクラス）を作りたい</strong>」という要求に応えるのが<strong>ジェネリクス（Generics）</strong>です。ジェネリクスは、型そのものを引数のように動的に扱うことを可能にする、TypeScriptの非常に強力な機能です。</p>
 <h2 id="_3">詳細解説</h2>
 <h3 id="generic-functions">🔑 ジェネリック関数 (Generic Functions)</h3>
 <p>ジェネリクスは、関数名やクラス名の後に <code>&lt;T&gt;</code> のような形で<strong>型変数（Type Variable）</strong>を宣言することで使用します。この <code>T</code> は、関数が呼び出されるときに具体的な型に置き換えられます。</p>
 <p>先ほどの <code>identity</code> 関数をジェネリクスを使って書き換えてみましょう。</p>
-<pre class="codehilite"><code class="language-typescript">// &lt;T&gt; で型変数Tを宣言し、引数argと戻り値の型として使用する
+<pre><code class="language-typescript">// &lt;T&gt; で型変数Tを宣言し、引数argと戻り値の型として使用する
 function identity&lt;T&gt;(arg: T): T {
   return arg;
 }
@@ -76,29 +75,26 @@ let output2 = identity(&quot;myString&quot;);
 let output3 = identity(123);
 // output3 は number 型だと推論される
 </code></pre>
-
 <p><code>any</code> を使った場合との決定的な違いは、<strong>引数の型と戻り値の型の関係性が保たれる</strong>ことです。<code>identity&lt;string&gt;</code> を呼び出せば、TypeScriptは戻り値が <code>string</code> であることを正確に把握しているため、<code>output1.toUpperCase()</code> のようなメソッド呼び出しも安全に行えます。</p>
 <h3 id="_4">複数の型変数</h3>
 <p>型変数はカンマ区切りで複数宣言することもできます。</p>
-<pre class="codehilite"><code class="language-typescript">function pair&lt;T, U&gt;(first: T, second: U): [T, U] {
+<pre><code class="language-typescript">function pair&lt;T, U&gt;(first: T, second: U): [T, U] {
   return [first, second];
 }
 
 let result = pair&lt;string, number&gt;(&quot;hello&quot;, 123);
 // result は [string, number] 型
 </code></pre>
-
 <h3 id="generic-constraints">🔑 ジェネリック制約 (Generic Constraints)</h3>
 <p>ジェネリクスは非常に柔軟ですが、時には型変数 <code>T</code> が<strong>特定のプロパティやメソッドを持つこと</strong>を保証したい場合があります。例えば、「受け取ったオブジェクトの <code>length</code> プロパティにアクセスしたい」というケースを考えます。</p>
-<pre class="codehilite"><code class="language-typescript">function loggingIdentity&lt;T&gt;(arg: T): T {
+<pre><code class="language-typescript">function loggingIdentity&lt;T&gt;(arg: T): T {
   console.log(arg.length); // エラー: Property 'length' does not exist on type 'T'.
   return arg;
 }
 </code></pre>
-
 <p>このコードはエラーになります。なぜなら、型 <code>T</code> は現時点ではどんな型にもなりうるため、<code>length</code> プロパティを持つとは限らないからです（例えば <code>number</code> 型など）。</p>
 <p>ここで役立つのが<strong>ジェネリック制約</strong>です。<code>extends</code> キーワードを使って、型変数が特定のインターフェースを実装していることを強制できます。</p>
-<pre class="codehilite"><code class="language-typescript">// lengthプロパティを持つ型を定義
+<pre><code class="language-typescript">// lengthプロパティを持つ型を定義
 interface Lengthwise {
   length: number;
 }
@@ -113,7 +109,6 @@ loggingIdentity(&quot;hello&quot;);       // OK. stringはlengthプロパティ�
 loggingIdentity([1, 2, 3]);     // OK. 配列はlengthプロパティを持つ
 // loggingIdentity(123);        // エラー: Argument of type 'number' is not assignable to parameter of type 'Lengthwise'.
 </code></pre>
-
 <p><code>T extends Lengthwise</code> という制約により、<code>loggingIdentity</code> 関数は <code>length</code> プロパティを持つ型の引数しか受け付けなくなりました。これにより、関数内部で安全に <code>arg.length</code> にアクセスできるようになります。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

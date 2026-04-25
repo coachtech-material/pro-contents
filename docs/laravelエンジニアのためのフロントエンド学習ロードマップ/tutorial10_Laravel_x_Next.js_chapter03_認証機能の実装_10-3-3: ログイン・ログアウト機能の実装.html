@@ -59,7 +59,7 @@
 <h4 id="1">ステップ1: 認証ルートの有効化</h4>
 <p>Laravelは、<code>laravel/ui</code>や<code>laravel/breeze</code>といったパッケージを導入することで、認証関連のルートやコントローラーを自動で生成してくれます。今回は、APIに必要なルートだけをシンプルに追加します。</p>
 <p><code>routes/api.php</code>に以下のコードを追加してください。</p>
-<pre class="codehilite"><code class="language-php">// routes/api.php
+<pre><code class="language-php">// routes/api.php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,9 +74,8 @@ Route::middleware(&quot;auth:sanctum&quot;)-&gt;get(&quot;/user&quot;, function 
     return $request-&gt;user();
 });
 </code></pre>
-
 <p>次に、<code>routes/web.php</code>にログイン・ログアウトのルートを追加します。SPA認証では、セッションを開始・破棄するために、これらのルートは<code>web</code>ミドルウェアグループ（CSRF保護などを含む）内に定義する必要があります。</p>
-<pre class="codehilite"><code class="language-php">// routes/web.php
+<pre><code class="language-php">// routes/web.php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -113,7 +112,6 @@ Route::post(&quot;/logout&quot;, function (Request $request) {
     return response()-&gt;noContent();
 });
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>/api/user</code></strong>: <code>auth:sanctum</code>ミドルウェアで保護されています。これにより、有効なセッションを持つリクエスト（認証済みリクエスト）だけがこのルートにアクセスでき、認証済みのユーザーモデルを取得できます。NextAuth.jsの<code>authorize</code>コールバックで、ログイン直後にこのエンドポイントを叩いていましたね。</li>
@@ -122,11 +120,10 @@ Route::post(&quot;/logout&quot;, function (Request $request) {
 </ul>
 <h4 id="2">ステップ2: テスト用ユーザーの作成</h4>
 <p>ログイン機能を試すために、テスト用のユーザーが必要です。<code>tinker</code>を使って作成しましょう。</p>
-<pre class="codehilite"><code class="language-bash">sail artisan tinker
+<pre><code class="language-bash">sail artisan tinker
 </code></pre>
-
 <p><code>tinker</code>の対話コンソールで、以下のPHPコードを実行します。</p>
-<pre class="codehilite"><code class="language-php">// tinker
+<pre><code class="language-php">// tinker
 
 \App\Models\User::create([
     'name' =&gt; 'Test User',
@@ -134,13 +131,12 @@ Route::post(&quot;/logout&quot;, function (Request $request) {
     'password' =&gt; bcrypt('password'),
 ]);
 </code></pre>
-
 <p>これで、メールアドレス <code>test@example.com</code>、パスワード <code>password</code> のユーザーが作成されました。</p>
 <h3 id="2-nextjs">パート2: フロントエンド（Next.js）の実装</h3>
 <p><strong>注意</strong>: このパートの作業は、すべてNext.jsプロジェクトのディレクトリ（<code>next-frontend-app</code>）で行います。</p>
 <h4 id="1_1">ステップ1: ログインページの作成</h4>
 <p>NextAuth.jsの設定で <code>pages: { signIn: '/login' }</code> と指定したので、<code>src/app/login/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/login/page.tsx
+<pre><code class="language-tsx">// src/app/login/page.tsx
 &quot;use client&quot;;
 
 import { useState } from &quot;react&quot;;
@@ -222,7 +218,6 @@ export default function LoginPage() {
   );
 }
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>"use client"</code></strong>: フォーム入力の状態管理（<code>useState</code>）やイベントハンドリング（<code>onSubmit</code>）など、クライアントサイドのインタラクションが必要なため、Client Componentとして定義します。</li>
@@ -232,7 +227,7 @@ export default function LoginPage() {
 <h4 id="2_1">ステップ2: 認証状態を表示するヘッダーの作成</h4>
 <p>ログインしているかどうか、誰がログインしているかを表示し、ログイン/ログアウトのリンクを提供するためのヘッダーコンポーネントを作成します。</p>
 <p><code>src/app/components/Header.tsx</code>という新しいファイルを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/components/Header.tsx
+<pre><code class="language-tsx">// src/app/components/Header.tsx
 &quot;use client&quot;;
 
 import { useSession, signOut } from &quot;next-auth/react&quot;;
@@ -274,7 +269,6 @@ export default function Header() {
   );
 }
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>useSession()</code></strong>: NextAuth.jsが提供する最も重要なフックです。認証状態（<code>status</code>）とセッションデータ（<code>data</code>）を取得します。<ul>
@@ -287,7 +281,7 @@ export default function Header() {
 </ul>
 <h4 id="3">ステップ3: レイアウトにヘッダーを追加</h4>
 <p>作成した<code>Header</code>コンポーネントを、<code>src/app/layout.tsx</code>で表示するようにします。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/layout.tsx
+<pre><code class="language-tsx">// src/app/layout.tsx
 
 // ... (importなどは変更なし)
 import Header from &quot;./components/Header&quot;; // Headerをインポート
@@ -311,7 +305,6 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <h3 id="3_1">パート3: 動作確認</h3>
 <p>すべての実装が完了しました。実際に動作を確認してみましょう。</p>
 <ol>

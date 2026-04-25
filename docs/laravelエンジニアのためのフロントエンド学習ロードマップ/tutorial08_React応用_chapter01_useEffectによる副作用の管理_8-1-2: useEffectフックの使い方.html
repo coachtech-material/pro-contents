@@ -59,7 +59,7 @@
 <hr />
 <h3 id="useeffect">⚙️ <code>useEffect</code>の基本構文</h3>
 <p><code>useEffect</code>は、第一引数に<strong>副作用関数</strong>、第二引数に<strong>依存配列</strong>を取ります。</p>
-<pre class="codehilite"><code class="language-tsx">import { useEffect } from 'react';
+<pre><code class="language-tsx">import { useEffect } from 'react';
 
 useEffect(
   // 1. 副作用関数：ここに実行したい副作用処理を書く
@@ -71,28 +71,25 @@ useEffect(
   [dependency1, dependency2, ...]
 );
 </code></pre>
-
 <p><strong>動作の基本ルール:</strong><br />
 Reactは、コンポーネントのレンダリングが完了した後、<strong>依存配列の中の値が前回のレンダリング時と変更されているか</strong>をチェックします。もし変更があれば、第一引数の副作用関数を実行します。</p>
 <hr />
 <h3 id="3">🚀 依存配列の3つのパターン</h3>
 <p>依存配列の指定方法によって、副作用の実行タイミングは大きく3つのパターンに分かれます。これは<code>useEffect</code>を使いこなす上で最も重要な知識です。</p>
 <h4 id="1">パターン1：依存配列を省略する</h4>
-<pre class="codehilite"><code class="language-tsx">useEffect(() =&gt; {
+<pre><code class="language-tsx">useEffect(() =&gt; {
   console.log(&quot;毎回のレンダリング後に実行&quot;);
 }); // 依存配列を省略
 </code></pre>
-
 <ul>
 <li><strong>実行タイミング:</strong> コンポーネントが<strong>再レンダリングされるたびに</strong>、副作用関数が実行されます。</li>
 <li><strong>主な用途:</strong> このパターンは、意図しない無限ループ（副作用内でStateを更新し、それが再レンダリングを引き起こし、また副作用が…）を引き起こしやすいため、<strong>ほとんど使いません</strong>。使う場面は非常に限定的です。</li>
 </ul>
 <h4 id="2">パターン2：空の依存配列 <code>[]</code> を指定する</h4>
-<pre class="codehilite"><code class="language-tsx">useEffect(() =&gt; {
+<pre><code class="language-tsx">useEffect(() =&gt; {
   console.log(&quot;初回レンダリング後に一度だけ実行&quot;);
 }, []); // 空の配列
 </code></pre>
-
 <ul>
 <li><strong>実行タイミング:</strong> コンポーネントが最初に画面にマウント（表示）された後、<strong>一度だけ</strong>副作用関数が実行されます。</li>
 <li><strong>主な用途:</strong> これが最もよく使われるパターンの一つです。<ul>
@@ -103,7 +100,7 @@ Reactは、コンポーネントのレンダリングが完了した後、<stron
 </li>
 </ul>
 <h4 id="3-dep1-dep2">パターン3：依存配列に値 <code>[dep1, dep2]</code> を指定する</h4>
-<pre class="codehilite"><code class="language-tsx">const [count, setCount] = useState(0);
+<pre><code class="language-tsx">const [count, setCount] = useState(0);
 const [name, setName] = useState(&quot;Taro&quot;);
 
 useEffect(() =&gt; {
@@ -114,7 +111,6 @@ useEffect(() =&gt; {
   console.log(&quot;countかnameが変更されました&quot;);
 }, [count, name]); // countとnameに依存
 </code></pre>
-
 <ul>
 <li><strong>実行タイミング:</strong><ol>
 <li>初回レンダリング後に一度実行される。</li>
@@ -133,7 +129,7 @@ useEffect(() =&gt; {
 <h3 id="_2">🔒 依存配列のルール</h3>
 <p><strong>ルール:</strong> <strong>副作用関数の中で使っている全てのリアクティブな値（Props, State, およびそれらから計算される変数）は、必ず依存配列に含めなければなりません。</strong></p>
 <p><strong>❌ やってはいけないこと（依存配列の嘘）:</strong></p>
-<pre class="codehilite"><code class="language-tsx">function Counter({ step }) {
+<pre><code class="language-tsx">function Counter({ step }) {
   const [count, setCount] = useState(0);
 
   useEffect(() =&gt; {
@@ -145,14 +141,12 @@ useEffect(() =&gt; {
   }, []); // …依存配列に`step`が含まれていない！
 }
 </code></pre>
-
 <p>このコードでは、<code>step</code>というPropsが変更されても、<code>useEffect</code>は再実行されません。そのため、タイマーは古い<code>step</code>の値を参照し続け、意図しない挙動になります。</p>
 <p><strong>⭕ 正しい方法:</strong></p>
-<pre class="codehilite"><code class="language-tsx">useEffect(() =&gt; {
+<pre><code class="language-tsx">useEffect(() =&gt; {
   // ...
 }, [step]); // 正しく`step`を依存配列に含める
 </code></pre>
-
 <p>幸い、ESLintの<code>react-hooks/exhaustive-deps</code>というルールがデフォルトで有効になっており、依存配列に漏れがあると警告を出してくれます。この警告は<strong>絶対に無視せず</strong>、指示に従って修正してください。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

@@ -57,7 +57,7 @@
 <li><strong>本当に型が不明か？</strong>: APIのレスポンスなど、外部から来るデータで型が不明な場合は、<code>unknown</code> 型を使うのがより安全です。<code>unknown</code> 型は、<code>any</code> と違って、型を絞り込む（Type Guard）までプロパティへのアクセスなどを許可しません。</li>
 <li><strong>ジェネリクスで解決できないか？</strong>: 様々な型を扱いたい場合は、ジェネリクスを使うことで型安全性を保ったまま柔軟な関数やクラスを定義できます。</li>
 </ul>
-<pre class="codehilite"><code class="language-typescript">// BAD: anyは型チェックを放棄する
+<pre><code class="language-typescript">// BAD: anyは型チェックを放棄する
 function process(data: any) {
   console.log(data.name);
 }
@@ -70,7 +70,6 @@ function processSafe(data: unknown) {
   }
 }
 </code></pre>
-
 <h3 id="2-interface-vs-type">2. <code>interface</code> vs <code>type</code>: 使い分けの指針</h3>
 <p>オブジェクトの形状を定義するには <code>interface</code> と <code>type</code> の2つの方法があります。機能的に重複する部分も多いですが、コミュニティでは以下のような使い分けが一般的です。</p>
 <ul>
@@ -102,7 +101,7 @@ function processSafe(data: unknown) {
 <p>やむを得ず使う場合もありますが（例: <code>unknown</code> 型からの絞り込み後）、乱用は避けるべきです。もし <code>as</code> を多用しているなら、それは型設計に問題があるサインかもしれません。Type Guardなど、より安全な方法で型を絞り込めないか検討しましょう。</p>
 <h3 id="5-const">5. <code>const</code> アサーションでイミュータブルな型を作る</h3>
 <p>オブジェクトや配列の末尾に <code>as const</code> を付けると、すべてのプロパティが <code>readonly</code> になり、リテラル型として推論されます。これにより、意図しない変更を防ぎ、より厳密な型定義が可能になります。</p>
-<pre class="codehilite"><code class="language-typescript">// as const なし
+<pre><code class="language-typescript">// as const なし
 const config = { env: 'development', version: '1.0' };
 // config.env は string 型
 
@@ -112,7 +111,6 @@ const constConfig = { env: 'development', version: '1.0' } as const;
 
 // constConfig.env = 'production'; // エラー: Cannot assign to 'env' because it is a read-only property.
 </code></pre>
-
 <p>設定オブジェクトなど、変更されるべきでないデータに対して非常に有効です。</p>
 <h2 id="_4">✨ まとめ</h2>
 <ul>

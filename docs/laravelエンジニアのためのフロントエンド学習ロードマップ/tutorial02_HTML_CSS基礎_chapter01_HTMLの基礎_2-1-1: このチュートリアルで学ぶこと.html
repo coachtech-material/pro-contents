@@ -71,7 +71,7 @@
 <h4 id="html">HTMLの役割：文書の構造化</h4>
 <p>HTMLは「マークアップ言語」と呼ばれます。これは、文章の各部分が「これは見出しです」「これは段落です」といったように、「意味（セマンティクス）」を<strong>マーク（目印）</strong>付けしていくことから来ています。</p>
 <p>例えば、以下のような簡単なHTMLを見てみましょう。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;私の最初のページ&lt;/title&gt;
@@ -82,7 +82,6 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p>このコードは、ブラウザに対して以下のような情報を伝えています。</p>
 <ul>
 <li><code>&lt;h1&gt;</code>: 「こんにちは、世界！」というテキストは、このページで最も重要なレベル1の見出しです。</li>
@@ -91,7 +90,7 @@
 <p>この時点では、文字の色や大きさといった「見た目」の情報は一切含まれていません。ただ、文書の構造だけが定義されています。</p>
 <h4 id="css">CSSの役割：見た目の装飾</h4>
 <p>次に、CSSを使ってこのHTMLにスタイルを適用してみましょう。CSSは、どの要素に（セレクタ）、どのようなスタイルを（プロパティと値）適用するかを記述します。</p>
-<pre class="codehilite"><code class="language-css">h1 {
+<pre><code class="language-css">h1 {
   color: blue;
   font-size: 32px;
 }
@@ -100,7 +99,6 @@ p {
   color: gray;
 }
 </code></pre>
-
 <p>このCSSは、ブラウザに対して以下のように指示します。</p>
 <ul>
 <li><code>h1</code>: <code>&lt;h1&gt;</code>タグで囲まれた要素の文字色を青（<code>blue</code>）に、文字サイズを32ピクセル（<code>32px</code>）にしなさい。</li>
@@ -108,7 +106,7 @@ p {
 </ul>
 <h4 id="htmlcss_1">HTMLとCSSの連携</h4>
 <p>HTMLファイルからこのCSSファイルを読み込むことで、初めて構造と見た目が結びつきます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;私の最初のページ&lt;/title&gt;
@@ -120,7 +118,6 @@ p {
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p>こうすることで、ブラウザはまずHTMLを解釈してページの骨格を作り、次にCSSを解釈してその骨格にデザインを施し、最終的にスタイルが適用されたWebページを画面に表示するのです。</p>
 <h3 id="tip">💡 TIP</h3>
 <ul>

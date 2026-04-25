@@ -43,7 +43,7 @@
 <p>このハンズオンでは、実際のプロジェクトで使えるTypeScript開発環境を一から構築します。tsconfig.json、ESLint、Prettierを設定し、型安全で品質の高いコードを書くための基盤を整えましょう。</p>
 <h2 id="step-1">Step 1: プロジェクトの初期化</h2>
 <p>まず、新しいプロジェクトを作成します。</p>
-<pre class="codehilite"><code class="language-bash"># プロジェクトディレクトリを作成
+<pre><code class="language-bash"># プロジェクトディレクトリを作成
 mkdir my-ts-project &amp;&amp; cd my-ts-project
 
 # package.jsonを初期化
@@ -55,10 +55,9 @@ npm install typescript --save-dev
 # tsconfig.jsonを生成
 npx tsc --init
 </code></pre>
-
 <h2 id="step-2-tsconfigjson">Step 2: tsconfig.jsonの設定</h2>
 <p>生成された<code>tsconfig.json</code>を以下のように編集します。</p>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;compilerOptions&quot;: {
     // 基本設定
     &quot;target&quot;: &quot;ES2020&quot;,
@@ -87,15 +86,13 @@ npx tsc --init
   &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
 }
 </code></pre>
-
 <h2 id="step-3-eslint">Step 3: ESLintの設定</h2>
 <p>ESLintをインストールし、設定ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-bash"># ESLintと関連パッケージをインストール
+<pre><code class="language-bash"># ESLintと関連パッケージをインストール
 npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
 </code></pre>
-
 <p><code>.eslintrc.js</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-javascript">module.exports = {
+<pre><code class="language-javascript">module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -118,15 +115,13 @@ npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --
   ignorePatterns: ['dist/', 'node_modules/']
 };
 </code></pre>
-
 <h2 id="step-4-prettier">Step 4: Prettierの設定</h2>
 <p>Prettierをインストールし、設定ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-bash"># Prettierと競合を防ぐパッケージをインストール
+<pre><code class="language-bash"># Prettierと競合を防ぐパッケージをインストール
 npm install prettier eslint-config-prettier --save-dev
 </code></pre>
-
 <p><code>.prettierrc</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;semi&quot;: true,
   &quot;singleQuote&quot;: true,
   &quot;tabWidth&quot;: 2,
@@ -134,19 +129,17 @@ npm install prettier eslint-config-prettier --save-dev
   &quot;printWidth&quot;: 100
 }
 </code></pre>
-
 <p><code>.eslintrc.js</code>の<code>extends</code>配列の最後に<code>prettier</code>を追加します。</p>
-<pre class="codehilite"><code class="language-javascript">extends: [
+<pre><code class="language-javascript">extends: [
   'eslint:recommended',
   'plugin:@typescript-eslint/recommended',
   'plugin:@typescript-eslint/recommended-requiring-type-checking',
   'prettier' // 追加
 ],
 </code></pre>
-
 <h2 id="step-5-packagejson">Step 5: package.jsonにスクリプトを追加</h2>
 <p><code>package.json</code>にビルドとリントのスクリプトを追加します。</p>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;scripts&quot;: {
     &quot;build&quot;: &quot;tsc&quot;,
     &quot;lint&quot;: &quot;eslint src/**/*.ts&quot;,
@@ -155,14 +148,12 @@ npm install prettier eslint-config-prettier --save-dev
   }
 }
 </code></pre>
-
 <h2 id="step-6">Step 6: サンプルコードの作成</h2>
 <p><code>src</code>ディレクトリを作成し、サンプルコードを書いてみましょう。</p>
-<pre class="codehilite"><code class="language-bash">mkdir src
+<pre><code class="language-bash">mkdir src
 </code></pre>
-
 <p><code>src/index.ts</code>を作成します。</p>
-<pre class="codehilite"><code class="language-typescript">interface User {
+<pre><code class="language-typescript">interface User {
   id: number;
   name: string;
   email: string;
@@ -180,10 +171,9 @@ const user: User = {
 
 console.log(greetUser(user));
 </code></pre>
-
 <h2 id="step-7">Step 7: 動作確認</h2>
 <p>設定が正しく動作するか確認します。</p>
-<pre class="codehilite"><code class="language-bash"># リントを実行
+<pre><code class="language-bash"># リントを実行
 npm run lint
 
 # コードをフォーマット
@@ -195,25 +185,21 @@ npm run build
 # ビルド結果を実行
 node dist/index.js
 </code></pre>
-
 <h2 id="step-8-env">Step 8: .envファイルの設定（オプション）</h2>
 <p>環境変数を使う場合は、<code>dotenv</code>パッケージをインストールします。</p>
-<pre class="codehilite"><code class="language-bash">npm install dotenv
+<pre><code class="language-bash">npm install dotenv
 </code></pre>
-
 <p><code>.env</code>ファイルを作成します。</p>
-<pre class="codehilite"><code>API_URL=https://api.example.com
+<pre><code>API_URL=https://api.example.com
 API_KEY=your-secret-key
 </code></pre>
-
 <p><code>.gitignore</code>に<code>.env</code>を追加します。</p>
-<pre class="codehilite"><code>node_modules/
+<pre><code>node_modules/
 dist/
 .env
 </code></pre>
-
 <p><code>src/config.ts</code>で環境変数を読み込みます。</p>
-<pre class="codehilite"><code class="language-typescript">import dotenv from 'dotenv';
+<pre><code class="language-typescript">import dotenv from 'dotenv';
 dotenv.config();
 
 interface Config {
@@ -226,7 +212,6 @@ export const config: Config = {
   apiKey: process.env.API_KEY ?? '',
 };
 </code></pre>
-
 <h2 id="_2">✨ まとめ</h2>
 <p>このハンズオンでは、以下の開発環境を構築しました。</p>
 <ul>

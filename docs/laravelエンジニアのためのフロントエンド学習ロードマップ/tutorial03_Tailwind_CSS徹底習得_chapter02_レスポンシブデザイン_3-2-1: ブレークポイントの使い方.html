@@ -103,11 +103,10 @@
 <h3 id="_3">⚙️ ブレークポイントプレフィックスの使い方</h3>
 <p>使い方は非常にシンプルです。適用したいユーティリティクラスの前に、<code>{breakpoint}:</code>というプレフィックスを付けるだけです。</p>
 <p><strong>例：画面サイズに応じて背景色を変える</strong></p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;bg-red-500 md:bg-blue-500 lg:bg-green-500&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;bg-red-500 md:bg-blue-500 lg:bg-green-500&quot;&gt;
   &lt;!-- ... --&gt;
 &lt;/div&gt;
 </code></pre>
-
 <p>この<code>div</code>要素の背景色は、画面幅に応じて以下のように変化します。</p>
 <ul>
 <li><strong>画面幅が 768px 未満の場合:</strong> <code>bg-red-500</code>が適用され、背景は<strong>赤色</strong>になります。（プレフィックスなしのクラスは、すべての画面サイズで適用されます）</li>
@@ -116,12 +115,11 @@
 </ul>
 <p><strong>例：画面サイズに応じてレイアウトを変更する</strong></p>
 <p>レスポンシブデザインで最もよく使われるのが、レイアウトの変更です。例えば、スマートフォンでは要素を縦に並べ、タブレット以上では横に並べたい場合、以下のように記述できます。</p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;md:flex&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;md:flex&quot;&gt;
   &lt;div class=&quot;md:w-1/2&quot;&gt;要素A&lt;/div&gt;
   &lt;div class=&quot;md:w-1/2&quot;&gt;要素B&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-
 <ul>
 <li><strong>画面幅が 768px 未満の場合:</strong><ul>
 <li><code>md:flex</code>や<code>md:w-1/2</code>は適用されません。</li>

@@ -78,7 +78,7 @@
 <p>（Chapter 1のハンズオンが完了している状態からスタートします）</p>
 <h4 id="step-1-userprofileprops">Step 1: <code>UserProfile</code>コンポーネントをProps対応にする</h4>
 <p><code>src/components/UserProfile.tsx</code>を以下のように書き換えます。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/UserProfile.tsx
+<pre><code class="language-tsx">// src/components/UserProfile.tsx
 
 // 1. Propsの型を定義
 type UserProfileProps = {
@@ -107,13 +107,12 @@ function UserProfile({ name, hobby, bio }: UserProfileProps) {
 
 export default UserProfile;
 </code></pre>
-
 <ul>
 <li><strong><code>{bio &amp;&amp; &lt;p&gt;...&lt;/p&gt;}</code></strong>: これはReactでよく使われる<strong>条件付きレンダリング</strong>のテクニックです。<code>bio</code>が<code>undefined</code>や空文字列でない（truthyな）場合にのみ、<code>&amp;&amp;</code>の右側のJSXがレンダリングされます。</li>
 </ul>
 <h4 id="step-2-card">Step 2: 汎用的な<code>Card</code>コンポーネントを作成する</h4>
 <p><code>src/components</code>ディレクトリに<code>Card.tsx</code>を新規作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/Card.tsx
+<pre><code class="language-tsx">// src/components/Card.tsx
 
 import React from &quot;react&quot;;
 
@@ -129,10 +128,9 @@ function Card({ children }: CardProps) {
 
 export default Card;
 </code></pre>
-
 <h4 id="step-3-apptsx">Step 3: <code>App.tsx</code>で新しいコンポーネントを組み立てる</h4>
 <p><code>src/App.tsx</code>を編集し、<code>Card</code>コンポーネントを使って<code>UserProfile</code>をラップします。また、<code>UserProfile</code>にPropsを渡します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/App.tsx
+<pre><code class="language-tsx">// src/App.tsx
 
 import WelcomeMessage from &quot;./components/WelcomeMessage&quot;;
 import UserProfile from &quot;./components/UserProfile&quot;;
@@ -165,7 +163,6 @@ function App() {
 
 export default App;
 </code></pre>
-
 <h4 id="step-4">Step 4: スタイルの整理</h4>
 <p>最後に、スタイルの責務を<code>UserProfile</code>から<code>Card</code>に移します。</p>
 <ol>

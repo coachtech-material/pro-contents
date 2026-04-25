@@ -43,7 +43,7 @@
 <p>このハンズオンでは、Chapter 1で学んだ非同期処理の基礎を実践します。<code>setTimeout</code>とPromiseを使って、非同期処理の動作を体験しましょう。</p>
 <h2 id="_2">準備</h2>
 <p>作業用のHTMLファイルを作成します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -57,10 +57,9 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <h2 id="1">課題1: 実行順序を予測する</h2>
 <p>以下のコードの実行順序を予測し、実際に実行して確認してください。</p>
-<pre class="codehilite"><code class="language-javascript">console.log(&quot;A&quot;);
+<pre><code class="language-javascript">console.log(&quot;A&quot;);
 
 setTimeout(() =&gt; {
   console.log(&quot;B&quot;);
@@ -74,15 +73,13 @@ setTimeout(() =&gt; {
 
 console.log(&quot;E&quot;);
 </code></pre>
-
 <h3 id="_3">解答</h3>
-<pre class="codehilite"><code>A
+<pre><code>A
 C
 E
 B（0ミリ秒後でも、同期処理の後に実行される）
 D（1秒後）
 </code></pre>
-
 <p><code>setTimeout</code>は0ミリ秒を指定しても、同期処理がすべて完了した後に実行されます。これはJavaScriptの「イベントループ」の仕組みによるものです。</p>
 <h2 id="2">課題2: カウントダウンタイマーを作成する</h2>
 <p>指定した秒数からカウントダウンし、0になったら「完了！」と表示するタイマーを作成してください。</p>
@@ -93,7 +90,7 @@ D（1秒後）
 <li>0になったら「完了！」を表示</li>
 </ol>
 <h3 id="_5">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">function countdown(seconds) {
+<pre><code class="language-javascript">function countdown(seconds) {
   console.log(`カウントダウン開始: ${seconds}秒`);
 
   for (let i = seconds; i &gt;= 0; i--) {
@@ -118,7 +115,6 @@ countdown(5);
 // 1（4秒後）
 // 完了！（5秒後）
 </code></pre>
-
 <h2 id="3-promise">課題3: Promiseを使ったデータ取得シミュレーション</h2>
 <p>APIからデータを取得する処理をシミュレートする関数を作成してください。</p>
 <h3 id="_6">要件</h3>
@@ -128,7 +124,7 @@ countdown(5);
 <li>idが0以下の場合はエラーを返す</li>
 </ol>
 <h3 id="_7">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">function fetchData(id) {
+<pre><code class="language-javascript">function fetchData(id) {
   return new Promise((resolve, reject) =&gt; {
     console.log(`データ取得中... (ID: ${id})`);
 
@@ -164,11 +160,10 @@ fetchData(-1)
     console.error(&quot;エラー:&quot;, error.message);
   });
 </code></pre>
-
 <h2 id="4-promise">課題4: Promiseチェーンを使った連続処理</h2>
 <p>ユーザー情報を取得し、そのユーザーの投稿一覧を取得し、最初の投稿のコメントを取得する処理を作成してください。</p>
 <h3 id="_8">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">// ユーザー取得
+<pre><code class="language-javascript">// ユーザー取得
 function getUser(userId) {
   return new Promise((resolve) =&gt; {
     setTimeout(() =&gt; {
@@ -226,11 +221,10 @@ getUser(1)
     console.log(&quot;処理完了&quot;);
   });
 </code></pre>
-
 <h2 id="5-promiseall">課題5: Promise.allを使った並列処理</h2>
 <p>複数のユーザーのデータを同時に取得し、全員の名前を表示してください。</p>
 <h3 id="_9">解答例</h3>
-<pre class="codehilite"><code class="language-javascript">function getUser(userId) {
+<pre><code class="language-javascript">function getUser(userId) {
   return new Promise((resolve) =&gt; {
     const names = [&quot;田中&quot;, &quot;佐藤&quot;, &quot;鈴木&quot;, &quot;高橋&quot;, &quot;渡辺&quot;];
     setTimeout(() =&gt; {
@@ -264,7 +258,6 @@ Promise.all(userPromises)
     console.error(&quot;エラー:&quot;, error);
   });
 </code></pre>
-
 <h2 id="_10">✨ まとめ</h2>
 <p>このハンズオンでは、以下のことを実践しました。</p>
 <ul>

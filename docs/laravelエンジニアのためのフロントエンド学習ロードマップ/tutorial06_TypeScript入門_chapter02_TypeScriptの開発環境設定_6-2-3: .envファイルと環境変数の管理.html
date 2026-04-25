@@ -59,7 +59,7 @@
 </ul>
 <h3 id="env"><code>.env</code> ファイルの役割</h3>
 <p><code>.env</code> ファイルは、<code>キー=値</code> の形式で環境変数を定義するシンプルなテキストファイルです。このファイルは、プロジェクトのルートディレクトリに配置します。</p>
-<pre class="codehilite"><code class="language-env"># データベース接続情報 (バックエンドの例)
+<pre><code class="language-env"># データベース接続情報 (バックエンドの例)
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=password
@@ -70,18 +70,15 @@ API_BASE_URL=http://localhost:8000/api
 # 外部サービスのAPIキー
 GOOGLE_MAPS_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXX
 </code></pre>
-
 <p><strong>⚠️ 最も重要なルール: <code>.gitignore</code> に <code>.env</code> を追加する</strong></p>
 <p><code>.env</code> ファイルには機密情報が含まれるため、<strong>絶対にGitで管理してはいけません</strong>。プロジェクトの <code>.gitignore</code> ファイルに以下の1行を必ず追加してください。</p>
-<pre class="codehilite"><code>.env
+<pre><code>.env
 </code></pre>
-
 <p>代わりに、チームメンバーがどのような環境変数を設定すべきか分かるように、<code>env.example</code> というファイルをリポジトリに含めるのが一般的です。このファイルには、実際の値の代わりにダミーの値を記述します。</p>
-<pre class="codehilite"><code class="language-env"># .env.example
+<pre><code class="language-env"># .env.example
 API_BASE_URL=http://localhost:8000/api
 GOOGLE_MAPS_API_KEY=
 </code></pre>
-
 <h3 id="_5">フロントエンドでの環境変数の扱い</h3>
 <p>Laravelでは、PHPがサーバーサイドで <code>.env</code> ファイルを読み込み、<code>env()</code> ヘルパーで簡単にアクセスできました。しかし、フロントエンドのJavaScriptはユーザーのブラウザ上で実行されるため、サーバー上の <code>.env</code> ファイルに直接アクセスすることはできません。</p>
 <p>フロントエンドで環境変数を利用するには、<strong>ビルドプロセス</strong>中に <code>.env</code> ファイルの内容をコードに埋め込む必要があります。ViteやNext.jsのようなモダンなフロントエンドツールには、この仕組みが標準で組み込まれています。</p>
@@ -91,35 +88,31 @@ GOOGLE_MAPS_API_KEY=
 <li><strong><code>VITE_</code></strong> (Viteの場合)</li>
 <li><strong><code>REACT_APP_</code></strong> (Create React Appの場合)</li>
 </ul>
-<pre class="codehilite"><code class="language-env"># この変数はフロントエンドのコードからアクセスできる
+<pre><code class="language-env"># この変数はフロントエンドのコードからアクセスできる
 VITE_API_BASE_URL=http://localhost:8000/api
 
 # この変数はフロントエンドからはアクセスできない（ビルドサーバー内でのみ利用可能）
 SECRET_KEY=my-secret-key
 </code></pre>
-
 <p>JavaScriptコードからは、<code>import.meta.env</code> (Vite) や <code>process.env</code> (CRA) を通じてアクセスします。</p>
-<pre class="codehilite"><code class="language-typescript">// Viteの場合
+<pre><code class="language-typescript">// Viteの場合
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 console.log(apiUrl); // &quot;http://localhost:8000/api&quot;
 
 // Create React Appの場合
 // const apiUrl = process.env.REACT_APP_API_BASE_URL;
 </code></pre>
-
 <h4 id="nextjs">Next.js での規約</h4>
 <p>Next.jsでは、プレフィックス <strong><code>NEXT_PUBLIC_</code></strong> を付けた環境変数がブラウザに公開されます。</p>
-<pre class="codehilite"><code class="language-env"># この変数はブラウザ（フロントエンド）からアクセスできる
+<pre><code class="language-env"># この変数はブラウザ（フロントエンド）からアクセスできる
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 
 # この変数はサーバーサイド（getStaticPropsなど）でのみアクセスできる
 API_SERVER_KEY=server-side-secret
 </code></pre>
-
 <p>コードからは <code>process.env</code> を使ってアクセスします。</p>
-<pre class="codehilite"><code class="language-typescript">const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+<pre><code class="language-typescript">const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 </code></pre>
-
 <p><strong>なぜプレフィックスが必要なのか？</strong></p>
 <p>この仕組みは、誤ってサーバーサイド専用の秘密鍵などをフロントエンドに公開してしまう事故を防ぐための、重要な<strong>セーフガード</strong>です。「<code>VITE_</code>」や「<code>NEXT_PUBLIC_</code>」を付けることで、「<strong>この変数はクライアントサイドに公開しても安全である</strong>」という開発者の明確な意思表示となります。</p>
 <h2 id="tip">💡 TIP</h2>

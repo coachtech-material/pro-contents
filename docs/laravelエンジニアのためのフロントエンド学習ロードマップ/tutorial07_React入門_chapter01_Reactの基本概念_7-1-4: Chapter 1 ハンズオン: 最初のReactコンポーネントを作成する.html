@@ -73,21 +73,19 @@
 <h3 id="step-by-step">🏃 実践: Step by Stepで自己紹介ページを作ろう</h3>
 <h4 id="step-1-vitereact">Step 1: ViteによるReactプロジェクトのセットアップ</h4>
 <p>ターミナルを開き、以下のコマンドを実行します。</p>
-<pre class="codehilite"><code class="language-bash"># ターミナル
+<pre><code class="language-bash"># ターミナル
 npm create vite@latest my-react-app -- --template react-ts
 </code></pre>
-
 <ul>
 <li><code>my-react-app</code>という名前のディレクトリが作成されます。</li>
 <li><code>--template react-ts</code>で、React + TypeScriptのテンプレートを指定しています。</li>
 </ul>
 <p>プロジェクトディレクトリに移動し、必要なパッケージをインストールして、開発サーバーを起動します。</p>
-<pre class="codehilite"><code class="language-bash"># ターミナル
+<pre><code class="language-bash"># ターミナル
 cd my-react-app
 npm install
 npm run dev
 </code></pre>
-
 <p>ブラウザで <code>http://localhost:5173</code> のようなアドレスが開かれ、ViteとReactのロゴが表示されれば成功です。</p>
 <h4 id="step-2">Step 2: プロジェクトの初期化（お掃除）</h4>
 <p><code>src</code>ディレクトリの中を整理します。</p>
@@ -108,7 +106,7 @@ npm run dev
 </ol>
 <h4 id="step-3-welcomemessage">Step 3: <code>WelcomeMessage</code>コンポーネントの作成</h4>
 <p><code>src</code>ディレクトリ内に<code>components</code>という新しいディレクトリを作成します。その中に<code>WelcomeMessage.tsx</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/WelcomeMessage.tsx
+<pre><code class="language-tsx">// src/components/WelcomeMessage.tsx
 
 function WelcomeMessage() {
   return &lt;h1&gt;ようこそ、Reactの世界へ！&lt;/h1&gt;;
@@ -116,10 +114,9 @@ function WelcomeMessage() {
 
 export default WelcomeMessage;
 </code></pre>
-
 <h4 id="step-4-userprofile">Step 4: <code>UserProfile</code>コンポーネントの作成</h4>
 <p>同様に、<code>src/components</code>ディレクトリに<code>UserProfile.tsx</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/UserProfile.tsx
+<pre><code class="language-tsx">// src/components/UserProfile.tsx
 
 function UserProfile() {
   return (
@@ -136,10 +133,9 @@ function UserProfile() {
 
 export default UserProfile;
 </code></pre>
-
 <h4 id="step-5-app">Step 5: <code>App</code>コンポーネントで子コンポーネントを呼び出す</h4>
 <p><code>src/App.tsx</code>を編集し、作成した2つのコンポーネントをインポートして配置します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/App.tsx
+<pre><code class="language-tsx">// src/App.tsx
 
 // 作成したコンポーネントをインポート
 import WelcomeMessage from &quot;./components/WelcomeMessage&quot;;
@@ -159,11 +155,10 @@ function App() {
 
 export default App;
 </code></pre>
-
 <p>この時点でブラウザを確認すると、コンポーネントが表示されているはずです。</p>
 <h4 id="step-6">Step 6: 簡単なスタイリング</h4>
 <p><code>src/index.css</code>を開き、以下のスタイルを追加します。（既存のスタイルは消してもそのままでもOKです）</p>
-<pre class="codehilite"><code class="language-css">/* src/index.css */
+<pre><code class="language-css">/* src/index.css */
 .user-profile {
   border: 1px solid #ccc;
   padding: 16px;
@@ -171,7 +166,6 @@ export default App;
   border-radius: 8px;
 }
 </code></pre>
-
 <p><code>UserProfile.tsx</code>で<code>className="user-profile"</code>と指定した<code>div</code>に、このスタイルが適用され、カードのような見た目になります。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

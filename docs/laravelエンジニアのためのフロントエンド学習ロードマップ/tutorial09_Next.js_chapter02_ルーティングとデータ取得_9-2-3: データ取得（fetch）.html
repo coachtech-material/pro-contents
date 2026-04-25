@@ -52,7 +52,7 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="server-components">🔑 Server Componentsでのデータ取得</h3>
 <p>Server Componentsはサーバーサイドで実行されるため、コンポーネント自体を<code>async</code>関数として定義できます。これにより、コンポーネントのレンダリングプロセスの一部として、ごく自然にデータ取得を組み込めます。</p>
-<pre class="codehilite"><code class="language-tsx">// app/posts/page.tsx
+<pre><code class="language-tsx">// app/posts/page.tsx
 
 interface Post {
   id: number;
@@ -87,7 +87,6 @@ async function PostsPage() {
 
 export default PostsPage;
 </code></pre>
-
 <p>このコードは、<code>useEffect</code>を使った従来のデータ取得方法に比べて、はるかにシンプルで宣言的です。ローディング状態を別途管理する必要もありません。Next.jsがデータの取得が完了するまでページのレンダリングを待機してくれるからです。（ローディングUIについては次のセクションで学びます）</p>
 <h3 id="_4">📚 キャッシュ戦略</h3>
 <p>Next.jsは、<code>fetch</code> APIの<code>options</code>オブジェクトを拡張し、サーバーサイドでのキャッシュ動作を制御できるようにしています。<code>cache</code>オプションと<code>next.revalidate</code>オプションがその中心です。</p>
@@ -96,21 +95,20 @@ export default PostsPage;
 <p>これは、ブログ記事や製品情報など、頻繁に更新されないコンテンツに最適で、ページのパフォーマンスを最大化します（実質的なSSG: Static Site Generation）。</p>
 <h4 id="cache-no-store">キャッシュの無効化: 動的データフェッチ (<code>cache: 'no-store'</code>)</h4>
 <p>常に最新のデータを表示したい場合、例えばユーザーごとのダッシュボードや株価情報のようなページでは、キャッシュを無効化する必要があります。そのためには<code>cache: 'no-store'</code>オプションを指定します。</p>
-<pre class="codehilite"><code class="language-tsx">async function DashboardPage() {
+<pre><code class="language-tsx">async function DashboardPage() {
   const res = await fetch('https://api.example.com/user/dashboard', {
     cache: 'no-store', // リクエストごとに常に最新のデータを取得
   });
   // ...
 }
 </code></pre>
-
 <p>このオプションを指定すると、ページへのリクエストがあるたびに、サーバーサイドでデータが再取得されます。これは、SSR (Server-Side Rendering) と同じ動作になります。</p>
 <h3 id="revalidation">♻️ データの再検証 (Revalidation)</h3>
 <p>「ビルド時に静的に生成しつつも、定期的にデータを更新したい」というニーズも多くあります。例えば、ニュースサイトの記事一覧などです。このようなケースのために、Next.jsは<strong>再検証 (Revalidation)</strong> の仕組みを提供しています。</p>
 <h4 id="time-based-revalidation">時間ベースの再検証 (Time-based Revalidation)</h4>
 <p><code>fetch</code>の<code>next.revalidate</code>オプションに秒数を指定することで、指定した時間が経過した後に最初のリクエストがあったタイミングで、バックグラウンドでデータが再取得されます。その間、ユーザーには古い（キャッシュされた）データが表示され、再取得が完了するとキャッシュが更新されます。</p>
 <p>これは<strong>ISR (Incremental Static Regeneration)</strong>として知られる強力な機能です。</p>
-<pre class="codehilite"><code class="language-tsx">async function NewsPage() {
+<pre><code class="language-tsx">async function NewsPage() {
   const res = await fetch('https://api.example.com/news', {
     next: { 
       revalidate: 60, // 60秒ごとにデータを再検証
@@ -119,7 +117,6 @@ export default PostsPage;
   // ...
 }
 </code></pre>
-
 <p>この設定により、ビルド時にページが生成された後も、最大60秒の鮮度を保ちつつ、静的ページのように高速な表示を実現できます。</p>
 <h4 id="on-demand-revalidation">オンデマンド再検証 (On-demand Revalidation)</h4>
 <p>時間ベースではなく、特定のイベント（例: CMSで記事を更新した、データベースの内容を変更した）をトリガーにキャッシュを能動的にクリアしたい場合もあります。これを<strong>オンデマンド再検証</strong>と呼びます。</p>

@@ -90,7 +90,7 @@
 <p>前のセクションで作成した<code>tailwind-handson</code>プロジェクトをそのまま使います。まだ準備ができていない場合は、前のセクションの手順に従ってセットアップを完了してください。</p>
 <h4 id="step-1-html">Step 1: HTMLの準備</h4>
 <p>まず、<code>src/index.html</code>を開き、<code>&lt;body&gt;</code>タグの中身を以下のように書き換えます。既存の<code>&lt;h1&gt;</code>タグは削除して構いません。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;body class=&quot;bg-slate-100 flex justify-center items-center h-screen&quot;&gt;
   &lt;button&gt;
@@ -98,7 +98,6 @@
   &lt;/button&gt;
 &lt;/body&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>bg-slate-100</code>: 背景色を薄いグレーに設定します。</li>
@@ -109,13 +108,12 @@
 <p>この時点でブラウザをリロードすると、OSデフォルトの味気ないボタンが画面中央に表示されます。</p>
 <h4 id="step-2">Step 2: 基本的なスタイリング</h4>
 <p>次に、<code>&lt;button&gt;</code>タグにクラスを追加して、基本的な見た目を整えます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;button class=&quot;bg-blue-500 text-white px-4 py-2&quot;&gt;
   Click me
 &lt;/button&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>bg-blue-500</code>: 背景色を青色（Tailwindが定義している500番の濃さ）に設定します。</li>
@@ -127,13 +125,12 @@
 </ul>
 <h4 id="step-3">Step 3: テキストと装飾の調整</h4>
 <p>さらにクラスを追加して、ボタンの印象を良くしていきましょう。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;button class=&quot;bg-blue-500 text-white px-4 py-2 rounded-md font-semibold shadow-md&quot;&gt;
   Click me
 &lt;/button&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>rounded-md</code>: 角を中くらい（<code>md</code>）に丸くします（<code>border-radius: 0.375rem</code>）。</li>
@@ -145,13 +142,12 @@
 <p>ここまでで、かなりボタンらしい見た目になったはずです。</p>
 <h4 id="step-4">Step 4: インタラクションの追加</h4>
 <p>最後に、ユーザーのアクションに反応するスタイルを追加します。Tailwind CSSでは、<code>hover:</code>や<code>active:</code>のような<strong>状態バリアント</strong>をクラス名の前につけるだけで、簡単に実装できます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 
 &lt;button class=&quot;bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold shadow-md&quot;&gt;
   Click me
 &lt;/button&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>hover:bg-blue-600</code>: マウスポインタがボタンの上に乗った（ホバーした）ときに、背景色を少し濃い青（600番）に変更します。</li>

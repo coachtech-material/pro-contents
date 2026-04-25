@@ -43,7 +43,7 @@
 <p>このハンズオンでは、TypeScriptの基本的な型を使って、型安全な関数を作成します。実際にコードを書きながら、型の恩恵を体験しましょう。</p>
 <h2 id="_2">準備</h2>
 <p>まず、TypeScriptを実行できる環境を準備します。</p>
-<pre class="codehilite"><code class="language-bash"># プロジェクトディレクトリを作成
+<pre><code class="language-bash"># プロジェクトディレクトリを作成
 mkdir ts-practice &amp;&amp; cd ts-practice
 
 # package.jsonを初期化
@@ -55,7 +55,6 @@ npm install typescript ts-node --save-dev
 # tsconfig.jsonを生成
 npx tsc --init
 </code></pre>
-
 <h2 id="1">課題1: ユーザー情報を表示する関数</h2>
 <p>ユーザー情報を受け取り、フォーマットされた文字列を返す関数を作成してください。</p>
 <h3 id="_3">要件</h3>
@@ -66,7 +65,7 @@ npx tsc --init
 </ol>
 <h3 id="_4">解答例</h3>
 <p><code>src/user.ts</code>ファイルを作成し、以下のコードを記述します。</p>
-<pre class="codehilite"><code class="language-typescript">// User インターフェースの定義
+<pre><code class="language-typescript">// User インターフェースの定義
 interface User {
   name: string;
   age: number;
@@ -91,11 +90,9 @@ const user2: User = { name: &quot;鈴木花子&quot;, age: 30, email: &quot;hana
 console.log(formatUser(user1)); // 名前: 田中太郎, 年齢: 25歳
 console.log(formatUser(user2)); // 名前: 鈴木花子, 年齢: 30歳, メール: hanako@example.com
 </code></pre>
-
 <p>実行してみましょう。</p>
-<pre class="codehilite"><code class="language-bash">npx ts-node src/user.ts
+<pre><code class="language-bash">npx ts-node src/user.ts
 </code></pre>
-
 <h2 id="2">課題2: 配列を操作する関数</h2>
 <p>数値の配列を受け取り、様々な計算結果を返す関数を作成してください。</p>
 <h3 id="_5">要件</h3>
@@ -106,7 +103,7 @@ console.log(formatUser(user2)); // 名前: 鈴木花子, 年齢: 30歳, メー�
 </ol>
 <h3 id="_6">解答例</h3>
 <p><code>src/stats.ts</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-typescript">// 統計情報の型定義
+<pre><code class="language-typescript">// 統計情報の型定義
 interface Stats {
   sum: number;
   average: number;
@@ -137,7 +134,6 @@ console.log(`平均: ${result.average}`);   // 平均: 86.6
 console.log(`最大: ${result.max}`);       // 最大: 92
 console.log(`最小: ${result.min}`);       // 最小: 78
 </code></pre>
-
 <h2 id="3">課題3: 商品の合計金額を計算する関数</h2>
 <p>商品リストを受け取り、合計金額を計算する関数を作成してください。</p>
 <h3 id="_7">要件</h3>
@@ -148,7 +144,7 @@ console.log(`最小: ${result.min}`);       // 最小: 78
 </ol>
 <h3 id="_8">解答例</h3>
 <p><code>src/product.ts</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-typescript">// 商品の型定義
+<pre><code class="language-typescript">// 商品の型定義
 interface Product {
   name: string;
   price: number;
@@ -175,7 +171,6 @@ const cart: Product[] = [
 console.log(`合計金額（税込）: ${calculateTotal(cart)}円`); // 合計金額（税込）: 6578円
 console.log(`合計金額（税率8%）: ${calculateTotal(cart, 0.08)}円`); // 合計金額（税率8%）: 6458円
 </code></pre>
-
 <h2 id="_9">✨ まとめ</h2>
 <p>このハンズオンでは、以下のことを実践しました。</p>
 <ul>

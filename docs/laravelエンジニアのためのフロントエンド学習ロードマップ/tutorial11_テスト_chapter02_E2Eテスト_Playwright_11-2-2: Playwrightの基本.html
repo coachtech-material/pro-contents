@@ -56,9 +56,8 @@
 </ul>
 <h2 id="playwright_1">Playwrightのセットアップ</h2>
 <p>Playwrightは、簡単なコマンドで対話的にセットアップできます。プロジェクトのルートで以下のコマンドを実行してください。</p>
-<pre class="codehilite"><code class="language-bash">npm init playwright@latest
+<pre><code class="language-bash">npm init playwright@latest
 </code></pre>
-
 <p>すると、いくつか質問されます。基本的にはデフォルトのままで問題ありません。</p>
 <ul>
 <li><code>Where to put your end-to-end tests?</code> -&gt; <code>tests</code> （テストファイルの置き場所）</li>
@@ -73,7 +72,7 @@
 </ul>
 <h2 id="playwright_2">Playwrightの主要な概念</h2>
 <p>Playwrightのテストコードは、Vitestとも似た、<code>test</code>と<code>expect</code>を使った直感的な構文で記述します。</p>
-<pre class="codehilite"><code class="language-typescript">// tests/example.spec.ts
+<pre><code class="language-typescript">// tests/example.spec.ts
 
 import { test, expect } from &quot;@playwright/test&quot;;
 
@@ -88,7 +87,6 @@ test(&quot;ホームページにタイトルがあること&quot;, async ({ page
   await expect(title).toHaveText(&quot;Playwright&quot;);
 });
 </code></pre>
-
 <ul>
 <li><strong><code>test(title, callback)</code></strong>: テストケースを定義します。Vitestの<code>it</code>に相当します。</li>
 <li><strong><code>page</code></strong>: ブラウザのページ（タブ）を操作するためのメインのAPIです。<code>page.goto()</code>でURLにアクセスしたり、<code>page.click()</code>で要素をクリックしたりします。</li>
@@ -98,9 +96,8 @@ test(&quot;ホームページにタイトルがあること&quot;, async ({ page
 <h2 id="playwright-codegen">Playwright Codegenを体験しよう</h2>
 <p>Playwrightの最も強力な機能の一つが<strong>Codegen</strong>です。これを使うと、ブラウザでの操作を記録して、自動でテストコードを生成できます。</p>
 <p>以下のコマンドを実行してみてください。</p>
-<pre class="codehilite"><code class="language-bash">npx playwright codegen https://tailwindcss.com/docs/installation
+<pre><code class="language-bash">npx playwright codegen https://tailwindcss.com/docs/installation
 </code></pre>
-
 <p>すると、指定したURLのブラウザウィンドウと、Playwright Inspectorというツールウィンドウが立ち上がります。</p>
 <ol>
 <li>ブラウザ上で、検索ボックスをクリックします。</li>
@@ -112,7 +109,7 @@ test(&quot;ホームページにタイトルがあること&quot;, async ({ page
 <p>生成されたコードはコピーして、自分のテストファイルに貼り付けて利用できます。これにより、複雑な操作のテストコードも素早く作成することができます。</p>
 <h2 id="_3">テストの実行</h2>
 <p><code>package.json</code>の<code>scripts</code>に、Playwright用のコマンドが自動で追加されているはずですが、なければ追加します。</p>
-<pre class="codehilite"><code class="language-json">// package.json
+<pre><code class="language-json">// package.json
 {
   ...
   &quot;scripts&quot;: {
@@ -122,16 +119,13 @@ test(&quot;ホームページにタイトルがあること&quot;, async ({ page
   ...
 }
 </code></pre>
-
 <p>以下のコマンドでテストを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npm run test:e2e
+<pre><code class="language-bash">npm run test:e2e
 </code></pre>
-
 <p>デフォルトでは、Chromium, Firefox, WebKitの3つのブラウザで並行してテストが実行されます（ヘッドレスモード）。</p>
 <p>テスト結果は、HTMLレポートとして自動生成されます。以下のコマンドでレポートを表示できます。</p>
-<pre class="codehilite"><code class="language-bash">npx playwright show-report
+<pre><code class="language-bash">npx playwright show-report
 </code></pre>
-
 <p>ブラウザでレポートが開き、各テストの成功/失敗、実行時間、ブラウザごとの結果などをインタラクティブに確認できます。</p>
 <h2 id="_4">✨ まとめ</h2>
 <ul>

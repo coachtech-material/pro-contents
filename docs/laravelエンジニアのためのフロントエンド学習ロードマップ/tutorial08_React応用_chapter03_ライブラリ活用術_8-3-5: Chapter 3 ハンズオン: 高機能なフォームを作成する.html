@@ -49,11 +49,10 @@
 <p>このハンズオンを通して、モダンなReact開発におけるライブラリ活用のエコシステムを体感し、宣言的で堅牢なコンポーネントを構築するスキルを習得します。</p>
 <h2 id="_2">事前準備</h2>
 <p>以下のライブラリをインストールしてください。</p>
-<pre class="codehilite"><code class="language-bash">npm install react-hook-form @hookform/resolvers zod @tanstack/react-query axios
+<pre><code class="language-bash">npm install react-hook-form @hookform/resolvers zod @tanstack/react-query axios
 </code></pre>
-
 <p>また、アプリケーションのルートが<code>QueryClientProvider</code>でラップされていることを確認してください。</p>
-<pre class="codehilite"><code class="language-tsx">// main.tsx
+<pre><code class="language-tsx">// main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -69,11 +68,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   &lt;/React.StrictMode&gt;
 );
 </code></pre>
-
 <h2 id="_3">ハンズオン</h2>
 <h3 id="1-zod">ステップ1: バリデーションスキーマと型の定義 (Zod)</h3>
 <p>まず、<code>Zod</code>を使ってフォームのバリデーションスキーマを定義します。ここでのポイントは、パスワードと確認用パスワードが一致するかを検証する相関バリデーションを<code>.refine()</code>を使って実装することです。</p>
-<pre class="codehilite"><code class="language-typescript">// src/components/RegisterForm.tsx
+<pre><code class="language-typescript">// src/components/RegisterForm.tsx
 import { z } from 'zod';
 
 const RegisterSchema = z.object({
@@ -89,10 +87,9 @@ const RegisterSchema = z.object({
 // Zodスキーマから型を推論
 type RegisterFormInput = z.infer&lt;typeof RegisterSchema&gt;;
 </code></pre>
-
 <h3 id="2-tanstack-query">ステップ2: データ送信ロジックの定義 (TanStack Query)</h3>
 <p>次に、フォームのデータをサーバーに送信するためのロジックを<code>TanStack Query</code>の<code>useMutation</code>を使って定義します。今回はダミーのAPIエンドポイントとして<code>jsonplaceholder</code>を使用します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/api/userApi.ts
+<pre><code class="language-typescript">// src/api/userApi.ts
 import axios from 'axios';
 import { RegisterFormInput } from '../components/RegisterForm'; // 型をインポート
 
@@ -105,10 +102,9 @@ export const createUser = async (userData: UserCreationPayload) =&gt; {
   return data;
 };
 </code></pre>
-
 <h3 id="3-react-hook-form">ステップ3: フォームコンポーネントの実装 (React Hook Form)</h3>
 <p>最後に、これらを統合してフォームコンポーネントを構築します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/RegisterForm.tsx
+<pre><code class="language-tsx">// src/components/RegisterForm.tsx
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -192,7 +188,6 @@ export function RegisterForm() {
   );
 }
 </code></pre>
-
 <h4 id="_4">コードのポイント</h4>
 <ul>
 <li><strong>責務の分離</strong>: <code>Zod</code>がバリデーション、<code>React Hook Form</code>がUIの状態管理、<code>TanStack Query</code>がサーバーとの通信、というように、各ライブラリがそれぞれの責務を綺麗に分担しています。</li>

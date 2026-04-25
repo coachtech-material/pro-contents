@@ -55,7 +55,7 @@
 <hr />
 <h3 id="packagejson">🔑 <code>package.json</code>の主要なキー</h3>
 <p><code>package.json</code>は、<code>npm init -y</code>というコマンドで簡単に生成できます。中身はシンプルなキーと値のペアで構成されています。特に重要なキーを見ていきましょう。</p>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;name&quot;: &quot;my-project&quot;,
   &quot;version&quot;: &quot;1.0.0&quot;,
   &quot;description&quot;: &quot;&quot;,
@@ -70,7 +70,6 @@
   &quot;devDependencies&quot;: {}
 }
 </code></pre>
-
 <table>
 <thead>
 <tr>
@@ -135,24 +134,21 @@
 <h3 id="scripts">🏃 <code>scripts</code>で定型作業を自動化する</h3>
 <p><code>scripts</code>セクションは、長くて覚えにくいコマンドを、短くて分かりやすいエイリアス（別名）で実行するための機能です。これはチーム開発において絶大な効果を発揮します。</p>
 <p>例えば、Tailwind CSSを使ってCSSをビルドするコマンドは以下のようになります。</p>
-<pre class="codehilite"><code class="language-bash">npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
+<pre><code class="language-bash">npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
 </code></pre>
-
 <p>これを毎回手で入力するのは大変ですし、間違いのもとです。そこで、<code>package.json</code>の<code>scripts</code>に登録します。</p>
-<pre class="codehilite"><code class="language-json">&quot;scripts&quot;: {
+<pre><code class="language-json">&quot;scripts&quot;: {
   &quot;build:css&quot;: &quot;tailwindcss -i ./src/input.css -o ./dist/output.css&quot;,
   &quot;watch:css&quot;: &quot;tailwindcss -i ./src/input.css -o ./dist/output.css --watch&quot;
 },
 </code></pre>
-
 <p>こうすることで、ターミナルで以下の短いコマンドを実行するだけで、同じ処理が行えるようになります。</p>
-<pre class="codehilite"><code class="language-bash"># CSSを一度だけビルドする
+<pre><code class="language-bash"># CSSを一度だけビルドする
 npm run build:css
 
 # ファイルの変更を監視して自動でビルドする
 npm run watch:css
 </code></pre>
-
 <p>これにより、プロジェクトに参加した誰もが、コマンドの詳細を覚えることなく、<code>npm run ...</code> という共通の作法で開発タスクを実行できるようになります。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

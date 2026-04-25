@@ -58,10 +58,9 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="zod">🔑 Zodの基本</h3>
 <p><code>Zod</code>では、データの構造とバリデーションルールを「スキーマ」と呼ばれるオブジェクトとして定義します。<code>z.string()</code>や<code>z.number()</code>といったメソッドをチェーンさせることで、直感的にスキーマを構築できます。</p>
-<pre class="codehilite"><code class="language-bash">npm install zod
+<pre><code class="language-bash">npm install zod
 </code></pre>
-
-<pre class="codehilite"><code class="language-typescript">import { z } from &quot;zod&quot;;
+<pre><code class="language-typescript">import { z } from &quot;zod&quot;;
 
 // ユーザー登録フォームのスキーマを定義
 const UserSchema = z.object({
@@ -70,9 +69,8 @@ const UserSchema = z.object({
   age: z.number().min(18, &quot;You must be at least 18&quot;),
 });
 </code></pre>
-
 <p>この<code>UserSchema</code>は、単なるバリデーションルールだけではありません。<code>Zod</code>の最も強力な機能は、このスキーマからTypeScriptの型を<strong>推論</strong>できることです。</p>
-<pre class="codehilite"><code class="language-typescript">// スキーマから型を生成
+<pre><code class="language-typescript">// スキーマから型を生成
 type User = z.infer&lt;typeof UserSchema&gt;;
 
 // User型は以下のようになる
@@ -82,17 +80,15 @@ type User = z.infer&lt;typeof UserSchema&gt;;
 //   age: number;
 // }
 </code></pre>
-
 <p><code>z.infer</code>を使うことで、スキーマ定義と型の定義を完全に同期させることができます。バリデーションルールを変更すれば、型も自動的に更新されるため、二重管理の手間がなくなり、ヒューマンエラーを防ぎます。</p>
 <h3 id="react-hook-form">React Hook Formとの連携</h3>
 <p><code>React Hook Form</code>は、<code>Zod</code>のような外部のバリデーションライブラリと簡単に連携するための公式パッケージ<code>@hookform/resolvers</code>を提供しています。</p>
-<pre class="codehilite"><code class="language-bash">npm install @hookform/resolvers
+<pre><code class="language-bash">npm install @hookform/resolvers
 </code></pre>
-
 <p>このリゾルバーを使うことで、<code>useForm</code>に<code>Zod</code>のスキーマを直接渡すことができます。</p>
 <h3 id="_4">実装例</h3>
 <p>前のセクションで作成したフォームを、<code>Zod</code>を使ってリファクタリングしてみましょう。</p>
-<pre class="codehilite"><code class="language-tsx">import React from 'react';
+<pre><code class="language-tsx">import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -150,7 +146,6 @@ function App() {
 
 export default App;
 </code></pre>
-
 <h4 id="_5">コードのポイント</h4>
 <ol>
 <li><strong>スキーマ定義</strong>: バリデーションルールを<code>z.object</code>を使って一箇所にまとめます。<code>min(1, '...')</code>のように、第二引数にカスタムエラーメッセージを指定できます。</li>

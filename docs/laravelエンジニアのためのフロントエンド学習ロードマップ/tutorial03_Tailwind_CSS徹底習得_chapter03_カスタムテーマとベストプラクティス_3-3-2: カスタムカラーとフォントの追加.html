@@ -54,7 +54,7 @@
 <p>カスタマイズのほとんどは <code>theme</code> オブジェクト内で行います。<code>theme</code> オブジェクトに直接キーを追加すると、デフォルトのテーマが上書きされます。既存のテーマを維持しつつ追加したい場合は、<code>theme.extend</code> を使います。</p>
 <h3 id="_5">カスタムカラーの追加</h3>
 <p><code>theme.extend.colors</code> に独自のカラーを追加します。キーがクラス名の一部になり、値がカラーコードになります。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 module.exports = {
   theme: {
     extend: {
@@ -70,11 +70,10 @@ module.exports = {
   },
 }
 </code></pre>
-
 <p>上記のように設定すると、<code>bg-custom-blue</code> や <code>text-custom-green-light</code> のようなクラスが使えるようになります。</p>
 <h3 id="_6">カスタムフォントの追加</h3>
 <p><code>theme.extend.fontFamily</code> にフォントファミリーを追加します。キーがクラス名の一部になり、値がフォントファミリーの配列になります。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -88,7 +87,6 @@ module.exports = {
   },
 }
 </code></pre>
-
 <p><code>defaultTheme</code> をインポートしてスプレッド構文で展開することで、デフォルトのフォントファミリーを維持しつつ、先頭にカスタムフォントを追加できます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

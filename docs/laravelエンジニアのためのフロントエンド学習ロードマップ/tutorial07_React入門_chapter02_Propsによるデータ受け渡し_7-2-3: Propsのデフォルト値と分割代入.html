@@ -57,7 +57,7 @@
 <p>Propsが親コンポーネントから渡されなかった場合に、代わりに使われる値を設定しておくことができます。これにより、Propsの渡し忘れによるエラーを防いだり、基本的なスタイルを保証したりできます。</p>
 <p>デフォルト値の設定は、関数の引数のデフォルト値と同じ構文を、分割代入と組み合わせて使います。</p>
 <p><strong>例：<code>Button</code>コンポーネントにデフォルト値を設定する</strong></p>
-<pre class="codehilite"><code class="language-tsx">// Button.tsx
+<pre><code class="language-tsx">// Button.tsx
 
 // 1. Propsの型を定義する
 type ButtonProps = {
@@ -74,25 +74,23 @@ function Button({ label, theme = 'secondary' }: ButtonProps) {
   return &lt;button className={buttonClass}&gt;{label}&lt;/button&gt;;
 }
 </code></pre>
-
 <p><strong>解説:</strong><br />
 1.  <strong><code>theme?: 'primary' | 'secondary'</code></strong>: <code>theme</code> Propsの型定義です。<br />
     -   <code>?</code> をプロパティ名の後ろに付けることで、このPropsが<strong>任意（オプショナル）</strong>であることを示します。これにより、<code>Button</code>コンポーネントを呼び出す際に<code>theme</code>を渡さなくても、TypeScriptのエラーが発生しなくなります。<br />
     -   <code>'primary' | 'secondary'</code> は<strong>ユニオン型</strong>といい、<code>theme</code>が取りうる値をこの2つの文字列に限定します。これにより、<code>'danger'</code>のような意図しない値が渡されるのを防ぎます。<br />
 2.  <strong><code>theme = 'secondary'</code></strong>: 分割代入の部分で、<code>theme</code>にデフォルト値を設定しています。もし親から<code>theme</code> Propsが渡されなかった場合、<code>theme</code>変数の値は自動的に<code>'secondary'</code>になります。</p>
 <p><strong>呼び出し側の例 (<code>App.tsx</code>)</strong></p>
-<pre class="codehilite"><code class="language-tsx">// App.tsx
+<pre><code class="language-tsx">// App.tsx
 
 &lt;Button label=&quot;OK&quot; theme=&quot;primary&quot; /&gt; // primaryテーマのボタンが表示される
 &lt;Button label=&quot;Cancel&quot; /&gt;            // themeを渡していないので、デフォルト値のsecondaryテーマのボタンが表示される
 </code></pre>
-
 <hr />
 <h3 id="restprops">🚀 RestパラメータによるPropsの集約</h3>
 <p>標準のHTMLタグが持つ属性（<code>onClick</code>, <code>disabled</code>, <code>id</code>, <code>aria-label</code>など）を、すべてカスタムコンポーネントでも受け取れるようにしたい場合があります。しかし、これらすべてをPropsの型定義に一つ一つ書くのは現実的ではありません。</p>
 <p>このような場合に便利なのが、分割代入の<strong>Restパラメータ (<code>...rest</code>)</strong> です。</p>
 <p><strong>例：<code>button</code>のネイティブな属性をすべて受け取る<code>Button</code>コンポーネント</strong></p>
-<pre class="codehilite"><code class="language-tsx">// Button.tsx
+<pre><code class="language-tsx">// Button.tsx
 
 import React from &quot;react&quot;;
 
@@ -114,7 +112,6 @@ function Button({ label, theme = 'secondary', ...rest }: ButtonProps) {
   );
 }
 </code></pre>
-
 <p><strong>解説:</strong><br />
 1.  <strong><code>&amp; React.ComponentPropsWithoutRef&lt;'button'&gt;</code></strong>: ここがTypeScriptのテクニックです。<br />
     -   <code>React.ComponentPropsWithoutRef&lt;'button'&gt;</code>は、Reactが提供する型で、<code>button</code>タグが受け取れるすべての属性（<code>onClick</code>, <code>disabled</code>, <code>type</code>など）の型情報を持っています。<br />
@@ -123,14 +120,13 @@ function Button({ label, theme = 'secondary', ...rest }: ButtonProps) {
 3.  <strong><code>{...rest}</code></strong>: <code>button</code>要素の属性として<code>{...rest}</code>と記述すると、<code>rest</code>オブジェクトが持つすべてのプロパティが、<code>button</code>タグの属性として展開されます。これを<strong>スプレッド構文</strong>と呼びます。<br />
     -   例えば、<code>rest</code>が<code>{ onClick: handleClick, disabled: true }</code>というオブジェクトだった場合、これは<code>onClick={handleClick} disabled={true}</code>と書いたのと同じ意味になります。</p>
 <p><strong>呼び出し側の例 (<code>App.tsx</code>)</strong></p>
-<pre class="codehilite"><code class="language-tsx">// App.tsx
+<pre><code class="language-tsx">// App.tsx
 
 const handleClick = () =&gt; alert('Clicked!');
 
 &lt;Button label=&quot;Click me&quot; onClick={handleClick} /&gt;
 &lt;Button label=&quot;Submitting...&quot; disabled={true} /&gt;
 </code></pre>
-
 <p>このテクニックを使うことで、コンポーネントのProps定義をシンプルに保ちつつ、HTML要素が持つすべての機能（アクセシビリティ属性を含む）を損なうことなく、ラップしたコンポーネントを作成できます。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

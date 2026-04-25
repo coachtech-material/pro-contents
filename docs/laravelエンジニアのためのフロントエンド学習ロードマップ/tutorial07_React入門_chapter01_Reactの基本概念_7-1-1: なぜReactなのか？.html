@@ -50,14 +50,13 @@
 <hr />
 <h3 id="webjquery">イントロダクション：Webアプリケーションの複雑化とjQueryの限界</h3>
 <p>Tutorial 4で学んだように、JavaScriptを使ってDOMを直接操作することで、Webページに動的な機能を追加できます。かつて、この手法は<strong>jQuery</strong>というライブラリによって、より簡単に行うことができました。</p>
-<pre class="codehilite"><code class="language-javascript">// 例：ボタンをクリックしたら、カウンターの数字を1増やす (jQuery)
+<pre><code class="language-javascript">// 例：ボタンをクリックしたら、カウンターの数字を1増やす (jQuery)
 let count = 0;
 $('#my-button').on('click', function() {
   count++;
   $('#counter').text(count);
 });
 </code></pre>
-
 <p>このアプローチは、単純なWebサイトでは非常にうまく機能しました。しかし、SNSのタイムライン、多機能な管理画面、リアルタイムで共同編集するドキュメントなど、現代のWebアプリケーションはますます複雑になっています。</p>
 <p>ユーザーのアクション、サーバーからの通知、時間経過など、様々な要因でUIの状態が刻一刻と変化するアプリケーションでは、「いつ」「どのDOMを」「どのように変更するか」を開発者がすべて手動で管理する必要があり、コードはすぐに<strong>スパゲッティコード</strong>と化してしまいます。これが「DOM操作の複雑化」問題です。</p>
 <p>この問題を解決するために登場したのが、<strong>React</strong>です。</p>
@@ -75,7 +74,7 @@ $('#my-button').on('click', function() {
 <h3 id="react3">🚀 Reactが解決する3つの課題</h3>
 <h4 id="1-dom">1. DOM操作の複雑化からの解放</h4>
 <p>前述の通り、Reactは宣言的UIを採用しています。開発者は、アプリケーションの<strong>状態 (State)</strong> を管理することに集中できます。状態が変化すれば、Reactが最適な方法でDOMの更新を行ってくれるため、手動でのDOM操作は原則として不要になります。</p>
-<pre class="codehilite"><code class="language-jsx">// Reactでのカウンター
+<pre><code class="language-jsx">// Reactでのカウンター
 function Counter() {
   const [count, setCount] = useState(0); // 状態(State)を定義
 
@@ -89,7 +88,6 @@ function Counter() {
   );
 }
 </code></pre>
-
 <h4 id="2">2. 状態管理の破綻を防ぐ</h4>
 <p>複雑なアプリケーションでは、「どのデータが」「UIのどの部分に影響を与えるのか」という関係性が複雑に絡み合い、状態管理が破綻しがちです。Reactでは、データは親から子への一方向に流れるという原則（<strong>One-way data flow</strong>）があり、データの流れが非常に見通しやすくなっています。これにより、アプリケーションの状態が予測可能になり、デバッグや機能追加が容易になります。</p>
 <h4 id="3">3. コードの再利用性を高めるコンポーネント指向</h4>

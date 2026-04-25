@@ -86,7 +86,7 @@
 <p><code>tailwind-handson</code>プロジェクトを使います。</p>
 <h4 id="step-1">Step 1: ブランドカラーの追加</h4>
 <p>まず、<code>tailwind.config.js</code>を開き、<code>theme.extend.colors</code>にプロジェクトのブランドカラーを追加します。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 module.exports = {
   content: [&quot;./src/**/*.{html,js}&quot;],
   theme: {
@@ -102,7 +102,6 @@ module.exports = {
   plugins: [],
 }
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>brand</code>というキーで色をグループ化し、その中に<code>primary</code>と<code>secondary</code>を定義しました。これにより、<code>bg-brand-primary</code>や<code>text-brand-secondary</code>といったクラス名で色を使えるようになります。</li>
@@ -111,7 +110,7 @@ module.exports = {
 </ul>
 <h4 id="step-2-apply">Step 2: <code>@apply</code>を使ったコンポーネントの作成</h4>
 <p>次に、<code>src/input.css</code>を開き、<code>@tailwind</code>ディレクティブの下にボタンコンポーネントのスタイルを記述します。</p>
-<pre class="codehilite"><code class="language-css">/* src/input.css */
+<pre><code class="language-css">/* src/input.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -137,7 +136,6 @@ module.exports = {
   @apply bg-gray-700; /* 少し濃いグレー */
 }
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>.btn</code>: ボタンの形状やフォント、影、アニメーション効果など、<strong>色以外の共通スタイル</strong>をすべてここにまとめます。<ul>
@@ -151,7 +149,7 @@ module.exports = {
 </ul>
 <h4 id="step-3-html">Step 3: HTMLでの実装</h4>
 <p>最後に、<code>src/index.html</code>を編集し、作成したボタンコンポーネントを使ってみましょう。<code>&lt;body&gt;</code>の中身を以下のように書き換えます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- src/index.html --&gt;
+<pre><code class="language-html">&lt;!-- src/index.html --&gt;
 &lt;body class=&quot;bg-gray-100 flex justify-center items-center h-screen space-x-4&quot;&gt;
 
   &lt;button class=&quot;btn btn-primary&quot;&gt;
@@ -164,7 +162,6 @@ module.exports = {
 
 &lt;/body&gt;
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>class="btn btn-primary"</code>: <strong>共通の<code>.btn</code>クラス</strong>と、<strong>バリエーションの<code>.btn-primary</code>クラス</strong>を両方指定しているのがポイントです。これにより、スタイルが合成されます。</li>

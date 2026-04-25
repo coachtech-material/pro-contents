@@ -72,27 +72,25 @@
 </tr>
 </tbody>
 </table>
-<pre class="codehilite"><code class="language-typescript">let a; // undefined（値が未定義）
+<pre><code class="language-typescript">let a; // undefined（値が未定義）
 let b = null; // null（意図的に空）
 
 const obj = { name: &quot;Taro&quot; };
 console.log(obj.age); // undefined（存在しないプロパティ）
 </code></pre>
-
 <h2 id="2-strictnullchecks">2. <code>strictNullChecks</code>オプション</h2>
 <p>TypeScriptの<code>tsconfig.json</code>で<code>strictNullChecks</code>を<code>true</code>に設定すると（<code>strict: true</code>に含まれる）、<code>null</code>と<code>undefined</code>は明示的に型に含めない限り、他の型に代入できなくなります。</p>
-<pre class="codehilite"><code class="language-typescript">// strictNullChecks: false の場合
+<pre><code class="language-typescript">// strictNullChecks: false の場合
 let name: string = null; // OK（危険！）
 
 // strictNullChecks: true の場合
 let name: string = null; // Error: Type 'null' is not assignable to type 'string'.
 let name: string | null = null; // OK（Union型で明示的に許可）
 </code></pre>
-
 <p>このオプションを有効にすることで、<code>null</code>や<code>undefined</code>が混入する可能性のある箇所をコンパイラが検出してくれます。</p>
 <h2 id="3">3. オプショナルプロパティとオプショナルパラメータ</h2>
 <p>オブジェクトのプロパティや関数の引数が省略可能であることを示すには、<code>?</code>を使います。</p>
-<pre class="codehilite"><code class="language-typescript">// オプショナルプロパティ
+<pre><code class="language-typescript">// オプショナルプロパティ
 interface User {
   name: string;
   age?: number; // number | undefined と同等
@@ -109,10 +107,9 @@ function greet(name: string, greeting?: string): string {
 greet(&quot;Taro&quot;); // &quot;Hello, Taro!&quot;
 greet(&quot;Taro&quot;, &quot;Hi&quot;); // &quot;Hi, Taro!&quot;
 </code></pre>
-
 <h2 id="4">4. オプショナルチェイニング (<code>?.</code>)</h2>
 <p>オプショナルチェイニングを使うと、ネストしたオブジェクトのプロパティに安全にアクセスできます。途中で<code>null</code>や<code>undefined</code>に遭遇した場合、エラーを投げずに<code>undefined</code>を返します。</p>
-<pre class="codehilite"><code class="language-typescript">interface Company {
+<pre><code class="language-typescript">interface Company {
   name: string;
   address?: {
     city: string;
@@ -129,10 +126,9 @@ const company: Company = { name: &quot;TechCorp&quot; };
 const city = company.address?.city; // undefined
 const zipCode = company.address?.zipCode; // undefined
 </code></pre>
-
 <h2 id="5-nullish-coalescing">5. Nullish Coalescing (<code>??</code>)</h2>
 <p>Nullish Coalescing演算子は、左辺が<code>null</code>または<code>undefined</code>の場合にのみ右辺の値を返します。<code>||</code>演算子と似ていますが、<code>0</code>や空文字列<code>""</code>を有効な値として扱う点が異なります。</p>
-<pre class="codehilite"><code class="language-typescript">const value1 = null ?? &quot;default&quot;; // &quot;default&quot;
+<pre><code class="language-typescript">const value1 = null ?? &quot;default&quot;; // &quot;default&quot;
 const value2 = undefined ?? &quot;default&quot;; // &quot;default&quot;
 const value3 = 0 ?? &quot;default&quot;; // 0（0は有効な値）
 const value4 = &quot;&quot; ?? &quot;default&quot;; // &quot;&quot;（空文字列は有効な値）
@@ -141,10 +137,9 @@ const value4 = &quot;&quot; ?? &quot;default&quot;; // &quot;&quot;（空文字�
 const value5 = 0 || &quot;default&quot;; // &quot;default&quot;（0はfalsyなので右辺が返る）
 const value6 = &quot;&quot; || &quot;default&quot;; // &quot;default&quot;（空文字列はfalsyなので右辺が返る）
 </code></pre>
-
 <h2 id="6-null">6. 非Nullアサーション演算子 (<code>!</code>)</h2>
 <p>変数の後ろに<code>!</code>を付けると、TypeScriptに対して「この値は<code>null</code>や<code>undefined</code>ではない」と断言できます。ただし、これは型チェックを回避するものであり、実行時の安全性は保証されません。<strong>使用は最小限に留めるべきです。</strong></p>
-<pre class="codehilite"><code class="language-typescript">function getElement(id: string): HTMLElement | null {
+<pre><code class="language-typescript">function getElement(id: string): HTMLElement | null {
   return document.getElementById(id);
 }
 
@@ -158,7 +153,6 @@ if (element) {
   element.innerHTML = &quot;Hello&quot;;
 }
 </code></pre>
-
 <h2 id="_3">✨ まとめ</h2>
 <ul>
 <li><code>null</code>は「意図的に空」、<code>undefined</code>は「値が未定義」を表す</li>

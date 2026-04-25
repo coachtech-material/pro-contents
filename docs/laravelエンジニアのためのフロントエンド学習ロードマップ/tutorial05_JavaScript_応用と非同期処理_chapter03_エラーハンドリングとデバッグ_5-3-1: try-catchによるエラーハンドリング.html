@@ -50,7 +50,7 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="trycatch"><code>try...catch</code> の基本構文</h3>
 <p><code>try...catch</code> 構文は、エラーが発生する可能性のあるコードブロックを <code>try</code> ブロックで囲み、エラーが発生した場合の処理を <code>catch</code> ブロックに記述します。</p>
-<pre class="codehilite"><code class="language-javascript">try {
+<pre><code class="language-javascript">try {
   // エラーが発生する可能性のあるコード
   console.log(&quot;tryブロックの処理を開始します&quot;);
 
@@ -67,20 +67,18 @@
 
 console.log(&quot;try...catchブロックの外の処理は続行されます&quot;);
 </code></pre>
-
 <p><strong>実行結果:</strong></p>
-<pre class="codehilite"><code>tryブロックの処理を開始します
+<pre><code>tryブロックの処理を開始します
 エラーが発生しました！
 ReferenceError: undefinedFunction is not defined
     at ...
 try...catchブロックの外の処理は続行されます
 </code></pre>
-
 <p><code>try</code> ブロック内でエラーが発生すると、その時点から <code>try</code> ブロックの実行は中断され、直ちに <code>catch</code> ブロックに処理が移ります。<code>catch</code> ブロックは、発生したエラー情報を含む<strong>エラーオブジェクト</strong>を引数として受け取ります。</p>
 <h3 id="asyncawait-trycatch"><code>async/await</code> と <code>try...catch</code></h3>
 <p><code>async/await</code> を使った非同期処理のエラーハンドリングは、<code>try...catch</code> と非常に相性が良いです。<code>await</code> したPromiseが <code>rejected</code>（失敗）状態になると、<code>try...catch</code> はそれを同期的なエラーと同様に捕捉できます。</p>
 <p>前のチャプターで作成した <code>fetch</code> の例にエラーハンドリングを追加してみましょう。</p>
-<pre class="codehilite"><code class="language-javascript">async function fetchUsers() {
+<pre><code class="language-javascript">async function fetchUsers() {
   try {
     // 意図的に無効なURLを指定してエラーを発生させる
     const response = await fetch(&quot;https://jsonplaceholder.typicode.com/invalid-url&quot;);
@@ -103,7 +101,6 @@ try...catchブロックの外の処理は続行されます
 
 fetchUsers();
 </code></pre>
-
 <p>この例では、2種類のエラーを捕捉しています。</p>
 <ol>
 <li><strong>ネットワークエラー</strong>: <code>fetch</code> 自体が失敗した場合（例: DNS解決に失敗、オフラインなど）。この場合、<code>await fetch(...)</code> がPromiseを <code>rejected</code> にし、<code>catch</code> ブロックが実行されます。</li>
@@ -111,7 +108,7 @@ fetchUsers();
 </ol>
 <h3 id="finally"><code>finally</code> ブロック</h3>
 <p><code>try...catch</code> には、<code>finally</code> ブロックを追加することもできます。<code>finally</code> ブロック内のコードは、<code>try</code> ブロックでエラーが発生したかどうかに関わらず、<strong>必ず最後に実行されます</strong>。</p>
-<pre class="codehilite"><code class="language-javascript">try {
+<pre><code class="language-javascript">try {
   // ...
 } catch (error) {
   // ...
@@ -119,7 +116,6 @@ fetchUsers();
   console.log('処理が完了しました');
 }
 </code></pre>
-
 <p>ローディング表示を終了させる処理など、成功・失敗にかかわらず実行したい後処理を記述するのに便利です。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

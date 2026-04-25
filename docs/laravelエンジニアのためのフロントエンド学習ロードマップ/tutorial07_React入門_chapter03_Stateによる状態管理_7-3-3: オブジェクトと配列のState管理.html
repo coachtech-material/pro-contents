@@ -57,7 +57,7 @@
 <p>Reactでは、<strong>Stateを直接変更（mutate）してはいけません</strong>。これは、オブジェクトや配列のStateを扱う際に特に重要です。</p>
 <p>JavaScriptでは、オブジェクトや配列は参照によって扱われます。つまり、変数が保持しているのはデータそのものではなく、メモリ上のデータが置かれている場所（アドレス）です。</p>
 <p><strong>❌ やってはいけないこと（Stateの直接変更）:</strong></p>
-<pre class="codehilite"><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
+<pre><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
 
 const handleAgeIncrement = () =&gt; {
   // ダメ！ userオブジェクトのプロパティを直接変更している
@@ -65,7 +65,6 @@ const handleAgeIncrement = () =&gt; {
   setUser(user); // Reactは変更を検知できない！
 };
 </code></pre>
-
 <p>なぜこれがダメなのでしょうか？<br />
 <code>setUser(user)</code>を呼び出しても、渡されている<code>user</code>変数が指し示すメモリ上のアドレスは、更新前と後で変わっていません。Reactは、Stateの変更を検知するために、前回のStateと今回のStateを比較しますが、この比較は高速化のために参照（アドレス）の比較で行われます。アドレスが変わっていないため、Reactは「何も変更されていない」と判断し、<strong>再レンダリングを行わない</strong>のです。</p>
 <p><strong>⭕ 正しい方法：新しいオブジェクトを作成する</strong></p>
@@ -74,7 +73,7 @@ const handleAgeIncrement = () =&gt; {
 <h3 id="_1">🚀 スプレッド構文によるイミュータブルな更新</h3>
 <p>イミュータブルな更新を簡単に行うために、JavaScriptの<strong>スプレッド構文 (<code>...</code>)</strong> を活用します。</p>
 <h4 id="_2">オブジェクトの更新</h4>
-<pre class="codehilite"><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
+<pre><code class="language-tsx">const [user, setUser] = useState({ name: 'Taro', age: 20 });
 
 const handleAgeIncrement = () =&gt; {
   // スプレッド構文で新しいオブジェクトを作成
@@ -84,7 +83,6 @@ const handleAgeIncrement = () =&gt; {
   });
 };
 </code></pre>
-
 <ul>
 <li><code>{ ...user }</code> は、<code>user</code>オブジェクトが持つすべてのプロパティ（<code>name: 'Taro'</code>, <code>age: 20</code>）を新しいオブジェクトの中にコピーします。</li>
 <li>その直後に <code>, age: user.age + 1</code> と記述することで、<code>age</code>プロパティだけが新しい値で上書きされます。</li>
@@ -93,7 +91,7 @@ const handleAgeIncrement = () =&gt; {
 <h4 id="_3">配列の更新</h4>
 <p>配列のStateも同様に、<code>push</code>や<code>splice</code>のような配列を直接変更するメソッドは使えません。スプレッド構文や、<code>map</code>, <code>filter</code>のような新しい配列を返すメソッドを使います。</p>
 <p><strong>例：TODOリスト</strong></p>
-<pre class="codehilite"><code class="language-tsx">const [todos, setTodos] = useState([
+<pre><code class="language-tsx">const [todos, setTodos] = useState([
   { id: 1, text: 'Reactを学ぶ' },
   { id: 2, text: '寝る' },
 ]);
@@ -125,7 +123,6 @@ const updateTodo = (idToUpdate: number, newText: string) =&gt; {
   }));
 };
 </code></pre>
-
 <hr />
 <p>✨ <strong>まとめ</strong></p>
 <ul>

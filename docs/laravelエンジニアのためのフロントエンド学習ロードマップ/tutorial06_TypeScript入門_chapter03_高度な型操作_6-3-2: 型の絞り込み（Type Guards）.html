@@ -52,16 +52,15 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="_4">🔑 なぜ型の絞り込みが必要か？</h3>
 <p>以下のコードは、前のセクションで見たエラーの例です。</p>
-<pre class="codehilite"><code class="language-typescript">function printId(id: string | number) {
+<pre><code class="language-typescript">function printId(id: string | number) {
   // エラー: Property 'toUpperCase' does not exist on type 'string | number'.
   console.log(id.toUpperCase()); 
 }
 </code></pre>
-
 <p>TypeScriptは、<code>id</code> が <code>number</code> である可能性を排除できないため、コンパイルを許可しません。このコードを安全に実行するには、「<code>id</code> が <code>string</code> の場合のみ <code>toUpperCase</code> を呼び出す」というロジックを加え、それをTypeScriptコンパイラに理解させる必要があります。そのための手法がType Guardsです。</p>
 <h3 id="1-typeof">1. <code>typeof</code> による絞り込み</h3>
 <p><code>typeof</code> 演算子は、JavaScriptの基本的な演算子で、変数のプリミティブな型を文字列で返します（例: <code>"string"</code>, <code>"number"</code>, <code>"boolean"</code>）。TypeScriptは、この <code>typeof</code> を使った条件分岐を理解し、型を絞り込みます。</p>
-<pre class="codehilite"><code class="language-typescript">function printId(id: string | number) {
+<pre><code class="language-typescript">function printId(id: string | number) {
   if (typeof id === &quot;string&quot;) {
     // このブロック内では、idは `string` 型として扱われる
     console.log(id.toUpperCase()); // OK
@@ -74,11 +73,10 @@
 printId(&quot;hello-world&quot;); // HELLO-WORLD
 printId(123.456);     // 123.46
 </code></pre>
-
 <p><code>if (typeof id === "string")</code> という条件式により、<code>if</code>ブロック内では <code>id</code> が <code>string</code> 型であることが保証されます。TypeScriptコンパイラはこの文脈を理解し、<code>toUpperCase</code> の呼び出しを許可します。同様に、<code>else</code> ブロック内では残りの可能性である <code>number</code> 型に絞り込まれます。</p>
 <h3 id="2-instanceof">2. <code>instanceof</code> による絞り込み</h3>
 <p><code>instanceof</code> 演算子は、あるオブジェクトが特定のクラスのインスタンスであるかどうかを判定します。これは、クラスベースのオブジェクト指向プログラミングで特に役立ちます。</p>
-<pre class="codehilite"><code class="language-typescript">class User {
+<pre><code class="language-typescript">class User {
   constructor(public name: string) {}
 }
 
@@ -99,10 +97,9 @@ function printEntity(entity: User | Company) {
 printEntity(new User(&quot;Taro&quot;));         // User: Taro
 printEntity(new Company(&quot;Tech Inc.&quot;)); // Company: Tech Inc.
 </code></pre>
-
 <h3 id="3-in">3. <code>in</code> 演算子による絞り込み</h3>
 <p><code>in</code> 演算子は、オブジェクトが特定のプロパティを持っているかどうかをチェックします。これは、同じような構造を持つが、一部のプロパティが異なるオブジェクトの型を区別するのに便利です。</p>
-<pre class="codehilite"><code class="language-typescript">interface Fish {
+<pre><code class="language-typescript">interface Fish {
   swim: () =&gt; void;
 }
 
@@ -119,7 +116,6 @@ function move(animal: Fish | Bird) {
   return animal.fly(); // OK
 }
 </code></pre>
-
 <p><code>"swim" in animal</code> というチェックにより、TypeScriptは「もし <code>swim</code> プロパティが存在するなら、この <code>animal</code> は <code>Fish</code> 型に違いない」と判断します。これにより、<code>swim</code> メソッドを安全に呼び出すことができます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

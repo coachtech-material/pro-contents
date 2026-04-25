@@ -11,7 +11,7 @@ from pathlib import Path
 from html import escape
 
 # パス設定
-BASE_DIR = Path("/home/ubuntu/pro-contents")
+BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "docs"
 
 # サイト情報
@@ -258,13 +258,18 @@ def format_column_chapter_title(chapter_name):
 
 def md_to_html(md_content):
     """MarkdownをHTMLに変換"""
-    md = markdown.Markdown(extensions=[
-        'tables',
-        'fenced_code',
-        'codehilite',
-        'toc',
-        'nl2br'
-    ])
+    md = markdown.Markdown(
+        extensions=[
+            'tables',
+            'fenced_code',
+            'codehilite',
+            'toc',
+            'nl2br'
+        ],
+        extension_configs={
+            'codehilite': {'use_pygments': False}
+        }
+    )
     return md.convert(md_content)
 
 

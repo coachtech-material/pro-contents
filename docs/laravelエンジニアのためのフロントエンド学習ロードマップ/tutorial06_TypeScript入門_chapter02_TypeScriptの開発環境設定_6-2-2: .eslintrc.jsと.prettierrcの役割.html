@@ -80,7 +80,7 @@
 <h3 id="eslint-javascript">ESLint: JavaScriptの静的解析ツール</h3>
 <p>ESLintは、コードを実行する前に潜在的な問題点やバグを検出するためのツールです。設定ファイルは <code>.eslintrc.js</code> (または <code>.json</code>, <code>.yml</code>) です。</p>
 <h4 id="eslintrcjs"><code>.eslintrc.js</code> の主要な設定</h4>
-<pre class="codehilite"><code class="language-javascript">module.exports = {
+<pre><code class="language-javascript">module.exports = {
   // パーサー：どのバージョンのJavaScriptか、TypeScriptかなどをESLintに教える
   parser: &quot;@typescript-eslint/parser&quot;,
 
@@ -108,7 +108,6 @@
   }
 };
 </code></pre>
-
 <ul>
 <li><strong><code>extends</code></strong>: 他の設定ファイルを継承します。<code>eslint:recommended</code> のような基本的なルールセットから、<code>prettier</code> のように他のツールとの連携設定まで、配列の末尾に書かれたものが優先されます。</li>
 <li><strong><code>plugins</code></strong>: ESLint本体だけでは解釈できない構文（例: TypeScript, React）を扱えるようにしたり、特定のライブラリに関するルールを追加したりします。</li>
@@ -117,19 +116,18 @@
 <h3 id="prettier">Prettier: コードフォーマッター</h3>
 <p>Prettierは、コードのスタイルに関するあらゆる議論を終わらせるための「独善的な」フォーマッターです。設定項目は意図的に少なくされており、細かい調整よりも「統一性」を重視します。設定ファイルは <code>.prettierrc</code> (または <code>.json</code>, <code>.js</code>) です。</p>
 <h4 id="prettierrc"><code>.prettierrc</code> の主要な設定</h4>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;semi&quot;: true, // 文末にセミコロンを付ける
   &quot;singleQuote&quot;: true, // シングルクォートを使用する
   &quot;tabWidth&quot;: 2, // インデントの幅をスペース2つ分にする
   &quot;trailingComma&quot;: &quot;es5&quot; // 配列やオブジェクトの末尾のカンマを付ける (ES5互換)
 }
 </code></pre>
-
 <p>これらの設定に従って、ファイルを保存したときなどに自動でコードが整形されます。</p>
 <h3 id="eslintprettier">ESLintとPrettierの連携</h3>
 <p>ESLintにもフォーマットに関するルールがあるため、Prettierと競合することがあります。例えば、「一行の最大文字数」を両方で設定していると、どちらを優先すべきか混乱します。</p>
 <p>この問題を解決するのが <code>eslint-config-prettier</code> です。これをESLintの <code>extends</code> 配列の<strong>一番最後</strong>に追加することで、「<strong>フォーマットに関するルールはすべてPrettierに任せる</strong>」という意味になり、ESLintのフォーマット関連ルールが一括で無効化されます。</p>
-<pre class="codehilite"><code class="language-javascript">// .eslintrc.js
+<pre><code class="language-javascript">// .eslintrc.js
 {
   extends: [
     // ...他の設定
@@ -137,7 +135,6 @@
   ]
 }
 </code></pre>
-
 <p>これにより、<strong>ESLintはコード品質のチェックに専念</strong>し、<strong>Prettierはコードスタイルの整形に専念する</strong>という、理想的な役割分担が実現できます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

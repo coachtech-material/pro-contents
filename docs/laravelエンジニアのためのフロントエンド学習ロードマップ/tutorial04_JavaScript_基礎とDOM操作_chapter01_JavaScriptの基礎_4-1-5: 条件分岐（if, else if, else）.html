@@ -55,13 +55,12 @@
 <h3 id="1-if">⚙️ 1. <code>if</code>文：もし〜なら</h3>
 <p><code>if</code>文は、指定した条件が<code>true</code>の場合にのみ、続く波括弧<code>{}</code>ブロック内のコードを実行します。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">if (条件式) {
+<pre><code class="language-javascript">if (条件式) {
   // 条件式がtrueの場合に実行される処理
 }
 </code></pre>
-
 <p><strong>例：</strong></p>
-<pre class="codehilite"><code class="language-javascript">const score = 80;
+<pre><code class="language-javascript">const score = 80;
 
 if (score &gt;= 60) {
   console.log(&quot;合格です！&quot;); // &quot;合格です！&quot; と表示される
@@ -72,7 +71,6 @@ if (age &lt; 20) {
   console.log(&quot;未成年です。&quot;); // 表示されない
 }
 </code></pre>
-
 <ul>
 <li><code>score &gt;= 60</code>は<code>true</code>なので、ブロック内の<code>console.log</code>が実行されます。</li>
 <li><code>age &lt; 20</code>は<code>false</code>なので、ブロック内の処理はスキップされます。</li>
@@ -80,15 +78,14 @@ if (age &lt; 20) {
 <h3 id="2-else">⚙️ 2. <code>else</code>文：そうでなければ</h3>
 <p><code>else</code>文は、<code>if</code>文の条件が<code>false</code>だった場合に実行される処理を記述するために使います。<code>if</code>文とセットで使われ、単独で使うことはできません。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">if (条件式) {
+<pre><code class="language-javascript">if (条件式) {
   // 条件式がtrueの場合に実行される処理
 } else {
   // 条件式がfalseの場合に実行される処理
 }
 </code></pre>
-
 <p><strong>例：</strong></p>
-<pre class="codehilite"><code class="language-javascript">const age = 22;
+<pre><code class="language-javascript">const age = 22;
 
 if (age &lt; 20) {
   console.log(&quot;未成年です。入場できません。&quot;);
@@ -96,14 +93,13 @@ if (age &lt; 20) {
   console.log(&quot;成人です。どうぞお入りください。&quot;); // &quot;成人です。どうぞお入りください。&quot; と表示される
 }
 </code></pre>
-
 <ul>
 <li><code>age &lt; 20</code>は<code>false</code>なので、<code>if</code>ブロックはスキップされ、<code>else</code>ブロック内のコードが実行されます。</li>
 </ul>
 <h3 id="3-else-if">⚙️ 3. <code>else if</code>文：さらに別の条件の場合</h3>
 <p>3つ以上の条件で分岐させたい場合は、<code>else if</code>を使います。<code>if</code>の条件が<code>false</code>だった場合に、さらに別の条件で評価を行うことができます。<code>else if</code>はいくつでも繋げることができます。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">if (条件式1) {
+<pre><code class="language-javascript">if (条件式1) {
   // 条件式1がtrueの場合の処理
 } else if (条件式2) {
   // 条件式1がfalseで、条件式2がtrueの場合の処理
@@ -111,9 +107,8 @@ if (age &lt; 20) {
   // すべての条件がfalseだった場合の処理
 }
 </code></pre>
-
 <p><strong>例：</strong></p>
-<pre class="codehilite"><code class="language-javascript">const score = 75;
+<pre><code class="language-javascript">const score = 75;
 
 if (score &gt;= 90) {
   console.log(&quot;優&quot;);
@@ -125,7 +120,6 @@ if (score &gt;= 90) {
   console.log(&quot;不可&quot;);
 }
 </code></pre>
-
 <ul>
 <li><strong>評価の順序が重要です。</strong><ol>
 <li>まず<code>score &gt;= 90</code>が評価されます → <code>false</code>。</li>
@@ -137,11 +131,10 @@ if (score &gt;= 90) {
 <h3 id="if-else">💡 三項演算子：シンプルな<code>if-else</code>のショートカット</h3>
 <p><code>if-else</code>の処理が非常にシンプルな場合、<strong>三項演算子</strong>（<code>? :</code>）を使うと、コードを1行で簡潔に書くことができます。</p>
 <p><strong>基本構文:</strong></p>
-<pre class="codehilite"><code class="language-javascript">条件式 ? (trueの場合の値) : (falseの場合の値)
+<pre><code class="language-javascript">条件式 ? (trueの場合の値) : (falseの場合の値)
 </code></pre>
-
 <p><strong>例：</strong></p>
-<pre class="codehilite"><code class="language-javascript">const age = 20;
+<pre><code class="language-javascript">const age = 20;
 
 // if-else文の場合
 let message;
@@ -156,7 +149,6 @@ const message = age &gt;= 20 ? &quot;成人&quot; : &quot;未成年&quot;;
 
 console.log(message); // &quot;成人&quot;
 </code></pre>
-
 <p>三項演算子は、特にReactなどのフレームワークで、コンポーネントの表示を条件によって切り替える際などによく使われます。ただし、処理が複雑になる場合は、可読性の観点から通常の<code>if-else</code>文を使う方が適切です。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

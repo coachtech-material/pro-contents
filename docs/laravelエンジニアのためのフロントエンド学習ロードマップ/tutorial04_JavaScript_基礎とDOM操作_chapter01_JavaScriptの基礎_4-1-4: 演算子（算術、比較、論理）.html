@@ -98,11 +98,10 @@
 </tbody>
 </table>
 <p>文字列の連結にも<code>+</code>演算子が使われます。</p>
-<pre class="codehilite"><code class="language-javascript">const lastName = '山田';
+<pre><code class="language-javascript">const lastName = '山田';
 const firstName = '太郎';
 const fullName = lastName + ' ' + firstName; // &quot;山田 太郎&quot;
 </code></pre>
-
 <h3 id="2-2">⚙️ 2. 比較演算子：2つの値を比べる</h3>
 <p>比較演算子は、2つの値を比較し、その結果を真偽値（<code>true</code>または<code>false</code>）で返します。条件分岐（<code>if</code>文）などで頻繁に使われます。</p>
 <table>
@@ -236,14 +235,13 @@ const fullName = lastName + ' ' + firstName; // &quot;山田 太郎&quot;
 <li><code>||</code> (OR): 左側の条件が<code>true</code>だった場合、右側の条件は<strong>評価（実行）されません</strong>。なぜなら、結果が<code>true</code>になることが確定するからです。</li>
 </ul>
 <p>これは、単なるパフォーマンス最適化だけでなく、エラー回避のテクニックとしても使われます。</p>
-<pre class="codehilite"><code class="language-javascript">const user = null;
+<pre><code class="language-javascript">const user = null;
 
 // userがnullなので、user.isAdminの評価は実行されず、エラーにならない
 if (user &amp;&amp; user.isAdmin) {
   console.log('管理者です');
 }
 </code></pre>
-
 <hr />
 <p>✨ <strong>まとめ</strong></p>
 <ul>

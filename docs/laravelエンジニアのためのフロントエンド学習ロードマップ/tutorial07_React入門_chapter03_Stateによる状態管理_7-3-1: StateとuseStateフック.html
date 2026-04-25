@@ -67,7 +67,7 @@
 <p><code>useState</code>は、コンポーネントにState（状態）を追加するためのフックです。</p>
 <p><code>useState</code>を呼び出すと、<strong>State変数</strong>と、そのStateを更新するための<strong>セッター関数</strong>のペアが、配列として返ってきます。</p>
 <p><strong><code>useState</code>の基本構文:</strong></p>
-<pre class="codehilite"><code class="language-tsx">import { useState } from 'react';
+<pre><code class="language-tsx">import { useState } from 'react';
 
 function MyComponent() {
   // useStateを呼び出し、配列の分割代入で変数とセッター関数を受け取る
@@ -76,14 +76,13 @@ function MyComponent() {
   // ...
 }
 </code></pre>
-
 <ul>
 <li><strong><code>initialValue</code></strong>: Stateの初期値。コンポーネントが最初にレンダリングされるときに一度だけ使われます。</li>
 <li><strong><code>stateVariable</code></strong>: 現在のStateの値を保持する変数。この変数の値が変更されると、Reactはコンポーネントを再レンダリングします。</li>
 <li><strong><code>setFunction</code></strong>: Stateを更新するための関数。<strong>Stateを直接変更することはできず、必ずこのセッター関数を使って更新します。</strong></li>
 </ul>
 <p><strong>例：シンプルなカウンターコンポーネント</strong></p>
-<pre class="codehilite"><code class="language-tsx">// Counter.tsx
+<pre><code class="language-tsx">// Counter.tsx
 import { useState } from 'react';
 
 function Counter() {
@@ -105,7 +104,6 @@ function Counter() {
   );
 }
 </code></pre>
-
 <p><strong>動作の流れ:</strong><br />
 1.  コンポーネントが最初に表示されるとき、<code>useState(0)</code>が呼ばれ、<code>count</code>は<code>0</code>になる。画面には「現在のカウント: 0」と表示される。<br />
 2.  ユーザーがボタンをクリックすると、<code>increment</code>関数が実行される。<br />
@@ -118,20 +116,18 @@ function Counter() {
 <h4 id="1-state">1. Stateを直接変更しない</h4>
 <p>State変数は読み取り専用のように扱ってください。直接代入しても、Reactは変更を検知できず、再レンダリングは発生しません。</p>
 <p><strong>❌ やってはいけないこと:</strong></p>
-<pre class="codehilite"><code class="language-tsx">const increment = () =&gt; {
+<pre><code class="language-tsx">const increment = () =&gt; {
   count = count + 1; // ダメ！再レンダリングされない
 };
 </code></pre>
-
 <p><strong>⭕ 正しい方法:</strong></p>
-<pre class="codehilite"><code class="language-tsx">const increment = () =&gt; {
+<pre><code class="language-tsx">const increment = () =&gt; {
   setCount(count + 1); // 必ずセッター関数を使う
 };
 </code></pre>
-
 <h4 id="2-state">2. Stateの更新は非同期</h4>
 <p>セッター関数（例: <code>setCount</code>）を呼び出しても、State変数が<strong>即座に</strong>更新されるわけではありません。Reactは、パフォーマンスのために複数のState更新をまとめてバッチ処理することがあります。</p>
-<pre class="codehilite"><code class="language-tsx">const handleClick = () =&gt; {
+<pre><code class="language-tsx">const handleClick = () =&gt; {
   setCount(count + 1); // countの更新をスケジュール
   console.log(count);  // まだ古い値(0)が表示される！
 
@@ -139,12 +135,11 @@ function Counter() {
   console.log(count);  // やはり古い値(0)が表示される！
 };
 </code></pre>
-
 <p>この場合、最終的に<code>count</code>は<code>1</code>にしかなりません。前のStateの値に基づいて更新を行いたい場合は、<strong>更新関数</strong>をセッターに渡す必要があります。（これは次のセクションで詳しく学びます）</p>
 <hr />
 <h3 id="state_1">⚙️ 複数のState変数を持つ</h3>
 <p>一つのコンポーネントは、複数のState変数を好きなだけ持つことができます。関連性の低いデータは、別々のStateとして管理するのが良い設計です。</p>
-<pre class="codehilite"><code class="language-tsx">function UserForm() {
+<pre><code class="language-tsx">function UserForm() {
   const [name, setName] = useState('');
   const [age, setAge] = useState(20);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -152,7 +147,6 @@ function Counter() {
   // ...
 }
 </code></pre>
-
 <hr />
 <p>✨ <strong>まとめ</strong></p>
 <ul>

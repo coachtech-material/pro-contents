@@ -68,20 +68,18 @@
 </ul>
 <h3 id="1-laravel">ステップ1: 新しいLaravelプロジェクトの作成</h3>
 <p>ターミナルを開き、プロジェクトを作成したいディレクトリに移動してください。そして、以下のコマンドを実行します。このコマンドは、Dockerを使って一時的なコンテナを起動し、その中で<code>laravel new</code>コマンドを実行して、<code>laravel-next-app</code>という名前の新しいLaravelプロジェクトを作成します。</p>
-<pre class="codehilite"><code class="language-bash"># このコマンドは完了までに数分かかります
+<pre><code class="language-bash"># このコマンドは完了までに数分かかります
 curl -s &quot;https://laravel.build/laravel-next-app&quot; | bash
 </code></pre>
-
 <p>コマンドが完了すると、<code>laravel-next-app</code>というディレクトリが作成されます。これが私たちのバックエンドアプリケーションのプロジェクトです。</p>
 <h3 id="2-sail">ステップ2: Sailの起動</h3>
 <p>次に、作成されたプロジェクトディレクトリに移動し、Sailを起動します。</p>
-<pre class="codehilite"><code class="language-bash"># プロジェクトディレクトリに移動
+<pre><code class="language-bash"># プロジェクトディレクトリに移動
 cd laravel-next-app
 
 # Sailをバックグラウンドで起動する
 ./vendor/bin/sail up -d
 </code></pre>
-
 <ul>
 <li><code>./vendor/bin/sail</code>: Sailコマンド本体です。</li>
 <li><code>up</code>: Dockerコンテナを起動します。</li>
@@ -101,10 +99,9 @@ cd laravel-next-app
 <li><strong>コンテナ内に入る</strong>: <code>./vendor/bin/sail shell</code></li>
 </ul>
 <p>毎回 <code>./vendor/bin/sail</code> と入力するのは少し面倒なので、エイリアスを設定すると便利です。</p>
-<pre class="codehilite"><code class="language-bash"># .bashrc や .zshrc に追加
+<pre><code class="language-bash"># .bashrc や .zshrc に追加
 alias sail='[ -f sail ] &amp;&amp; bash sail || bash vendor/bin/sail'
 </code></pre>
-
 <p>エイリアスを設定すれば、単に <code>sail up -d</code> や <code>sail artisan migrate</code> のようにコマンドを実行できるようになります。</p>
 <h2 id="_5">✨ まとめ</h2>
 <ul>

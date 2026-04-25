@@ -44,7 +44,7 @@
 <p>DRY（Don't Repeat Yourself）の原則に従い、型の定義を再利用することの重要性を体感することが目的です。</p>
 <h3 id="_2">基準となる型</h3>
 <p>すべての課題は、以下の<code>Todo</code>インターフェースを元にして作成します。</p>
-<pre class="codehilite"><code class="language-typescript">interface Todo {
+<pre><code class="language-typescript">interface Todo {
   id: number;
   title: string;
   description: string;
@@ -52,7 +52,6 @@
   createdAt: Date;
 }
 </code></pre>
-
 <h3 id="_3">完成要件</h3>
 <ol>
 <li>
@@ -90,7 +89,7 @@
 <li>それぞれの型が正しく定義できているか、ダミーの変数に型注釈を付けて確認してみましょう。</li>
 </ol>
 <h2 id="_5">🏆 解答例</h2>
-<pre class="codehilite"><code class="language-typescript">// 基準となるTodoインターフェース
+<pre><code class="language-typescript">// 基準となるTodoインターフェース
 interface Todo {
   id: number;
   title: string;
@@ -172,7 +171,6 @@ GroupedTodos: {
 
 */
 </code></pre>
-
 <h3 id="_6">💡 コードのポイント</h3>
 <p>このハンズオンの最大のポイントは、<code>Todo</code> という<strong>単一の信頼できる情報源（Single Source of Truth）</strong>から、アプリケーションの様々な場面で必要とされる型を、重複なく効率的に生成している点です。</p>
 <p>もし将来、<code>Todo</code> インターフェースに <code>dueDate: Date</code> というプロパティが追加されたとしても、<code>TodoCreation</code> や <code>TodoUpdate</code> の型定義は自動的に <code>dueDate</code> を含むようになり、手動で修正する必要はありません。これがUtility Typesを使う大きなメリットであり、メンテナンス性の高いコードに繋がります。</p>

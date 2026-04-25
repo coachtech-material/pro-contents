@@ -54,13 +54,12 @@
 <p><strong>注意</strong>: これ以降の作業は、すべてNext.jsプロジェクトのディレクトリ（<code>next-frontend-app</code>）で行います。</p>
 <h3 id="1-nextauthjs">ステップ1: NextAuth.jsのインストール</h3>
 <p>まず、npmを使ってNextAuth.jsをインストールします。</p>
-<pre class="codehilite"><code class="language-bash">npm install next-auth
+<pre><code class="language-bash">npm install next-auth
 </code></pre>
-
 <h3 id="2-api">ステップ2: APIルートの作成</h3>
 <p>NextAuth.jsは、自身の認証処理（サインイン、サインアウト、セッション管理など）を行うためのAPIエンドポイントを必要とします。<code>src/app/api/auth/[...nextauth]/route.ts</code>というファイルを作成します。この<code>[...nextauth]</code>という動的ルートが、NextAuth.jsに関連するすべてのAPIリクエストをキャッチします。</p>
 <p><code>src/app/api/auth/[...nextauth]/route.ts</code>に以下のコードを記述してください。</p>
-<pre class="codehilite"><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
+<pre><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
 
 import NextAuth from &quot;next-auth&quot;;
 import CredentialsProvider from &quot;next-auth/providers/credentials&quot;;
@@ -120,7 +119,6 @@ const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>CredentialsProvider</code></strong>: メールアドレスとパスワードのような、任意のクレデンシャル（資格情報）を使った認証方法を定義します。</li>
@@ -134,7 +132,7 @@ export { handler as GET, handler as POST };
 </ul>
 <h3 id="3">ステップ3: セッション管理とコールバックの設定</h3>
 <p><code>authorize</code>関数で返されたユーザー情報を、NextAuth.jsのセッションやJWT（JSON Web Token）にどのように保存するかを定義します。<code>route.ts</code>に<code>callbacks</code>と<code>pages</code>の設定を追加します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
+<pre><code class="language-typescript">// src/app/api/auth/[...nextauth]/route.ts
 
 // ... (importとprovidersは変更なし)
 
@@ -163,7 +161,6 @@ const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>callbacks</code></strong>: 認証フローの特定のタイミングで呼び出される関数を定義します。<ul>
@@ -176,7 +173,7 @@ export { handler as GET, handler as POST };
 <h3 id="4">ステップ4: セッションプロバイダーのセットアップ</h3>
 <p>NextAuth.jsの<code>useSession</code>フックや<code>getSession</code>関数をクライアントコンポーネントで使えるようにするには、アプリケーションのルートで<code>SessionProvider</code>コンポーネントを配置する必要があります。</p>
 <p><code>src/app/providers.tsx</code>という新しいファイルを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/providers.tsx
+<pre><code class="language-tsx">// src/app/providers.tsx
 &quot;use client&quot;;
 
 import { SessionProvider } from &quot;next-auth/react&quot;;
@@ -185,9 +182,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return &lt;SessionProvider&gt;{children}&lt;/SessionProvider&gt;;
 }
 </code></pre>
-
 <p>そして、ルートレイアウトである<code>src/app/layout.tsx</code>で、この<code>Providers</code>コンポーネントを使います。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/layout.tsx
+<pre><code class="language-tsx">// src/app/layout.tsx
 
 import type { Metadata } from &quot;next&quot;;
 import { Inter } from &quot;next/font/google&quot;;
@@ -215,7 +211,6 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <p><code>SessionProvider</code>は内部でReactのContext APIを使用しているため、<code>"use client"</code>ディレクティブが必要です。しかし、ルートレイアウト(<code>layout.tsx</code>)はServer Componentである必要があるため、<code>SessionProvider</code>をラップした別のClient Component (<code>providers.tsx</code>) を作成し、それをレイアウトから呼び出す、という構成にしています。</p>
 <h2 id="_4">✨ まとめ</h2>
 <ul>

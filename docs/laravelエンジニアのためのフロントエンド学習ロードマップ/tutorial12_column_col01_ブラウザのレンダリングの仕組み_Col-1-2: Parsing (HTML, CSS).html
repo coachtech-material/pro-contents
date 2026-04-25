@@ -76,7 +76,7 @@
 <h2 id="javascript">JavaScriptと解析のブロッキング</h2>
 <p>JavaScriptもまた、CRPに大きな影響を与える要因です。</p>
 <p>HTMLの解析中に<code>&lt;script&gt;</code>タグが見つかると、ブラウザは<strong>DOMの構築を一時停止</strong>し、JavaScriptエンジンに制御を渡してスクリプトをダウンロード・解析・実行します。なぜなら、JavaScriptは<code>document.write()</code>のような命令でDOMの構造自体を変更する可能性があるため、ブラウザは安全のためにHTMLの解析を続けられないのです。</p>
-<pre class="codehilite"><code class="language-html">&lt;html&gt;
+<pre><code class="language-html">&lt;html&gt;
   &lt;head&gt;
     &lt;link href=&quot;style.css&quot; rel=&quot;stylesheet&quot;&gt;
   &lt;/head&gt;
@@ -87,7 +87,6 @@
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p>さらに、JavaScriptはCSSOMにアクセスしてスタイル情報を問い合わせることもできます（例: <code>element.style.width</code>）。もしブラウザがCSSOMの構築が終わっていない状態でJavaScriptを実行しようとすると、スクリプトは不正確な情報を得てしまうかもしれません。このため、ブラウザは先行するCSSのダウンロードとCSSOMの構築が完了するまで、JavaScriptの実行を待機します。</p>
 <p>結果として、<strong>CSSはJavaScriptの実行をブロックし、JavaScriptはDOMの構築をブロックする</strong>という依存関係が生まれます。これが、<code>&lt;link&gt;</code>タグを<code>&lt;head&gt;</code>内に、<code>&lt;script&gt;</code>タグを<code>&lt;body&gt;</code>の最後に置くことが推奨される主な理由です。</p>
 <h3 id="_3">ブロッキングを回避する方法</h3>
@@ -96,10 +95,9 @@
 <li><strong><code>async</code></strong>: HTMLの解析をブロックせず、スクリプトを非同期にダウンロードします。ダウンロードが完了次第、DOM構築を一時停止してスクリプトを実行します。</li>
 <li><strong><code>defer</code></strong>: HTMLの解析をブロックせず、スクリプトを非同期にダウンロードします。スクリプトの実行は、DOM構築が完了した後、<code>DOMContentLoaded</code>イベントの前に実行されます。</li>
 </ul>
-<pre class="codehilite"><code class="language-html">&lt;script src=&quot;app.js&quot; async&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;app.js&quot; async&gt;&lt;/script&gt;
 &lt;script src=&quot;app.js&quot; defer&gt;&lt;/script&gt;
 </code></pre>
-
 <p>これらの属性を適切に使うことで、JavaScriptによるブロッキングの影響を最小限に抑え、CRPを高速化できます。</p>
 <h2 id="_4">✨ まとめ</h2>
 <ul>

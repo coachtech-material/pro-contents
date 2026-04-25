@@ -49,9 +49,8 @@
 <p>前のセクションでは、Storybookの概念と利点について学びました。このセクションでは、実際にNext.jsプロジェクトにStorybookを導入し、最初のStoryを作成するまでの手順をハンズオン形式で進めていきます。</p>
 <h2 id="storybook">Storybookのセットアップ</h2>
 <p>Storybookの導入は、Playwrightと同様に、簡単なコマンドで対話的に行うことができます。Next.jsプロジェクトのルートディレクトリで、以下のコマンドを実行してください。</p>
-<pre class="codehilite"><code class="language-bash">npx storybook@latest init
+<pre><code class="language-bash">npx storybook@latest init
 </code></pre>
-
 <p>このコマンドは、プロジェクトの依存関係（<code>react</code>, <code>next</code>など）を自動で検出し、最適な設定を対話形式で進めてくれます。基本的にはデフォルトの選択肢のままで問題ありません。</p>
 <p>セットアップが完了すると、主に以下の2つのディレクトリと、<code>package.json</code>へのスクリプト追加が行われます。</p>
 <ul>
@@ -59,7 +58,7 @@
 <li><code>src/stories/</code>: サンプルのコンポーネントとStoryファイルが格納されるディレクトリ。</li>
 </ul>
 <p>また、<code>package.json</code>の<code>scripts</code>には、Storybookを起動・ビルドするためのコマンドが追加されます。</p>
-<pre class="codehilite"><code class="language-json">// package.json
+<pre><code class="language-json">// package.json
 {
   ...
   &quot;scripts&quot;: {
@@ -70,18 +69,16 @@
   ...
 }
 </code></pre>
-
 <h2 id="storybook_1">Storybookを起動する</h2>
 <p>早速、Storybookを起動してみましょう。</p>
-<pre class="codehilite"><code class="language-bash">npm run storybook
+<pre><code class="language-bash">npm run storybook
 </code></pre>
-
 <p>しばらくすると、ブラウザで<code>http://localhost:6006</code>が開き、StorybookのUIが表示されます。<code>src/stories</code>に自動生成されたサンプルコンポーネントのStoryがいくつか表示されているはずです。</p>
 <h2 id="storybook_2">Storybookの主要な設定ファイル</h2>
 <p><code>.storybook</code>ディレクトリにある2つの主要な設定ファイルを見てみましょう。</p>
 <h3 id="storybookmaints"><code>.storybook/main.ts</code></h3>
 <p>Storybookのメインの設定ファイルです。どの場所にあるStoryファイルを読み込むか、どのアドオンを利用するかなどを定義します。</p>
-<pre class="codehilite"><code class="language-typescript">// .storybook/main.ts
+<pre><code class="language-typescript">// .storybook/main.ts
 
 import type { StorybookConfig } from &quot;@storybook/nextjs&quot;;
 
@@ -106,7 +103,6 @@ const config: StorybookConfig = {
 };
 export default config;
 </code></pre>
-
 <ol>
 <li><strong><code>stories</code></strong>: Storybookが読み込むファイルのパスをglobパターンで指定します。デフォルトでは、<code>src</code>ディレクトリ以下の<code>.stories.tsx</code>（または<code>.mdx</code>）という名前のファイルを探しに行きます。</li>
 <li><strong><code>addons</code></strong>: Storybookの機能を拡張するアドオンのリストです。<code>addon-essentials</code>には、コンポーネントのpropsを動的に変更できる<code>Controls</code>や、コンポーネントの説明書を書ける<code>Docs</code>など、基本的な機能が含まれています。</li>
@@ -114,7 +110,7 @@ export default config;
 <h3 id="storybookpreviewts"><code>.storybook/preview.ts</code></h3>
 <p>すべてのStoryに共通で適用される「プレビュー」の設定を行います。例えば、グローバルなCSSを読み込んだり、Storyを特定のコンポーネントでラップしたりすることができます。</p>
 <p>Next.jsでTailwind CSSを使用している場合、<code>globals.css</code>をここでインポートする必要があります。</p>
-<pre class="codehilite"><code class="language-typescript">// .storybook/preview.ts
+<pre><code class="language-typescript">// .storybook/preview.ts
 
 import type { Preview } from &quot;@storybook/react&quot;;
 import &quot;../src/app/globals.css&quot;; // グローバルCSSをインポート
@@ -133,12 +129,11 @@ const preview: Preview = {
 
 export default preview;
 </code></pre>
-
 <h2 id="story">Storyを書いてみよう</h2>
 <p>それでは、自分たちで作成したコンポーネントのStoryを書いてみましょう。</p>
 <h3 id="1">ステップ1: コンポーネントの準備</h3>
 <p>まず、<code>src/components/ui/Button.tsx</code>というシンプルなボタンコンポーネントを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/ui/Button.tsx
+<pre><code class="language-tsx">// src/components/ui/Button.tsx
 
 import { cva, type VariantProps } from &quot;class-variance-authority&quot;;
 
@@ -179,10 +174,9 @@ const Button = ({ className, variant, size, ...props }: ButtonProps) =&gt; {
 
 export { Button };
 </code></pre>
-
 <h3 id="2-story">ステップ2: Storyファイルの作成</h3>
 <p>次に、この<code>Button</code>コンポーネントと同じ階層に<code>Button.stories.tsx</code>というファイルを作成します。これが<code>Button</code>コンポーネントのStoryファイルになります。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/ui/Button.stories.tsx
+<pre><code class="language-tsx">// src/components/ui/Button.stories.tsx
 
 import type { Meta, StoryObj } from &quot;@storybook/react&quot;;
 import { Button } from &quot;./Button&quot;;
@@ -232,7 +226,6 @@ export const Destructive: Story = {
   },
 };
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ol>
 <li>

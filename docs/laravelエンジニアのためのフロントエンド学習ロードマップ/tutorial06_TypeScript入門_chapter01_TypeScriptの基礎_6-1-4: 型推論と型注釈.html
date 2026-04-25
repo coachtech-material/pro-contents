@@ -51,7 +51,7 @@
 <h2 id="_3">詳細解説</h2>
 <h3 id="type-inference">🔑 型推論 (Type Inference)</h3>
 <p>型推論は、TypeScriptコンパイラがコードの文脈から変数の型を自動的に決定する機能です。主に、変数を宣言と同時に初期化した場合に機能します。</p>
-<pre class="codehilite"><code class="language-typescript">// 変数 `name` は初期値 'Taro' から string 型だと推論される
+<pre><code class="language-typescript">// 変数 `name` は初期値 'Taro' から string 型だと推論される
 let name = 'Taro';
 
 // name = 123; // エラー: Type 'number' is not assignable to type 'string'.
@@ -62,11 +62,10 @@ let age = 30;
 // 変数 `isAdult` は初期値 true から boolean 型だと推論される
 let isAdult = true;
 </code></pre>
-
 <p>この例では、<code>name</code> に文字列リテラル <code>'Taro'</code> を代入しているため、TypeScriptは「<code>name</code> は <code>string</code> 型の変数である」と推論します。そのため、後から数値を代入しようとすると、コンパイルエラーが発生します。これにより、開発者は型を明記することなく、型の安全性を享受できます。</p>
 <h3 id="type-annotation">🔑 型注釈 (Type Annotation)</h3>
 <p>型注釈は、開発者が変数や関数の型を明示的に指定する方法です。変数名や関数名の後にコロン (<code>:</code>) を付け、その後に型名を記述します。</p>
-<pre class="codehilite"><code class="language-typescript">// 変数 `username` は string 型であることを明示的に注釈
+<pre><code class="language-typescript">// 変数 `username` は string 型であることを明示的に注釈
 let username: string;
 
 username = 'Jiro'; // OK
@@ -77,7 +76,6 @@ function greet(name: string): string {
   return `Hello, ${name}`;
 }
 </code></pre>
-
 <h4 id="_4">型注釈が必要なケース</h4>
 <p>型推論は非常に強力ですが、型注釈が不可欠な場面も存在します。</p>
 <ol>
@@ -148,12 +146,11 @@ function add(a: number, b: number): number {<br />
 </tbody>
 </table>
 <p><strong>関数の戻り値の型注釈は省略可能か？</strong></p>
-<pre class="codehilite"><code class="language-typescript">// 戻り値の型は `number` と推論される
+<pre><code class="language-typescript">// 戻り値の型は `number` と推論される
 function multiply(a: number, b: number) {
   return a * b;
 }
 </code></pre>
-
 <p>上記のように、TypeScriptは関数の <code>return</code> 文から戻り値の型を推論できます。しかし、複雑な関数では、意図せず異なる型を返してしまう可能性があります。そのため、<strong>関数の戻り値には型注釈を付けることが一般的に推奨されます。</strong></p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

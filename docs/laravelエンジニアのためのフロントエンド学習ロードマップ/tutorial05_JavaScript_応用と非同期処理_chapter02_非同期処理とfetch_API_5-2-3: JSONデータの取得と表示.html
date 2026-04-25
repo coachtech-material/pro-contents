@@ -56,7 +56,7 @@
 <h3 id="_5">実装例：ユーザーリストの表示</h3>
 <p>JSONPlaceholderからユーザーのリストを取得し、<code>&lt;ul&gt;</code> タグの中に <code>&lt;li&gt;</code> 要素として表示する例を見てみましょう。</p>
 <p><strong>HTML (<code>index.html</code>)</strong></p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -70,9 +70,8 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p><strong>JavaScript (<code>app.js</code>)</strong></p>
-<pre class="codehilite"><code class="language-javascript">async function displayUsers() {
+<pre><code class="language-javascript">async function displayUsers() {
   // ユーザーリストを表示するul要素を取得
   const userList = document.querySelector(&quot;#user-list&quot;);
 
@@ -93,7 +92,6 @@
 
 displayUsers();
 </code></pre>
-
 <p>このコードを実行すると、APIから取得した10人分のユーザー名がリストとしてページに表示されます。</p>
 <h2 id="tip">💡 TIP</h2>
 <ul>

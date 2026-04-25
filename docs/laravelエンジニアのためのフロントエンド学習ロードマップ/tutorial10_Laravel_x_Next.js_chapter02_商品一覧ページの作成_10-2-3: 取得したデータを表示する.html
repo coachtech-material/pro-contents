@@ -99,7 +99,7 @@ sail up -d<br />
 <h3 id="2-ui">ステップ2: 取得したデータをUIに反映する</h3>
 <p>APIからデータを無事に取得できるようになったので、次はこのデータをユーザーに見やすいように表示します。</p>
 <p><code>src/app/products/page.tsx</code>（Next.jsプロジェクト）を以下のように編集してください。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/products/page.tsx
+<pre><code class="language-tsx">// src/app/products/page.tsx
 
 // Productインターフェースは変更なし
 interface Product {
@@ -152,7 +152,6 @@ export default async function ProductsPage() {
   );
 }
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><strong><code>ProductCard</code>コンポーネント</strong>: 一つの商品情報を表示するための、再利用可能なコンポーネントを新たに作成しました。<code>product</code>オブジェクトを<code>props</code>として受け取ります。</li>

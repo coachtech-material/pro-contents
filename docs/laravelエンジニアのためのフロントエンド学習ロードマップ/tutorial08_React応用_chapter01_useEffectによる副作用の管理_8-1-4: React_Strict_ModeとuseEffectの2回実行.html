@@ -58,14 +58,13 @@
 <h3 id="react-strict-mode">⚙️ React Strict Modeとは？</h3>
 <p><strong>Strict Mode</strong>は、アプリケーションの潜在的な問題を検出するための開発用のツールです。本番環境のビルドには影響を与えず、開発中にのみ追加のチェックや警告を行います。</p>
 <p><code>src/main.tsx</code>（Viteの場合）を見ると、あなたの<code>App</code>コンポーネントが<code>&lt;React.StrictMode&gt;</code>で囲まれているのがわかります。</p>
-<pre class="codehilite"><code class="language-tsx">// src/main.tsx
+<pre><code class="language-tsx">// src/main.tsx
 ReactDOM.createRoot(document.getElementById(&quot;root&quot;)!).render(
   &lt;React.StrictMode&gt;
     &lt;App /&gt;
   &lt;/React.StrictMode&gt;
 );
 </code></pre>
-
 <p>Strict Modeは、安全でないライフサイクルや古いAPIの使用など、様々なことを警告してくれますが、<code>useEffect</code>に関連する最も重要な挙動が、<strong>副作用の健全性をチェックするための意図的な2回実行</strong>です。</p>
 <hr />
 <h3 id="useeffect2">🚀 なぜ<code>useEffect</code>が2回実行されるのか？</h3>
@@ -90,7 +89,7 @@ ReactDOM.createRoot(document.getElementById(&quot;root&quot;)!).render(
 <p>この問題への最もクリーンな対処法は、<strong><code>useEffect</code>のクリーンアップ関数で、進行中のAPIリクエストをキャンセルする</strong>ことです。</p>
 <p><code>fetch</code> APIは、<code>AbortController</code>という仕組みを使ってリクエストのキャンセルをサポートしています。</p>
 <p><strong>例：<code>fetch</code>リクエストをクリーンアップでキャンセルする</strong></p>
-<pre class="codehilite"><code class="language-tsx">import { useEffect, useState } from &quot;react&quot;;
+<pre><code class="language-tsx">import { useEffect, useState } from &quot;react&quot;;
 
 type User = { id: number; name: string };
 
@@ -130,7 +129,6 @@ function UserProfile({ userId }) {
   // ...
 }
 </code></pre>
-
 <p><strong>動作の流れ:</strong><br />
 1.  最初の副作用が実行され、<code>fetch</code>が開始される。<br />
 2.  Strict Modeが即座にクリーンアップを要求する。<br />

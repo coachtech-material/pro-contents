@@ -49,7 +49,7 @@
 <p>JavaScriptのコードは、基本的に上から下へ順番に実行されます。これを「同期処理」と呼びます。しかし、API通信やファイル読み込みなど、時間のかかる処理を同期的に行うと、その処理が完了するまで次の処理に進めません。この問題を解決するのが「非同期処理」です。</p>
 <h2 id="1">1. 同期処理とは</h2>
 <p>同期処理では、コードが上から下へ順番に実行されます。前の処理が完了するまで、次の処理は待機します。</p>
-<pre class="codehilite"><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
+<pre><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
 console.log(&quot;2. 次の処理&quot;);
 console.log(&quot;3. 最後の処理&quot;);
 
@@ -58,18 +58,16 @@ console.log(&quot;3. 最後の処理&quot;);
 // 2. 次の処理
 // 3. 最後の処理
 </code></pre>
-
 <h3 id="_3">同期処理の問題点</h3>
 <p>時間のかかる処理があると、その間、他の処理が止まってしまいます。</p>
-<pre class="codehilite"><code class="language-javascript">// 仮に「重い処理」があった場合のイメージ
+<pre><code class="language-javascript">// 仮に「重い処理」があった場合のイメージ
 console.log(&quot;1. 処理開始&quot;);
 // heavyProcess(); // 5秒かかる処理（この間、画面が固まる）
 console.log(&quot;2. 処理完了&quot;);
 </code></pre>
-
 <h2 id="2">2. 非同期処理とは</h2>
 <p>非同期処理では、時間のかかる処理を「バックグラウンド」で実行し、その間も他の処理を続けることができます。</p>
-<pre class="codehilite"><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
+<pre><code class="language-javascript">console.log(&quot;1. 最初の処理&quot;);
 
 // setTimeout は非同期処理
 setTimeout(() =&gt; {
@@ -83,11 +81,10 @@ console.log(&quot;3. 最後の処理&quot;);
 // 3. 最後の処理
 // 2. 1秒後の処理（1秒後に出力）
 </code></pre>
-
 <p>「3. 最後の処理」が「2. 1秒後の処理」より先に出力されることに注目してください。<code>setTimeout</code>の中の処理は、1秒後に実行されるため、その間に次の処理が先に実行されます。</p>
 <h2 id="3-settimeout">3. setTimeoutを使った非同期処理</h2>
 <p><code>setTimeout</code>は、指定した時間（ミリ秒）後に処理を実行する関数です。</p>
-<pre class="codehilite"><code class="language-javascript">// 基本構文
+<pre><code class="language-javascript">// 基本構文
 setTimeout(() =&gt; {
   // 実行したい処理
 }, 待機時間（ミリ秒）);
@@ -97,9 +94,8 @@ setTimeout(() =&gt; {
   console.log(&quot;2秒経過しました&quot;);
 }, 2000);
 </code></pre>
-
 <h3 id="settimeout">複数のsetTimeoutを使った例</h3>
-<pre class="codehilite"><code class="language-javascript">console.log(&quot;カウントダウン開始&quot;);
+<pre><code class="language-javascript">console.log(&quot;カウントダウン開始&quot;);
 
 setTimeout(() =&gt; {
   console.log(&quot;3&quot;);
@@ -127,10 +123,9 @@ console.log(&quot;（カウントダウン中...）&quot;);
 // 1（3秒後）
 // スタート！（4秒後）
 </code></pre>
-
 <h2 id="4">4. コールバック関数</h2>
 <p>非同期処理が完了した後に実行したい処理は、「コールバック関数」として渡します。</p>
-<pre class="codehilite"><code class="language-javascript">// コールバック関数を使った非同期処理
+<pre><code class="language-javascript">// コールバック関数を使った非同期処理
 function fetchData(callback) {
   console.log(&quot;データ取得開始...&quot;);
 
@@ -152,10 +147,9 @@ console.log(&quot;他の処理を続行...&quot;);
 // 他の処理を続行...
 // データ取得完了: { name: &quot;太郎&quot;, age: 25 }（2秒後）
 </code></pre>
-
 <h3 id="_4">コールバック地獄</h3>
 <p>コールバック関数をネストすると、コードが読みにくくなります。これを「コールバック地獄」と呼びます。</p>
-<pre class="codehilite"><code class="language-javascript">// コールバック地獄の例（読みにくい）
+<pre><code class="language-javascript">// コールバック地獄の例（読みにくい）
 fetchUser((user) =&gt; {
   fetchPosts(user.id, (posts) =&gt; {
     fetchComments(posts[0].id, (comments) =&gt; {
@@ -166,7 +160,6 @@ fetchUser((user) =&gt; {
   });
 });
 </code></pre>
-
 <p>この問題を解決するために、次のセクションで学ぶ「Promise」が導入されました。</p>
 <h2 id="5">5. 同期処理と非同期処理の比較</h2>
 <table>

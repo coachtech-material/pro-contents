@@ -61,7 +61,7 @@
 </ol>
 <p><strong>例：<code>UserProfile</code>コンポーネントに<code>name</code>と<code>hobby</code>を渡す</strong></p>
 <p><strong>1. 親コンポーネント (<code>App.tsx</code>)</strong></p>
-<pre class="codehilite"><code class="language-tsx">// App.tsx
+<pre><code class="language-tsx">// App.tsx
 import UserProfile from &quot;./components/UserProfile&quot;;
 
 function App() {
@@ -74,12 +74,11 @@ function App() {
   );
 }
 </code></pre>
-
 <ul>
 <li><code>&lt;UserProfile ... /&gt;</code> の中で、<code>name="..."</code> や <code>hobby="..."</code> のように、属性を渡すのと同じ要領でPropsを指定します。</li>
 </ul>
 <p><strong>2. 子コンポーネント (<code>UserProfile.tsx</code>)</strong></p>
-<pre class="codehilite"><code class="language-tsx">// UserProfile.tsx
+<pre><code class="language-tsx">// UserProfile.tsx
 
 // 関数の第一引数としてpropsオブジェクトを受け取る
 function UserProfile(props) {
@@ -93,7 +92,6 @@ function UserProfile(props) {
   );
 }
 </code></pre>
-
 <ul>
 <li>子コンポーネントは、その第一引数に、親から渡されたすべてのデータが格納された<strong><code>props</code>オブジェクト</strong>を受け取ります。</li>
 <li><code>props.name</code>や<code>props.hobby</code>のように、ドット記法で各データにアクセスできます。</li>
@@ -102,7 +100,7 @@ function UserProfile(props) {
 <h3 id="typescriptprops">🚀 TypeScriptによるPropsの型定義</h3>
 <p>上記のコードは動作しますが、TypeScriptの観点からは不完全です。<code>props</code>オブジェクトがどのようなプロパティを持つべきか、型が定義されていないためです。</p>
 <p>コンポーネントが受け取るPropsの型は、<code>type</code>エイリアスまたは<code>interface</code>を使って定義するのが一般的です。</p>
-<pre class="codehilite"><code class="language-tsx">// UserProfile.tsx
+<pre><code class="language-tsx">// UserProfile.tsx
 
 // 1. Propsの型を定義する
 type UserProfileProps = {
@@ -123,7 +121,6 @@ function UserProfile({ name, hobby }: UserProfileProps) {
 
 export default UserProfile;
 </code></pre>
-
 <p><strong>解説:</strong><br />
 1.  <code>type UserProfileProps = { ... }</code> で、<code>UserProfile</code>コンポーネントが<code>string</code>型の<code>name</code>と<code>hobby</code>という2つのPropsを受け取ることを定義します。コンポーネント名の後ろに<code>Props</code>を付けるのが一般的な命名規則です。<br />
 2.  <code>function UserProfile({ name, hobby }: UserProfileProps)</code> の部分がポイントです。<br />
@@ -131,7 +128,7 @@ export default UserProfile;
     -   <code>: UserProfileProps</code>: 分割代入で受け取るオブジェクトが、先ほど定義した<code>UserProfileProps</code>型に準拠していることをTypeScriptに伝えます。</p>
 <p>このように型を定義することで、<code>App.tsx</code>側でPropsを渡し忘れたり、間違った型のデータを渡そうとしたりすると、コンパイルエラーとして即座に検知できるようになります。</p>
 <p><strong>❌ 間違った呼び出しの例:</strong></p>
-<pre class="codehilite"><code class="language-tsx">// App.tsx
+<pre><code class="language-tsx">// App.tsx
 
 // コンパイルエラー: プロパティ 'hobby' がありません。
 &lt;UserProfile name=&quot;佐藤 健&quot; /&gt;
@@ -139,20 +136,18 @@ export default UserProfile;
 // コンパイルエラー: 型 'number' を型 'string' に割り当てることはできません。
 &lt;UserProfile name=&quot;高橋 恵子&quot; hobby={30} /&gt;
 </code></pre>
-
 <hr />
 <h3 id="props_1">🔒 Propsは読み取り専用</h3>
 <p>Propsに関して、一つだけ非常に重要なルールがあります。それは、<strong>「コンポーネントは、受け取った自身のPropsを決して変更してはならない」</strong>というルールです。</p>
 <p>Propsは親から子への一方通行のデータです。子コンポーネントが受け取ったPropsを勝手に書き換えてしまうと、データの流れが混乱し、アプリケーションの挙動が予測不能になってしまいます。</p>
 <p><strong>❌ やってはいけないこと:</strong></p>
-<pre class="codehilite"><code class="language-tsx">function UserProfile({ name, hobby }: UserProfileProps) {
+<pre><code class="language-tsx">function UserProfile({ name, hobby }: UserProfileProps) {
   // エラー！ Propsは読み取り専用です。
   name = &quot;別の名前&quot;; 
 
   return (...);
 }
 </code></pre>
-
 <p>Reactでは、このような思想を「純粋関数」という言葉で説明することがあります。同じPropsが与えられれば、必ず同じJSXを返す、副作用のない関数のようにコンポーネントを扱うべき、ということです。</p>
 <p>コンポーネント内で時間経過やユーザーの操作によって変化する値を扱いたい場合は、次のChapterで学ぶ<strong>State</strong>という別の仕組みを使います。</p>
 <hr />

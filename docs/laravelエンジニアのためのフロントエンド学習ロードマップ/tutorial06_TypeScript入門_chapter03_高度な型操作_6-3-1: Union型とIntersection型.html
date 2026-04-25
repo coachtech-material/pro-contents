@@ -52,7 +52,7 @@
 <h3 id="union-union-types">🔑 Union型 (Union Types): 「または」の型</h3>
 <p>Union型は、その名の通り「合併」を意味し、「<strong>A または B</strong>」のように、ある変数が複数の型のうちのいずれか一つであることを表現します。型名の間にパイプ <code>|</code> を挟んで定義します。</p>
 <h4 id="_4">基本的な使い方</h4>
-<pre class="codehilite"><code class="language-typescript">// `userId` は string または number のどちらかの型を持つことができる
+<pre><code class="language-typescript">// `userId` は string または number のどちらかの型を持つことができる
 let userId: string | number;
 
 userId = 101;       // OK
@@ -60,22 +60,20 @@ userId = &quot;user-abc&quot;; // OK
 
 // userId = true; // エラー: Type 'boolean' is not assignable to type 'string | number'.
 </code></pre>
-
 <p>この <code>userId</code> は、数値でも文字列でも受け入れることができる、より柔軟な変数になりました。</p>
 <h4 id="union">Union型の注意点</h4>
 <p>Union型を持つ変数のプロパティやメソッドにアクセスしようとする場合、その操作は<strong>すべての構成要素の型に共通して存在するものでなければなりません</strong>。</p>
-<pre class="codehilite"><code class="language-typescript">function printId(id: string | number) {
+<pre><code class="language-typescript">function printId(id: string | number) {
   console.log(id.toUpperCase()); // エラー: Property 'toUpperCase' does not exist on type 'string | number'.
                                  // Property 'toUpperCase' does not exist on type 'number'.
 }
 </code></pre>
-
 <p>この例では、<code>id</code> が <code>number</code> である可能性もあるため、<code>string</code> 型にしか存在しない <code>toUpperCase</code> メソッドを直接呼び出すことはできません。このような場合、次のセクションで学ぶ<strong>型の絞り込み（Type Guards）</strong>が必要になります。</p>
 <h3 id="intersection-intersection-types">🔑 Intersection型 (Intersection Types): 「かつ」の型</h3>
 <p>Intersection型は、「交差」を意味し、「<strong>A かつ B</strong>」のように、複数の型が持つすべてのプロパティを<strong>結合</strong>した新しい型を作ります。型名の間にアンパサンド <code>&amp;</code> を挟んで定義します。</p>
 <h4 id="_5">基本的な使い方</h4>
 <p>オブジェクトの型を結合する際によく使われます。</p>
-<pre class="codehilite"><code class="language-typescript">// 基本的なユーザー情報を持つ型
+<pre><code class="language-typescript">// 基本的なユーザー情報を持つ型
 interface User {
   id: number;
   name: string;
@@ -97,7 +95,6 @@ const userProfile: UserProfile = {
   phone: &quot;090-1234-5678&quot;
 };
 </code></pre>
-
 <p><code>UserProfile</code> 型は、<code>User</code> 型と <code>Contact</code> 型の両方のプロパティをすべて持っている必要があります。一つでも欠けているとエラーになります。</p>
 <h3 id="unionintersection">Union型とIntersection型の比較</h3>
 <table>
@@ -126,7 +123,7 @@ const userProfile: UserProfile = {
 </table>
 <h2 id="tip-type">💡 TIP: Typeエイリアスとの組み合わせ</h2>
 <p>Union型やIntersection型は、<code>type</code> キーワードを使って<strong>Typeエイリアス（型エイリアス）</strong>として定義することで、再利用性が格段に向上します。</p>
-<pre class="codehilite"><code class="language-typescript">// Union型のエイリアス
+<pre><code class="language-typescript">// Union型のエイリアス
 type StringOrNumber = string | number;
 
 // Intersection型のエイリアス
@@ -140,7 +137,6 @@ const admin: AdminUser = {
   isAdmin: true
 };
 </code></pre>
-
 <p>複雑な型を何度も書く必要がなくなり、コードの可読性が向上します。</p>
 <h2 id="_6">✨ まとめ</h2>
 <ul>

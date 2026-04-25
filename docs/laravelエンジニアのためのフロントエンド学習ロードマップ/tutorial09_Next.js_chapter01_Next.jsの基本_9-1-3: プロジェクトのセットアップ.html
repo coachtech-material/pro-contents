@@ -49,11 +49,10 @@
 <p>Next.jsプロジェクトは、<code>create-next-app</code>コマンドを使って簡単に作成できます。このセクションでは、プロジェクトの作成から開発サーバーの起動までの手順を学びます。</p>
 <h2 id="_3">プロジェクトの作成</h2>
 <p>ターミナルで以下のコマンドを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npx create-next-app@latest my-next-app
+<pre><code class="language-bash">npx create-next-app@latest my-next-app
 </code></pre>
-
 <p>いくつかの質問が表示されます。以下のように回答することを推奨します。</p>
-<pre class="codehilite"><code>✔ Would you like to use TypeScript? … Yes
+<pre><code>✔ Would you like to use TypeScript? … Yes
 ✔ Would you like to use ESLint? … Yes
 ✔ Would you like to use Tailwind CSS? … Yes
 ✔ Would you like your code inside a `src/` directory? … No
@@ -61,14 +60,12 @@
 ✔ Would you like to use Turbopack for `next dev`? … Yes
 ✔ Would you like to customize the import alias (@/*)? … No
 </code></pre>
-
 <p>プロジェクトが作成されたら、ディレクトリに移動します。</p>
-<pre class="codehilite"><code class="language-bash">cd my-next-app
+<pre><code class="language-bash">cd my-next-app
 </code></pre>
-
 <h2 id="_4">ディレクトリ構造</h2>
 <p>作成されたプロジェクトの構造は以下のようになっています。</p>
-<pre class="codehilite"><code>my-next-app/
+<pre><code>my-next-app/
 ├── app/                    # App Router のルートディレクトリ
 │   ├── favicon.ico         # ファビコン
 │   ├── globals.css         # グローバルスタイル
@@ -83,7 +80,6 @@
 ├── tailwind.config.ts      # Tailwind CSS設定
 └── tsconfig.json           # TypeScript設定
 </code></pre>
-
 <h3 id="_5">主要なファイルの役割</h3>
 <table>
 <thead>
@@ -117,13 +113,12 @@
 </table>
 <h2 id="_6">開発サーバーの起動</h2>
 <p>以下のコマンドで開発サーバーを起動します。</p>
-<pre class="codehilite"><code class="language-bash">npm run dev
+<pre><code class="language-bash">npm run dev
 </code></pre>
-
 <p>ブラウザで <code>http://localhost:3000</code> にアクセスすると、Next.jsのウェルカムページが表示されます。</p>
 <h2 id="_7">最初のページを編集する</h2>
 <p><code>app/page.tsx</code>を開き、内容を以下のように変更してみましょう。</p>
-<pre class="codehilite"><code class="language-typescript">export default function Home() {
+<pre><code class="language-typescript">export default function Home() {
   return (
     &lt;main className=&quot;flex min-h-screen flex-col items-center justify-center p-24&quot;&gt;
       &lt;h1 className=&quot;text-4xl font-bold&quot;&gt;Hello, Next.js!&lt;/h1&gt;
@@ -134,11 +129,10 @@
   );
 }
 </code></pre>
-
 <p>ファイルを保存すると、ブラウザが自動的にリロードされ、変更が反映されます。これがNext.jsの「Fast Refresh」機能です。</p>
 <h2 id="packagejson">package.jsonのスクリプト</h2>
 <p><code>package.json</code>には、以下のスクリプトが定義されています。</p>
-<pre class="codehilite"><code class="language-json">{
+<pre><code class="language-json">{
   &quot;scripts&quot;: {
     &quot;dev&quot;: &quot;next dev --turbopack&quot;,
     &quot;build&quot;: &quot;next build&quot;,
@@ -147,7 +141,6 @@
   }
 }
 </code></pre>
-
 <table>
 <thead>
 <tr>

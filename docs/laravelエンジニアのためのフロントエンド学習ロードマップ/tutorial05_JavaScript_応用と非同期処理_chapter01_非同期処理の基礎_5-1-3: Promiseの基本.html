@@ -73,7 +73,7 @@
 </table>
 <h2 id="2-promise">2. Promiseの基本的な使い方</h2>
 <h3 id="promise">Promiseの作成</h3>
-<pre class="codehilite"><code class="language-javascript">const promise = new Promise((resolve, reject) =&gt; {
+<pre><code class="language-javascript">const promise = new Promise((resolve, reject) =&gt; {
   // 非同期処理
   setTimeout(() =&gt; {
     const success = true;
@@ -86,9 +86,8 @@
   }, 1000);
 });
 </code></pre>
-
 <h3 id="then-catch-finally">then, catch, finally</h3>
-<pre class="codehilite"><code class="language-javascript">promise
+<pre><code class="language-javascript">promise
   .then((result) =&gt; {
     // 成功時の処理
     console.log(result); // &quot;成功しました！&quot;
@@ -102,9 +101,8 @@
     console.log(&quot;処理完了&quot;);
   });
 </code></pre>
-
 <h2 id="3">3. 実践的な例: データ取得</h2>
-<pre class="codehilite"><code class="language-javascript">// データを取得する関数（Promiseを返す）
+<pre><code class="language-javascript">// データを取得する関数（Promiseを返す）
 function fetchUser(userId) {
   return new Promise((resolve, reject) =&gt; {
     console.log(`ユーザー ${userId} のデータを取得中...`);
@@ -138,10 +136,9 @@ fetchUser(1)
 // （1.5秒後）
 // ユーザー情報: { id: 1, name: &quot;山田太郎&quot;, email: &quot;yamada@example.com&quot; }
 </code></pre>
-
 <h2 id="4-promise">4. Promiseチェーン</h2>
 <p><code>then</code>の中で新しいPromiseを返すと、処理を連結できます。これを「Promiseチェーン」と呼びます。</p>
-<pre class="codehilite"><code class="language-javascript">// 複数の関数を定義
+<pre><code class="language-javascript">// 複数の関数を定義
 function fetchUser(userId) {
   return new Promise((resolve) =&gt; {
     setTimeout(() =&gt; {
@@ -194,12 +191,11 @@ fetchUser(1)
 // 投稿数: 2
 // コメント数: 2
 </code></pre>
-
 <p>コールバック地獄と比較すると、Promiseチェーンはフラットで読みやすいことがわかります。</p>
 <h2 id="5-promiseall-promiserace">5. Promise.all と Promise.race</h2>
 <h3 id="promiseall">Promise.all</h3>
 <p>複数のPromiseを並列で実行し、すべてが完了するのを待ちます。</p>
-<pre class="codehilite"><code class="language-javascript">const promise1 = fetchUser(1);
+<pre><code class="language-javascript">const promise1 = fetchUser(1);
 const promise2 = fetchUser(2);
 const promise3 = fetchUser(3);
 
@@ -213,10 +209,9 @@ Promise.all([promise1, promise2, promise3])
     console.error(&quot;エラー:&quot;, error);
   });
 </code></pre>
-
 <h3 id="promiserace">Promise.race</h3>
 <p>複数のPromiseのうち、最初に完了したものの結果を取得します。</p>
-<pre class="codehilite"><code class="language-javascript">const slow = new Promise((resolve) =&gt; {
+<pre><code class="language-javascript">const slow = new Promise((resolve) =&gt; {
   setTimeout(() =&gt; resolve(&quot;遅い処理&quot;), 3000);
 });
 
@@ -229,9 +224,8 @@ Promise.race([slow, fast])
     console.log(&quot;勝者:&quot;, result); // &quot;速い処理&quot;
   });
 </code></pre>
-
 <h2 id="6-promise">6. コールバックとPromiseの比較</h2>
-<pre class="codehilite"><code class="language-javascript">// コールバック版（読みにくい）
+<pre><code class="language-javascript">// コールバック版（読みにくい）
 fetchUser(1, (user) =&gt; {
   fetchPosts(user.id, (posts) =&gt; {
     fetchComments(posts[0].id, (comments) =&gt; {
@@ -247,7 +241,6 @@ fetchUser(1)
   .then((comments) =&gt; console.log(comments))
   .catch((error) =&gt; console.error(error));
 </code></pre>
-
 <h2 id="_3">✨ まとめ</h2>
 <p>Promiseは、非同期処理を扱うための強力な機能です。<code>then</code>で成功時の処理、<code>catch</code>でエラー処理、<code>finally</code>で後処理を記述できます。Promiseチェーンを使うと、複数の非同期処理を読みやすく連結できます。</p>
 <p>次のチャプターでは、Promiseをさらに直感的に書ける「async/await」について学んでいきましょう。</p>

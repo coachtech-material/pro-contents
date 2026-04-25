@@ -61,18 +61,15 @@
 <h3 id="jsx">⚙️ JSXでのイベントハンドリング</h3>
 <p>JSXでイベントを処理するには、HTML要素に<code>camelCase</code>形式のイベントハンドラ属性（例: <code>onClick</code>, <code>onChange</code>）を渡します。属性値には、イベント発生時に実行したい<strong>関数</strong>を波括弧<code>{}</code>で囲んで指定します。</p>
 <p><strong>❌ やってはいけないこと（関数を呼び出してしまう）:</strong></p>
-<pre class="codehilite"><code class="language-jsx">// ページが表示された瞬間にhandleClickが実行されてしまう！
+<pre><code class="language-jsx">// ページが表示された瞬間にhandleClickが実行されてしまう！
 &lt;button onClick={handleClick()}&gt;Click me&lt;/button&gt;
 </code></pre>
-
 <p><strong>⭕ 正しい方法（関数そのものを渡す）:</strong></p>
-<pre class="codehilite"><code class="language-jsx">&lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;
+<pre><code class="language-jsx">&lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;
 </code></pre>
-
 <p>または、アロー関数を使ってインラインで定義することもできます。</p>
-<pre class="codehilite"><code class="language-jsx">&lt;button onClick={() =&gt; alert(&quot;Clicked!&quot;)}&gt;Click me&lt;/button&gt;
+<pre><code class="language-jsx">&lt;button onClick={() =&gt; alert(&quot;Clicked!&quot;)}&gt;Click me&lt;/button&gt;
 </code></pre>
-
 <h4 id="_1">イベントオブジェクト</h4>
 <p>イベントハンドラ関数は、第一引数に<strong>イベントオブジェクト</strong>を受け取ることができます。これには、イベントに関する詳細な情報（どのキーが押されたか、マウスの座標はどこか、など）が含まれています。</p>
 <p>特にフォーム要素で重要なのが、<code>event.target.value</code>です。これは、イベントが発生した要素（例: <code>input</code>タグ）の現在の値を取得するために使われます。</p>
@@ -85,7 +82,7 @@
 3.  <code>input</code>要素の<code>onChange</code>イベントを捕捉し、イベントハンドラを定義する。<br />
 4.  イベントハンドラ内で、<code>event.target.value</code>を使って入力値を取得し、セッター関数でStateを更新する。</p>
 <p><strong>例：名前入力フォーム</strong></p>
-<pre class="codehilite"><code class="language-tsx">// NameForm.tsx
+<pre><code class="language-tsx">// NameForm.tsx
 import { useState } from &quot;react&quot;;
 
 function NameForm() {
@@ -111,7 +108,6 @@ function NameForm() {
   );
 }
 </code></pre>
-
 <ul>
 <li><strong><code>React.ChangeEvent&lt;HTMLInputElement&gt;</code></strong>: <code>onChange</code>イベントオブジェクトの型です。ジェネリクスで、イベントの発生源が<code>HTMLInputElement</code>であることを明記しています。</li>
 </ul>
@@ -122,23 +118,21 @@ function NameForm() {
 <h3 id="state_1">🔒 安全なState更新：更新関数を使う</h3>
 <p>前のセクションで、「Stateの更新は非同期である」と学びました。これにより、前のStateの値に依存する更新処理が、意図通りに動かないことがあります。</p>
 <p><strong>❌ 問題が起こる例：カウンターを一度に2回インクリメントしたい</strong></p>
-<pre class="codehilite"><code class="language-tsx">const handleDoubleIncrement = () =&gt; {
+<pre><code class="language-tsx">const handleDoubleIncrement = () =&gt; {
   setCount(count + 1); // この時点ではまだcountは古い値
   setCount(count + 1); // ここでも同じ古い値を使ってしまう
 };
 // 結果：1しか増えない
 </code></pre>
-
 <p>この問題を解決するには、セッター関数に新しい値を直接渡すのではなく、<strong>「現在のStateを受け取り、新しいStateを返す関数」（更新関数）</strong>を渡します。</p>
 <p><strong>⭕ 正しい方法：更新関数を渡す</strong></p>
-<pre class="codehilite"><code class="language-tsx">const handleDoubleIncrement = () =&gt; {
+<pre><code class="language-tsx">const handleDoubleIncrement = () =&gt; {
   // (prevCount) =&gt; prevCount + 1 という関数を渡す
   setCount((prevCount) =&gt; prevCount + 1);
   setCount((prevCount) =&gt; prevCount + 1);
 };
 // 結果：期待通り2増える
 </code></pre>
-
 <ul>
 <li><code>prevCount</code>という引数には、Reactが保証する<strong>最新のStateの値</strong>が渡されます。</li>
 <li>Reactはこれらの更新関数をキューに入れ、順番に実行するため、前の更新結果が次の更新に正しく反映されます。</li>

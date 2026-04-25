@@ -81,7 +81,7 @@
 </ol>
 <p><img alt="PPRの概念図" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/column/ppr-flow.png" /></p>
 <p><strong>重要なのは、開発者はPPRを意識して特別なコードを書く必要がないということです。</strong> <code>Suspense</code>を使ってローディングUIを適切に設定するだけで、Next.jsが自動的にPPRを適用してくれます。</p>
-<pre class="codehilite"><code class="language-jsx">// app/products/[id]/page.tsx
+<pre><code class="language-jsx">// app/products/[id]/page.tsx
 
 import { Suspense } from 'react';
 import { ProductDescription, Reviews, AddToCartButton } from './components';
@@ -105,7 +105,6 @@ export default function ProductPage({ params }) {
   );
 }
 </code></pre>
-
 <p>この例では、商品の説明(<code>ProductDescription</code>)は静的なシェルとしてビルド時にレンダリングされます。一方、レビュー(<code>Reviews</code>)やカート追加ボタン(<code>AddToCartButton</code>)は、リクエスト時にユーザー情報などに基づいて動的にレンダリングされ、ストリーミングで配信されます。</p>
 <h2 id="ppr_2">PPRのメリット</h2>
 <h3 id="1">1. パフォーマンスの向上</h3>

@@ -51,11 +51,10 @@
 <p>ここで登場するのが、<strong><code>@testing-library/react</code></strong> というライブラリです。このライブラリは、Reactコンポーネントやフックをテストするための便利なユーティリティを提供します。</p>
 <h2 id="testing-libraryreact"><code>@testing-library/react</code> のセットアップ</h2>
 <p>まず、必要なライブラリをインストールします。<code>@testing-library/react</code>は、Reactコンポーネントをテスト用の仮想DOMにレンダリングする機能を提供します。また、テスト環境でDOMを扱えるようにするために<code>jsdom</code>も必要です。</p>
-<pre class="codehilite"><code class="language-bash">npm install -D @testing-library/react jsdom
+<pre><code class="language-bash">npm install -D @testing-library/react jsdom
 </code></pre>
-
 <p>次に、Vitestの設定ファイル <code>vitest.config.ts</code> をプロジェクトのルートに作成し、テスト環境として<code>jsdom</code>を使用するように設定します。</p>
-<pre class="codehilite"><code class="language-typescript">// vitest.config.ts
+<pre><code class="language-typescript">// vitest.config.ts
 
 import { defineConfig } from &quot;vitest/config&quot;;
 import react from &quot;@vitejs/plugin-react&quot;;
@@ -69,22 +68,19 @@ export default defineConfig({
   },
 });
 </code></pre>
-
 <p>さらに、<code>vitest.setup.ts</code> というファイルをプロジェクトルートに作成します。このファイルは、各テストファイルの実行前に一度だけ実行されるファイルで、<code>@testing-library/jest-dom</code>から提供されるカスタムマッチャーを<code>expect</code>に拡張するために使用します。</p>
-<pre class="codehilite"><code class="language-typescript">// vitest.setup.ts
+<pre><code class="language-typescript">// vitest.setup.ts
 
 import &quot;@testing-library/jest-dom&quot;;
 </code></pre>
-
 <p><code>@testing-library/jest-dom</code>は、DOMの状態を検証するための便利なマッチャー（例: <code>.toBeInTheDocument()</code>）を提供します。これもインストールしておきましょう。</p>
-<pre class="codehilite"><code class="language-bash">npm install -D @testing-library/jest-dom
+<pre><code class="language-bash">npm install -D @testing-library/jest-dom
 </code></pre>
-
 <h2 id="usecounter">ハンズオン: <code>useCounter</code>フックのテスト</h2>
 <p>それでは、Tutorial 8で作成した<code>useCounter</code>カスタムフックのユニットテストを書いてみましょう。</p>
 <h3 id="1">ステップ1: テスト対象のフックの準備</h3>
 <p>まず、テスト対象となる<code>useCounter</code>フックを<code>src/hooks/useCounter.ts</code>に作成します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.ts
+<pre><code class="language-typescript">// src/hooks/useCounter.ts
 
 import { useState, useCallback } from &quot;react&quot;;
 
@@ -97,10 +93,9 @@ export const useCounter = (initialValue = 0) =&gt; {
   return { count, increment, decrement };
 };
 </code></pre>
-
 <h3 id="2">ステップ2: テストファイルの作成</h3>
 <p><code>src/hooks/useCounter.test.ts</code>を作成し、テストコードを記述します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.test.ts
+<pre><code class="language-typescript">// src/hooks/useCounter.test.ts
 
 import { describe, it, expect } from &quot;vitest&quot;;
 import { renderHook, act } from &quot;@testing-library/react&quot;;
@@ -138,7 +133,6 @@ describe(&quot;useCounter&quot;, () =&gt; {
   });
 });
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ol>
 <li>
@@ -156,14 +150,13 @@ describe(&quot;useCounter&quot;, () =&gt; {
 </ol>
 <h3 id="3">ステップ3: テストの実行</h3>
 <p>ターミナルで<code>npm test</code>を実行し、テストがすべてパスすることを確認しましょう。</p>
-<pre class="codehilite"><code> ✓ src/hooks/useCounter.test.ts (3)
+<pre><code> ✓ src/hooks/useCounter.test.ts (3)
 
  Test Files  1 passed (1)
       Tests  3 passed (3)
    Start at  10:05:00
    Duration  256ms ...
 </code></pre>
-
 <p><code>PASS</code>と表示されれば成功です！</p>
 <h2 id="_3">✨ まとめ</h2>
 <ul>

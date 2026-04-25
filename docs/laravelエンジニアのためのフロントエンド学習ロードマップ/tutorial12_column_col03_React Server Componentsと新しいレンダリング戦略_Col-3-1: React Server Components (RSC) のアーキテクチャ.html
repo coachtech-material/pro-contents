@@ -69,7 +69,7 @@
 <li><strong>状態（State）やライフサイクルが使えない</strong>: <code>useState</code>や<code>useEffect</code>、<code>onClick</code>のようなインタラクティブな機能は使えません。これらはクライアントサイドで実行される必要があるためです。</li>
 <li><strong>レンダリングはビルド時またはリクエスト時</strong>: サーバー上でレンダリングされ、その結果（HTMLではない、特別なフォーマット）がクライアントに送られます。</li>
 </ul>
-<pre class="codehilite"><code class="language-jsx">// app/page.tsx (これはサーバーコンポーネント)
+<pre><code class="language-jsx">// app/page.tsx (これはサーバーコンポーネント)
 import db from './lib/db'; // サーバーサイドのDBクライアント
 
 // async/await がコンポーネントで直接使える！
@@ -90,7 +90,6 @@ async function Page() {
 
 export default Page;
 </code></pre>
-
 <h3 id="client-components">Client Components</h3>
 <p>クライアントコンポーネントは、従来のReactコンポーネントと同じように、クライアントサイドでレンダリングされ、インタラクティブ性を持つコンポーネントです。</p>
 <p><strong>特徴:</strong></p>
@@ -99,7 +98,7 @@ export default Page;
 <li><strong>ブラウザAPIにアクセス可能</strong>: <code>window</code>や<code>localStorage</code>など、ブラウザ環境に依存するAPIが使えます。</li>
 <li><strong><code>"use client"</code> ディレクティブ</strong>: ファイルの先頭に<code>"use client";</code>と記述することで、そのファイル内のすべてのコンポーネントがクライアントコンポーネントとして扱われます。</li>
 </ul>
-<pre class="codehilite"><code class="language-jsx">// components/Counter.tsx
+<pre><code class="language-jsx">// components/Counter.tsx
 &quot;use client&quot;; // この宣言が重要
 
 import { useState } from 'react';
@@ -114,7 +113,6 @@ export function Counter() {
   );
 }
 </code></pre>
-
 <h2 id="rscssr">RSCとSSRの違い</h2>
 <p>この2つは混同されがちですが、根本的に異なります。</p>
 <ul>
@@ -136,7 +134,7 @@ export function Counter() {
 </ul>
 </li>
 </ol>
-<pre class="codehilite"><code class="language-jsx">// Client Component (e.g., Layout.tsx)
+<pre><code class="language-jsx">// Client Component (e.g., Layout.tsx)
 &quot;use client&quot;;
 
 export function Layout({ children }) {
@@ -161,7 +159,6 @@ export default function Page() {
   );
 }
 </code></pre>
-
 <h2 id="_3">✨ まとめ</h2>
 <ul>
 <li>RSCは、JSバンドルサイズの削減と、サーバー/クライアント間のシームレスな連携を目的とした新しいアーキテクチャ。</li>

@@ -97,7 +97,7 @@
 <h3 id="step-by-step">🏃 実践: Step by Stepで実装しよう</h3>
 <h4 id="step-1">Step 1: コンポーネントの雛形作成</h4>
 <p><code>src/components</code>に<code>UserInfo.tsx</code>というファイルを作成します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/UserInfo.tsx
+<pre><code class="language-tsx">// src/components/UserInfo.tsx
 import { useState, useEffect } from &quot;react&quot;;
 
 // APIから返ってくるユーザーデータの型
@@ -121,9 +121,8 @@ function UserInfo() {
 
 export default UserInfo;
 </code></pre>
-
 <p>そして、<code>src/App.tsx</code>でこのコンポーネントを呼び出します。</p>
-<pre class="codehilite"><code class="language-tsx">// src/App.tsx
+<pre><code class="language-tsx">// src/App.tsx
 import UserInfo from &quot;./components/UserInfo&quot;;
 
 function App() {
@@ -132,10 +131,9 @@ function App() {
 
 export default App;
 </code></pre>
-
 <h4 id="step-2-state">Step 2: Stateの宣言</h4>
 <p><code>UserInfo.tsx</code>に必要なStateを宣言します。</p>
-<pre class="codehilite"><code class="language-tsx">// ...
+<pre><code class="language-tsx">// ...
 function UserInfo() {
   const [userId, setUserId] = useState(1);
   const [user, setUser] = useState&lt;User | null&gt;(null);
@@ -146,10 +144,9 @@ function UserInfo() {
 }
 // ...
 </code></pre>
-
 <h4 id="step-3-useeffectapi">Step 3: <code>useEffect</code>でのAPI通信とクリーンアップの実装</h4>
 <p><code>useEffect</code>を使って、<code>userId</code>が変更されたときにAPI通信を行うロジックを実装します。</p>
-<pre class="codehilite"><code class="language-tsx">// ...
+<pre><code class="language-tsx">// ...
 useEffect(() =&gt; {
   // AbortControllerでクリーンアップを実装
   const controller = new AbortController();
@@ -190,10 +187,9 @@ useEffect(() =&gt; {
 }, [userId]); // userIdに依存
 // ...
 </code></pre>
-
 <h4 id="step-4-ui">Step 4: UIの条件付きレンダリング</h4>
 <p>取得したStateに基づいて、表示するUIを動的に変更します。</p>
-<pre class="codehilite"><code class="language-tsx">// ...
+<pre><code class="language-tsx">// ...
 function UserInfo() {
   // ... (StateとuseEffectの実装)
 
@@ -225,7 +221,6 @@ function UserInfo() {
 }
 // ...
 </code></pre>
-
 <p>これで完成です！ブラウザで動作を確認してみましょう。「次のユーザーへ」ボタンを素早く連続でクリックしても、コンソールに "Fetch aborted" と表示され、最後のIDのリクエストだけが正常に完了することが確認できるはずです。これがクリーンアップの力です。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

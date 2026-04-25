@@ -74,7 +74,7 @@
 </ol>
 <h3 id="usecounter">実装例: <code>useCounter</code>フックの作成</h3>
 <p>それでは、シンプルなカウンター機能を持つ <code>useCounter</code> カスタムフックを作成してみましょう。</p>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useCounter.ts
+<pre><code class="language-typescript">// src/hooks/useCounter.ts
 import { useState } from 'react';
 
 // カスタムフックの戻り値の型を定義
@@ -101,7 +101,6 @@ const useCounter = (initialValue: number = 0): UseCounterReturn =&gt; {
 
 export default useCounter;
 </code></pre>
-
 <h4 id="_7">コードのポイント</h4>
 <ul>
 <li><code>useCounter.ts</code> というように、フックは専用のファイルに切り出すのが一般的です。</li>
@@ -111,7 +110,7 @@ export default useCounter;
 </ul>
 <h3 id="_8">カスタムフックの利用</h3>
 <p>作成した <code>useCounter</code> フックをコンポーネントで使ってみましょう。使い方は <code>useState</code> などの組み込みフックと全く同じです。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/CounterComponent.tsx
+<pre><code class="language-tsx">// src/components/CounterComponent.tsx
 import React from 'react';
 import useCounter from '../hooks/useCounter';
 
@@ -132,7 +131,6 @@ function CounterComponent() {
 
 export default CounterComponent;
 </code></pre>
-
 <p>コンポーネントのコードが非常にシンプルになったことに注目してください。カウンターに関する複雑なロジックはすべて <code>useCounter</code> フックに隠蔽され、コンポーネントはそれを呼び出してUIを構築することに専念できています。これがカスタムフックの力です。</p>
 <h2 id="_9">✨ まとめ</h2>
 <ul>

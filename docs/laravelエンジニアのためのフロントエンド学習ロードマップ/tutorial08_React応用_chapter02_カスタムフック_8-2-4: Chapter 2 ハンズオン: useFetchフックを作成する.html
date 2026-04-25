@@ -43,16 +43,15 @@
 <p>このハンズオンでは、データ取得のロジックをカプセル化した<code>useFetch</code>カスタムフックを作成します。ローディング状態、エラーハンドリング、データの取得を一つのフックにまとめることで、コンポーネントをシンプルに保つ方法を学びます。</p>
 <h2 id="_2">準備</h2>
 <p>Chapter 1で作成したReactプロジェクトを使用するか、新しいプロジェクトを作成してください。</p>
-<pre class="codehilite"><code class="language-bash"># 新しいプロジェクトを作成する場合
+<pre><code class="language-bash"># 新しいプロジェクトを作成する場合
 npx create-react-app custom-hooks-practice --template typescript
 cd custom-hooks-practice
 npm start
 </code></pre>
-
 <h2 id="step-1-usefetch">Step 1: 基本的なuseFetchフックの作成</h2>
 <p>まず、シンプルな<code>useFetch</code>フックを作成します。</p>
 <p><code>src/hooks/useFetch.ts</code>ファイルを作成します。</p>
-<pre class="codehilite"><code class="language-typescript">import { useState, useEffect } from 'react';
+<pre><code class="language-typescript">import { useState, useEffect } from 'react';
 
 // フックの戻り値の型定義
 interface UseFetchResult&lt;T&gt; {
@@ -91,11 +90,10 @@ export function useFetch&lt;T&gt;(url: string): UseFetchResult&lt;T&gt; {
   return { data, loading, error };
 }
 </code></pre>
-
 <h2 id="step-2-usefetch">Step 2: useFetchフックを使ったコンポーネントの作成</h2>
 <p>作成したフックを使って、ユーザー一覧を表示するコンポーネントを作成します。</p>
 <p><code>src/components/UserList.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-typescript">import { useFetch } from '../hooks/useFetch';
+<pre><code class="language-typescript">import { useFetch } from '../hooks/useFetch';
 
 // APIから取得するユーザーの型
 interface User {
@@ -140,11 +138,10 @@ export function UserList() {
   );
 }
 </code></pre>
-
 <h2 id="step-3">Step 3: 再取得機能の追加</h2>
 <p>データを手動で再取得できる機能を追加します。</p>
 <p><code>src/hooks/useFetch.ts</code>を更新します。</p>
-<pre class="codehilite"><code class="language-typescript">import { useState, useEffect, useCallback } from 'react';
+<pre><code class="language-typescript">import { useState, useEffect, useCallback } from 'react';
 
 interface UseFetchResult&lt;T&gt; {
   data: T | null;
@@ -187,10 +184,9 @@ export function useFetch&lt;T&gt;(url: string): UseFetchResult&lt;T&gt; {
   return { data, loading, error, refetch };
 }
 </code></pre>
-
 <h2 id="step-4">Step 4: 再取得ボタンの追加</h2>
 <p><code>src/components/UserList.tsx</code>に再取得ボタンを追加します。</p>
-<pre class="codehilite"><code class="language-typescript">import { useFetch } from '../hooks/useFetch';
+<pre><code class="language-typescript">import { useFetch } from '../hooks/useFetch';
 
 interface User {
   id: number;
@@ -234,10 +230,9 @@ export function UserList() {
   );
 }
 </code></pre>
-
 <h2 id="step-5-apptsx">Step 5: App.tsxの更新</h2>
 <p><code>src/App.tsx</code>を更新して、UserListコンポーネントを表示します。</p>
-<pre class="codehilite"><code class="language-typescript">import { UserList } from './components/UserList';
+<pre><code class="language-typescript">import { UserList } from './components/UserList';
 import './App.css';
 
 function App() {
@@ -251,10 +246,9 @@ function App() {
 
 export default App;
 </code></pre>
-
 <h2 id="step-6">Step 6: スタイルの追加</h2>
 <p><code>src/App.css</code>にスタイルを追加します。</p>
-<pre class="codehilite"><code class="language-css">.App {
+<pre><code class="language-css">.App {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -319,7 +313,6 @@ button:hover:not(:disabled) {
   background-color: #0056b3;
 }
 </code></pre>
-
 <h2 id="_3">✨ まとめ</h2>
 <p>このハンズオンでは、以下のことを実践しました。</p>
 <ul>

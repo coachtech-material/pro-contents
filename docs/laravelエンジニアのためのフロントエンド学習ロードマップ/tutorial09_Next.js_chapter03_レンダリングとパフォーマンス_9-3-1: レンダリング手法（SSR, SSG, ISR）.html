@@ -58,7 +58,7 @@
 <li><code>fetch</code>リクエストでキャッシュオプションを指定しない（デフォルトの<code>cache: 'force-cache'</code>が適用される）。</li>
 <li>または、明示的に<code>cache: 'force-cache'</code>を指定する。</li>
 </ul>
-<pre class="codehilite"><code class="language-tsx">// このページはビルド時に静的生成される (SSG)
+<pre><code class="language-tsx">// このページはビルド時に静的生成される (SSG)
 async function AboutPage() {
   // デフォルトで 'force-cache' が適用される
   const res = await fetch(&quot;https://api.example.com/team-members&quot;);
@@ -67,7 +67,6 @@ async function AboutPage() {
   return &lt;div&gt;{/* ... */}&lt;/div&gt;;
 }
 </code></pre>
-
 <ul>
 <li><strong>メリット</strong>: 非常に高速（CDNから配信）、サーバー負荷が低い、セキュリティが高い。</li>
 <li><strong>デメリット</strong>: ビルド後にコンテンツが更新されても、再ビルドするまで内容は変わらない。</li>
@@ -80,7 +79,7 @@ async function AboutPage() {
 <li><code>fetch</code>リクエストで<code>cache: 'no-store'</code>を指定する。</li>
 <li><code>cookies()</code>や<code>headers()</code>のような動的な関数をページ内で使用する。（これらを使用すると、Next.jsはそのページがリクエストごとに動的にレンダリングされる必要があると判断します）</li>
 </ul>
-<pre class="codehilite"><code class="language-tsx">import { cookies } from &quot;next/headers&quot;;
+<pre><code class="language-tsx">import { cookies } from &quot;next/headers&quot;;
 
 // このページはリクエストごとにサーバーサイドレンダリングされる (SSR)
 async function DashboardPage() {
@@ -97,7 +96,6 @@ async function DashboardPage() {
   return &lt;div&gt;{/* ... */}&lt;/div&gt;;
 }
 </code></pre>
-
 <ul>
 <li><strong>メリット</strong>: 常に最新のデータを表示できる、ユーザーごとにパーソナライズされたコンテンツを提供できる。</li>
 <li><strong>デメリット</strong>: リクエストごとにサーバーでの計算が必要なため、SSGより表示が遅くなる可能性がある、サーバー負荷が高い。</li>
@@ -109,7 +107,7 @@ async function DashboardPage() {
 <ul>
 <li><code>fetch</code>リクエストで<code>next: { revalidate: &lt;秒数&gt; }</code>オプションを指定する。</li>
 </ul>
-<pre class="codehilite"><code class="language-tsx">// このページはISRでレンダリングされる
+<pre><code class="language-tsx">// このページはISRでレンダリングされる
 async function NewsPage() {
   const res = await fetch(&quot;https://api.example.com/news&quot;, {
     next: { revalidate: 60 }, // 60秒ごとに再検証
@@ -119,7 +117,6 @@ async function NewsPage() {
   return &lt;div&gt;{/* ... */}&lt;/div&gt;;
 }
 </code></pre>
-
 <ul>
 <li><strong>メリット</strong>: SSGの高速表示を維持しつつ、定期的にコンテンツを自動更新できる。サーバー負荷を抑えつつ、ある程度の鮮度を保てる。</li>
 <li><strong>デメリット</strong>: データがリアルタイムに更新されるわけではない（最大で指定した秒数分の遅延がある）。</li>

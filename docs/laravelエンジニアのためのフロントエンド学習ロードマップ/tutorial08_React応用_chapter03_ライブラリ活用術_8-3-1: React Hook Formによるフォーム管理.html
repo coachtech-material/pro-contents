@@ -60,10 +60,9 @@
 <p><code>React Hook Form</code> の最大の特徴は、<strong>非制御コンポーネント（Uncontrolled Components）</strong>のアプローチをベースにしている点です。Controlled Componentsが入力のたびにReactのStateを更新するのに対し、<code>React Hook Form</code> はフォーム要素への<strong>参照（ref）</strong>を使って入力を追跡します。これにより、ユーザーの入力中は不要な再レンダリングが発生せず、パフォーマンスが大幅に向上します。</p>
 <h3 id="useform"><code>useForm</code>フック</h3>
 <p><code>React Hook Form</code> を使うには、まず <code>useForm</code> フックを呼び出します。このフックが、フォームの状態管理やバリデーションに必要なメソッドと状態を提供してくれます。</p>
-<pre class="codehilite"><code class="language-bash">npm install react-hook-form
+<pre><code class="language-bash">npm install react-hook-form
 </code></pre>
-
-<pre class="codehilite"><code class="language-tsx">import { useForm, SubmitHandler } from &quot;react-hook-form&quot;;
+<pre><code class="language-tsx">import { useForm, SubmitHandler } from &quot;react-hook-form&quot;;
 
 // フォームのデータ型を定義
 interface IFormInput {
@@ -82,7 +81,6 @@ function MyForm() {
   // ...
 }
 </code></pre>
-
 <p><code>useForm</code> から分割代入で取り出す主要なものは以下の通りです。</p>
 <ul>
 <li><strong><code>register</code></strong>: フォームの入力要素を<code>React Hook Form</code>に「登録」するためのメソッド。このメソッドの戻り値を、<code>&lt;input&gt;</code>などの<code>props</code>として展開します。</li>
@@ -90,7 +88,7 @@ function MyForm() {
 <li><strong><code>formState</code></strong>: フォームの状態（エラー、入力済みか、送信中かなど）を保持するオブジェクト。<code>formState.errors</code> には、バリデーションエラーの情報が格納されます。</li>
 </ul>
 <h3 id="_4">実装例</h3>
-<pre class="codehilite"><code class="language-tsx">import React from 'react';
+<pre><code class="language-tsx">import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface IFormInput {
@@ -142,7 +140,6 @@ function App() {
 
 export default App;
 </code></pre>
-
 <h4 id="_5">コードのポイント</h4>
 <ol>
 <li><strong><code>register("firstName", { ... })</code></strong>: 第一引数にフィールド名を指定し、入力要素を登録します。第二引数には、<code>required</code>（必須）、<code>maxLength</code>（最大長）、<code>pattern</code>（正規表現）、<code>min</code>/<code>max</code>（最小/最大値）などのバリデーションルールをオブジェクトで渡せます。</li>

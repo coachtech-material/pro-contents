@@ -76,18 +76,16 @@
 </li>
 </ol>
 <p><strong>図解：Flexboxの親子関係</strong></p>
-<pre class="codehilite"><code class="language-html">&lt;div class=&quot;flex-container&quot;&gt; &lt;!-- 親要素 --&gt;
+<pre><code class="language-html">&lt;div class=&quot;flex-container&quot;&gt; &lt;!-- 親要素 --&gt;
   &lt;div class=&quot;flex-item&quot;&gt;アイテム1&lt;/div&gt; &lt;!-- 子要素 --&gt;
   &lt;div class=&quot;flex-item&quot;&gt;アイテム2&lt;/div&gt; &lt;!-- 子要素 --&gt;
   &lt;div class=&quot;flex-item&quot;&gt;アイテム3&lt;/div&gt; &lt;!-- 子要素 --&gt;
 &lt;/div&gt;
 </code></pre>
-
-<pre class="codehilite"><code class="language-css">.flex-container {
+<pre><code class="language-css">.flex-container {
   display: flex; /* この一行で魔法が始まる！ */
 }
 </code></pre>
-
 <p>たったこれだけで、通常は縦に並ぶはずの<code>div</code>要素（ブロックレベル要素）が、綺麗に横に並びます。これがFlexboxの基本です。</p>
 <h4 id="main-axis-cross-axis">主軸 (Main Axis) と 交差軸 (Cross Axis)</h4>
 <p>Flexboxには「軸」という重要な概念があります。</p>

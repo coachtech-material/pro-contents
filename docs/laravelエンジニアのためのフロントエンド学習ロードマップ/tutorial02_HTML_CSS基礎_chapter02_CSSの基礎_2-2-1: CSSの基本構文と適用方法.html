@@ -50,11 +50,10 @@
 <p>CSSは「HTMLで作った構造に、どのような見た目を適用するか」を指定する言語です。文字の色、背景色、余白、配置など、Webページのデザインに関わるほぼすべてをCSSで制御します。</p>
 <h2 id="css">CSSの基本構文</h2>
 <p>CSSは「<strong>セレクタ</strong>」「<strong>プロパティ</strong>」「<strong>値</strong>」の3つの要素で構成されます。</p>
-<pre class="codehilite"><code class="language-css">セレクタ {
+<pre><code class="language-css">セレクタ {
   プロパティ: 値;
 }
 </code></pre>
-
 <h3 id="_3">構文の各要素</h3>
 <table>
 <thead>
@@ -83,12 +82,11 @@
 </tbody>
 </table>
 <h3 id="_4">実際のコード例</h3>
-<pre class="codehilite"><code class="language-css">h1 {
+<pre><code class="language-css">h1 {
   color: blue;
   font-size: 24px;
 }
 </code></pre>
-
 <p>このコードを1行ずつ読み解きましょう。</p>
 <ol>
 <li><code>h1</code> - セレクタ。HTMLの<code>&lt;h1&gt;</code>要素を対象にする</li>
@@ -104,9 +102,8 @@
 <p>CSSをHTMLに適用する方法は3つあります。それぞれの特徴と使い分けを理解しましょう。</p>
 <h3 id="1">1. インラインスタイル（非推奨）</h3>
 <p>HTML要素の<code>style</code>属性に直接CSSを記述する方法です。</p>
-<pre class="codehilite"><code class="language-html">&lt;h1 style=&quot;color: blue; font-size: 24px;&quot;&gt;見出し&lt;/h1&gt;
+<pre><code class="language-html">&lt;h1 style=&quot;color: blue; font-size: 24px;&quot;&gt;見出し&lt;/h1&gt;
 </code></pre>
-
 <p><strong>特徴:</strong><br />
 - 特定の要素にのみスタイルを適用できる<br />
 - HTMLとCSSが混在し、管理が困難になる<br />
@@ -116,7 +113,7 @@
 </blockquote>
 <h3 id="2">2. 内部スタイルシート（限定的に使用）</h3>
 <p>HTMLファイルの<code>&lt;head&gt;</code>内に<code>&lt;style&gt;</code>タグを使ってCSSを記述する方法です。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -138,7 +135,6 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p><strong>特徴:</strong><br />
 - 1つのHTMLファイル内でスタイルを管理できる<br />
 - 複数のHTMLファイルで同じスタイルを使う場合、コードが重複する<br />
@@ -146,7 +142,7 @@
 <h3 id="3">3. 外部スタイルシート（推奨）</h3>
 <p>CSSを別ファイル（<code>.css</code>）に記述し、HTMLから読み込む方法です。</p>
 <p><strong>style.css:</strong></p>
-<pre class="codehilite"><code class="language-css">h1 {
+<pre><code class="language-css">h1 {
   color: blue;
   font-size: 24px;
 }
@@ -156,9 +152,8 @@ p {
   line-height: 1.6;
 }
 </code></pre>
-
 <p><strong>index.html:</strong></p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -171,7 +166,6 @@ p {
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p><strong>特徴:</strong><br />
 - HTMLとCSSを分離でき、管理しやすい<br />
 - 複数のHTMLファイルで同じCSSファイルを共有できる<br />
@@ -213,14 +207,13 @@ p {
 <h2 id="csshtml">🏃 実践: 外部CSSファイルを作成してHTMLに適用する</h2>
 <p>実際に外部CSSファイルを作成し、HTMLに適用してみましょう。</p>
 <h3 id="step-1">Step 1: プロジェクトフォルダを作成</h3>
-<pre class="codehilite"><code>css-practice/
+<pre><code>css-practice/
 ├── index.html
 └── style.css
 </code></pre>
-
 <h3 id="step-2-html">Step 2: HTMLファイルを作成</h3>
 <p><code>index.html</code>を作成し、以下のコードを記述します。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -235,10 +228,9 @@ p {
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <h3 id="step-3-css">Step 3: CSSファイルを作成</h3>
 <p><code>style.css</code>を作成し、以下のコードを記述します。</p>
-<pre class="codehilite"><code class="language-css">/* 見出しのスタイル */
+<pre><code class="language-css">/* 見出しのスタイル */
 h1 {
   color: #333;
   font-size: 28px;
@@ -253,7 +245,6 @@ p {
   line-height: 1.8;
 }
 </code></pre>
-
 <h3 id="step-4">Step 4: ブラウザで確認</h3>
 <p><code>index.html</code>をブラウザで開き、スタイルが適用されていることを確認します。</p>
 <p><strong>確認ポイント:</strong><br />
@@ -266,7 +257,7 @@ p {
 </blockquote>
 <h2 id="_5">コメントの書き方</h2>
 <p>CSSでは<code>/* */</code>でコメントを記述できます。コメントはブラウザに無視され、コードの説明やメモとして使用します。</p>
-<pre class="codehilite"><code class="language-css">/* これはコメントです */
+<pre><code class="language-css">/* これはコメントです */
 h1 {
   color: blue; /* 文字色を青に設定 */
 }
@@ -277,10 +268,9 @@ h1 {
   書けます
 */
 </code></pre>
-
 <h2 id="_6">よくある間違いと対処法</h2>
 <h3 id="1_1">1. セミコロンの付け忘れ</h3>
-<pre class="codehilite"><code class="language-css">/* ❌ 間違い */
+<pre><code class="language-css">/* ❌ 間違い */
 h1 {
   color: blue
   font-size: 24px;
@@ -292,9 +282,8 @@ h1 {
   font-size: 24px;
 }
 </code></pre>
-
 <h3 id="2_1">2. 波括弧の閉じ忘れ</h3>
-<pre class="codehilite"><code class="language-css">/* ❌ 間違い */
+<pre><code class="language-css">/* ❌ 間違い */
 h1 {
   color: blue;
 
@@ -311,15 +300,13 @@ p {
   color: gray;
 }
 </code></pre>
-
 <h3 id="3_2">3. ファイルパスの間違い</h3>
-<pre class="codehilite"><code class="language-html">&lt;!-- ❌ 間違い（ファイル名のスペルミス） --&gt;
+<pre><code class="language-html">&lt;!-- ❌ 間違い（ファイル名のスペルミス） --&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
 
 &lt;!-- ✅ 正しい --&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
 </code></pre>
-
 <blockquote>
 <p><strong>💡 TIP:</strong> CSSが適用されない場合は、まずブラウザの開発者ツール（F12）の「Console」タブでエラーがないか確認しましょう。ファイルが見つからない場合は「404 Not Found」エラーが表示されます。</p>
 </blockquote>

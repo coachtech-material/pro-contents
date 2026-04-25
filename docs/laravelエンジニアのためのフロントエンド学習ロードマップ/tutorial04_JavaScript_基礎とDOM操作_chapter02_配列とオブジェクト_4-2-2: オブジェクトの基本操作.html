@@ -49,7 +49,7 @@
 <p>オブジェクトは、キーと値のペアでデータを格納するデータ構造です。関連するデータをまとめて管理するのに便利です。</p>
 <h2 id="_3">詳細解説</h2>
 <h3 id="_4">オブジェクトの作成とアクセス</h3>
-<pre class="codehilite"><code class="language-javascript">// オブジェクトの作成
+<pre><code class="language-javascript">// オブジェクトの作成
 const user = {
   name: &quot;John Doe&quot;,
   age: 30,
@@ -62,9 +62,8 @@ console.log(user.name); // &quot;John Doe&quot;
 // ブラケット記法によるアクセス
 console.log(user[&quot;age&quot;]); // 30
 </code></pre>
-
 <h3 id="_5">プロパティの操作</h3>
-<pre class="codehilite"><code class="language-javascript">// プロパティの追加
+<pre><code class="language-javascript">// プロパティの追加
 user.email = &quot;john.doe@example.com&quot;;
 
 // プロパティの更新
@@ -76,10 +75,9 @@ delete user.isAdmin;
 console.log(user);
 // { name: 'John Doe', age: 31, email: 'john.doe@example.com' }
 </code></pre>
-
 <h3 id="_6">メソッド</h3>
 <p>オブジェクトのプロパティとして関数を定義することができます。これをメソッドと呼びます。</p>
-<pre class="codehilite"><code class="language-javascript">const user = {
+<pre><code class="language-javascript">const user = {
   name: &quot;John Doe&quot;,
   greet: function() {
     console.log(&quot;Hello, my name is &quot; + this.name);
@@ -88,7 +86,6 @@ console.log(user);
 
 user.greet(); // &quot;Hello, my name is John Doe&quot;
 </code></pre>
-
 <h2 id="tip">💡 TIP</h2>
 <ul>
 <li>ブラケット記法は、プロパティ名にスペースやハイフンが含まれる場合や、変数を使ってプロパティにアクセスする場合に便利です。</li>

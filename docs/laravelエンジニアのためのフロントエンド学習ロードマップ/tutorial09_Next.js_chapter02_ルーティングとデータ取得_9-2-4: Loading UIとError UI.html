@@ -56,21 +56,19 @@
 <p><code>loading.tsx</code>は、同じ階層にある<code>page.tsx</code>とその子コンポーネントがデータを取得している間、自動的に表示されるUIを定義するための規約ファイルです。</p>
 <h4 id="_4">使い方</h4>
 <p>データ取得を行う<code>page.tsx</code>と同じディレクトリに、<code>loading.tsx</code>という名前のファイルを作成するだけです。</p>
-<pre class="codehilite"><code>app/
+<pre><code>app/
 └── dashboard/
     ├── page.tsx      # データ取得を行うページ
     └── loading.tsx   # page.tsxのデータ取得中に表示されるUI
 </code></pre>
-
-<pre class="codehilite"><code class="language-tsx">// app/dashboard/loading.tsx
+<pre><code class="language-tsx">// app/dashboard/loading.tsx
 
 export default function Loading() {
   // スケルトンスクリーンやスピナーなど、任意のローディングUIを返す
   return &lt;div&gt;Loading dashboard data...&lt;/div&gt;;
 }
 </code></pre>
-
-<pre class="codehilite"><code class="language-tsx">// app/dashboard/page.tsx
+<pre><code class="language-tsx">// app/dashboard/page.tsx
 
 async function DashboardPage() {
   // このデータ取得が完了するまで、Next.jsは
@@ -84,30 +82,27 @@ async function DashboardPage() {
 
 export default DashboardPage;
 </code></pre>
-
 <p>これだけで、<code>/dashboard</code>にアクセスすると、まず<code>loading.tsx</code>の内容が即座に表示され、<code>page.tsx</code>のデータ取得が完了した時点で、ページの内容が<code>page.tsx</code>のレンダリング結果に自動的に切り替わります。</p>
 <h4 id="react-suspense">裏側の仕組み: React Suspense</h4>
 <p>この機能は、Reactの<strong>Suspense</strong>という機能に基づいています。Next.jsは、<code>loading.tsx</code>ファイルを見つけると、自動的に<code>page.tsx</code>を<code>&lt;Suspense&gt;</code>コンポーネントでラップし、<code>fallback</code> propに<code>loading.tsx</code>の内容を渡してくれます。</p>
-<pre class="codehilite"><code class="language-tsx">// Next.jsが内部的に生成するコードのイメージ
+<pre><code class="language-tsx">// Next.jsが内部的に生成するコードのイメージ
 &lt;Suspense fallback={&lt;Loading /&gt;}&gt;
   &lt;DashboardPage /&gt;
 &lt;/Suspense&gt;
 </code></pre>
-
 <p><code>loading.tsx</code>は、この複雑な設定をファイル規約という形で抽象化し、開発者がSuspenseを意識することなく、簡単にローディングUIを実装できるようにしてくれているのです。</p>
 <h3 id="errortsx-ui">💣 <code>error.tsx</code> によるエラーUI</h3>
 <p><code>error.tsx</code>は、ルートセグメント（同じ階層の<code>page.tsx</code>やその子コンポーネント）で予期せぬエラーが発生した際に、自動的に表示されるフォールバックUIを定義するための規約ファイルです。</p>
 <h4 id="_5">使い方</h4>
 <p><code>loading.tsx</code>と同様に、エラーをキャッチしたいルートセグメントに<code>error.tsx</code>という名前のファイルを作成します。</p>
-<pre class="codehilite"><code>app/
+<pre><code>app/
 └── dashboard/
     ├── page.tsx
     ├── loading.tsx
     └── error.tsx     # page.tsxでエラーが発生した場合に表示されるUI
 </code></pre>
-
 <p><code>error.tsx</code>コンポーネントは、<strong>Client Componentである必要があります</strong> (<code>"use client";</code>が必須)。これは、エラーが発生した後にユーザーが「再試行」するなどのインタラクションを可能にするためです。</p>
-<pre class="codehilite"><code class="language-tsx">// app/dashboard/error.tsx
+<pre><code class="language-tsx">// app/dashboard/error.tsx
 &quot;use client&quot;; // Error BoundaryはClient Componentである必要がある
 
 import { useEffect } from &quot;react&quot;;
@@ -132,7 +127,6 @@ export default function Error({ error, reset }: ErrorProps) {
   );
 }
 </code></pre>
-
 <p><code>page.tsx</code>内でエラーがスローされると（例: <code>fetch</code>の失敗）、Next.jsは最も近い親階層にある<code>error.tsx</code>を探し、その内容でUIを置き換えます。<code>reset</code>関数を呼び出すことで、ユーザーはページを再読み込みすることなく、コンポーネントの再レンダリングを試みることができます。</p>
 <h4 id="react-error-boundary">裏側の仕組み: React Error Boundary</h4>
 <p>この機能は、Reactの<strong>Error Boundary</strong>という機能に基づいています。Next.jsは、<code>error.tsx</code>ファイルを見つけると、自動的にルートセグメントをError Boundaryコンポーネントでラップします。</p>

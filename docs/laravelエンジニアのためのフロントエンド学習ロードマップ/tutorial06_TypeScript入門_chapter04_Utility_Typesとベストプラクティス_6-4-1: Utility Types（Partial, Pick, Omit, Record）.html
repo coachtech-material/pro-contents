@@ -57,7 +57,7 @@
 <p>このような一般的な型の変換操作を簡単に行うために、TypeScriptには<strong>Utility Types（ユーティリティ型）</strong>という便利なツールが組み込まれています。これらは、既存の型を引数として受け取り、新しい型を返すジェネリクスベースの型です。このセクションでは、実務で特に頻繁に使われる4つの重要なUtility Typeを学びます。</p>
 <h2 id="_3">詳細解説</h2>
 <p>以下の解説では、基準となる<code>User</code>インターフェースを使用します。</p>
-<pre class="codehilite"><code class="language-typescript">interface User {
+<pre><code class="language-typescript">interface User {
   id: number;
   name: string;
   email: string;
@@ -65,11 +65,10 @@
   createdAt: Date;
 }
 </code></pre>
-
 <h3 id="1-partialt">1. <code>Partial&lt;T&gt;</code></h3>
 <p><code>Partial&lt;T&gt;</code>は、型<code>T</code>の<strong>すべてのプロパティをオプショナル（<code>?</code>を付けた状態）にした新しい型</strong>を構築します。</p>
 <p><strong>ユースケース</strong>: ユーザー情報の一部だけを更新する関数の引数など。</p>
-<pre class="codehilite"><code class="language-typescript">// Userのすべてのプロパティがオプショナルになる
+<pre><code class="language-typescript">// Userのすべてのプロパティがオプショナルになる
 // type PartialUser = { 
 //   id?: number; 
 //   name?: string; 
@@ -86,11 +85,10 @@ function updateUser(id: number, fieldsToUpdate: PartialUser) {
 // nameとemailだけを更新する
 updateUser(1, { name: 'Taro Yamada', email: 'taro@new-example.com' });
 </code></pre>
-
 <h3 id="2-pickt-k">2. <code>Pick&lt;T, K&gt;</code></h3>
 <p><code>Pick&lt;T, K&gt;</code>は、型<code>T</code>から、指定したキー<code>K</code>（Union型で複数指定可）の<strong>プロパティだけを選択（Pick）して</strong>新しい型を構築します。</p>
 <p><strong>ユースケース</strong>: ユーザーの一覧表示に必要な、最小限の情報の型を作りたい場合など。</p>
-<pre class="codehilite"><code class="language-typescript">// Userからidとnameプロパティだけを抜き出した型
+<pre><code class="language-typescript">// Userからidとnameプロパティだけを抜き出した型
 // type UserPreview = { 
 //   id: number; 
 //   name: string; 
@@ -102,11 +100,10 @@ const user: UserPreview = {
   name: 'Taro'
 };
 </code></pre>
-
 <h3 id="3-omitt-k">3. <code>Omit&lt;T, K&gt;</code></h3>
 <p><code>Omit&lt;T, K&gt;</code>は<code>Pick</code>の逆で、型<code>T</code>から、指定したキー<code>K</code>の<strong>プロパティを除外（Omit）して</strong>新しい型を構築します。</p>
 <p><strong>ユースケース</strong>: 新規ユーザー作成時に、サーバー側で自動採番される<code>id</code>や<code>createdAt</code>を除いた型を作りたい場合など。</p>
-<pre class="codehilite"><code class="language-typescript">// UserからidとcreatedAtプロパティを除外した型
+<pre><code class="language-typescript">// UserからidとcreatedAtプロパティを除外した型
 // type UserCreationPayload = { 
 //   name: string; 
 //   email: string; 
@@ -120,11 +117,10 @@ function createUser(payload: UserCreationPayload) {
 
 createUser({ name: 'Jiro', email: 'jiro@example.com', isAdmin: false });
 </code></pre>
-
 <h3 id="4-recordk-t">4. <code>Record&lt;K, T&gt;</code></h3>
 <p><code>Record&lt;K, T&gt;</code>は、キーの型が<code>K</code>、値の型が<code>T</code>である<strong>オブジェクト型を構築します</strong>。<code>K</code>には通常、<code>string</code>や<code>number</code>、または具体的な文字列リテラルのUnion型を指定します。</p>
 <p><strong>ユースケース</strong>: 特定のキーを持つことが決まっている設定オブジェクトや、辞書（連想配列）のようなデータ構造を表現したい場合など。</p>
-<pre class="codehilite"><code class="language-typescript">// 'home' | 'about' | 'contact' のいずれかをキーに持ち、
+<pre><code class="language-typescript">// 'home' | 'about' | 'contact' のいずれかをキーに持ち、
 // 値として { title: string; path: string } を持つオブジェクトの型
 type PageKey = 'home' | 'about' | 'contact';
 
@@ -142,7 +138,6 @@ const siteNav: Pages = {
   // 'extra': { title: 'Extra', path: '/extra' } // エラー: 'extra'はPageKeyに含まれない
 };
 </code></pre>
-
 <h2 id="tip">💡 TIP</h2>
 <ul>
 <li>Utility Typesはネストして組み合わせることも可能です。例えば、「ユーザー作成ペイロードだが、すべての項目をオプショナルにしたい」場合は <code>Partial&lt;Omit&lt;User, 'id' | 'createdAt'&gt;&gt;</code> のように書くことができます。</li>

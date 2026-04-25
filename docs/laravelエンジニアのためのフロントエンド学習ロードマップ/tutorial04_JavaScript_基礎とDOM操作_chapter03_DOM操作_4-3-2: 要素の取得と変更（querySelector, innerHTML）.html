@@ -53,7 +53,7 @@
 <li><strong><code>document.querySelector()</code></strong>: CSSセレクタに一致する<strong>最初の要素</strong>を1つだけ返します。</li>
 <li><strong><code>document.querySelectorAll()</code></strong>: CSSセレクタに一致する<strong>すべての要素</strong>を <code>NodeList</code>（配列のようなオブジェクト）として返します。</li>
 </ul>
-<pre class="codehilite"><code class="language-javascript">// IDで要素を取得
+<pre><code class="language-javascript">// IDで要素を取得
 const mainTitle = document.querySelector(&quot;#main-title&quot;);
 
 // クラスで最初の要素を取得
@@ -67,14 +67,13 @@ allItems.forEach(item =&gt; {
   console.log(item.textContent);
 });
 </code></pre>
-
 <h3 id="innerhtml-textcontent"><code>innerHTML</code> と <code>textContent</code></h3>
 <p>要素を取得したら、その内容を読み取ったり書き換えたりできます。</p>
 <ul>
 <li><strong><code>innerHTML</code></strong>: 要素内のHTMLタグを含めた内容を取得・設定します。</li>
 <li><strong><code>textContent</code></strong>: 要素内のテキストコンテンツだけを取得・設定します。</li>
 </ul>
-<pre class="codehilite"><code class="language-javascript">const content = document.querySelector(&quot;#content&quot;);
+<pre><code class="language-javascript">const content = document.querySelector(&quot;#content&quot;);
 
 // 内容を書き換える
 content.innerHTML = &quot;&lt;h2&gt;新しいタイトル&lt;/h2&gt;&lt;p&gt;これは新しい段落です。&lt;/p&gt;&quot;;
@@ -83,7 +82,6 @@ content.innerHTML = &quot;&lt;h2&gt;新しいタイトル&lt;/h2&gt;&lt;p&gt;こ
 console.log(content.textContent);
 // &quot;新しいタイトルこれは新しい段落です。&quot;
 </code></pre>
-
 <h2 id="tip">💡 TIP</h2>
 <ul>
 <li>ユーザーからの入力を <code>innerHTML</code> で設定すると、悪意のあるスクリプトが埋め込まれる<strong>クロスサイトスクリプティング（XSS）</strong>の脆弱性につながる可能性があります。安全のため、テキストを扱う場合は <code>textContent</code> を使うのが基本です。</li>

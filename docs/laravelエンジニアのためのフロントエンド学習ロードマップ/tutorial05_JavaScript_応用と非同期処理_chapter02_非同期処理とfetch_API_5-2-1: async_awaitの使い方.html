@@ -49,7 +49,7 @@
 <p><code>async/await</code> は、この問題を解決し、非同期処理をまるで同期処理のようにシンプルに記述するための構文です。ES2017で導入されました。</p>
 <h2 id="1-async">1. async関数の基本</h2>
 <p>関数を <code>async</code> として宣言すると、その関数は常に <strong>Promise</strong> を返すようになります。</p>
-<pre class="codehilite"><code class="language-javascript">// async関数は常にPromiseを返す
+<pre><code class="language-javascript">// async関数は常にPromiseを返す
 async function greet() {
   return &quot;こんにちは&quot;;
 }
@@ -64,11 +64,10 @@ greet().then((message) =&gt; {
   console.log(message); // &quot;こんにちは&quot;
 });
 </code></pre>
-
 <h2 id="2-await">2. await演算子</h2>
 <p><code>await</code> は <code>async</code> 関数の中でのみ使用でき、Promiseが解決されるまで関数の実行を一時停止します。Promiseが解決されると、その結果を返します。</p>
 <p>これにより、<code>.then()</code> を使わずに、Promiseの結果を直接変数に代入できます。</p>
-<pre class="codehilite"><code class="language-javascript">// Promiseを返す関数
+<pre><code class="language-javascript">// Promiseを返す関数
 function fetchData() {
   return new Promise((resolve) =&gt; {
     setTimeout(() =&gt; {
@@ -90,10 +89,9 @@ async function getData() {
 
 getData();
 </code></pre>
-
 <h2 id="3-promise">3. Promiseチェーンとの比較</h2>
 <p>Chapter 1で学んだPromiseチェーンを、async/awaitで書き直してみましょう。</p>
-<pre class="codehilite"><code class="language-javascript">// Promiseチェーン版
+<pre><code class="language-javascript">// Promiseチェーン版
 getUser(1)
   .then((user) =&gt; {
     console.log(&quot;ユーザー:&quot;, user.name);
@@ -128,11 +126,10 @@ async function fetchAllData() {
 
 fetchAllData();
 </code></pre>
-
 <p>async/await版は、同期処理のように上から下へ順番に読めるため、非常に直感的です。</p>
 <h2 id="4">4. エラーハンドリング</h2>
 <p>async/awaitでは、<code>try/catch</code>を使ってエラーを処理します。</p>
-<pre class="codehilite"><code class="language-javascript">async function fetchUser(id) {
+<pre><code class="language-javascript">async function fetchUser(id) {
   try {
     const response = await fetch(`https://api.example.com/users/${id}`);
 
@@ -148,10 +145,9 @@ fetchAllData();
   }
 }
 </code></pre>
-
 <h2 id="5">5. 並列実行</h2>
 <p>複数の非同期処理を並列で実行したい場合は、<code>Promise.all</code>と組み合わせます。</p>
-<pre class="codehilite"><code class="language-javascript">// 順次実行（遅い）
+<pre><code class="language-javascript">// 順次実行（遅い）
 async function sequential() {
   const user1 = await getUser(1); // 1秒待つ
   const user2 = await getUser(2); // さらに1秒待つ
@@ -169,7 +165,6 @@ async function parallel() {
   // 合計1秒（最も遅い処理の時間）
 }
 </code></pre>
-
 <h2 id="tip">💡 TIP</h2>
 <ul>
 <li><code>await</code> は <code>async</code> 関数の中、もしくはモジュールのトップレベルでしか使えません。通常の関数内で使うと構文エラーになります。</li>

@@ -94,17 +94,16 @@
 <p>それでは、簡単な純粋関数のテストを書いてみましょう。</p>
 <h4 id="1">ステップ1: テスト対象の関数の作成</h4>
 <p><code>src/utils/math.ts</code>というファイルを作成し、2つの数値を足し合わせる簡単な関数を定義します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/utils/math.ts
+<pre><code class="language-typescript">// src/utils/math.ts
 
 export const add = (a: number, b: number): number =&gt; {
   return a + b;
 };
 </code></pre>
-
 <h4 id="2">ステップ2: テストファイルの作成</h4>
 <p>Vitestは、<code>.test.ts</code>または<code>.spec.ts</code>という接尾辞を持つファイルをテストファイルとして自動的に認識します。一般的に、テスト対象のファイルと同じ階層にテストファイルを置くのが管理しやすいため推奨されます。</p>
 <p><code>src/utils/math.test.ts</code>を作成し、以下のテストコードを記述します。</p>
-<pre class="codehilite"><code class="language-typescript">// src/utils/math.test.ts
+<pre><code class="language-typescript">// src/utils/math.test.ts
 
 import { describe, it, expect } from &quot;vitest&quot;;
 import { add } from &quot;./math&quot;;
@@ -128,7 +127,6 @@ describe(&quot;add&quot;, () =&gt; {
   });
 });
 </code></pre>
-
 <p><strong>コードのポイント:</strong></p>
 <ul>
 <li><code>describe</code>で<code>add</code>関数に関するテストをまとめています。</li>
@@ -137,7 +135,7 @@ describe(&quot;add&quot;, () =&gt; {
 </ul>
 <h4 id="3">ステップ3: テストの実行</h4>
 <p><code>package.json</code>にテスト実行用のスクリプトを追加します。</p>
-<pre class="codehilite"><code class="language-json">// package.json
+<pre><code class="language-json">// package.json
 {
   ...
   &quot;scripts&quot;: {
@@ -150,13 +148,11 @@ describe(&quot;add&quot;, () =&gt; {
   ...
 }
 </code></pre>
-
 <p>ターミナルで以下のコマンドを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npm test
+<pre><code class="language-bash">npm test
 </code></pre>
-
 <p>すると、Vitestが起動し、プロジェクト内のテストファイルを実行します。すべてのテストが成功すれば、以下のような出力が表示されます。</p>
-<pre class="codehilite"><code> ✓ src/utils/math.test.ts (3)
+<pre><code> ✓ src/utils/math.test.ts (3)
 
  Test Files  1 passed (1)
       Tests  3 passed (3)
@@ -167,7 +163,6 @@ describe(&quot;add&quot;, () =&gt; {
  PASS  Waiting for file changes...
        press h to show help, press q to quit
 </code></pre>
-
 <p><code>PASS</code>と表示されれば成功です！Vitestはデフォルトでウォッチモードで起動するため、ファイルの変更を監視し続けます。<code>q</code>キーを押すと終了します。</p>
 <h2 id="_4">✨ まとめ</h2>
 <ul>

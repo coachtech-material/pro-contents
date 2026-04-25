@@ -58,7 +58,7 @@
 <p>状態に応じて表示を切り替えるための、シンプルで効果的な実装パターンを見ていきましょう。</p>
 <p><strong>HTML (<code>index.html</code>)</strong></p>
 <p>まず、各状態に対応するUI要素をあらかじめHTMLに用意しておきます。</p>
-<pre class="codehilite"><code class="language-html">&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -89,10 +89,9 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
 <p><strong>JavaScript (<code>app.js</code>)</strong></p>
 <p>JavaScript側で、処理の進行状況に合わせてこれらの要素の表示・非表示を切り替えます。</p>
-<pre class="codehilite"><code class="language-javascript">// 各UI要素を取得
+<pre><code class="language-javascript">// 各UI要素を取得
 const userList = document.querySelector(&quot;#user-list&quot;);
 const loading = document.querySelector(&quot;#loading&quot;);
 const error = document.querySelector(&quot;#error&quot;);
@@ -147,7 +146,6 @@ async function fetchAndDisplayUsers() {
 // 実行
 fetchAndDisplayUsers();
 </code></pre>
-
 <h3 id="_6">コードのポイント</h3>
 <ol>
 <li><strong>初期状態</strong>: <code>fetch</code> を呼び出す直前に、まずローディング表示を <code>show</code> し、他の要素を <code>hide</code> します。これにより、処理が開始されたことをユーザーに伝えます。</li>

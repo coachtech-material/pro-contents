@@ -54,7 +54,7 @@
 <hr />
 <h3 id="theme">🔑 <code>theme</code>オブジェクトの構造</h3>
 <p>カスタマイズの中心となるのが、<code>tailwind.config.js</code>内の<code>theme</code>オブジェクトです。このオブジェクトの中に、色（<code>colors</code>）、余白（<code>spacing</code>）、フォントサイズ（<code>fontSize</code>）など、Tailwindのすべてのデザイン定義が含まれています。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 module.exports = {
   content: [/* ... */],
   theme: {
@@ -81,7 +81,6 @@ module.exports = {
   plugins: [],
 }
 </code></pre>
-
 <h3 id="extend-vs-override">⚙️ <code>extend</code> vs 上書き（Override）</h3>
 <p>カスタマイズには2つの方法があります。<code>theme</code>直下に設定を書く<strong>「上書き」</strong>と、<code>theme.extend</code>の中に書く<strong>「拡張」</strong>です。この違いを理解することが非常に重要です。</p>
 <ul>
@@ -109,7 +108,7 @@ module.exports = {
 <h3 id="step-by-step">🏃 実践: Step by Stepでテーマをカスタマイズしよう</h3>
 <h4 id="1">1. ブランドカラーの追加</h4>
 <p>プロジェクトのブランドカラーを追加してみましょう。<code>tailwind.config.js</code>を以下のように編集します。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 module.exports = {
   // ...
   theme: {
@@ -123,11 +122,10 @@ module.exports = {
   // ...
 }
 </code></pre>
-
 <p>これで、<code>bg-laravel-red</code>や<code>text-vue-green</code>といったクラスが使えるようになります。</p>
 <h4 id="2">2. フォントの追加</h4>
 <p>Google Fontsなどから読み込んだWebフォントを、Tailwindの<code>fontFamily</code>に追加してみましょう。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -142,7 +140,6 @@ module.exports = {
   // ...
 }
 </code></pre>
-
 <ul>
 <li><strong>コードリーディング</strong><ul>
 <li><code>const defaultTheme = require('tailwindcss/defaultTheme')</code>: Tailwindのデフォルトテーマ設定をインポートします。</li>
@@ -152,7 +149,7 @@ module.exports = {
 </ul>
 <h4 id="3">3. 独自のユーティリティクラスの追加（上級）</h4>
 <p><code>plugins</code>機能を使うと、より複雑な独自のユーティリティクラスを追加できます。例えば、テキストを縦書きにする<code>writing-vertical-rl</code>というクラスを追加したい場合、以下のように記述します。</p>
-<pre class="codehilite"><code class="language-javascript">// tailwind.config.js
+<pre><code class="language-javascript">// tailwind.config.js
 const plugin = require('tailwindcss/plugin')
 
 module.exports = {
@@ -168,7 +165,6 @@ module.exports = {
   ],
 }
 </code></pre>
-
 <p>これで、HTML内で<code>class="writing-vertical-rl"</code>と書くだけで、テキストが縦書きになります。</p>
 <hr />
 <p>✨ <strong>まとめ</strong></p>

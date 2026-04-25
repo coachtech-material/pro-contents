@@ -50,11 +50,10 @@
 <h2 id="_2">導入</h2>
 <p>Next.jsの最も強力で直感的な機能の一つが、<strong>ファイルベースルーティング</strong>です。これは、アプリケーションのURL構造が、ファイルシステムのフォルダ構造に直接マッピングされるという考え方です。</p>
 <p>Laravelのようなフレームワークでは、<code>routes/web.php</code>のようなファイルにルート定義を明示的に記述する必要がありました。</p>
-<pre class="codehilite"><code class="language-php">// Laravelのルート定義例
+<pre><code class="language-php">// Laravelのルート定義例
 Route::get(&quot;/dashboard&quot;, [DashboardController::class, &quot;index&quot;]);
 Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
 </code></pre>
-
 <p>一方、Next.jsでは、<code>app</code>ディレクトリ内にフォルダを作成するだけで、自動的にルートが生成されます。これにより、ルート定義ファイルを見なくても、フォルダ構造を見るだけでアプリケーション全体のURL構造を把握することができます。</p>
 <h2 id="_3">詳細解説</h2>
 <h3 id="_4">🔑 基本的な考え方</h3>
@@ -99,7 +98,7 @@ Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
 </table>
 <h3 id="nested-routes">ネストされたルート (Nested Routes)</h3>
 <p>フォルダをネストさせることで、階層的なルートを簡単に作成できます。例えば、ブログ機能を作成する場合を考えてみましょう。</p>
-<pre class="codehilite"><code>app/
+<pre><code>app/
 ├── blog/                  # /blog セグメント
 │   ├── page.tsx            # /blog のページ
 │   ├── layout.tsx          # /blog とその子ルートに適用されるレイアウト
@@ -107,7 +106,6 @@ Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
 │       └── page.tsx        # /blog/some-post のページ
 └── page.tsx                # / (ルート) のページ
 </code></pre>
-
 <p>この構造では、<code>/blog</code>というパスと、その配下に個別のブログ記事ページ（例: <code>/blog/my-first-post</code>）が存在することを示しています。</p>
 <h3 id="_6">レイアウトとの連携</h3>
 <p>ファイルベースルーティングは、<code>layout.tsx</code>と密接に連携します。特定のフォルダ内に<code>layout.tsx</code>を配置すると、そのレイアウトはそのフォルダ内の<code>page.tsx</code>と、すべての<strong>子孫ルート</strong>に適用されます。</p>
@@ -116,7 +114,7 @@ Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
 <p>URL構造に影響を与えずに、ルートセグメント（フォルダ）を整理したい場合があります。例えば、マーケティング関連のページ（<code>/about</code>, <code>/contact</code>）と、アプリケーション内のページ（<code>/dashboard</code>, <code>/settings</code>）をフォルダレベルで分けて管理したいが、URLにその管理用のフォルダ名（例: <code>/marketing/about</code>）は含めたくない、というケースです。</p>
 <p>このような場合、フォルダ名を括弧 <code>()</code> で囲むことで<strong>ルートグループ</strong>を作成できます。括弧で囲まれたフォルダ名はURLパスから完全に無視されます。</p>
 <h4 id="_7">例：</h4>
-<pre class="codehilite"><code>app/
+<pre><code>app/
 ├── (marketing)/          # URLに影響しないグループ
 │   ├── about/
 │   │   └── page.tsx        # → /about
@@ -129,7 +127,6 @@ Route::get(&quot;/users/{id}&quot;, [UserController::class, &quot;show&quot;]);
 │       └── page.tsx        # → /settings
 └── page.tsx
 </code></pre>
-
 <p>ルートグループは、特定のセクションごとに異なるレイアウトを適用したい場合にも非常に便利です。例えば、<code>(marketing)</code>グループのルートにのみ適用される<code>layout.tsx</code>を<code>(marketing)/layout.tsx</code>に配置できます。</p>
 <h2 id="_8">✨ まとめ</h2>
 <ul>

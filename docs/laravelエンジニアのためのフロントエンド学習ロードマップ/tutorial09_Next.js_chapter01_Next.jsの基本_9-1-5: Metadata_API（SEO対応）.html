@@ -50,7 +50,7 @@
 <p>Laravelの<code>@section('title')</code>や<code>@section('description')</code>に相当する機能ですが、Next.jsではより型安全で、動的な生成も容易です。</p>
 <h2 id="1">1. 静的メタデータ</h2>
 <p>ページのメタデータが固定の場合は、<code>metadata</code>オブジェクトをエクスポートします。</p>
-<pre class="codehilite"><code class="language-typescript">// app/about/page.tsx
+<pre><code class="language-typescript">// app/about/page.tsx
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -67,17 +67,15 @@ export default function AboutPage() {
   );
 }
 </code></pre>
-
 <p>生成されるHTML:</p>
-<pre class="codehilite"><code class="language-html">&lt;head&gt;
+<pre><code class="language-html">&lt;head&gt;
   &lt;title&gt;会社概要&lt;/title&gt;
   &lt;meta name=&quot;description&quot; content=&quot;私たちの会社について紹介します。&quot; /&gt;
 &lt;/head&gt;
 </code></pre>
-
 <h2 id="2">2. レイアウトでの共通メタデータ</h2>
 <p><code>layout.tsx</code>でメタデータを設定すると、そのレイアウト配下のすべてのページに適用されます。</p>
-<pre class="codehilite"><code class="language-typescript">// app/layout.tsx
+<pre><code class="language-typescript">// app/layout.tsx
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -100,11 +98,10 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <p>子ページで<code>title: '会社概要'</code>を設定すると、実際のタイトルは「会社概要 | My Website」になります。</p>
 <h2 id="3">3. 動的メタデータ</h2>
 <p>ブログ記事や商品ページなど、動的なコンテンツのメタデータを設定するには、<code>generateMetadata</code>関数を使います。</p>
-<pre class="codehilite"><code class="language-typescript">// app/blog/[slug]/page.tsx
+<pre><code class="language-typescript">// app/blog/[slug]/page.tsx
 import type { Metadata } from 'next';
 
 interface Props {
@@ -145,10 +142,9 @@ export default async function BlogPost({ params }: Props) {
   );
 }
 </code></pre>
-
 <h2 id="4-open-graphogp">4. Open Graph（OGP）の設定</h2>
 <p>SNSでシェアされたときの表示を設定するには、<code>openGraph</code>プロパティを使います。</p>
-<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+<pre><code class="language-typescript">export const metadata: Metadata = {
   title: '素晴らしい記事',
   description: 'この記事では...',
   openGraph: {
@@ -175,10 +171,9 @@ export default async function BlogPost({ params }: Props) {
   },
 };
 </code></pre>
-
 <h2 id="5">5. その他のメタデータ</h2>
 <h3 id="robots">robots（クローラー制御）</h3>
-<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+<pre><code class="language-typescript">export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
@@ -192,9 +187,8 @@ export default async function BlogPost({ params }: Props) {
   },
 };
 </code></pre>
-
 <h3 id="icons">icons（ファビコン）</h3>
-<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+<pre><code class="language-typescript">export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
@@ -202,15 +196,13 @@ export default async function BlogPost({ params }: Props) {
   },
 };
 </code></pre>
-
 <h3 id="canonical-url">canonical URL</h3>
-<pre class="codehilite"><code class="language-typescript">export const metadata: Metadata = {
+<pre><code class="language-typescript">export const metadata: Metadata = {
   alternates: {
     canonical: 'https://example.com/blog/great-article',
   },
 };
 </code></pre>
-
 <h2 id="6-laravelnextjs">6. LaravelとNext.jsの比較</h2>
 <table>
 <thead>

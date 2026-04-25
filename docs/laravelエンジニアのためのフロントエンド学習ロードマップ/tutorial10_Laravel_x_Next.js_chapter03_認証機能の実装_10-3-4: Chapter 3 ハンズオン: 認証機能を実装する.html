@@ -56,7 +56,7 @@
 <p>10-3-1で設定したLaravel Sanctumの認証エンドポイントを確認します。</p>
 <h3 id="11">1.1 ルートの確認</h3>
 <p><code>routes/api.php</code>に以下のルートが設定されていることを確認します。</p>
-<pre class="codehilite"><code class="language-php">&lt;?php
+<pre><code class="language-php">&lt;?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -74,10 +74,9 @@ Route::middleware('auth:sanctum')-&gt;group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 </code></pre>
-
 <h3 id="12-authcontroller">1.2 AuthControllerの確認</h3>
 <p><code>app/Http/Controllers/AuthController.php</code>の内容を確認します。</p>
-<pre class="codehilite"><code class="language-php">&lt;?php
+<pre><code class="language-php">&lt;?php
 
 namespace App\Http\Controllers;
 
@@ -142,18 +141,16 @@ class AuthController extends Controller
     }
 }
 </code></pre>
-
 <h3 id="13">1.3 テストユーザーの作成</h3>
 <p>Seederを使ってテストユーザーを作成します。</p>
-<pre class="codehilite"><code class="language-bash"># Laravelコンテナに入る
+<pre><code class="language-bash"># Laravelコンテナに入る
 docker compose exec laravel.test bash
 
 # Seederを実行
 php artisan db:seed
 </code></pre>
-
 <p><code>database/seeders/DatabaseSeeder.php</code>にテストユーザーを追加しておきます。</p>
-<pre class="codehilite"><code class="language-php">&lt;?php
+<pre><code class="language-php">&lt;?php
 
 namespace Database\Seeders;
 
@@ -173,11 +170,10 @@ class DatabaseSeeder extends Seeder
     }
 }
 </code></pre>
-
 <h2 id="step-2-nextjs">Step 2: Next.js側の認証設定</h2>
 <h3 id="21-nextauthjs">2.1 NextAuth.jsの設定確認</h3>
 <p>10-3-2で設定した<code>app/api/auth/[...nextauth]/route.ts</code>を確認します。</p>
-<pre class="codehilite"><code class="language-typescript">import NextAuth from &quot;next-auth&quot;;
+<pre><code class="language-typescript">import NextAuth from &quot;next-auth&quot;;
 import CredentialsProvider from &quot;next-auth/providers/credentials&quot;;
 
 const handler = NextAuth({
@@ -246,10 +242,9 @@ const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 </code></pre>
-
 <h3 id="22">2.2 型定義の追加</h3>
 <p><code>types/next-auth.d.ts</code>を作成して、セッションの型を拡張します。</p>
-<pre class="codehilite"><code class="language-typescript">import &quot;next-auth&quot;;
+<pre><code class="language-typescript">import &quot;next-auth&quot;;
 
 declare module &quot;next-auth&quot; {
   interface Session {
@@ -273,11 +268,10 @@ declare module &quot;next-auth/jwt&quot; {
   }
 }
 </code></pre>
-
 <h2 id="step-3">Step 3: ログインページの作成</h2>
 <h3 id="31">3.1 ログインフォームコンポーネント</h3>
 <p><code>app/login/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-tsx">&quot;use client&quot;;
+<pre><code class="language-tsx">&quot;use client&quot;;
 
 import { useState } from &quot;react&quot;;
 import { signIn } from &quot;next-auth/react&quot;;
@@ -380,11 +374,10 @@ export default function LoginPage() {
   );
 }
 </code></pre>
-
 <h2 id="step-4">Step 4: 認証状態の表示</h2>
 <h3 id="41">4.1 ヘッダーコンポーネントの作成</h3>
 <p><code>components/Header.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-tsx">&quot;use client&quot;;
+<pre><code class="language-tsx">&quot;use client&quot;;
 
 import { useSession, signOut } from &quot;next-auth/react&quot;;
 import Link from &quot;next/link&quot;;
@@ -432,10 +425,9 @@ export default function Header() {
   );
 }
 </code></pre>
-
 <h3 id="42-sessionprovider">4.2 SessionProviderの設定</h3>
 <p><code>app/providers.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-tsx">&quot;use client&quot;;
+<pre><code class="language-tsx">&quot;use client&quot;;
 
 import { SessionProvider } from &quot;next-auth/react&quot;;
 
@@ -443,10 +435,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return &lt;SessionProvider&gt;{children}&lt;/SessionProvider&gt;;
 }
 </code></pre>
-
 <h3 id="43">4.3 レイアウトの更新</h3>
 <p><code>app/layout.tsx</code>を更新します。</p>
-<pre class="codehilite"><code class="language-tsx">import type { Metadata } from &quot;next&quot;;
+<pre><code class="language-tsx">import type { Metadata } from &quot;next&quot;;
 import { Inter } from &quot;next/font/google&quot;;
 import &quot;./globals.css&quot;;
 import Providers from &quot;./providers&quot;;
@@ -476,11 +467,10 @@ export default function RootLayout({
   );
 }
 </code></pre>
-
 <h2 id="step-5">Step 5: 認証が必要なページの保護</h2>
 <h3 id="51">5.1 ミドルウェアの作成</h3>
 <p><code>middleware.ts</code>をプロジェクトルートに作成します。</p>
-<pre class="codehilite"><code class="language-typescript">import { withAuth } from &quot;next-auth/middleware&quot;;
+<pre><code class="language-typescript">import { withAuth } from &quot;next-auth/middleware&quot;;
 
 export default withAuth({
   pages: {
@@ -492,10 +482,9 @@ export const config = {
   matcher: [&quot;/dashboard/:path*&quot;, &quot;/profile/:path*&quot;],
 };
 </code></pre>
-
 <h3 id="52">5.2 保護されたページの作成</h3>
 <p><code>app/dashboard/page.tsx</code>を作成します。</p>
-<pre class="codehilite"><code class="language-tsx">import { getServerSession } from &quot;next-auth&quot;;
+<pre><code class="language-tsx">import { getServerSession } from &quot;next-auth&quot;;
 import { redirect } from &quot;next/navigation&quot;;
 
 export default async function DashboardPage() {
@@ -520,17 +509,15 @@ export default async function DashboardPage() {
   );
 }
 </code></pre>
-
 <h2 id="step-6">Step 6: 動作確認</h2>
 <h3 id="61">6.1 開発サーバーの起動</h3>
-<pre class="codehilite"><code class="language-bash"># Laravelの起動（Docker）
+<pre><code class="language-bash"># Laravelの起動（Docker）
 docker compose up -d
 
 # Next.jsの起動
 cd frontend
 npm run dev
 </code></pre>
-
 <h3 id="62">6.2 確認項目</h3>
 <p>以下の動作を確認します。</p>
 <table>

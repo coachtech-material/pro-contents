@@ -58,17 +58,15 @@
 </ul>
 <h3 id="1-nextjs">ステップ1: 新しいNext.jsプロジェクトの作成</h3>
 <p>ターミナルを開き、Laravelプロジェクト（<code>laravel-next-app</code>）と同じ階層のディレクトリに移動します。<strong>Laravelプロジェクトの中にNext.jsプロジェクトを作成しないように注意してください。</strong></p>
-<pre class="codehilite"><code>- your-workspace/
+<pre><code>- your-workspace/
   - laravel-next-app/  &lt;- バックエンド
   - (ここにNext.jsプロジェクトを作成する)
 </code></pre>
-
 <p>そして、以下のコマンドを実行します。</p>
-<pre class="codehilite"><code class="language-bash">npx create-next-app@latest
+<pre><code class="language-bash">npx create-next-app@latest
 </code></pre>
-
 <p>コマンドを実行すると、対話形式でいくつかの質問が表示されます。このチュートリアルでは、以下の設定を選択してください。</p>
-<pre class="codehilite"><code>✔ What is your project named? … next-frontend-app
+<pre><code>✔ What is your project named? … next-frontend-app
 ✔ Would you like to use TypeScript? … Yes
 ✔ Would you like to use ESLint? … Yes
 ✔ Would you like to use Tailwind CSS? … Yes
@@ -76,7 +74,6 @@
 ✔ Would you like to use App Router? (recommended) … Yes
 ✔ Would you like to customize the default import alias (@/*)? … No
 </code></pre>
-
 <ul>
 <li><strong>Project name</strong>: <code>next-frontend-app</code>と入力します。</li>
 <li><strong>TypeScript, ESLint, Tailwind CSS</strong>: これらは現代のフロントエンド開発で非常に役立つツールなので、すべて<code>Yes</code>を選択します。</li>
@@ -86,24 +83,22 @@
 <p>コマンドが完了すると、<code>next-frontend-app</code>というディレクトリが作成されます。これが私たちのフロントエンドアプリケーションです。</p>
 <h3 id="2">ステップ2: 開発サーバーの起動</h3>
 <p>作成されたプロジェクトディレクトリに移動し、開発サーバーを起動します。</p>
-<pre class="codehilite"><code class="language-bash"># プロジェクトディレクトリに移動
+<pre><code class="language-bash"># プロジェクトディレクトリに移動
 cd next-frontend-app
 
 # 開発サーバーを起動
 npm run dev
 </code></pre>
-
 <p>コンソールに以下のようなメッセージが表示されれば成功です。</p>
-<pre class="codehilite"><code>- ready started server on 0.0.0.0:3000, url: http://localhost:3000
+<pre><code>- ready started server on 0.0.0.0:3000, url: http://localhost:3000
 </code></pre>
-
 <p>ブラウザで <code>http://localhost:3000</code> にアクセスしてください。Next.jsのウェルカムページが表示されるはずです。</p>
 <p><img alt="Next.js Welcome Page" src="https://raw.githubusercontent.com/coachtech-material/pro-contents/main/laravel%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E3%83%95%E3%83%AD%E3%83%B3%E3%83%88%E3%82%A8%E3%83%B3%E3%83%89%E5%AD%A6%E7%BF%92%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97/images/tutorial-10/nextjs-welcome.png" /></p>
 <p>これで、フロントエンドの開発環境も整いました！Laravelの開発サーバー（<code>http://localhost</code>）とNext.jsの開発サーバー（<code>http://localhost:3000</code>）が、それぞれ独立して動作している状態です。</p>
 <h3 id="3">ステップ3: 初期ページのクリーンアップ</h3>
 <p>開発を始める前に、デフォルトで生成されたウェルカムページの内容を削除し、シンプルな状態にしておきましょう。</p>
 <p><code>src/app/page.tsx</code>を開き、内容を以下のように書き換えてください。</p>
-<pre class="codehilite"><code class="language-tsx">// src/app/page.tsx
+<pre><code class="language-tsx">// src/app/page.tsx
 
 export default function Home() {
   return (
@@ -113,7 +108,6 @@ export default function Home() {
   );
 }
 </code></pre>
-
 <p>ファイルを保存すると、ブラウザが自動的にリロードされ、表示が切り替わるはずです。これはNext.jsの<strong>Fast Refresh</strong>という機能で、開発効率を大幅に向上させます。</p>
 <h2 id="_5">✨ まとめ</h2>
 <ul>

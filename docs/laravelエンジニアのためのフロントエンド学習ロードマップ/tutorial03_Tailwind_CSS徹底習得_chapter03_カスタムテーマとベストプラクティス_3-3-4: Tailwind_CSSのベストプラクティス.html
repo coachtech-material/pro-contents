@@ -54,10 +54,9 @@
 <hr />
 <h3 id="1">⚙️ ベストプラクティス1: クラスの順序を統一する</h3>
 <p>Tailwind CSSを使っていると、HTML要素の<code>class</code>属性が非常に長くなることがあります。クラスがランダムな順序で並んでいると、特定のクラスを探したり、どのようなスタイルが適用されているのかを把握するのが難しくなります。</p>
-<pre class="codehilite"><code class="language-html">&lt;!-- 良くない例：順序がバラバラ --&gt;
+<pre><code class="language-html">&lt;!-- 良くない例：順序がバラバラ --&gt;
 &lt;div class=&quot;font-bold md:w-1/2 p-4 bg-blue-500 w-full text-white md:p-6&quot;&gt;
 </code></pre>
-
 <p>一貫した順序でクラスを並べることで、コードの可読性は劇的に向上します。どのような順序が絶対的に正しい、というルールはありませんが、一般的には以下のようなグループで分類し、そのグループの順序をプロジェクトで統一するのが良いとされています。</p>
 <ol>
 <li><strong>レイアウトとボックスモデル:</strong> <code>display</code>, <code>position</code>, <code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code>など</li>
@@ -65,10 +64,9 @@
 <li><strong>背景とボーダー:</strong> <code>background-color</code>, <code>border-color</code>, <code>border-radius</code>, <code>box-shadow</code>など</li>
 <li><strong>状態とレスポンシブ:</strong> <code>hover:</code>, <code>focus:</code>, <code>md:</code>, <code>lg:</code>など</li>
 </ol>
-<pre class="codehilite"><code class="language-html">&lt;!-- 良い例：論理的な順序で並んでいる --&gt;
+<pre><code class="language-html">&lt;!-- 良い例：論理的な順序で並んでいる --&gt;
 &lt;div class=&quot;w-full md:w-1/2 bg-blue-500 p-4 md:p-6 text-white font-bold&quot;&gt;
 </code></pre>
-
 <p>しかし、これを手動で毎回並べ替えるのは現実的ではありません。そこで役立つのが、次のベストプラクティスです。</p>
 <h3 id="2-prettier">⚙️ ベストプラクティス2: Prettierプラグインで自動整形する</h3>
 <p>多くのモダンな開発プロジェクトでは、コードフォーマッターである<strong>Prettier</strong>が導入されています。そして、Tailwind CSSには公式の<strong>Prettierプラグイン（<code>prettier-plugin-tailwindcss</code>）</strong>が提供されています。</p>

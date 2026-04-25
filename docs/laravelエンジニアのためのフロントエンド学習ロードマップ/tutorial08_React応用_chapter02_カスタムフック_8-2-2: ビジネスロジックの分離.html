@@ -73,7 +73,7 @@
 </ul>
 <h3 id="_4">悪い例: ロジックが混在したコンポーネント</h3>
 <p>ユーザーリストを取得して表示するコンポーネントを例に考えてみましょう。すべてのロジックがコンポーネント内に存在すると、以下のようになります。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/UserList.tsx (悪い例)
+<pre><code class="language-tsx">// src/components/UserList.tsx (悪い例)
 import React, { useState, useEffect } from 'react';
 
 interface User {
@@ -130,12 +130,11 @@ function UserList() {
   );
 }
 </code></pre>
-
 <p>このコンポーネントは、データの取得方法、ローディング状態の管理、エラー処理といった<strong>ビジネスロジック</strong>と、それらの状態に基づいて何を表示するかという<strong>UIロジック</strong>が密結合しています。これでは、コンポーネントの責務が多すぎます。</p>
 <h3 id="_5">良い例: カスタムフックでビジネスロジックを分離</h3>
 <p>次に、ビジネスロジックを<code>useUsers</code>というカスタムフックに分離してみましょう。</p>
 <h4 id="1">1. カスタムフックの作成</h4>
-<pre class="codehilite"><code class="language-typescript">// src/hooks/useUsers.ts
+<pre><code class="language-typescript">// src/hooks/useUsers.ts
 import { useState, useEffect } from 'react';
 
 interface User {
@@ -174,10 +173,9 @@ export const useUsers = () =&gt; {
   return { users, isLoading, error };
 };
 </code></pre>
-
 <h4 id="2">2. クリーンになったコンポーネント</h4>
 <p>カスタムフックを利用する側のコンポーネントは、ビジネスロジックの詳細を知る必要がなくなり、UIの描画に専念できます。</p>
-<pre class="codehilite"><code class="language-tsx">// src/components/UserList.tsx (良い例)
+<pre><code class="language-tsx">// src/components/UserList.tsx (良い例)
 import React from 'react';
 import { useUsers } from '../hooks/useUsers';
 
@@ -206,7 +204,6 @@ function UserList() {
   );
 }
 </code></pre>
-
 <p><code>UserList</code>コンポーネントは、もはやデータがどこから、どのようにして来るのかを知りません。ただ <code>useUsers</code> フックを呼び出し、返された <code>isLoading</code>, <code>error</code>, <code>users</code> の状態に基づいて適切なUIを描画するだけです。責務が明確に分離され、非常に見通しが良くなりました。</p>
 <h3 id="_6">分離によるメリット</h3>
 <ul>

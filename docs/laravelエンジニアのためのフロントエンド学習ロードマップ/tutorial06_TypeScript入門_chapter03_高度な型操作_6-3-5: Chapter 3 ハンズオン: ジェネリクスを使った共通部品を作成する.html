@@ -70,7 +70,7 @@
 <li><strong>動作確認</strong>: ユーザーデータと商品データを模したサンプルデータを作成し、<code>handleResponse</code> 関数を成功ケースと失敗ケースでそれぞれ呼び出し、期待通りの出力が得られるか確認します。</li>
 </ol>
 <h2 id="_4">🏆 解答例</h2>
-<pre class="codehilite"><code class="language-typescript">// 1. 型の定義
+<pre><code class="language-typescript">// 1. 型の定義
 
 // 成功時のレスポンス型。データ部分をジェネリクスTで受け取る
 interface ApiSuccessResponse&lt;T&gt; {
@@ -153,7 +153,6 @@ Error! Message: Could not fetch data from the server.
 
 */
 </code></pre>
-
 <h3 id="discriminated-unions">💡 コードのポイント: Discriminated Unions</h3>
 <p>このハンズオンで使った <code>status</code> プロパティのように、Union型の各メンバーが共通して持つリテラル型（ここでは <code>'success'</code> と <code>'error'</code>）のプロパティは、<strong>Discriminated Union（判別可能な合併型）</strong> と呼ばれます。これを使うことで、TypeScriptは <code>if</code> 文や <code>switch</code> 文で非常に効率的かつ確実に型を絞り込むことができます。これは実務で頻繁に使われる、極めて重要なパターンです。</p>
 </div>
