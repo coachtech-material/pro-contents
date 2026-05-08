@@ -33,37 +33,41 @@ Webサイトの最上部に表示されるヘッダーで、左側にロゴ、�
 - **要件:** ロゴは左端、ナビゲーションメニューは右端に配置したい。
 - **使うプロパティ:** `display: flex;`, `justify-content: space-between;`, `align-items: center;`
 
-- **HTML:**
-  ```html
-  <header class="site-header">
-    <div class="logo">My Site</div>
-    <nav>
-      <ul>
-        <li><a href="#">ホーム</a></li>
-        <li><a href="#">サービス</a></li>
-        <li><a href="#">お問い合わせ</a></li>
-      </ul>
-    </nav>
-  </header>
-  ```
-- **CSS:**
-  ```css
-  .site-header {
-    display: flex;
-    justify-content: space-between; /* 両端に配置 */
-    align-items: center; /* 垂直方向中央揃え */
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-  }
-  .site-header nav ul {
-    display: flex; /* ナビゲーションの項目も横並びに */
-    list-style: none;
-    padding: 0;
-    gap: 15px; /* 項目間の隙間 */
-  }
-  ```
-- **ポイント:** 親要素である`.site-header`に`justify-content: space-between;`を指定するだけで、2つの子要素（ロゴとナビゲーション）が左右の両端に綺麗に分かれます。また、ナビゲーションメニュー自体もFlexboxを使って項目を横並びにしています（Flexboxの入れ子）。
+**HTML:**
+
+```html
+<header class="site-header">
+  <div class="logo">My Site</div>
+  <nav>
+    <ul>
+      <li><a href="#">ホーム</a></li>
+      <li><a href="#">サービス</a></li>
+      <li><a href="#">お問い合わせ</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+**CSS:**
+
+```css
+.site-header {
+  display: flex;
+  justify-content: space-between; /* 両端に配置 */
+  align-items: center; /* 垂直方向中央揃え */
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+}
+.site-header nav ul {
+  display: flex; /* ナビゲーションの項目も横並びに */
+  list-style: none;
+  padding: 0;
+  gap: 15px; /* 項目間の隙間 */
+}
+```
+
+**ポイント:** 親要素である`.site-header`に`justify-content: space-between;`を指定するだけで、2つの子要素（ロゴとナビゲーション）が左右の両端に綺麗に分かれます。また、ナビゲーションメニュー自体もFlexboxを使って項目を横並びにしています（Flexboxの入れ子）。
 
 #### パターン2: レスポンシブなカードリスト
 
@@ -72,28 +76,32 @@ Webサイトの最上部に表示されるヘッダーで、左側にロゴ、�
 - **要件:** カードを横に並べ、コンテナの幅を超えたら自動で次の行に折り返したい。
 - **使うプロパティ:** `display: flex;`, `flex-wrap: wrap;`, `gap`
 
-- **HTML:**
-  ```html
-  <div class="card-container">
-    <div class="card">カード 1</div>
-    <div class="card">カード 2</div>
-    <div class="card">カード 3</div>
-    <div class="card">カード 4</div>
-  </div>
-  ```
-- **CSS:**
-  ```css
-  .card-container {
-    display: flex;
-    flex-wrap: wrap; /* 折り返しを許可 */
-    gap: 20px; /* カード間の隙間 */
-  }
-  .card {
-    flex-basis: 300px; /* カードの基本幅を指定 */
-    /* ...カードの装飾スタイル... */
-  }
-  ```
-- **ポイント:** `flex-wrap: wrap;`が鍵です。これを指定しないと、アイテムは無理やり一行に収まろうとして縮んでしまいます。`wrap`を指定することで、コンテナの幅が足りなくなるとアイテムが自然に下の行に落ちてくれます。`gap`でアイテム間の隙間を簡単に指定できるのも便利です。
+**HTML:**
+
+```html
+<div class="card-container">
+  <div class="card">カード 1</div>
+  <div class="card">カード 2</div>
+  <div class="card">カード 3</div>
+  <div class="card">カード 4</div>
+</div>
+```
+
+**CSS:**
+
+```css
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* 折り返しを許可 */
+  gap: 20px; /* カード間の隙間 */
+}
+.card {
+  flex-basis: 300px; /* カードの基本幅を指定 */
+  /* ...カードの装飾スタイル... */
+}
+```
+
+**ポイント:** `flex-wrap: wrap;`が鍵です。これを指定しないと、アイテムは無理やり一行に収まろうとして縮んでしまいます。`wrap`を指定することで、コンテナの幅が足りなくなるとアイテムが自然に下の行に落ちてくれます。`gap`でアイテム間の隙間を簡単に指定できるのも便利です。
 
 #### パターン3: アイテム幅の柔軟な制御
 
@@ -102,28 +110,32 @@ Webサイトの最上部に表示されるヘッダーで、左側にロゴ、�
 - **要件:** 片方のアイテム（サイドバー）の幅は固定し、もう片方（メインコンテンツ）が残りの幅をすべて使うようにしたい。
 - **使うプロパティ:** `display: flex;`, `flex-grow: 1;`
 
-- **HTML:**
-  ```html
-  <div class="container">
-    <main class="main-content">メインコンテンツ</main>
-    <aside class="sidebar">サイドバー</aside>
-  </div>
-  ```
-- **CSS:**
-  ```css
-  .container {
-    display: flex;
-  }
-  .main-content {
-    flex-grow: 1; /* 残りのスペースをすべて埋める */
-    background-color: lightblue;
-  }
-  .sidebar {
-    flex-basis: 200px; /* 幅を200pxに固定 */
-    background-color: lightgreen;
-  }
-  ```
-- **ポイント:** `flex-grow`は、コンテナ内に余ったスペースがある場合に、そのアイテムがどれだけの割合でスペースを「成長（grow）」して埋めるかを指定するプロパティです。`1`を指定された`.main-content`が、余ったスペースを独り占めして伸びるため、このようなレイアウトが実現できます。
+**HTML:**
+
+```html
+<div class="container">
+  <main class="main-content">メインコンテンツ</main>
+  <aside class="sidebar">サイドバー</aside>
+</div>
+```
+
+**CSS:**
+
+```css
+.container {
+  display: flex;
+}
+.main-content {
+  flex-grow: 1; /* 残りのスペースをすべて埋める */
+  background-color: lightblue;
+}
+.sidebar {
+  flex-basis: 200px; /* 幅を200pxに固定 */
+  background-color: lightgreen;
+}
+```
+
+**ポイント:** `flex-grow`は、コンテナ内に余ったスペースがある場合に、そのアイテムがどれだけの割合でスペースを「成長（grow）」して埋めるかを指定するプロパティです。`1`を指定された`.main-content`が、余ったスペースを独り占めして伸びるため、このようなレイアウトが実現できます。
 
 ### 💡 TIP
 

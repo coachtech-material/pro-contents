@@ -59,104 +59,89 @@
 <p>Webサイトの最上部に表示されるヘッダーで、左側にロゴ、右側にナビゲーションメニューを配置する、という最も一般的なレイアウトです。</p>
 <ul>
 <li><strong>要件:</strong> ロゴは左端、ナビゲーションメニューは右端に配置したい。</li>
-<li>
-<p><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>justify-content: space-between;</code>, <code>align-items: center;</code></p>
-</li>
-<li>
-<p><strong>HTML:</strong><br />
-  ```html<br />
-<br />
-<header class="site-header">
-    <div class="logo">My Site</div>
-    <nav>
-      <ul>
-        <li><a href="#">ホーム</a></li>
-        <li><a href="#">サービス</a></li>
-        <li><a href="#">お問い合わせ</a></li>
-      </ul>
-    </nav>
-  </header></p>
-</li>
+<li><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>justify-content: space-between;</code>, <code>align-items: center;</code></li>
 </ul>
-<p><code>- **CSS:**</code>css<br />
-  .site-header {<br />
-    display: flex;<br />
-    justify-content: space-between; /<em> 両端に配置 </em>/<br />
-    align-items: center; /<em> 垂直方向中央揃え </em>/<br />
-    padding: 10px 20px;<br />
-    background-color: #333;<br />
-    color: white;<br />
-  }<br />
-  .site-header nav ul {<br />
-    display: flex; /<em> ナビゲーションの項目も横並びに </em>/<br />
-    list-style: none;<br />
-    padding: 0;<br />
-    gap: 15px; /<em> 項目間の隙間 </em>/<br />
-  }<br />
-<code>``
-- **ポイント:** 親要素である</code>.site-header<code>に</code>justify-content: space-between;`を指定するだけで、2つの子要素（ロゴとナビゲーション）が左右の両端に綺麗に分かれます。また、ナビゲーションメニュー自体もFlexboxを使って項目を横並びにしています（Flexboxの入れ子）。</p>
+<p><strong>HTML:</strong></p>
+<pre><code class="language-html">&lt;header class=&quot;site-header&quot;&gt;
+  &lt;div class=&quot;logo&quot;&gt;My Site&lt;/div&gt;
+  &lt;nav&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot;&gt;ホーム&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot;&gt;サービス&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#&quot;&gt;お問い合わせ&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+</code></pre>
+<p><strong>CSS:</strong></p>
+<pre><code class="language-css">.site-header {
+  display: flex;
+  justify-content: space-between; /* 両端に配置 */
+  align-items: center; /* 垂直方向中央揃え */
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+}
+.site-header nav ul {
+  display: flex; /* ナビゲーションの項目も横並びに */
+  list-style: none;
+  padding: 0;
+  gap: 15px; /* 項目間の隙間 */
+}
+</code></pre>
+<p><strong>ポイント:</strong> 親要素である<code>.site-header</code>に<code>justify-content: space-between;</code>を指定するだけで、2つの子要素（ロゴとナビゲーション）が左右の両端に綺麗に分かれます。また、ナビゲーションメニュー自体もFlexboxを使って項目を横並びにしています（Flexboxの入れ子）。</p>
 <h4 id="2">パターン2: レスポンシブなカードリスト</h4>
 <p>商品一覧やブログ記事一覧などで使われる、複数のカードを並べるレイアウトです。画面幅が広い時は横に並び、狭くなると自動的に折り返して縦に並びます。</p>
 <ul>
 <li><strong>要件:</strong> カードを横に並べ、コンテナの幅を超えたら自動で次の行に折り返したい。</li>
-<li>
-<p><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>flex-wrap: wrap;</code>, <code>gap</code></p>
-</li>
-<li>
-<p><strong>HTML:</strong><br />
-  ```html<br />
-<br />
-<div class="card-container">
-    <div class="card">カード 1</div>
-    <div class="card">カード 2</div>
-    <div class="card">カード 3</div>
-    <div class="card">カード 4</div>
-  </div></p>
-</li>
+<li><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>flex-wrap: wrap;</code>, <code>gap</code></li>
 </ul>
-<p><code>- **CSS:**</code>css<br />
-  .card-container {<br />
-    display: flex;<br />
-    flex-wrap: wrap; /<em> 折り返しを許可 </em>/<br />
-    gap: 20px; /<em> カード間の隙間 </em>/<br />
-  }<br />
-  .card {<br />
-    flex-basis: 300px; /<em> カードの基本幅を指定 </em>/<br />
-    /<em> ...カードの装飾スタイル... </em>/<br />
-  }<br />
-<code>``
-- **ポイント:**</code>flex-wrap: wrap;<code>が鍵です。これを指定しないと、アイテムは無理やり一行に収まろうとして縮んでしまいます。</code>wrap<code>を指定することで、コンテナの幅が足りなくなるとアイテムが自然に下の行に落ちてくれます。</code>gap`でアイテム間の隙間を簡単に指定できるのも便利です。</p>
+<p><strong>HTML:</strong></p>
+<pre><code class="language-html">&lt;div class=&quot;card-container&quot;&gt;
+  &lt;div class=&quot;card&quot;&gt;カード 1&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;カード 2&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;カード 3&lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;カード 4&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>CSS:</strong></p>
+<pre><code class="language-css">.card-container {
+  display: flex;
+  flex-wrap: wrap; /* 折り返しを許可 */
+  gap: 20px; /* カード間の隙間 */
+}
+.card {
+  flex-basis: 300px; /* カードの基本幅を指定 */
+  /* ...カードの装飾スタイル... */
+}
+</code></pre>
+<p><strong>ポイント:</strong> <code>flex-wrap: wrap;</code>が鍵です。これを指定しないと、アイテムは無理やり一行に収まろうとして縮んでしまいます。<code>wrap</code>を指定することで、コンテナの幅が足りなくなるとアイテムが自然に下の行に落ちてくれます。<code>gap</code>でアイテム間の隙間を簡単に指定できるのも便利です。</p>
 <h4 id="3">パターン3: アイテム幅の柔軟な制御</h4>
 <p>サイドバーとメインコンテンツのように、一部の幅は固定し、残りの部分が利用可能なスペースをすべて埋める、といったレイアウトです。</p>
 <ul>
 <li><strong>要件:</strong> 片方のアイテム（サイドバー）の幅は固定し、もう片方（メインコンテンツ）が残りの幅をすべて使うようにしたい。</li>
-<li>
-<p><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>flex-grow: 1;</code></p>
-</li>
-<li>
-<p><strong>HTML:</strong><br />
-  ```html<br />
-<br />
-<div class="container">
-    <main class="main-content">メインコンテンツ</main>
-    <aside class="sidebar">サイドバー</aside>
-  </div></p>
-</li>
+<li><strong>使うプロパティ:</strong> <code>display: flex;</code>, <code>flex-grow: 1;</code></li>
 </ul>
-<p><code>- **CSS:**</code>css<br />
-  .container {<br />
-    display: flex;<br />
-  }<br />
-  .main-content {<br />
-    flex-grow: 1; /<em> 残りのスペースをすべて埋める </em>/<br />
-    background-color: lightblue;<br />
-  }<br />
-  .sidebar {<br />
-    flex-basis: 200px; /<em> 幅を200pxに固定 </em>/<br />
-    background-color: lightgreen;<br />
-  }<br />
-<code>``
-- **ポイント:**</code>flex-grow<code>は、コンテナ内に余ったスペースがある場合に、そのアイテムがどれだけの割合でスペースを「成長（grow）」して埋めるかを指定するプロパティです。</code>1<code>を指定された</code>.main-content`が、余ったスペースを独り占めして伸びるため、このようなレイアウトが実現できます。</p>
+<p><strong>HTML:</strong></p>
+<pre><code class="language-html">&lt;div class=&quot;container&quot;&gt;
+  &lt;main class=&quot;main-content&quot;&gt;メインコンテンツ&lt;/main&gt;
+  &lt;aside class=&quot;sidebar&quot;&gt;サイドバー&lt;/aside&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>CSS:</strong></p>
+<pre><code class="language-css">.container {
+  display: flex;
+}
+.main-content {
+  flex-grow: 1; /* 残りのスペースをすべて埋める */
+  background-color: lightblue;
+}
+.sidebar {
+  flex-basis: 200px; /* 幅を200pxに固定 */
+  background-color: lightgreen;
+}
+</code></pre>
+<p><strong>ポイント:</strong> <code>flex-grow</code>は、コンテナ内に余ったスペースがある場合に、そのアイテムがどれだけの割合でスペースを「成長（grow）」して埋めるかを指定するプロパティです。<code>1</code>を指定された<code>.main-content</code>が、余ったスペースを独り占めして伸びるため、このようなレイアウトが実現できます。</p>
 <h3 id="tip">💡 TIP</h3>
 <ul>
 <li><strong>アイテムの順序変更:</strong> <code>order</code>プロパティを使うと、HTMLの構造を変えずに、Flexアイテムの表示順序をCSSだけで変更できます。例えば、スマートフォン表示の時だけ特定の要素を一番上に表示する、といったことが可能です。<code>order: -1;</code>と指定すると、他のアイテムより前に表示されます。</li>

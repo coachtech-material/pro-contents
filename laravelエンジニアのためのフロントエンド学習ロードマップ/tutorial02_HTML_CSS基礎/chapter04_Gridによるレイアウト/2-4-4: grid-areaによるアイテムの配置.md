@@ -1,4 +1,4 @@
-# 2-4-3: grid-areaによるアイテムの配置
+# 2-4-4: grid-areaによるアイテムの配置
 
 ## Chapter 4: Gridによるレイアウト
 
@@ -71,48 +71,52 @@
 
 実際に聖杯レイアウト（Holy Grail Layout）と呼ばれる典型的なWebページレイアウトを`grid-area`で作ってみましょう。
 
-- **HTML:**
-  ```html
-  <div class="holy-grail-container">
-    <header>ヘッダー</header>
-    <nav>ナビゲーション</nav>
-    <main>メインコンテンツ</main>
-    <aside>サイドバー</aside>
-    <footer>フッター</footer>
-  </div>
-  ```
+**HTML:**
 
-- **CSS:**
-  ```css
-  .holy-grail-container {
-    display: grid;
-    height: 100vh; /* 画面の高さいっぱいに広げる */
-    grid-template-columns: 150px 1fr 150px; /* 3列 */
-    grid-template-rows: auto 1fr auto; /* 3行 */
-    grid-template-areas:
-      "header header header"
-      "nav    main   sidebar"
-      "footer footer footer";
-  }
+```html
+<div class="holy-grail-container">
+  <header>ヘッダー</header>
+  <nav>ナビゲーション</nav>
+  <main>メインコンテンツ</main>
+  <aside>サイドバー</aside>
+  <footer>フッター</footer>
+</div>
+```
 
-  /* 各アイテムを対応するエリアに割り当て */
-  header { grid-area: header; }
-  nav { grid-area: nav; }
-  main { grid-area: main; }
-  aside { grid-area: sidebar; }
-  footer { grid-area: footer; }
+**CSS:**
 
-  /* 以下、見た目のための装飾 */
-  .holy-grail-container > * {
-    border: 1px solid #333;
-    padding: 10px;
-  }
-  ```
-- **コードリーディング:**
-    - `grid-template-areas`のASCIIアートのような記述が、そのままレイアウトに反映されているのが分かります。
-    - `header`と`footer`は3つのセルを結合して1行全体を占めています。
-    - 2行目は`nav`, `main`, `sidebar`がそれぞれ1セルずつを占めています。
-    - HTMLの要素の順番に関係なく、CSSで指定したエリアに配置されるのが大きな特徴です。（例えば、HTMLで`<footer>`を一番上に書いても、表示は一番下にきます）
+```css
+.holy-grail-container {
+  display: grid;
+  height: 100vh; /* 画面の高さいっぱいに広げる */
+  grid-template-columns: 150px 1fr 150px; /* 3列 */
+  grid-template-rows: auto 1fr auto; /* 3行 */
+  grid-template-areas:
+    "header header header"
+    "nav    main   sidebar"
+    "footer footer footer";
+}
+
+/* 各アイテムを対応するエリアに割り当て */
+header { grid-area: header; }
+nav { grid-area: nav; }
+main { grid-area: main; }
+aside { grid-area: sidebar; }
+footer { grid-area: footer; }
+
+/* 以下、見た目のための装飾 */
+.holy-grail-container > * {
+  border: 1px solid #333;
+  padding: 10px;
+}
+```
+
+**コードリーディング:**
+
+- `grid-template-areas`のASCIIアートのような記述が、そのままレイアウトに反映されているのが分かります。
+- `header`と`footer`は3つのセルを結合して1行全体を占めています。
+- 2行目は`nav`, `main`, `sidebar`がそれぞれ1セルずつを占めています。
+- HTMLの要素の順番に関係なく、CSSで指定したエリアに配置されるのが大きな特徴です。（例えば、HTMLで`<footer>`を一番上に書いても、表示は一番下にきます）
 
 ### 💡 TIP
 

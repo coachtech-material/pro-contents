@@ -105,15 +105,13 @@
 </tr>
 </tbody>
 </table>
-<ul>
-<li><strong>コード例 (<code>space-between</code>):</strong><br />
-<code>css
-  .container {
-    display: flex;
-    justify-content: space-between; /* これを追加 */
-  }</code></li>
-<li><strong>表示結果:</strong> 最初のアイテムは左端、最後のアイテムは右端に配置され、その間のスペースが均等に分配されます。ヘッダーのロゴとナビゲーションメニューの配置などで非常によく使われます。</li>
-</ul>
+<p><strong>コード例 (<code>space-between</code>):</strong></p>
+<pre><code class="language-css">.container {
+  display: flex;
+  justify-content: space-between; /* これを追加 */
+}
+</code></pre>
+<p><strong>表示結果:</strong> 最初のアイテムは左端、最後のアイテムは右端に配置され、その間のスペースが均等に分配されます。ヘッダーのロゴとナビゲーションメニューの配置などで非常によく使われます。</p>
 <h4 id="align-items"><code>align-items</code> の主要な値</h4>
 <p>交差軸方向（縦方向）の揃え方をコントロールします。コンテナに高さがないと違いが分かりにくいため、以下の例ではコンテナに高さを指定しています。</p>
 <table>
@@ -152,29 +150,25 @@
 </tr>
 </tbody>
 </table>
-<ul>
-<li><strong>コード例 (<code>center</code>):</strong><br />
-<code>css
-  .container {
-    display: flex;
-    height: 150px; /* 高さを指定 */
-    align-items: center; /* これを追加 */
-  }</code></li>
-<li><strong>表示結果:</strong> 高さ150pxのコンテナの中で、アイテムが垂直方向の中央に配置されます。</li>
-</ul>
+<p><strong>コード例 (<code>center</code>):</strong></p>
+<pre><code class="language-css">.container {
+  display: flex;
+  height: 150px; /* 高さを指定 */
+  align-items: center; /* これを追加 */
+}
+</code></pre>
+<p><strong>表示結果:</strong> 高さ150pxのコンテナの中で、アイテムが垂直方向の中央に配置されます。</p>
 <h4 id="_4">究極のテクニック: 水平・垂直中央揃え</h4>
 <p><code>justify-content</code>と<code>align-items</code>を組み合わせることで、CSSの長年の課題であった「完全な中央揃え」が、たった3行で実現できます。</p>
-<ul>
-<li><strong>コード例:</strong><br />
-<code>css
-  .container {
-    display: flex;
-    justify-content: center; /* 水平方向の中央揃え */
-    align-items: center;     /* 垂直方向の中央揃え */
-    height: 200px; /* コンテナの高さが必要 */
-  }</code></li>
-<li><strong>表示結果:</strong> 高さ200pxのコンテナの中で、中のアイテムがど真ん中に配置されます。これはモーダルウィンドウやローディング表示など、あらゆる場面で活用できる必須テクニックです。</li>
-</ul>
+<p><strong>コード例:</strong></p>
+<pre><code class="language-css">.container {
+  display: flex;
+  justify-content: center; /* 水平方向の中央揃え */
+  align-items: center;     /* 垂直方向の中央揃え */
+  height: 200px; /* コンテナの高さが必要 */
+}
+</code></pre>
+<p><strong>表示結果:</strong> 高さ200pxのコンテナの中で、中のアイテムがど真ん中に配置されます。これはモーダルウィンドウやローディング表示など、あらゆる場面で活用できる必須テクニックです。</p>
 <h3 id="tip">💡 TIP</h3>
 <ul>
 <li><strong>軸の向きに注意:</strong> <code>flex-direction: column;</code>で主軸を垂直にした場合、<code>justify-content</code>は「垂直方向」の揃え、<code>align-items</code>は「水平方向」の揃えをコントロールするようになります。役割が入れ替わるので注意しましょう。</li>

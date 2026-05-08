@@ -44,18 +44,19 @@
 
 1-1. `index.html`のSNSセクションを、`class="social-section"`を持つ`<div>`で囲みます。
 
--   **コマンド/コード (index.html):**
-    ```html
-    <!-- 変更前 -->
-    <h2>SNS & Links</h2>
-    <ul class="social-links">...</ul>
+**コマンド/コード (index.html):**
 
-    <!-- 変更後 -->
-    <div class="social-section">
-      <h2>SNS & Links</h2>
-      <ul class="social-links">...</ul>
-    </div>
-    ```
+```html
+<!-- 変更前 -->
+<h2>SNS & Links</h2>
+<ul class="social-links">...</ul>
+
+<!-- 変更後 -->
+<div class="social-section">
+  <h2>SNS & Links</h2>
+  <ul class="social-links">...</ul>
+</div>
+```
 
 ##### Step 2: プロフィールカードをGridコンテナにする
 
@@ -65,22 +66,23 @@
 
 2-1. `style.css`の`#profile-card`セレクタに、`display: grid;`と関連プロパティを追加します。また、Gridで中央揃えを行うため、既存の`text-align`や`margin`を調整します。
 
--   **コマンド/コード (style.css):**
-    ```css
-    #profile-card {
-      /* ...既存のスタイル... */
-      display: grid; /* Gridコンテナにする */
-      grid-template-columns: 150px 1fr; /* 左列150px, 右列は残り全部 */
-      grid-template-rows: auto 1fr auto; /* 3行。中段は可変高 */
-      grid-template-areas:
-        "name     name"
-        "image    intro"
-        "social   social";
-      gap: 20px; /* エリア間の隙間 */
-      /* Grid化に伴い不要になる、または変更するスタイル */
-      padding: 30px; /* paddingは維持 */
-    }
-    ```
+**コマンド/コード (style.css):**
+
+```css
+#profile-card {
+  /* ...既存のスタイル... */
+  display: grid; /* Gridコンテナにする */
+  grid-template-columns: 150px 1fr; /* 左列150px, 右列は残り全部 */
+  grid-template-rows: auto 1fr auto; /* 3行。中段は可変高 */
+  grid-template-areas:
+    "name     name"
+    "image    intro"
+    "social   social";
+  gap: 20px; /* エリア間の隙間 */
+  /* Grid化に伴い不要になる、または変更するスタイル */
+  padding: 30px; /* paddingは維持 */
+}
+```
 
 ##### Step 3: 各要素をGrid Areaに配置する
 
@@ -90,42 +92,43 @@
 
 3-1. `style.css`に以下のコードを追加し、既存のスタイルを修正します。
 
--   **コマンド/コード (style.css):**
-    ```css
-    /* 既存のh1スタイルを修正 */
-    h1 {
-      grid-area: name; /* nameエリアに配置 */
-      text-align: center;
-      color: #2c3e50;
-      margin: 0; /* Gridで配置するので不要なmarginはリセット */
-    }
+**コマンド/コード (style.css):**
 
-    /* 既存の.profile-imageスタイルを修正 */
-    .profile-image {
-      grid-area: image; /* imageエリアに配置 */
-      width: 150px; /* 幅を列のサイズに合わせる */
-      height: 150px; /* 高さも指定して正円を維持 */
-      border-radius: 50%;
-      /* display: block; margin: auto; は不要になるので削除 */
-    }
+```css
+/* 既存のh1スタイルを修正 */
+h1 {
+  grid-area: name; /* nameエリアに配置 */
+  text-align: center;
+  color: #2c3e50;
+  margin: 0; /* Gridで配置するので不要なmarginはリセット */
+}
 
-    /* 自己紹介文を配置するための新しいセレクタ */
-    #profile-card > p {
-      grid-area: intro; /* introエリアに配置 */
-      margin: 0; /* 不要なmarginはリセット */
-    }
+/* 既存の.profile-imageスタイルを修正 */
+.profile-image {
+  grid-area: image; /* imageエリアに配置 */
+  width: 150px; /* 幅を列のサイズに合わせる */
+  height: 150px; /* 高さも指定して正円を維持 */
+  border-radius: 50%;
+  /* display: block; margin: auto; は不要になるので削除 */
+}
 
-    /* SNSセクションを配置するための新しいセレクタ */
-    .social-section {
-      grid-area: social; /* socialエリアに配置 */
-    }
+/* 自己紹介文を配置するための新しいセレクタ */
+#profile-card > p {
+  grid-area: intro; /* introエリアに配置 */
+  margin: 0; /* 不要なmarginはリセット */
+}
 
-    /* 既存のh2スタイルを修正 */
-    h2 {
-      margin-top: 0; /* Gridのgapで余白ができるのでリセット */
-      /* ...その他のスタイルは維持... */
-    }
-    ```
+/* SNSセクションを配置するための新しいセレクタ */
+.social-section {
+  grid-area: social; /* socialエリアに配置 */
+}
+
+/* 既存のh2スタイルを修正 */
+h2 {
+  margin-top: 0; /* Gridのgapで余白ができるのでリセット */
+  /* ...その他のスタイルは維持... */
+}
+```
 
 #### ✨ 完成！
 
