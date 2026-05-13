@@ -15,8 +15,8 @@ BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "docs"
 
 # サイト情報
-SITE_TITLE = "pro-contents"
-SITE_DESCRIPTION = "Pro生用プログラミング教材コンテンツ"
+SITE_TITLE = "COACHTECH × フロントエンド ガイド"
+SITE_DESCRIPTION = "Laravelエンジニアのためのフロントエンド学習ロードマップ"
 
 # コンテンツ情報（リポジトリ内のディレクトリ）
 CONTENTS_INFO = {
@@ -276,7 +276,7 @@ def md_to_html(md_content):
 def generate_top_index_page(contents):
     """トップページ（コンテンツ一覧）を生成"""
     content = '<h2>コンテンツ一覧</h2>\n'
-    content += '<p>Pro生がさらなる技術力を高めていくための学習コンテンツです。</p>\n'
+    content += '<p>Laravelエンジニアがさらなる技術力を高めていくための学習コンテンツです。</p>\n'
     content += '<div class="tutorial-list">\n'
     
     for content_dir, info in sorted(contents.items(), key=lambda x: x[1]["order"]):
