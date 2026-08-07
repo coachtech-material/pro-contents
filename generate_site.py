@@ -19,9 +19,12 @@ SITE_TITLE = "COACHTECH × フロントエンド ガイド"
 SITE_DESCRIPTION = "Laravelエンジニアのためのフロントエンド学習ロードマップ"
 
 # コンテンツ情報（リポジトリ内のディレクトリ）
+# slug: 公開URLに使う短い英数字パス。日本語ディレクトリ名をURLに出さないための要。
+#       変更すると公開URLが変わるので、既存の共有リンクを壊さないよう安易に変えないこと。
 CONTENTS_INFO = {
     "laravelエンジニアのためのフロントエンド学習ロードマップ": {
         "order": 1,
+        "slug": "roadmap",
         "title": "Laravelエンジニアのためのフロントエンド学習ロードマップ",
         "description": "PHP/Laravelエンジニアがフロントエンド開発（JavaScript/TypeScript/React/Next.js）を習得し、2年目レベルのスキルを身につけるための教材です。",
         "time": "700時間"
@@ -151,7 +154,7 @@ def generate_sidebar_top(contents):
     html += '<div class="side"><ul>\n'
     
     for content_dir, info in sorted(contents.items(), key=lambda x: x[1]["order"]):
-        html += f'<li><a href="{content_dir}/index.html">{info["title"]}</a></li>\n'
+        html += f'<li><a href="{info["slug"]}/index.html">{info["title"]}</a></li>\n'
     
     html += '</ul></div>\n'
     return html
@@ -164,7 +167,7 @@ def generate_sidebar_tutorials(tutorials, current_tutorial=None):
     
     for tutorial_dir, info in sorted(tutorials.items(), key=lambda x: x[1]["order"]):
         current_class = ' class="current"' if tutorial_dir == current_tutorial else ''
-        html += f'<li><a href="{tutorial_dir}.html"{current_class}>{info["title"]}</a></li>\n'
+        html += f'<li><a href="{tutorial_slug(tutorial_dir)}.html"{current_class}>{info["title"]}</a></li>\n'
     
     html += '</ul></div>\n'
     return html
@@ -256,6 +259,86 @@ def format_column_chapter_title(chapter_name):
     return chapter_name
 
 
+# ---------------------------------------------------------------------------
+# 短縮URL用のスラッグ生成
+#
+# 公開URLを日本語パス（%E3%82... で数百文字になる）から解放するための仕組み。
+#   チュートリアル: t1.html      （tutorial01_開発環境とWebの基礎固め）
+#   チャプター:     1-1.html     （tutorial01 / chapter01）
+#   セクション:     1-1-1.html   （1-1-1: このチュートリアルで学ぶこと.md）
+#   コラム:         col-1.html / col-1-1.html
+# セクション番号は教材全体で一意かつディレクトリ位置と一致していることを確認済み。
+# ---------------------------------------------------------------------------
+
+def tutorial_slug(tutorial_dir):
+    """tutorial01_開発環境とWebの基礎固め -> t1"""
+    match = re.match(r'tutorial(\d+)', tutorial_dir)
+    if match:
+        return f"t{int(match.group(1))}"
+    return tutorial_dir
+
+
+def chapter_slug(tutorial_dir, chapter_name):
+    """(tutorial02_..., chapter03_...) -> 2-3 / (tutorial12_column, col01_...) -> col-1"""
+    match = re.match(r'(chapter|col)(\d+)', chapter_name)
+    if not match:
+        return f"{tutorial_slug(tutorial_dir)}-{chapter_name}"
+    kind, num = match.group(1), int(match.group(2))
+    if kind == "col":
+        return f"col-{num}"
+    tutorial_match = re.match(r'tutorial(\d+)', tutorial_dir)
+    tutorial_num = int(tutorial_match.group(1)) if tutorial_match else 0
+    return f"{tutorial_num}-{num}"
+
+
+def section_slug(tutorial_dir, chapter_name, section_filename, section_index):
+    """'2-3-1: xxx.md' -> 2-3-1 / 'Col-1-1: xxx.md' -> col-1-1"""
+    number = extract_section_number(section_filename)
+    if number:
+        return number.lower()
+    # 番号なしのファイルが将来増えた場合のフォールバック
+    return f"{chapter_slug(tutorial_dir, chapter_name)}-{section_index}"
+
+
+def get_redirect_html(target, title):
+    """旧URL用の転送ページを生成
+
+    GitHub Pages は 301 リダイレクトを設定できないため、
+    meta refresh + canonical + JS の三段構えで新URLへ飛ばす。
+    """
+    return f'''<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url={target}">
+    <link rel="canonical" href="{target}">
+    <meta name="robots" content="noindex">
+    <title>{escape(title)} | {SITE_TITLE}</title>
+    <style>
+        body {{ font-family: sans-serif; margin: 4em auto; max-width: 40em; padding: 0 1em; line-height: 1.8; color: #333; }}
+        a {{ color: #0b6bcb; }}
+    </style>
+    <script>location.replace("{target}");</script>
+</head>
+<body>
+    <p>このページは新しいURLへ移動しました。自動で切り替わります。</p>
+    <p><a href="{target}">切り替わらない場合はこちらをクリックしてください</a></p>
+</body>
+</html>
+'''
+
+
+def write_redirect(legacy_path, target, title):
+    """旧URLのパスに転送ページを書き出す"""
+    legacy_path.parent.mkdir(parents=True, exist_ok=True)
+    legacy_path.write_text(get_redirect_html(target, title), encoding="utf-8")
+    REDIRECTS_WRITTEN.append(legacy_path)
+
+
+REDIRECTS_WRITTEN = []
+
+
 def md_to_html(md_content):
     """MarkdownをHTMLに変換"""
     md = markdown.Markdown(
@@ -285,7 +368,7 @@ def generate_top_index_page(contents):
         tutorial_count = len(tutorials)
         
         content += f'''<div class="tutorial-card">
-    <h3><a href="{content_dir}/index.html">{info["title"]}</a></h3>
+    <h3><a href="{info["slug"]}/index.html">{info["title"]}</a></h3>
     <div class="meta">学習時間: {info["time"]} | {tutorial_count}チュートリアル</div>
     <div class="description">{info["description"]}</div>
 </div>
@@ -322,26 +405,33 @@ def generate_content_index_page(content_dir, content_info, tutorials):
         chapter_count = len(chapters)
         
         content += f'''<div class="tutorial-card">
-    <h3><a href="{tutorial_dir}.html">{info["title"]}</a></h3>
+    <h3><a href="{tutorial_slug(tutorial_dir)}.html">{info["title"]}</a></h3>
     <div class="meta">学習時間: {info["time"]} | {chapter_count}チャプター</div>
     <div class="description">{info["description"]}</div>
 </div>
 '''
-    
+
     content += '</div>\n'
-    
+
     breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span>{content_info["title"]}</div>'
     sidebar = generate_sidebar_tutorials(tutorials)
-    
+
     html = get_html_template(content_info["title"], content, breadcrumb, sidebar, css_path="../style.css")
-    
-    # コンテンツ用のディレクトリを作成
-    content_output_dir = OUTPUT_DIR / content_dir
+
+    # 短縮URL側（実ページ）
+    content_output_dir = OUTPUT_DIR / content_info["slug"]
     content_output_dir.mkdir(exist_ok=True)
-    
+
     output_path = content_output_dir / "index.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
+
+    # 旧URL側（転送ページ）
+    write_redirect(
+        OUTPUT_DIR / content_dir / "index.html",
+        f'../{content_info["slug"]}/index.html',
+        content_info["title"]
+    )
 
 
 def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_info, tutorials):
@@ -368,26 +458,31 @@ def generate_tutorial_page(content_dir, content_info, tutorial_dir, tutorial_inf
             chapter_title = format_chapter_title(chapter.name)
         sections = get_sections(chapter)
         section_count = len(sections)
-        
-        chapter_id = f"{tutorial_dir}_{chapter.name}"
-        
+
         content += f'''<div class="chapter-item">
-    <h3><a href="{chapter_id}.html">{chapter_title}</a></h3>
+    <h3><a href="{chapter_slug(tutorial_dir, chapter.name)}.html">{chapter_title}</a></h3>
     <div class="section-count">{section_count}セクション</div>
 </div>
 '''
-    
+
     content += '</div>\n'
-    
+
     breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span>{tutorial_info["title"]}</div>'
     sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
-    
+
     html = get_html_template(tutorial_info["title"], content, breadcrumb, sidebar, css_path="../style.css")
-    
-    content_output_dir = OUTPUT_DIR / content_dir
-    output_path = content_output_dir / f"{tutorial_dir}.html"
+
+    # 短縮URL側（実ページ）
+    output_path = OUTPUT_DIR / content_info["slug"] / f"{tutorial_slug(tutorial_dir)}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
+
+    # 旧URL側（転送ページ）
+    write_redirect(
+        OUTPUT_DIR / content_dir / f"{tutorial_dir}.html",
+        f'../{content_info["slug"]}/{tutorial_slug(tutorial_dir)}.html',
+        tutorial_info["title"]
+    )
 
 
 def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tutorial_info, tutorials, is_column=False):
@@ -404,26 +499,32 @@ def generate_chapter_page(content_dir, content_info, tutorial_dir, chapter, tuto
     for i, section in enumerate(sections, 1):
         section_num = extract_section_number(section.name)
         section_title = clean_title(section.name)
-        section_id = f"{tutorial_dir}_{chapter.name}_{section.stem}"
-        
+        section_href = f"{section_slug(tutorial_dir, chapter.name, section.name, i)}.html"
+
         content += f'''<div class="section-item">
     <div class="section-number">{section_num or i}</div>
-    <div class="section-title"><a href="{section_id}.html">{section_title}</a></div>
+    <div class="section-title"><a href="{section_href}">{section_title}</a></div>
 </div>
 '''
-    
+
     content += '</div>\n'
-    
-    chapter_id = f"{tutorial_dir}_{chapter.name}"
-    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_dir}.html">{tutorial_info["title"]}</a><span>></span>{chapter_title}</div>'
+
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_slug(tutorial_dir)}.html">{tutorial_info["title"]}</a><span>></span>{chapter_title}</div>'
     sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
-    
+
     html = get_html_template(chapter_title, content, breadcrumb, sidebar, css_path="../style.css")
-    
-    content_output_dir = OUTPUT_DIR / content_dir
-    output_path = content_output_dir / f"{chapter_id}.html"
+
+    # 短縮URL側（実ページ）
+    output_path = OUTPUT_DIR / content_info["slug"] / f"{chapter_slug(tutorial_dir, chapter.name)}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
+
+    # 旧URL側（転送ページ）
+    write_redirect(
+        OUTPUT_DIR / content_dir / f"{tutorial_dir}_{chapter.name}.html",
+        f'../{content_info["slug"]}/{chapter_slug(tutorial_dir, chapter.name)}.html',
+        chapter_title
+    )
 
 
 def generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, section_index, is_column=False):
@@ -445,34 +546,40 @@ def generate_section_page(content_dir, content_info, tutorial_dir, chapter, sect
     
     if section_index > 0:
         prev_section = sections[section_index - 1]
-        prev_id = f"{tutorial_dir}_{chapter.name}_{prev_section.stem}"
+        prev_href = f"{section_slug(tutorial_dir, chapter.name, prev_section.name, section_index)}.html"
         prev_title = clean_title(prev_section.name)
-        content += f'<a href="{prev_id}.html" class="prev">{prev_title}</a>\n'
+        content += f'<a href="{prev_href}" class="prev">{prev_title}</a>\n'
     else:
         content += '<span></span>\n'
-    
+
     if section_index < len(sections) - 1:
         next_section = sections[section_index + 1]
-        next_id = f"{tutorial_dir}_{chapter.name}_{next_section.stem}"
+        next_href = f"{section_slug(tutorial_dir, chapter.name, next_section.name, section_index + 2)}.html"
         next_title = clean_title(next_section.name)
-        content += f'<a href="{next_id}.html" class="next">{next_title}</a>\n'
+        content += f'<a href="{next_href}" class="next">{next_title}</a>\n'
     else:
         content += '<span></span>\n'
-    
+
     content += '</div>\n'
-    
-    chapter_id = f"{tutorial_dir}_{chapter.name}"
-    section_id = f"{tutorial_dir}_{chapter.name}_{section.stem}"
-    
-    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_dir}.html">{tutorial_info["title"]}</a><span>></span><a href="{chapter_id}.html">{chapter_title}</a><span>></span>{section_title}</div>'
+
+    section_short = section_slug(tutorial_dir, chapter.name, section.name, section_index + 1)
+
+    breadcrumb = f'<div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">{content_info["title"]}</a><span>></span><a href="{tutorial_slug(tutorial_dir)}.html">{tutorial_info["title"]}</a><span>></span><a href="{chapter_slug(tutorial_dir, chapter.name)}.html">{chapter_title}</a><span>></span>{section_title}</div>'
     sidebar = generate_sidebar_tutorials(tutorials, tutorial_dir)
-    
+
     html = get_html_template(section_title, content, breadcrumb, sidebar, css_path="../style.css")
-    
-    content_output_dir = OUTPUT_DIR / content_dir
-    output_path = content_output_dir / f"{section_id}.html"
+
+    # 短縮URL側（実ページ）
+    output_path = OUTPUT_DIR / content_info["slug"] / f"{section_short}.html"
     output_path.write_text(html, encoding="utf-8")
     print(f"Generated: {output_path}")
+
+    # 旧URL側（転送ページ）
+    write_redirect(
+        OUTPUT_DIR / content_dir / f"{tutorial_dir}_{chapter.name}_{section.stem}.html",
+        f'../{content_info["slug"]}/{section_short}.html',
+        section_title
+    )
 
 
 def main():
@@ -524,8 +631,35 @@ def main():
                 for i, section in enumerate(sections):
                     generate_section_page(content_dir, content_info, tutorial_dir, chapter, section, tutorial_info, tutorials, sections, i, is_column)
     
+    # 短縮URLの衝突チェック
+    # スラッグが重複すると後勝ちで静かに上書きされ、ページが消える。
+    # 「期待ページ数 == 実ファイル数」で検知する。
+    for content_dir, content_info in contents.items():
+        content_path = BASE_DIR / content_dir
+        tutorials = get_tutorials(content_path)
+        expected = 1  # index.html
+        for tutorial_dir, tutorial_info in tutorials.items():
+            tutorial_path = content_path / tutorial_dir
+            if tutorial_info.get("is_column"):
+                chapters = get_column_chapters(tutorial_path)
+            else:
+                chapters = get_chapters(tutorial_path)
+            expected += 1 + len(chapters)
+            for chapter in chapters:
+                expected += len(get_sections(chapter))
+
+        actual = len(list((OUTPUT_DIR / content_info["slug"]).glob("*.html")))
+        if actual != expected:
+            raise SystemExit(
+                f"[ERROR] 短縮URLのスラッグが衝突しています: "
+                f"{content_info['slug']} 期待 {expected} ページ / 実際 {actual} ページ"
+            )
+
+    total = len(list(OUTPUT_DIR.rglob('*.html')))
     print(f"\n生成完了！出力先: {OUTPUT_DIR}")
-    print(f"生成されたHTMLファイル数: {len(list(OUTPUT_DIR.rglob('*.html')))}")
+    print(f"  実ページ（短縮URL）: {total - len(REDIRECTS_WRITTEN)}")
+    print(f"  旧URLからの転送ページ: {len(REDIRECTS_WRITTEN)}")
+    print(f"生成されたHTMLファイル数: {total}")
 
 
 if __name__ == "__main__":

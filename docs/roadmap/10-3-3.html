@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン・ログアウト機能の実装 | COACHTECH × フロントエンド ガイド</title>
+    <meta name="description" content="Laravelエンジニアのためのフロントエンド学習ロードマップ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">COACHTECH × フロントエンド ガイド</a></h1>
+            <p class="description">Laravelエンジニアのためのフロントエンド学習ロードマップ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="t1.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="t2.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="t3.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="t4.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="t5.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="t6.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="t7.html">Tutorial 7: React入門</a></li>
+<li><a href="t8.html">Tutorial 8: React応用</a></li>
+<li><a href="t9.html">Tutorial 9: Next.js</a></li>
+<li><a href="t10.html" class="current">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="t11.html">Tutorial 11: テスト</a></li>
+<li><a href="t12.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="t10.html">Tutorial 10: Laravel × Next.js</a><span>></span><a href="10-3.html">Chapter 3: 認証機能の実装</a><span>></span>ログイン・ログアウト機能の実装</div>
+                    <div class="section-content">
+<h1 id="10-3-3">10-3-3: ログイン・ログアウト機能の実装</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li>Laravel側に、ログイン、ログアウト、ユーザー情報取得のためのAPIエンドポイントを作成する方法を学ぶ</li>
+<li>Next.jsで、ログインフォームコンポーネントを作成する方法を習得する</li>
+<li>NextAuth.jsの<code>signIn</code>, <code>signOut</code>関数を使って、実際にログイン・ログアウト処理を実行する方法を学ぶ</li>
+<li><code>useSession</code>フックを使って、認証状態に応じてUIを動的に変更する方法を理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>これまでのセクションで、バックエンド（Sanctum）とフロントエンド（NextAuth.js）の認証設定が完了しました。しかし、これらはまだ連携しておらず、実際にユーザーが操作できるUIもありません。</p>
+<p>このセクションでは、いよいよ両者を結びつけ、ユーザーが実際にログイン・ログアウトできる機能を実装します。具体的には、以下の作業を行います。</p>
+<ol>
+<li><strong>Laravel</strong>: NextAuth.jsが要求するログイン、ログアウト、ユーザー情報取得のAPIを作成します。</li>
+<li><strong>Next.js</strong>: ログインフォームを作成し、NextAuth.jsの関数を呼び出してLaravelのAPIと通信します。また、認証状態を表示するUIも作成します。</li>
+</ol>
+<h2 id="_3">詳細解説</h2>
+<h3 id="1-laravel">パート1: バックエンド（Laravel）の実装</h3>
+<p><strong>注意</strong>: このパートの作業は、すべてLaravelプロジェクトのディレクトリ（<code>laravel-next-app</code>）で行います。</p>
+<h4 id="1">ステップ1: 認証ルートの有効化</h4>
+<p>Laravelは、<code>laravel/ui</code>や<code>laravel/breeze</code>といったパッケージを導入することで、認証関連のルートやコントローラーを自動で生成してくれます。今回は、APIに必要なルートだけをシンプルに追加します。</p>
+<p><code>routes/api.php</code>に以下のコードを追加してください。</p>
+<pre><code class="language-php">// routes/api.php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+
+// 商品一覧API（変更なし）
+Route::get(&quot;/products&quot;, [ProductController::class, &quot;index&quot;]);
+
+// 認証済みユーザーのみアクセス可能なルート
+Route::middleware(&quot;auth:sanctum&quot;)-&gt;get(&quot;/user&quot;, function (Request $request) {
+    return $request-&gt;user();
+});
+</code></pre>
+<p>次に、<code>routes/web.php</code>にログイン・ログアウトのルートを追加します。SPA認証では、セッションを開始・破棄するために、これらのルートは<code>web</code>ミドルウェアグループ（CSRF保護などを含む）内に定義する必要があります。</p>
+<pre><code class="language-php">// routes/web.php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+// ...
+
+// ログイン
+Route::post(&quot;/login&quot;, function (Request $request) {
+    $credentials = $request-&gt;validate([
+        &quot;email&quot; =&gt; [&quot;required&quot;, &quot;email&quot;],
+        &quot;password&quot; =&gt; [&quot;required&quot;],
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        $request-&gt;session()-&gt;regenerate();
+
+        return response()-&gt;json(Auth::user());
+    }
+
+    return response()-&gt;json([
+        &quot;message&quot; =&gt; &quot;The provided credentials do not match our records.&quot;,
+    ], 401);
+});
+
+// ログアウト
+Route::post(&quot;/logout&quot;, function (Request $request) {
+    Auth::guard(&quot;web&quot;)-&gt;logout();
+
+    $request-&gt;session()-&gt;invalidate();
+
+    $request-&gt;session()-&gt;regenerateToken();
+
+    return response()-&gt;noContent();
+});
+</code></pre>
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>/api/user</code></strong>: <code>auth:sanctum</code>ミドルウェアで保護されています。これにより、有効なセッションを持つリクエスト（認証済みリクエスト）だけがこのルートにアクセスでき、認証済みのユーザーモデルを取得できます。NextAuth.jsの<code>authorize</code>コールバックで、ログイン直後にこのエンドポイントを叩いていましたね。</li>
+<li><strong><code>/login</code></strong>: <code>Auth::attempt</code>ファサードを使って、リクエストで送られてきたメールアドレスとパスワードで認証を試みます。成功すれば、セッションを再生成（セキュリティ対策）し、ユーザー情報をJSONで返します。</li>
+<li><strong><code>/logout</code></strong>: <code>Auth::guard('web')-&gt;logout()</code>でセッションからユーザー情報を削除し、セッションを無効化・再生成してログアウトを完了させます。</li>
+</ul>
+<h4 id="2">ステップ2: テスト用ユーザーの作成</h4>
+<p>ログイン機能を試すために、テスト用のユーザーが必要です。<code>tinker</code>を使って作成しましょう。</p>
+<pre><code class="language-bash">sail artisan tinker
+</code></pre>
+<p><code>tinker</code>の対話コンソールで、以下のPHPコードを実行します。</p>
+<pre><code class="language-php">// tinker
+
+\App\Models\User::create([
+    'name' =&gt; 'Test User',
+    'email' =&gt; 'test@example.com',
+    'password' =&gt; bcrypt('password'),
+]);
+</code></pre>
+<p>これで、メールアドレス <code>test@example.com</code>、パスワード <code>password</code> のユーザーが作成されました。</p>
+<h3 id="2-nextjs">パート2: フロントエンド（Next.js）の実装</h3>
+<p><strong>注意</strong>: このパートの作業は、すべてNext.jsプロジェクトのディレクトリ（<code>next-frontend-app</code>）で行います。</p>
+<h4 id="1_1">ステップ1: ログインページの作成</h4>
+<p>NextAuth.jsの設定で <code>pages: { signIn: '/login' }</code> と指定したので、<code>src/app/login/page.tsx</code>を作成します。</p>
+<pre><code class="language-tsx">// src/app/login/page.tsx
+&quot;use client&quot;;
+
+import { useState } from &quot;react&quot;;
+import { signIn } from &quot;next-auth/react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
+
+export default function LoginPage() {
+  const [email, setEmail] = useState(&quot;&quot;);
+  const [password, setPassword] = useState(&quot;&quot;);
+  const [error, setError] = useState(&quot;&quot;);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) =&gt; {
+    e.preventDefault();
+    setError(&quot;&quot;);
+
+    const result = await signIn(&quot;credentials&quot;, {
+      redirect: false, // 認証後の自動リダイレクトを無効化
+      email,
+      password,
+    });
+
+    if (result?.error) {
+      setError(&quot;メールアドレスまたはパスワードが正しくありません。&quot;);
+    } else if (result?.ok) {
+      router.push(&quot;/&quot;); // 認証成功後にトップページにリダイレクト
+    }
+  };
+
+  return (
+    &lt;div className=&quot;flex items-center justify-center min-h-screen bg-gray-100&quot;&gt;
+      &lt;div className=&quot;w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md&quot;&gt;
+        &lt;h1 className=&quot;text-2xl font-bold text-center&quot;&gt;ログイン&lt;/h1&gt;
+        &lt;form onSubmit={handleSubmit} className=&quot;space-y-6&quot;&gt;
+          &lt;div&gt;
+            &lt;label
+              htmlFor=&quot;email&quot;
+              className=&quot;block text-sm font-medium text-gray-700&quot;
+            &gt;
+              メールアドレス
+            &lt;/label&gt;
+            &lt;input
+              id=&quot;email&quot;
+              type=&quot;email&quot;
+              value={email}
+              onChange={(e) =&gt; setEmail(e.target.value)}
+              required
+              className=&quot;w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500&quot;
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label
+              htmlFor=&quot;password&quot;
+              className=&quot;block text-sm font-medium text-gray-700&quot;
+            &gt;
+              パスワード
+            &lt;/label&gt;
+            &lt;input
+              id=&quot;password&quot;
+              type=&quot;password&quot;
+              value={password}
+              onChange={(e) =&gt; setPassword(e.target.value)}
+              required
+              className=&quot;w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500&quot;
+            /&gt;
+          &lt;/div&gt;
+          {error &amp;&amp; &lt;p className=&quot;text-sm text-red-600&quot;&gt;{error}&lt;/p&gt;}
+          &lt;div&gt;
+            &lt;button
+              type=&quot;submit&quot;
+              className=&quot;w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500&quot;
+            &gt;
+              ログイン
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>"use client"</code></strong>: フォーム入力の状態管理（<code>useState</code>）やイベントハンドリング（<code>onSubmit</code>）など、クライアントサイドのインタラクションが必要なため、Client Componentとして定義します。</li>
+<li><strong><code>signIn("credentials", ...)</code></strong>: NextAuth.jsが提供する<code>signIn</code>関数を呼び出しています。第一引数に<code>providers</code>で設定した認証方法（今回は<code>credentials</code>）を指定し、第二引数にフォームの入力値とオプションを渡します。</li>
+<li><strong><code>redirect: false</code></strong>: <code>signIn</code>のデフォルトの挙動は、認証後に自動で元のページにリダイレクトするというものです。ここでは<code>false</code>に設定し、認証結果（成功か失敗か）を<code>result</code>オブジェクトとして受け取り、手動で画面遷移やエラー表示を制御しています。</li>
+</ul>
+<h4 id="2_1">ステップ2: 認証状態を表示するヘッダーの作成</h4>
+<p>ログインしているかどうか、誰がログインしているかを表示し、ログイン/ログアウトのリンクを提供するためのヘッダーコンポーネントを作成します。</p>
+<p><code>src/app/components/Header.tsx</code>という新しいファイルを作成します。</p>
+<pre><code class="language-tsx">// src/app/components/Header.tsx
+&quot;use client&quot;;
+
+import { useSession, signOut } from &quot;next-auth/react&quot;;
+import Link from &quot;next/link&quot;;
+
+export default function Header() {
+  const { data: session, status } = useSession();
+
+  return (
+    &lt;header className=&quot;bg-white shadow-md&quot;&gt;
+      &lt;nav className=&quot;container mx-auto px-6 py-4 flex justify-between items-center&quot;&gt;
+        &lt;Link href=&quot;/&quot; className=&quot;text-xl font-bold text-gray-800&quot;&gt;
+          MyApp
+        &lt;/Link&gt;
+        &lt;div&gt;
+          {status === &quot;loading&quot; ? (
+            &lt;p&gt;Loading...&lt;/p&gt;
+          ) : session ? (
+            &lt;div className=&quot;flex items-center space-x-4&quot;&gt;
+              &lt;p&gt;ようこそ, {session.user?.name}さん&lt;/p&gt;
+              &lt;button
+                onClick={() =&gt; signOut({ callbackUrl: &quot;/login&quot; })}
+                className=&quot;px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700&quot;
+              &gt;
+                ログアウト
+              &lt;/button&gt;
+            &lt;/div&gt;
+          ) : (
+            &lt;Link
+              href=&quot;/login&quot;
+              className=&quot;px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700&quot;
+            &gt;
+              ログイン
+            &lt;/Link&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/nav&gt;
+    &lt;/header&gt;
+  );
+}
+</code></pre>
+<p><strong>コードのポイント:</strong></p>
+<ul>
+<li><strong><code>useSession()</code></strong>: NextAuth.jsが提供する最も重要なフックです。認証状態（<code>status</code>）とセッションデータ（<code>data</code>）を取得します。<ul>
+<li><code>status</code>: <code>"loading"</code> | <code>"authenticated"</code> | <code>"unauthenticated"</code> のいずれかの文字列。</li>
+<li><code>data</code>: 認証されている場合はセッションオブジェクト、されていない場合は<code>null</code>。</li>
+</ul>
+</li>
+<li><strong>状態に応じたUIの分岐</strong>: <code>status</code>と<code>session</code>の値に応じて、ローディング表示、ユーザー名とログアウトボタン、ログインボタンを出し分けています。</li>
+<li><strong><code>signOut()</code></strong>: ログアウト処理を実行します。<code>callbackUrl</code>を指定すると、ログアウト後にそのURLにリダイレクトされます。</li>
+</ul>
+<h4 id="3">ステップ3: レイアウトにヘッダーを追加</h4>
+<p>作成した<code>Header</code>コンポーネントを、<code>src/app/layout.tsx</code>で表示するようにします。</p>
+<pre><code class="language-tsx">// src/app/layout.tsx
+
+// ... (importなどは変更なし)
+import Header from &quot;./components/Header&quot;; // Headerをインポート
+
+// ...
+
+export default function RootLayout({
+  children,
+}: Readonly&lt;{
+  children: React.ReactNode;
+}&gt;) {
+  return (
+    &lt;html lang=&quot;en&quot;&gt;
+      &lt;body className={inter.className}&gt;
+        &lt;Providers&gt;
+          &lt;Header /&gt; {/* Headerコンポーネントを追加 */}
+          {children}
+        &lt;/Providers&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+</code></pre>
+<h3 id="3_1">パート3: 動作確認</h3>
+<p>すべての実装が完了しました。実際に動作を確認してみましょう。</p>
+<ol>
+<li>Next.jsの開発サーバーが起動していることを確認し、<code>http://localhost:3000</code>にアクセスします。ヘッダーに「ログイン」ボタンが表示されているはずです。</li>
+<li>「ログイン」ボタンをクリックすると、<code>/login</code>ページに遷移します。</li>
+<li>メールアドレスに<code>test@example.com</code>、パスワードに<code>password</code>と入力してログインボタンを押します。</li>
+<li>成功するとトップページにリダイレクトされ、ヘッダーが「ようこそ, Test Userさん」と「ログアウト」ボタンに変わります。</li>
+<li>商品一覧ページ（<code>/products</code>）にアクセスしても、ログイン状態が維持されていることを確認します。</li>
+<li>「ログアウト」ボタンを押すと、ログインページにリダイレクトされ、ヘッダーが再び「ログイン」ボタンに戻ります。</li>
+</ol>
+<h2 id="_4">✨ まとめ</h2>
+<ul>
+<li>Laravel側で、<code>web</code>ミドルウェアグループ内にログイン・ログアウト用のルートを、<code>api</code>ミドルウェアグループ内に認証済みユーザー情報を返すルートを定義した。</li>
+<li>Next.jsでログインフォームを作成し、<code>signIn("credentials", ...)</code>関数を呼び出して認証処理を実行した。</li>
+<li><code>useSession</code>フックを使って認証状態を取得し、UIを動的に切り替える方法を学んだ。</li>
+<li><code>signOut()</code>関数でログアウト処理を実装した。</li>
+</ul>
+<p>これで、LaravelとNext.jsを連携させた、本格的な認証機能が完成しました。次のハンズオンで、このチャプター全体の流れを復習しましょう。</p>
+</div>
+<div class="section-nav">
+<a href="10-3-2.html" class="prev">NextAuth.jsのセットアップ</a>
+<a href="10-3-4.html" class="next">Chapter 3 ハンズオン: 認証機能を実装する</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 COACHTECH × フロントエンド ガイド
+        </footer>
+    </div>
+</body>
+</html>

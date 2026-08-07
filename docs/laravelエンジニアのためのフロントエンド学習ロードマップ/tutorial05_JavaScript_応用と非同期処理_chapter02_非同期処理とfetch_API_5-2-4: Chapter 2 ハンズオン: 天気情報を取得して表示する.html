@@ -3,157 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=../roadmap/5-2-4.html">
+    <link rel="canonical" href="../roadmap/5-2-4.html">
+    <meta name="robots" content="noindex">
     <title>Chapter 2 ハンズオン: 天気情報を取得して表示する | COACHTECH × フロントエンド ガイド</title>
-    <meta name="description" content="Laravelエンジニアのためのフロントエンド学習ロードマップ">
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { font-family: sans-serif; margin: 4em auto; max-width: 40em; padding: 0 1em; line-height: 1.8; color: #333; }
+        a { color: #0b6bcb; }
+    </style>
+    <script>location.replace("../roadmap/5-2-4.html");</script>
 </head>
 <body>
-    <div id="outer">
-        <header>
-            <h1><a href="index.html">COACHTECH × フロントエンド ガイド</a></h1>
-            <p class="description">Laravelエンジニアのためのフロントエンド学習ロードマップ</p>
-        </header>
-        <div id="container">
-            <aside>
-                <div id="side-inner">
-                    <div class="side-title">チュートリアル一覧</div>
-<div class="side"><ul>
-<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
-<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
-<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
-<li><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
-<li><a href="tutorial05_JavaScript_応用と非同期処理.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
-<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
-<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
-<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
-<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
-<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
-<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
-<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
-</ul></div>
-
-                </div>
-            </aside>
-            <div id="content">
-                <div class="inner">
-                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="tutorial05_JavaScript_応用と非同期処理_chapter02_非同期処理とfetch_API.html">Chapter 2: 非同期処理とfetch API</a><span>></span>Chapter 2 ハンズオン: 天気情報を取得して表示する</div>
-                    <div class="section-content">
-<h1 id="5-2-4">5-2-4: 実践 🚀 チャプターハンズオン</h1>
-<h2 id="_1">🎯 課題</h2>
-<p><strong>JSONPlaceholder API を使って、ブログ投稿の一覧を表示するWebページを作成しましょう。</strong></p>
-<h3 id="_2">完成イメージ</h3>
-<ul>
-<li>ページには「Blog Posts」という見出しがある。</li>
-<li>APIから取得した投稿が、それぞれカード形式で表示される。</li>
-<li>各カードには、投稿のタイトルと本文が表示される。</li>
-</ul>
-<h3 id="api">使用するAPIエンドポイント</h3>
-<ul>
-<li><code>https://jsonplaceholder.typicode.com/posts</code></li>
-</ul>
-<h2 id="_3">🛠️ 手順</h2>
-<ol>
-<li>
-<p><strong>HTMLファイルの作成</strong>: <code>index.html</code> を作成し、基本的な構造（<code>&lt;h1&gt;</code>, <code>&lt;div&gt;</code> など）を用意します。投稿カードを表示するためのコンテナとなる要素（例: <code>&lt;div id="posts-container"&gt;&lt;/div&gt;</code>）を配置してください。</p>
-</li>
-<li>
-<p><strong>JavaScriptファイルの作成</strong>: <code>app.js</code> を作成し、<code>index.html</code> から読み込みます。</p>
-</li>
-<li>
-<p><strong>非同期関数の作成</strong>: <code>fetchPosts</code> という <code>async</code> 関数を定義します。</p>
-</li>
-<li>
-<p><strong>データの取得</strong>: <code>fetchPosts</code> 関数の中で、<code>fetch</code> を使って上記のAPIエンドポイントから投稿データを取得します。</p>
-</li>
-<li>
-<p><strong>DOM操作</strong>: 取得した投稿データの配列をループ処理し、各投稿に対して以下の要素を生成してDOMに追加します。</p>
-</li>
-<li>投稿全体を囲む <code>div</code> 要素（カード）</li>
-<li>タイトルを表示する <code>h2</code> 要素</li>
-<li>
-<p>本文を表示する <code>p</code> 要素</p>
-</li>
-<li>
-<p><strong>スタイリング（任意）</strong>: 簡単なCSSを書いて、カード形式のデザインを整えてみましょう。</p>
-</li>
-</ol>
-<h2 id="_4">🏆 解答例</h2>
-<p><strong>HTML (<code>index.html</code>)</strong></p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;ja&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot;&gt;
-  &lt;title&gt;Blog Posts&lt;/title&gt;
-  &lt;style&gt;
-    #posts-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .post-card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 16px;
-    }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;Blog Posts&lt;/h1&gt;
-  &lt;div id=&quot;posts-container&quot;&gt;&lt;/div&gt;
-
-  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><strong>JavaScript (<code>app.js</code>)</strong></p>
-<pre><code class="language-javascript">async function fetchPosts() {
-  const postsContainer = document.querySelector(&quot;#posts-container&quot;);
-
-  try {
-    const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
-    const posts = await response.json();
-
-    posts.forEach(post =&gt; {
-      // カード要素を作成
-      const card = document.createElement(&quot;div&quot;);
-      card.classList.add(&quot;post-card&quot;);
-
-      // タイトル要素を作成
-      const title = document.createElement(&quot;h2&quot;);
-      title.textContent = post.title;
-
-      // 本文要素を作成
-      const body = document.createElement(&quot;p&quot;);
-      body.textContent = post.body;
-
-      // カードにタイトルと本文を追加
-      card.appendChild(title);
-      card.appendChild(body);
-
-      // コンテナにカードを追加
-      postsContainer.appendChild(card);
-    });
-
-  } catch (error) {
-    console.error(&quot;投稿の取得に失敗しました:&quot;, error);
-    postsContainer.textContent = &quot;投稿の取得に失敗しました。&quot;;
-  }
-}
-
-fetchPosts();
-</code></pre>
-</div>
-<div class="section-nav">
-<a href="tutorial05_JavaScript_応用と非同期処理_chapter02_非同期処理とfetch_API_5-2-3: JSONデータの取得と表示.html" class="prev">JSONデータの取得と表示</a>
-<span></span>
-</div>
-
-                </div>
-            </div>
-        </div>
-        <footer>
-            &copy; 2025 COACHTECH × フロントエンド ガイド
-        </footer>
-    </div>
+    <p>このページは新しいURLへ移動しました。自動で切り替わります。</p>
+    <p><a href="../roadmap/5-2-4.html">切り替わらない場合はこちらをクリックしてください</a></p>
 </body>
 </html>

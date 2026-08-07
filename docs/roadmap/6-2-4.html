@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 ハンズオン: TypeScriptプロジェクトのセットアップ | COACHTECH × フロントエンド ガイド</title>
+    <meta name="description" content="Laravelエンジニアのためのフロントエンド学習ロードマップ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">COACHTECH × フロントエンド ガイド</a></h1>
+            <p class="description">Laravelエンジニアのためのフロントエンド学習ロードマップ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="t1.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="t2.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="t3.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="t4.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="t5.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="t6.html" class="current">Tutorial 6: TypeScript入門</a></li>
+<li><a href="t7.html">Tutorial 7: React入門</a></li>
+<li><a href="t8.html">Tutorial 8: React応用</a></li>
+<li><a href="t9.html">Tutorial 9: Next.js</a></li>
+<li><a href="t10.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="t11.html">Tutorial 11: テスト</a></li>
+<li><a href="t12.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="t6.html">Tutorial 6: TypeScript入門</a><span>></span><a href="6-2.html">Chapter 2: TypeScriptの開発環境設定</a><span>></span>Chapter 2 ハンズオン: TypeScriptプロジェクトのセットアップ</div>
+                    <div class="section-content">
+<h1 id="6-2-4-chapter-2-typescript">6-2-4: Chapter 2 ハンズオン: TypeScriptプロジェクトのセットアップ</h1>
+<h2 id="_1">🎯 このハンズオンの目的</h2>
+<p>このハンズオンでは、実際のプロジェクトで使えるTypeScript開発環境を一から構築します。tsconfig.json、ESLint、Prettierを設定し、型安全で品質の高いコードを書くための基盤を整えましょう。</p>
+<h2 id="step-1">Step 1: プロジェクトの初期化</h2>
+<p>まず、新しいプロジェクトを作成します。</p>
+<pre><code class="language-bash"># プロジェクトディレクトリを作成
+mkdir my-ts-project &amp;&amp; cd my-ts-project
+
+# package.jsonを初期化
+npm init -y
+
+# TypeScriptをインストール
+npm install typescript --save-dev
+
+# tsconfig.jsonを生成
+npx tsc --init
+</code></pre>
+<h2 id="step-2-tsconfigjson">Step 2: tsconfig.jsonの設定</h2>
+<p>生成された<code>tsconfig.json</code>を以下のように編集します。</p>
+<pre><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    // 基本設定
+    &quot;target&quot;: &quot;ES2020&quot;,
+    &quot;module&quot;: &quot;ESNext&quot;,
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;esModuleInterop&quot;: true,
+
+    // 厳格な型チェック
+    &quot;strict&quot;: true,
+    &quot;noImplicitAny&quot;: true,
+    &quot;strictNullChecks&quot;: true,
+    &quot;noImplicitReturns&quot;: true,
+    &quot;noUnusedLocals&quot;: true,
+    &quot;noUnusedParameters&quot;: true,
+
+    // 出力設定
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;declaration&quot;: true,
+
+    // その他
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+</code></pre>
+<h2 id="step-3-eslint">Step 3: ESLintの設定</h2>
+<p>ESLintをインストールし、設定ファイルを作成します。</p>
+<pre><code class="language-bash"># ESLintと関連パッケージをインストール
+npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
+</code></pre>
+<p><code>.eslintrc.js</code>ファイルを作成します。</p>
+<pre><code class="language-javascript">module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    project: './tsconfig.json'
+  },
+  plugins: ['@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking'
+  ],
+  rules: {
+    // カスタムルール
+    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-explicit-any': 'error'
+  },
+  ignorePatterns: ['dist/', 'node_modules/']
+};
+</code></pre>
+<h2 id="step-4-prettier">Step 4: Prettierの設定</h2>
+<p>Prettierをインストールし、設定ファイルを作成します。</p>
+<pre><code class="language-bash"># Prettierと競合を防ぐパッケージをインストール
+npm install prettier eslint-config-prettier --save-dev
+</code></pre>
+<p><code>.prettierrc</code>ファイルを作成します。</p>
+<pre><code class="language-json">{
+  &quot;semi&quot;: true,
+  &quot;singleQuote&quot;: true,
+  &quot;tabWidth&quot;: 2,
+  &quot;trailingComma&quot;: &quot;es5&quot;,
+  &quot;printWidth&quot;: 100
+}
+</code></pre>
+<p><code>.eslintrc.js</code>の<code>extends</code>配列の最後に<code>prettier</code>を追加します。</p>
+<pre><code class="language-javascript">extends: [
+  'eslint:recommended',
+  'plugin:@typescript-eslint/recommended',
+  'plugin:@typescript-eslint/recommended-requiring-type-checking',
+  'prettier' // 追加
+],
+</code></pre>
+<h2 id="step-5-packagejson">Step 5: package.jsonにスクリプトを追加</h2>
+<p><code>package.json</code>にビルドとリントのスクリプトを追加します。</p>
+<pre><code class="language-json">{
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;tsc&quot;,
+    &quot;lint&quot;: &quot;eslint src/**/*.ts&quot;,
+    &quot;lint:fix&quot;: &quot;eslint src/**/*.ts --fix&quot;,
+    &quot;format&quot;: &quot;prettier --write src/**/*.ts&quot;
+  }
+}
+</code></pre>
+<h2 id="step-6">Step 6: サンプルコードの作成</h2>
+<p><code>src</code>ディレクトリを作成し、サンプルコードを書いてみましょう。</p>
+<pre><code class="language-bash">mkdir src
+</code></pre>
+<p><code>src/index.ts</code>を作成します。</p>
+<pre><code class="language-typescript">interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function greetUser(user: User): string {
+  return `Hello, ${user.name}! Your email is ${user.email}.`;
+}
+
+const user: User = {
+  id: 1,
+  name: 'Taro',
+  email: 'taro@example.com',
+};
+
+console.log(greetUser(user));
+</code></pre>
+<h2 id="step-7">Step 7: 動作確認</h2>
+<p>設定が正しく動作するか確認します。</p>
+<pre><code class="language-bash"># リントを実行
+npm run lint
+
+# コードをフォーマット
+npm run format
+
+# TypeScriptをビルド
+npm run build
+
+# ビルド結果を実行
+node dist/index.js
+</code></pre>
+<h2 id="step-8-env">Step 8: .envファイルの設定（オプション）</h2>
+<p>環境変数を使う場合は、<code>dotenv</code>パッケージをインストールします。</p>
+<pre><code class="language-bash">npm install dotenv
+</code></pre>
+<p><code>.env</code>ファイルを作成します。</p>
+<pre><code>API_URL=https://api.example.com
+API_KEY=your-secret-key
+</code></pre>
+<p><code>.gitignore</code>に<code>.env</code>を追加します。</p>
+<pre><code>node_modules/
+dist/
+.env
+</code></pre>
+<p><code>src/config.ts</code>で環境変数を読み込みます。</p>
+<pre><code class="language-typescript">import dotenv from 'dotenv';
+dotenv.config();
+
+interface Config {
+  apiUrl: string;
+  apiKey: string;
+}
+
+export const config: Config = {
+  apiUrl: process.env.API_URL ?? 'http://localhost:3000',
+  apiKey: process.env.API_KEY ?? '',
+};
+</code></pre>
+<h2 id="_2">✨ まとめ</h2>
+<p>このハンズオンでは、以下の開発環境を構築しました。</p>
+<ul>
+<li>TypeScriptコンパイラ（tsconfig.json）</li>
+<li>ESLintによる静的解析</li>
+<li>Prettierによるコードフォーマット</li>
+<li>環境変数の管理</li>
+</ul>
+<p>この環境をベースに、型安全で品質の高いTypeScriptプロジェクトを開発できます。次のチャプターでは、より高度な型操作について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<a href="6-2-3.html" class="prev">.envファイルと環境変数の管理</a>
+<span></span>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 COACHTECH × フロントエンド ガイド
+        </footer>
+    </div>
+</body>
+</html>

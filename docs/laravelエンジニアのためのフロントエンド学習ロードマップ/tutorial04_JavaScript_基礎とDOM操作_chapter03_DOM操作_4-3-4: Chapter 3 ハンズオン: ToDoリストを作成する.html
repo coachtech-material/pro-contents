@@ -3,117 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=../roadmap/4-3-4.html">
+    <link rel="canonical" href="../roadmap/4-3-4.html">
+    <meta name="robots" content="noindex">
     <title>Chapter 3 ハンズオン: ToDoリストを作成する | COACHTECH × フロントエンド ガイド</title>
-    <meta name="description" content="Laravelエンジニアのためのフロントエンド学習ロードマップ">
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { font-family: sans-serif; margin: 4em auto; max-width: 40em; padding: 0 1em; line-height: 1.8; color: #333; }
+        a { color: #0b6bcb; }
+    </style>
+    <script>location.replace("../roadmap/4-3-4.html");</script>
 </head>
 <body>
-    <div id="outer">
-        <header>
-            <h1><a href="index.html">COACHTECH × フロントエンド ガイド</a></h1>
-            <p class="description">Laravelエンジニアのためのフロントエンド学習ロードマップ</p>
-        </header>
-        <div id="container">
-            <aside>
-                <div id="side-inner">
-                    <div class="side-title">チュートリアル一覧</div>
-<div class="side"><ul>
-<li><a href="tutorial01_開発環境とWebの基礎固め.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
-<li><a href="tutorial02_HTML_CSS基礎.html">Tutorial 2: HTML/CSS基礎</a></li>
-<li><a href="tutorial03_Tailwind_CSS徹底習得.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
-<li><a href="tutorial04_JavaScript_基礎とDOM操作.html" class="current">Tutorial 4: JavaScript基礎とDOM操作</a></li>
-<li><a href="tutorial05_JavaScript_応用と非同期処理.html">Tutorial 5: JavaScript応用と非同期処理</a></li>
-<li><a href="tutorial06_TypeScript入門.html">Tutorial 6: TypeScript入門</a></li>
-<li><a href="tutorial07_React入門.html">Tutorial 7: React入門</a></li>
-<li><a href="tutorial08_React応用.html">Tutorial 8: React応用</a></li>
-<li><a href="tutorial09_Next.js.html">Tutorial 9: Next.js</a></li>
-<li><a href="tutorial10_Laravel_x_Next.js.html">Tutorial 10: Laravel × Next.js</a></li>
-<li><a href="tutorial11_テスト.html">Tutorial 11: テスト</a></li>
-<li><a href="tutorial12_column.html">上級コラム: Webレンダリングの深層理解</a></li>
-</ul></div>
-
-                </div>
-            </aside>
-            <div id="content">
-                <div class="inner">
-                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作.html">Tutorial 4: JavaScript基礎とDOM操作</a><span>></span><a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作.html">Chapter 3: DOM操作</a><span>></span>Chapter 3 ハンズオン: ToDoリストを作成する</div>
-                    <div class="section-content">
-<h1 id="4-3-4-todo">4-3-4: 実践 🚀 チャプターハンズオン: ToDoリストを作成する</h1>
-<h2 id="_1">🎯 このハンズオンの目的</h2>
-<ul>
-<li>これまで学んだDOM操作の知識を総動員して、簡単なToDoリストアプリケーションを作成する</li>
-<li>ユーザーの入力に応じて動的にページを更新する処理を実装する</li>
-</ul>
-<h2 id="_2">課題</h2>
-<p>以下の仕様を満たすToDoリストを作成してください。</p>
-<h3 id="html">HTML</h3>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;ja&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot;&gt;
-  &lt;title&gt;ToDo List&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;ToDo List&lt;/h1&gt;
-  &lt;input type=&quot;text&quot; id=&quot;todo-input&quot; placeholder=&quot;新しいToDoを入力&quot;&gt;
-  &lt;button id=&quot;add-button&quot;&gt;追加&lt;/button&gt;
-  &lt;ul id=&quot;todo-list&quot;&gt;&lt;/ul&gt;
-
-  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="javascript-appjs">JavaScript (<code>app.js</code>)</h3>
-<ol>
-<li>必要なDOM要素（input, button, ul）を取得する</li>
-<li>「追加」ボタンがクリックされたら、以下の処理を行うイベントリスナーを登録する<br />
-   a. inputに入力されたテキストを取得する<br />
-   b. 新しい <code>&lt;li&gt;</code> 要素を作成する<br />
-   c. <code>&lt;li&gt;</code> 要素のテキストを a で取得したテキストに設定する<br />
-   d. <code>&lt;ul&gt;</code> 要素の子要素として <code>&lt;li&gt;</code> を追加する<br />
-   e. inputの中身を空にする</li>
-</ol>
-<h2 id="_3">💻 解答例</h2>
-<pre><code class="language-javascript">// app.js
-
-// 1. DOM要素の取得
-const todoInput = document.querySelector(&quot;#todo-input&quot;);
-const addButton = document.querySelector(&quot;#add-button&quot;);
-const todoList = document.querySelector(&quot;#todo-list&quot;);
-
-// 2. イベントリスナーの登録
-addButton.addEventListener(&quot;click&quot;, function() {
-  // a. テキストの取得
-  const todoText = todoInput.value;
-
-  // 入力が空の場合は何もしない
-  if (todoText === &quot;&quot;) return;
-
-  // b. li要素の作成
-  const newTodoItem = document.createElement(&quot;li&quot;);
-
-  // c. テキストの設定
-  newTodoItem.textContent = todoText;
-
-  // d. li要素の追加
-  todoList.appendChild(newTodoItem);
-
-  // e. inputを空にする
-  todoInput.value = &quot;&quot;;
-});
-</code></pre>
-</div>
-<div class="section-nav">
-<a href="tutorial04_JavaScript_基礎とDOM操作_chapter03_DOM操作_4-3-3: イベントリスナーの追加（addEventListener）.html" class="prev">イベントリスナーの追加（addEventListener）</a>
-<span></span>
-</div>
-
-                </div>
-            </div>
-        </div>
-        <footer>
-            &copy; 2025 COACHTECH × フロントエンド ガイド
-        </footer>
-    </div>
+    <p>このページは新しいURLへ移動しました。自動で切り替わります。</p>
+    <p><a href="../roadmap/4-3-4.html">切り替わらない場合はこちらをクリックしてください</a></p>
 </body>
 </html>

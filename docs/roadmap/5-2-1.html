@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async_awaitの使い方 | COACHTECH × フロントエンド ガイド</title>
+    <meta name="description" content="Laravelエンジニアのためのフロントエンド学習ロードマップ">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="outer">
+        <header>
+            <h1><a href="index.html">COACHTECH × フロントエンド ガイド</a></h1>
+            <p class="description">Laravelエンジニアのためのフロントエンド学習ロードマップ</p>
+        </header>
+        <div id="container">
+            <aside>
+                <div id="side-inner">
+                    <div class="side-title">チュートリアル一覧</div>
+<div class="side"><ul>
+<li><a href="t1.html">Tutorial 1: 開発環境とWebの基礎固め</a></li>
+<li><a href="t2.html">Tutorial 2: HTML/CSS基礎</a></li>
+<li><a href="t3.html">Tutorial 3: Tailwind CSS徹底習得</a></li>
+<li><a href="t4.html">Tutorial 4: JavaScript基礎とDOM操作</a></li>
+<li><a href="t5.html" class="current">Tutorial 5: JavaScript応用と非同期処理</a></li>
+<li><a href="t6.html">Tutorial 6: TypeScript入門</a></li>
+<li><a href="t7.html">Tutorial 7: React入門</a></li>
+<li><a href="t8.html">Tutorial 8: React応用</a></li>
+<li><a href="t9.html">Tutorial 9: Next.js</a></li>
+<li><a href="t10.html">Tutorial 10: Laravel × Next.js</a></li>
+<li><a href="t11.html">Tutorial 11: テスト</a></li>
+<li><a href="t12.html">上級コラム: Webレンダリングの深層理解</a></li>
+</ul></div>
+
+                </div>
+            </aside>
+            <div id="content">
+                <div class="inner">
+                    <div class="breadcrumb"><a href="../index.html">ホーム</a><span>></span><a href="index.html">Laravelエンジニアのためのフロントエンド学習ロードマップ</a><span>></span><a href="t5.html">Tutorial 5: JavaScript応用と非同期処理</a><span>></span><a href="5-2.html">Chapter 2: 非同期処理とfetch API</a><span>></span>async_awaitの使い方</div>
+                    <div class="section-content">
+<h1 id="5-2-1-asyncawait">5-2-1: async/awaitの使い方</h1>
+<h2 id="_1">🎯 このセクションで学ぶこと</h2>
+<ul>
+<li><code>async/await</code> を使って、Promiseベースの非同期処理を同期処理のように直感的に書けるようになる</li>
+<li><code>async</code> 関数が常にPromiseを返すことを理解する</li>
+</ul>
+<h2 id="_2">導入</h2>
+<p>Chapter 1では <code>Promise</code> と <code>.then()</code> を使った非同期処理を学びましたが、処理が複雑になるとチェーンが長くなり、読みにくくなることがあります。</p>
+<p><code>async/await</code> は、この問題を解決し、非同期処理をまるで同期処理のようにシンプルに記述するための構文です。ES2017で導入されました。</p>
+<h2 id="1-async">1. async関数の基本</h2>
+<p>関数を <code>async</code> として宣言すると、その関数は常に <strong>Promise</strong> を返すようになります。</p>
+<pre><code class="language-javascript">// async関数は常にPromiseを返す
+async function greet() {
+  return &quot;こんにちは&quot;;
+}
+
+// 以下と同じ意味
+function greet() {
+  return Promise.resolve(&quot;こんにちは&quot;);
+}
+
+// 使い方
+greet().then((message) =&gt; {
+  console.log(message); // &quot;こんにちは&quot;
+});
+</code></pre>
+<h2 id="2-await">2. await演算子</h2>
+<p><code>await</code> は <code>async</code> 関数の中でのみ使用でき、Promiseが解決されるまで関数の実行を一時停止します。Promiseが解決されると、その結果を返します。</p>
+<p>これにより、<code>.then()</code> を使わずに、Promiseの結果を直接変数に代入できます。</p>
+<pre><code class="language-javascript">// Promiseを返す関数
+function fetchData() {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve({ name: &quot;太郎&quot;, age: 25 });
+    }, 1000);
+  });
+}
+
+// then を使った書き方
+fetchData().then((data) =&gt; {
+  console.log(data);
+});
+
+// async/await を使った書き方
+async function getData() {
+  const data = await fetchData(); // Promiseが解決されるまで待つ
+  console.log(data);
+}
+
+getData();
+</code></pre>
+<h2 id="3-promise">3. Promiseチェーンとの比較</h2>
+<p>Chapter 1で学んだPromiseチェーンを、async/awaitで書き直してみましょう。</p>
+<pre><code class="language-javascript">// Promiseチェーン版
+getUser(1)
+  .then((user) =&gt; {
+    console.log(&quot;ユーザー:&quot;, user.name);
+    return getPosts(user.id);
+  })
+  .then((posts) =&gt; {
+    console.log(&quot;投稿数:&quot;, posts.length);
+    return getComments(posts[0].id);
+  })
+  .then((comments) =&gt; {
+    console.log(&quot;コメント数:&quot;, comments.length);
+  })
+  .catch((error) =&gt; {
+    console.error(&quot;エラー:&quot;, error);
+  });
+
+// async/await版（より直感的！）
+async function fetchAllData() {
+  try {
+    const user = await getUser(1);
+    console.log(&quot;ユーザー:&quot;, user.name);
+
+    const posts = await getPosts(user.id);
+    console.log(&quot;投稿数:&quot;, posts.length);
+
+    const comments = await getComments(posts[0].id);
+    console.log(&quot;コメント数:&quot;, comments.length);
+  } catch (error) {
+    console.error(&quot;エラー:&quot;, error);
+  }
+}
+
+fetchAllData();
+</code></pre>
+<p>async/await版は、同期処理のように上から下へ順番に読めるため、非常に直感的です。</p>
+<h2 id="4">4. エラーハンドリング</h2>
+<p>async/awaitでは、<code>try/catch</code>を使ってエラーを処理します。</p>
+<pre><code class="language-javascript">async function fetchUser(id) {
+  try {
+    const response = await fetch(`https://api.example.com/users/${id}`);
+
+    if (!response.ok) {
+      throw new Error(&quot;ユーザーが見つかりません&quot;);
+    }
+
+    const user = await response.json();
+    return user;
+  } catch (error) {
+    console.error(&quot;エラー:&quot;, error.message);
+    return null;
+  }
+}
+</code></pre>
+<h2 id="5">5. 並列実行</h2>
+<p>複数の非同期処理を並列で実行したい場合は、<code>Promise.all</code>と組み合わせます。</p>
+<pre><code class="language-javascript">// 順次実行（遅い）
+async function sequential() {
+  const user1 = await getUser(1); // 1秒待つ
+  const user2 = await getUser(2); // さらに1秒待つ
+  const user3 = await getUser(3); // さらに1秒待つ
+  // 合計3秒
+}
+
+// 並列実行（速い）
+async function parallel() {
+  const [user1, user2, user3] = await Promise.all([
+    getUser(1),
+    getUser(2),
+    getUser(3)
+  ]);
+  // 合計1秒（最も遅い処理の時間）
+}
+</code></pre>
+<h2 id="tip">💡 TIP</h2>
+<ul>
+<li><code>await</code> は <code>async</code> 関数の中、もしくはモジュールのトップレベルでしか使えません。通常の関数内で使うと構文エラーになります。</li>
+<li><code>await</code>を使うと処理が「待機」するため、並列実行したい場合は<code>Promise.all</code>を使いましょう。</li>
+</ul>
+<h2 id="_3">✨ まとめ</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>async</code></td>
+<td>関数がPromiseを返すことを示す</td>
+</tr>
+<tr>
+<td><code>await</code></td>
+<td><code>async</code>関数内でPromiseの結果を待つ</td>
+</tr>
+<tr>
+<td>エラー処理</td>
+<td><code>try/catch</code>を使用</td>
+</tr>
+<tr>
+<td>並列実行</td>
+<td><code>Promise.all</code>と組み合わせる</td>
+</tr>
+</tbody>
+</table>
+<p><code>async/await</code>を使うことで、非同期処理が同期処理のようにシンプルに書けます。次のセクションでは、実際のAPI通信に使う<code>fetch API</code>について学んでいきましょう。</p>
+</div>
+<div class="section-nav">
+<span></span>
+<a href="5-2-2.html" class="next">fetch_APIの基本</a>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <footer>
+            &copy; 2025 COACHTECH × フロントエンド ガイド
+        </footer>
+    </div>
+</body>
+</html>
